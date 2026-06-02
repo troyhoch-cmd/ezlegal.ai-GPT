@@ -1,0 +1,30 @@
+source_key: fl_statutes
+source_name: Florida Statutes
+jurisdiction: FL
+source_type: state_statute
+base_url: http://www.leg.state.fl.us/statutes/
+update_frequency: monthly
+is_active: true
+rate_limit:
+  requests_per_minute: 30
+  min_delay_seconds: 2
+content_types:
+  - statute
+  - agency_guidance
+targets:
+  - name: statutes
+    content_type: statute
+    start_url: http://www.leg.state.fl.us/statutes/index.cfm
+    selectors:
+      title_list: "a.statute"
+      section_number: "span.section"
+      section_title: "h3"
+      content: "div.statute-text"
+  - name: ag_opinions
+    content_type: agency_guidance
+    start_url: http://myfloridalegal.com/ago.nsf/Opinions
+    selectors:
+      title_list: "a.opinion-link"
+      section_number: "span.opinion-number"
+      section_title: "h3.opinion-title"
+      content: "div.opinion-body"

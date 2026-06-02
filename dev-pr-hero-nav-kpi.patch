@@ -1,0 +1,232 @@
+From: ezLegal.ai prototype
+Subject: [PATCH] Home hero, primary nav, and KPI strip alignment with prototype
+
+Scope: Bring dev.ezlegal.ai home page and top navigation in line with the
+current Bolt prototype. Three logical changes bundled:
+
+  1. Home hero - copy, CrisisStrip, TrustChip (replaces static pills),
+     "Ask a free legal question" primary CTA wired to /start with
+     consent recording, and "Privacy at a glance" legal line.
+  2. HomeKPIStrip - 4-up stat strip below hero, live counts from Supabase
+     (chat_messages count, lawyer_profiles partner count).
+  3. Top Navigation - header CTA renamed "Ask free" -> "Ask a question",
+     top-level groups consolidated to Get Help / Why ezLegal / Pricing
+     via consolidateNavGroups().
+
+New/changed runtime dependencies: none. All components already exist in
+src/components/. The patch only wires them together in Home.tsx and
+updates one copy string in Navigation.tsx.
+
+Supabase: no schema changes required for this PR. HomeKPIStrip reads
+existing tables (chat_messages, lawyer_profiles) via the anon client and
+degrades gracefully when counts are null.
+
+---------------------------------------------------------------------
+ src/pages/Home.tsx          | hero section (lines 82-174)
+ src/components/Navigation.tsx | header CTA label + top-group filter
+---------------------------------------------------------------------
+
+diff --git a/src/pages/Home.tsx b/src/pages/Home.tsx
+--- a/src/pages/Home.tsx
++++ b/src/pages/Home.tsx
+@@ -1,8 +1,9 @@
+ import { useState, useEffect } from 'react';
+ import { Link, useNavigate } from 'react-router-dom';
+ import {
+   Shield, MessageSquare, FileText, CheckCircle, Users,
+-  ArrowRight, Building2, Heart, ChevronDown, ChevronUp, Info,
++  ArrowRight, Info,
++  PlayCircle,
+ } from 'lucide-react';
+ import RelatedLinks from '../components/RelatedLinks';
+ import Navigation from '../components/Navigation';
+ import Footer from '../components/Footer';
+ import ResumeBanner from '../components/ResumeBanner';
+ import HomeKPIStrip from '../components/HomeKPIStrip';
+ import CrisisStrip from '../components/CrisisStrip';
+ import TrustChip from '../components/TrustChip';
+ import HomeAudienceRouting from '../components/HomeAudienceRouting';
+ import { recordConsent } from '../lib/consent';
+ import { useLanguage } from '../contexts/LanguageContext';
+@@ -82,75 +83,99 @@
+         <section className="relative overflow-hidden pt-28 pb-16 min-h-[80vh] flex items-center">
+           <div className="absolute inset-0 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 pointer-events-none" />
+-
+-          {/* OLD DEV HERO - remove */}
+-          <div className="relative max-w-4xl mx-auto px-4 text-center">
+-            <h1 className="text-white text-5xl font-bold mb-6">
+-              Legal help that speaks your language
+-            </h1>
+-            <p className="text-navy-100 text-xl mb-10">
+-              Ethical AI built for individuals, small businesses, and legal aid.
+-              Start free&mdash;no credit card.
+-            </p>
+-            <div className="flex gap-3 justify-center mb-6">
+-              <button className="bg-teal-500 text-white px-10 py-4 rounded-xl">
+-                Start now free
+-              </button>
+-              <button className="bg-white/10 text-white border border-white/30 px-6 py-4 rounded-xl">
+-                See how it works
+-              </button>
+-            </div>
+-            <div className="flex gap-3 justify-center">
+-              <span className="px-3 py-1 rounded-full bg-white/10 text-white text-sm">Private by default</span>
+-              <span className="px-3 py-1 rounded-full bg-white/10 text-white text-sm">Ethical AI with human oversight</span>
+-              <span className="px-3 py-1 rounded-full bg-white/10 text-white text-sm">Not legal advice</span>
+-            </div>
+-            <p className="mt-4 text-sm text-navy-200">
+-              Tailored for: Individuals &middot; Businesses &middot; Legal Aid
+-            </p>
+-          </div>
+-
+-          {/* NEW PROTOTYPE HERO - add */}
+           <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+             <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight text-white break-words">
+               {language === 'en'
+                 ? 'Legal help that speaks your language'
+                 : 'Ayuda legal que habla tu idioma'}
+             </h1>
+
+             <p className="text-base sm:text-lg md:text-xl text-navy-100 mb-10 max-w-2xl mx-auto">
+               {language === 'en'
+                 ? 'Ask legal questions, understand documents, and find safe next steps \u2014 in plain English or Spanish. Free to start, no credit card.'
+                 : 'Haz preguntas legales, entiende documentos y encuentra pr\u00f3ximos pasos seguros \u2014 en espa\u00f1ol o ingl\u00e9s. Gratis para empezar, sin tarjeta de cr\u00e9dito.'}
+             </p>
+
+             <div className="mb-6 flex justify-center">
+               <CrisisStrip variant="inline" />
+             </div>
+
+             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4 w-full">
+               <button
+                 type="button"
+                 onClick={(e) => handleStartNow(e)}
+                 data-testid="hero-primary-cta"
+                 className="group bg-teal-500 hover:bg-teal-400 text-white px-6 sm:px-10 py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900 min-h-[56px] w-full sm:w-auto"
+                 aria-label={language === 'en' ? 'Ask a free legal question' : 'Haz una pregunta legal gratis'}
+               >
+                 {language === 'en' ? 'Ask a free legal question' : 'Haz una pregunta legal gratis'}
+                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+               </button>
+
+               <button
+                 type="button"
+                 onClick={handleHowItWorks}
+                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/30 px-6 py-4 rounded-xl font-semibold text-base transition-all focus:outline-none focus:ring-2 focus:ring-white/40 min-h-[56px] w-full sm:w-auto"
+               >
+                 <PlayCircle className="w-5 h-5" aria-hidden="true" />
+                 {language === 'en' ? 'See how it works' : 'Ver c\u00f3mo funciona'}
+               </button>
+             </div>
+
+             <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-navy-200 mb-4">
+               <TrustChip
+                 icon={Shield}
+                 label={language === 'en' ? 'Private by default' : 'Privado por defecto'}
+                 detail={language === 'en'
+                   ? 'We encrypt your chats in transit and at rest. Your questions are not sold, shared, or used to train public AI models.'
+                   : 'Ciframos tus chats en tr\u00e1nsito y en reposo. Tus preguntas no se venden, comparten ni se usan para entrenar modelos p\u00fablicos de IA.'}
+               />
+               <TrustChip
+                 icon={CheckCircle}
+                 label={language === 'en' ? 'Attorney-informed safeguards' : 'Protecciones informadas por abogados'}
+                 detail={language === 'en'
+                   ? 'Our prompts, routing, and safety checks are designed with attorneys. Human review is available through participating legal-aid partners \u2014 not every answer is reviewed by a lawyer.'
+                   : 'Nuestros mensajes, enrutamiento y controles de seguridad se dise\u00f1an con abogados. La revisi\u00f3n humana est\u00e1 disponible a trav\u00e9s de socios participantes \u2014 no todas las respuestas son revisadas por un abogado.'}
+               />
+               <TrustChip
+                 icon={Info}
+                 label={language === 'en' ? 'Not legal advice' : 'No es asesor\u00eda legal'}
+                 detail={language === 'en'
+                   ? 'ezLegal.ai explains options and next steps in plain language. We are not your lawyer; for representation we can refer you to legal aid or a licensed attorney.'
+                   : 'ezLegal.ai explica opciones y pr\u00f3ximos pasos en lenguaje simple. No somos tu abogado; para representaci\u00f3n podemos referirte a asistencia legal o a un abogado con licencia.'}
+               />
+             </div>
+
+             <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs text-navy-300">
+               <span className="inline-flex items-center gap-1.5">
+                 <Info className="w-3.5 h-3.5" aria-hidden="true" />
+                 {language === 'en'
+                   ? 'ezLegal.ai provides legal information, not legal advice.'
+                   : 'ezLegal.ai ofrece informaci\u00f3n legal, no asesor\u00eda legal.'}
+               </span>
+               <span aria-hidden="true" className="text-navy-500">&middot;</span>
+               <Link
+                 to="/privacy-at-a-glance"
+                 className="underline underline-offset-2 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/40 rounded"
+               >
+                 {language === 'en' ? 'Privacy at a glance' : 'Privacidad de un vistazo'}
+               </Link>
+             </p>
+           </div>
+         </section>
+
++        {/* 2. KPI strip directly under hero (wire in HomeKPIStrip + ResumeBanner) */}
+         <section className="py-6 bg-slate-50 border-y border-slate-200">
+           <div className="max-w-5xl mx-auto px-4">
+             <ResumeBanner />
+             <div className="mt-4">
+               <HomeKPIStrip />
+             </div>
+           </div>
+         </section>
+
++        {/* 3. Audience routing (replaces inline "Tailored for:" row from dev) */}
+         <HomeAudienceRouting />
+
+         <section id="how-it-works" className="py-16 bg-white">
+           {/* unchanged - keep dev 3-step section */}
+
+
+diff --git a/src/components/Navigation.tsx b/src/components/Navigation.tsx
+--- a/src/components/Navigation.tsx
++++ b/src/components/Navigation.tsx
+@@ -- HEADER PRIMARY CTA --
+-          <Link to="/ask-free" className="btn-primary">
+-            <Sparkles className="h-4 w-4" /> Ask free
+-          </Link>
++          <Link
++            to="/start"
++            onClick={() => trackEngagement({ event: 'nav_primary_cta_click', source: 'top_nav' })}
++            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-lg shadow-sm"
++          >
++            <Sparkles className="h-4 w-4" aria-hidden="true" />
++            {language === 'en' ? 'Ask a question' : 'Preguntar'}
++          </Link>
+
+@@ -- TOP-LEVEL GROUP FILTER --
+-  const visibleGroups = groups;                              // shows Get Help / Solutions / Resources / Pricing / Trust
++  // Consolidate to 3 top-level groups: Get Help, Why ezLegal (= Solutions + Resources + Trust), Pricing.
++  const TOP_LEVEL_IDS = new Set(['get_help', 'why_ezlegal', 'pricing']);
++  const visibleGroups = groups.filter((g) => TOP_LEVEL_IDS.has(g.id));
+
+   // consolidateNavGroups() already merges Solutions+Resources+Trust into a why_ezlegal mega-menu
+   // when the DB row with id='why_ezlegal' exists. If dev DB does not have it yet, run:
+   //
+   //   insert into nav_groups (id, label_en, label_es, sort_order, visible)
+   //   values ('why_ezlegal', 'Why ezLegal', 'Por qu\u00e9 ezLegal', 20, true)
+   //   on conflict (id) do update set label_en = excluded.label_en;
+   //
+   //   update nav_items set group_id = 'why_ezlegal'
+   //   where group_id in ('solutions', 'resources', 'trust');
+
+---------------------------------------------------------------------
+ Required follow-up (outside this PR, tracked separately):
+---------------------------------------------------------------------
+  - PersonalizationContext must wrap <Home /> so trackPageVisit('/') fires.
+  - AuthContext must expose `profile.hero_variant_seen` so returning users
+    get persona-aware redirect via getDefaultLandingRoute().
+  - Supabase `consent_records` table must exist (migration
+    20260503031258_create_consent_records.sql) so recordConsent() on the
+    primary CTA succeeds. If absent, recordConsent logs & no-ops.
+
+QA checklist for this PR:
+  [ ] Hero renders CrisisStrip pill above CTAs on both locales.
+  [ ] Primary CTA reads "Ask a free legal question" and routes to /start.
+  [ ] Three TrustChips open/close their detail dropdowns on click.
+  [ ] "Privacy at a glance" link resolves to /privacy-at-a-glance.
+  [ ] KPI strip shows 4 cards; "Questions answered" updates from
+      chat_messages count within ~1s of first paint.
+  [ ] Header CTA reads "Ask a question"; top nav shows exactly three
+      groups: Get Help, Why ezLegal, Pricing.
+  [ ] Spanish locale swap translates hero, CTAs, chips, and KPI labels.

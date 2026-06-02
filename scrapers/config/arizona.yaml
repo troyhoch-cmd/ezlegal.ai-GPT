@@ -1,0 +1,26 @@
+source_key: az_ars
+source_name: Arizona Revised Statutes
+jurisdiction: AZ
+source_type: state_statute
+base_url: https://www.azleg.gov/arsDetail/
+update_frequency: monthly
+is_active: true
+rate_limit:
+  requests_per_minute: 30
+  min_delay_seconds: 2
+content_types:
+  - statute
+  - regulation
+targets:
+  - name: statutes
+    content_type: statute
+    start_url: https://www.azleg.gov/arstitle/
+    selectors:
+      title_list: "a[href*='arsDetail']"
+      title_number: "h2.title-number"
+      section_number: "span.section-number"
+      section_title: "h3.section-title"
+      content: "div.section-body"
+    pagination:
+      next_selector: "a.next"
+      max_pages: 500

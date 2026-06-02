@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ezLegal.ai Platform Review Documentation</title>
+  <style>
+    @media print {
+      body { font-size: 11pt; }
+      .no-print { display: none !important; }
+      .page-break { page-break-before: always; }
+      h1, h2 { page-break-after: avoid; }
+      table { page-break-inside: avoid; }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1e293b;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f8fafc;
+    }
+
+    .print-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      z-index: 100;
+    }
+
+    .print-button:hover {
+      background: #1d4ed8;
+    }
+
+    .cover {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #1e40af 0%, #1e293b 100%);
+      color: white;
+      border-radius: 16px;
+      margin-bottom: 40px;
+    }
+
+    .cover h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .cover .subtitle {
+      font-size: 1.2em;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .cover .meta {
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+
+    h1 { font-size: 1.8em; color: #1e40af; margin: 40px 0 20px; border-bottom: 3px solid #1e40af; padding-bottom: 10px; }
+    h2 { font-size: 1.4em; color: #334155; margin: 30px 0 15px; }
+    h3 { font-size: 1.1em; color: #475569; margin: 20px 0 10px; }
+
+    p { margin-bottom: 15px; }
+
+    .section {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.9em;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background: #f1f5f9;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    tr:hover { background: #f8fafc; }
+
+    ul, ol {
+      margin: 15px 0 15px 25px;
+    }
+
+    li { margin-bottom: 8px; }
+
+    .highlight {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .warning {
+      background: #fee2e2;
+      border-left: 4px solid #ef4444;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .success {
+      background: #dcfce7;
+      border-left: 4px solid #22c55e;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: 600;
+    }
+
+    .badge-active { background: #dcfce7; color: #166534; }
+    .badge-high { background: #fee2e2; color: #991b1b; }
+    .badge-medium { background: #fef3c7; color: #92400e; }
+
+    .toc {
+      background: #f1f5f9;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 40px;
+    }
+
+    .toc h2 { margin-top: 0; color: #1e40af; }
+    .toc ol { columns: 2; column-gap: 40px; }
+    .toc li { margin-bottom: 10px; }
+    .toc a { color: #2563eb; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .toc ol { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+  <button class="print-button no-print" onclick="window.print()">
+    Print / Save as PDF
+  </button>
+
+  <div class="cover">
+    <h1>ezLegal.ai</h1>
+    <div class="subtitle">Platform Documentation for Reviewers</div>
+    <div class="meta">
+      <strong>Version:</strong> 1.0 | <strong>Date:</strong> January 2026<br>
+      <strong>Prepared for:</strong> Board Review, Compliance Officers, Legal Aid Partners
+    </div>
+  </div>
+
+  <div class="toc">
+    <h2>Table of Contents</h2>
+    <ol>
+      <li><a href="#executive">Executive Summary</a></li>
+      <li><a href="#pages">Platform Pages Overview</a></li>
+      <li><a href="#ai">AI Transparency & Methodology</a></li>
+      <li><a href="#safety">Safety Features</a></li>
+      <li><a href="#accessibility">Accessibility Compliance</a></li>
+      <li><a href="#security">Security Architecture</a></li>
+      <li><a href="#features">Feature Inventory</a></li>
+      <li><a href="#checklist">Compliance Checklist</a></li>
+    </ol>
+  </div>
+
+  <div class="section" id="executive">
+    <h1>1. Executive Summary</h1>
+
+    <p>ezLegal.ai is an AI-powered legal information platform designed to democratize access to legal knowledge for consumers and small businesses who cannot afford traditional legal representation.</p>
+
+    <h2>Platform Capabilities</h2>
+    <ul>
+      <li><strong>AI Legal Assistant:</strong> Jurisdiction-aware legal information chatbot</li>
+      <li><strong>Attorney Matching:</strong> Directory of verified lawyers with pro bono options</li>
+      <li><strong>Document Resources:</strong> Legal forms, templates, and educational content</li>
+      <li><strong>Crisis Escalation:</strong> Immediate resources for emergencies</li>
+    </ul>
+
+    <h2>Key Differentiators</h2>
+    <div class="success">
+      <strong>Ethical AI Framework:</strong> Comprehensive governance policies compliant with EU AI Act, Colorado AI Act<br><br>
+      <strong>Access to Justice Mission:</strong> Free tier, pro bono pathways, legal aid partnerships<br><br>
+      <strong>Transparency:</strong> Clear disclaimers, source documentation, methodology explanation<br><br>
+      <strong>Safety-First Design:</strong> Crisis detection, human escalation paths, persistent safety resources
+    </div>
+  </div>
+
+  <div class="section page-break" id="pages">
+    <h1>2. Platform Pages Overview</h1>
+
+    <h2>Public Pages</h2>
+    <table>
+      <thead>
+        <tr><th>Page</th><th>URL</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Home</td><td>/</td><td>Landing page with audience routing</td></tr>
+        <tr><td>For Individuals</td><td>/for-individuals</td><td>Consumer-focused features</td></tr>
+        <tr><td>For Business</td><td>/for-business</td><td>SMB-focused features</td></tr>
+        <tr><td>For Organizations</td><td>/for-organizations</td><td>Legal aid org features</td></tr>
+        <tr><td>Pricing</td><td>/pricing</td><td>Subscription tiers</td></tr>
+        <tr><td>About</td><td>/about</td><td>Company mission, team</td></tr>
+        <tr><td>EZ Reads</td><td>/ezreads</td><td>Educational articles</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Trust & Safety Pages</h2>
+    <table>
+      <thead>
+        <tr><th>Page</th><th>URL</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Trust Center</td><td>/trust-center</td><td>Privacy, security, AI ethics hub</td></tr>
+        <tr><td>How Our AI Works</td><td>/how-it-works</td><td>Full AI methodology documentation</td></tr>
+        <tr><td>AI Governance</td><td>/ai-governance</td><td>6 core principles, ethics</td></tr>
+        <tr><td>Scope & Disclaimers</td><td>/scope-disclaimers</td><td>What AI can/cannot do</td></tr>
+        <tr><td>Enterprise Security</td><td>/enterprise-security</td><td>SOC 2, encryption details</td></tr>
+        <tr><td>Privacy Policy</td><td>/privacy-policy.html</td><td>Data handling practices</td></tr>
+        <tr><td>Terms of Service</td><td>/terms</td><td>User agreement</td></tr>
+        <tr><td>Accessibility</td><td>/accessibility</td><td>WCAG 2.1 AA compliance</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Emergency & Support Pages</h2>
+    <table>
+      <thead>
+        <tr><th>Page</th><th>URL</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Emergency Resources</td><td>/emergency-resources</td><td>Crisis hotlines, immediate help</td></tr>
+        <tr><td>Pro Bono Intake</td><td>/pro-bono</td><td>Free legal aid eligibility</td></tr>
+        <tr><td>Contact</td><td>/contact</td><td>Support and inquiries</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Authenticated Pages</h2>
+    <table>
+      <thead>
+        <tr><th>Page</th><th>URL</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Dashboard</td><td>/dashboard</td><td>User home, recent activity</td></tr>
+        <tr><td>Chatbot</td><td>/chatbot</td><td>Full AI chat interface</td></tr>
+        <tr><td>AI Assistant</td><td>/dashboard/ai-assistant</td><td>Chat + lawyer matching</td></tr>
+        <tr><td>History</td><td>/dashboard/history</td><td>Conversation archive</td></tr>
+        <tr><td>Documents</td><td>/dashboard/documents</td><td>Generated and uploaded files</td></tr>
+        <tr><td>Lawyer Profiles</td><td>/dashboard/lawyer-profiles</td><td>Attorney directory</td></tr>
+        <tr><td>Profile</td><td>/dashboard/profile</td><td>Account settings</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section page-break" id="ai">
+    <h1>3. AI Transparency & Methodology</h1>
+
+    <h2>Architecture: Retrieval-Augmented Generation (RAG)</h2>
+    <p>Our AI uses a 5-step process to generate responses:</p>
+
+    <table>
+      <thead>
+        <tr><th>Step</th><th>Process</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Question Analysis</td><td>NLP extracts legal concepts, practice area, entities</td></tr>
+        <tr><td>2</td><td>Jurisdiction Matching</td><td>User-selected state prioritized, federal law included</td></tr>
+        <tr><td>3</td><td>Source Retrieval</td><td>Semantic search across curated legal database</td></tr>
+        <tr><td>4</td><td>Response Generation</td><td>LLM synthesizes with attorney-reviewed prompts</td></tr>
+        <tr><td>5</td><td>Safety Check</td><td>Crisis detection, UPL guardrails, bias monitoring</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Data Sources</h2>
+    <table>
+      <thead>
+        <tr><th>Source</th><th>Description</th><th>Update Frequency</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Federal Statutes</td><td>U.S. Code, CFR, Federal Register</td><td>Weekly</td></tr>
+        <tr><td>State Statutes</td><td>All 50 states + territories</td><td>Monthly</td></tr>
+        <tr><td>Case Law</td><td>Federal and state court decisions</td><td>Daily</td></tr>
+        <tr><td>Agency Guidance</td><td>EEOC, FTC, CFPB, DOL publications</td><td>Weekly</td></tr>
+        <tr><td>Legal Aid Resources</td><td>Self-help guides nationwide</td><td>Monthly</td></tr>
+        <tr><td>Attorney-Reviewed Content</td><td>Practice guides and templates</td><td>Quarterly</td></tr>
+      </tbody>
+    </table>
+
+    <h2>What "Attorney-Reviewed" Means</h2>
+    <div class="grid-2">
+      <div class="success">
+        <strong>What It IS:</strong>
+        <ul>
+          <li>Licensed attorneys design system prompts</li>
+          <li>Document templates reviewed by attorneys</li>
+          <li>Legal team audits AI responses regularly</li>
+          <li>Attorneys identify edge cases for training</li>
+        </ul>
+      </div>
+      <div class="warning">
+        <strong>What It is NOT:</strong>
+        <ul>
+          <li>Individual responses are NOT reviewed before delivery</li>
+          <li>AI responses are NOT attorney work product</li>
+          <li>Using ezLegal.ai does NOT create attorney-client relationship</li>
+          <li>Information is NOT protected by privilege</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Six Core Governance Principles</h2>
+    <ol>
+      <li><strong>Access to Justice Mission:</strong> Democratize legal knowledge</li>
+      <li><strong>Human-Centricity & Oversight:</strong> AI assists, humans decide</li>
+      <li><strong>Transparency & Explainability:</strong> Clear about capabilities and limits</li>
+      <li><strong>Fairness & Bias Mitigation:</strong> Regular audits, diverse testing</li>
+      <li><strong>Robustness & Safety:</strong> Continuous monitoring, red teaming</li>
+      <li><strong>Accountability & Governance:</strong> AI Governance Board oversight</li>
+    </ol>
+  </div>
+
+  <div class="section page-break" id="safety">
+    <h1>4. Safety Features</h1>
+
+    <h2>Crisis Detection System</h2>
+    <p>The platform automatically detects crisis situations and surfaces immediate resources:</p>
+
+    <table>
+      <thead>
+        <tr><th>Crisis Type</th><th>Trigger Examples</th><th>Primary Resource</th><th>Priority</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Domestic Violence</td>
+          <td>"abusive relationship", "restraining order"</td>
+          <td>National DV Hotline: 1-800-799-7233</td>
+          <td><span class="badge badge-high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td>Self-Harm</td>
+          <td>"suicide", "want to die"</td>
+          <td>988 Suicide & Crisis Lifeline</td>
+          <td><span class="badge badge-high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td>Homelessness</td>
+          <td>"evicted", "homeless"</td>
+          <td>HUD Housing: 1-800-569-4287</td>
+          <td><span class="badge badge-high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td>Detention</td>
+          <td>"arrested", "detained"</td>
+          <td>ACLU Know Your Rights</td>
+          <td><span class="badge badge-high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td>Urgent Deadline</td>
+          <td>"court tomorrow", "filing deadline"</td>
+          <td>Attorney referral prioritized</td>
+          <td><span class="badge badge-medium">MEDIUM</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Safety Checkpoint Flow</h2>
+    <p>Before first chat interaction, users must complete:</p>
+    <ol>
+      <li>Acknowledge AI limitations disclaimer</li>
+      <li>Select their jurisdiction (state)</li>
+      <li>Confirm understanding that this is information, not legal advice</li>
+      <li>Acknowledge crisis resources are available</li>
+    </ol>
+
+    <h2>Persistent Safety Elements</h2>
+    <div class="highlight">
+      <strong>Always Visible in Chat Interface:</strong>
+      <ul>
+        <li>Crisis Help button (direct link to 988)</li>
+        <li>Free Legal Aid link (pro bono eligibility)</li>
+        <li>Find Lawyer link (attorney directory)</li>
+        <li>How AI Works link (transparency)</li>
+        <li>Disclaimer banner ("AI provides information, not legal advice")</li>
+      </ul>
+    </div>
+
+    <h2>When AI Recommends Human Attorney</h2>
+    <p>The system explicitly recommends attorney consultation for:</p>
+    <div class="grid-2">
+      <ul>
+        <li>Court appearances</li>
+        <li>Complex transactions</li>
+        <li>Criminal charges</li>
+        <li>Custody disputes</li>
+      </ul>
+      <ul>
+        <li>Immigration matters</li>
+        <li>Personal injury claims</li>
+        <li>Estate planning</li>
+        <li>Business formation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section page-break" id="accessibility">
+    <h1>5. Accessibility Compliance</h1>
+
+    <h2>WCAG 2.1 AA Standards</h2>
+
+    <h3>Perceivable</h3>
+    <ul>
+      <li>Text alternatives for all images (alt text)</li>
+      <li>Sufficient color contrast (4.5:1 minimum)</li>
+      <li>Resizable text without loss of functionality</li>
+      <li>No content relies solely on color</li>
+    </ul>
+
+    <h3>Operable</h3>
+    <ul>
+      <li>Full keyboard navigation</li>
+      <li>Skip links for main content</li>
+      <li>Visible focus indicators</li>
+      <li>No keyboard traps</li>
+    </ul>
+
+    <h3>Understandable</h3>
+    <ul>
+      <li>Consistent navigation patterns</li>
+      <li>Form input labels and instructions</li>
+      <li>Error identification and suggestions</li>
+      <li>Plain language where possible</li>
+    </ul>
+
+    <h3>Robust</h3>
+    <ul>
+      <li>Valid HTML markup</li>
+      <li>ARIA attributes for dynamic content</li>
+      <li>Assistive technology compatibility</li>
+    </ul>
+
+    <h2>Specific Implementations</h2>
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Implementation</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Icon Accessibility</td><td>aria-hidden="true" on decorative icons</td></tr>
+        <tr><td>Interactive Labels</td><td>aria-label on all buttons and links</td></tr>
+        <tr><td>Expandable Sections</td><td>aria-expanded, aria-controls</td></tr>
+        <tr><td>Landmarks</td><td>&lt;main&gt;, &lt;nav&gt;, &lt;aside&gt;, role="complementary"</td></tr>
+        <tr><td>Focus Management</td><td>:focus-visible ring styling</td></tr>
+        <tr><td>Skip Links</td><td>"Skip to main content" link in navigation</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section page-break" id="security">
+    <h1>6. Security Architecture</h1>
+
+    <h2>Data Protection Layers</h2>
+    <table>
+      <thead>
+        <tr><th>Layer</th><th>Implementation</th><th>Standard</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Transit Encryption</td><td>TLS 1.3</td><td>Industry Standard</td></tr>
+        <tr><td>At-Rest Encryption</td><td>AES-256</td><td>Industry Standard</td></tr>
+        <tr><td>Database Security</td><td>Row-Level Security (RLS)</td><td>Supabase</td></tr>
+        <tr><td>Authentication</td><td>Secure sessions, JWT</td><td>Supabase Auth</td></tr>
+        <tr><td>API Security</td><td>Rate limiting, input validation</td><td>OWASP</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Row-Level Security Policies</h2>
+    <ul>
+      <li>Users can only access their own data</li>
+      <li>Authenticated users required for sensitive operations</li>
+      <li>Admin functions require is_admin flag verification</li>
+      <li>No public access to user data by default</li>
+    </ul>
+
+    <h2>Compliance Certifications</h2>
+    <ul>
+      <li><strong>SOC 2 Type II:</strong> Controls implemented, audit available</li>
+      <li><strong>CCPA:</strong> California consumer data rights honored</li>
+      <li><strong>HIPAA-Ready:</strong> Architecture supports healthcare data if needed</li>
+      <li><strong>GDPR-Compatible:</strong> Data handling supports EU rights</li>
+    </ul>
+  </div>
+
+  <div class="section page-break" id="features">
+    <h1>7. Feature Inventory</h1>
+
+    <h2>Core Features</h2>
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Description</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>AI Legal Chat</td><td>Jurisdiction-aware legal information</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Safety Checkpoint</td><td>Consent and jurisdiction flow</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Crisis Detection</td><td>Automatic crisis keyword detection</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Crisis Escalation</td><td>Immediate resource display</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Handoff Toolbar</td><td>Persistent help options</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Pro Bono Intake</td><td>Eligibility screening</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Attorney Directory</td><td>Searchable lawyer profiles</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Document Generator</td><td>Legal form templates</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Chat History</td><td>Conversation archive</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Export Functions</td><td>Transcript and summary download</td><td><span class="badge badge-active">Active</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Transparency Features</h2>
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Description</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>How AI Works Page</td><td>Full methodology documentation</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Source Citations</td><td>Legal references in responses</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Confidence Indicators</td><td>Uncertainty acknowledgment</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Jurisdiction Context</td><td>State-specific information</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Disclaimers</td><td>Persistent legal notices</td><td><span class="badge badge-active">Active</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Administrative Features</h2>
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Description</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Admin Dashboard</td><td>User and content management</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>LSO Dashboard</td><td>Legal services organization tools</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Grant Reporting</td><td>Funder metrics and exports</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Audit Logging</td><td>System activity tracking</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>RBAC</td><td>Role-based access control</td><td><span class="badge badge-active">Active</span></td></tr>
+        <tr><td>Widget Embedding</td><td>Partner site integration</td><td><span class="badge badge-active">Active</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section page-break" id="checklist">
+    <h1>8. Compliance Checklist</h1>
+
+    <h2>Legal & Regulatory</h2>
+    <table>
+      <thead><tr><th>Requirement</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>UPL disclaimers present on all AI interactions</td><td>&#9745;</td></tr>
+        <tr><td>No attorney-client relationship language clear</td><td>&#9745;</td></tr>
+        <tr><td>Information vs. advice distinction maintained</td><td>&#9745;</td></tr>
+        <tr><td>Crisis resources readily accessible</td><td>&#9745;</td></tr>
+        <tr><td>Human escalation paths available</td><td>&#9745;</td></tr>
+        <tr><td>Data retention policies documented</td><td>&#9745;</td></tr>
+        <tr><td>User consent mechanisms in place</td><td>&#9745;</td></tr>
+        <tr><td>CCPA rights honored</td><td>&#9745;</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Ethical AI</h2>
+    <table>
+      <thead><tr><th>Requirement</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Bias audits scheduled</td><td>&#9745;</td></tr>
+        <tr><td>AI Governance Board established</td><td>&#9745;</td></tr>
+        <tr><td>Incident response procedures documented</td><td>&#9745;</td></tr>
+        <tr><td>User feedback mechanisms active</td><td>&#9745;</td></tr>
+        <tr><td>Transparency documentation complete</td><td>&#9745;</td></tr>
+        <tr><td>Attorney review process in place</td><td>&#9745;</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <table>
+      <thead><tr><th>Requirement</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>WCAG 2.1 AA compliance verified</td><td>&#9745;</td></tr>
+        <tr><td>Screen reader testing completed</td><td>&#9745;</td></tr>
+        <tr><td>Keyboard navigation functional</td><td>&#9745;</td></tr>
+        <tr><td>Color contrast ratios met</td><td>&#9745;</td></tr>
+        <tr><td>Focus management implemented</td><td>&#9745;</td></tr>
+        <tr><td>ARIA attributes properly used</td><td>&#9745;</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Security</h2>
+    <table>
+      <thead><tr><th>Requirement</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Encryption in transit and at rest</td><td>&#9745;</td></tr>
+        <tr><td>Row-level security policies active</td><td>&#9745;</td></tr>
+        <tr><td>Authentication secure</td><td>&#9745;</td></tr>
+        <tr><td>Penetration testing scheduled</td><td>&#9745;</td></tr>
+        <tr><td>Incident response plan documented</td><td>&#9745;</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section" style="text-align: center; background: #f1f5f9;">
+    <h2>Contact Information</h2>
+    <p>
+      <strong>Technical:</strong> development@ezlegal.ai<br>
+      <strong>Compliance:</strong> compliance@ezlegal.ai<br>
+      <strong>Partnerships:</strong> partnerships@ezlegal.ai<br>
+      <strong>Support:</strong> support@ezlegal.ai
+    </p>
+    <p style="margin-top: 30px; font-size: 0.9em; color: #64748b;">
+      Document Version: 1.0 | Last Updated: January 2026 | Classification: Reviewer Distribution
+    </p>
+  </div>
+
+  <script>
+    document.querySelector('.print-button').addEventListener('click', function() {
+      window.print();
+    });
+  </script>
+</body>
+</html>

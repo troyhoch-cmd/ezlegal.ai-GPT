@@ -1,0 +1,152 @@
+{
+  "version": "1.0.0",
+  "description": "Schema mapping from legacy MySQL to Supabase PostgreSQL",
+  "tables": {
+    "users": {
+      "source": {
+        "database": "legalbre_main",
+        "table": "users",
+        "columns": ["id", "email", "password", "first_name", "last_name", "phone", "role", "status", "created_at", "updated_at"]
+      },
+      "target": {
+        "auth_table": "auth.users",
+        "profile_table": "public.profiles",
+        "mapping": {
+          "id": "-> generates new UUID, stored in legacy_id",
+          "email": "-> auth.users.email",
+          "password": "-> REQUIRES PASSWORD RESET (hashes incompatible)",
+          "first_name": "-> profiles.full_name (combined with last_name)",
+          "last_name": "-> profiles.full_name (combined with first_name)",
+          "phone": "-> profiles.phone",
+          "role": "-> profiles.role (map: admin->admin, lawyer->lawyer, user->user)",
+          "status": "-> profiles.status",
+          "created_at": "-> profiles.created_at",
+          "updated_at": "-> profiles.updated_at"
+        }
+      }
+    },
+    "lawyers": {
+      "source": {
+        "database": "legalbre_main",
+        "table": "lawyers",
+        "columns": ["id", "user_id", "bar_number", "practice_area", "state", "hourly_rate", "biography", "availability", "created_at"]
+      },
+      "target": {
+        "table": "public.lawyer_profiles",
+        "mapping": {
+          "id": "-> generates new UUID, stored in legacy_id",
+          "user_id": "-> user_id (mapped to new auth.users.id)",
+          "bar_number": "-> bar_number",
+          "practice_area": "-> practice_areas (convert to text[])",
+          "state": "-> jurisdictions (convert to text[])",
+          "hourly_rate": "-> hourly_rate (numeric)",
+          "biography": "-> bio",
+          "availability": "-> availability_status",
+          "created_at": "-> created_at"
+        }
+      }
+    },
+    "clients": {
+      "source": {
+        "database": "legalbre_main",
+        "table": "clients",
+        "columns": ["id", "user_id", "case_type", "income_level", "household_size", "created_at"]
+      },
+      "target": {
+        "table": "public.profiles",
+        "notes": "Client data merged into unified profiles table with metadata"
+      }
+    },
+    "cases": {
+      "source": {
+        "database": "legalbre_main",
+        "table": "cases",
+        "columns": ["id", "client_id", "lawyer_id", "case_type", "status", "description", "jurisdiction", "created_at", "updated_at"]
+      },
+      "target": {
+        "table": "public.lso_cases",
+        "mapping": {
+          "id": "-> generates new UUID",
+          "client_id": "-> client_id (mapped)",
+          "lawyer_id": "-> assigned_lawyer_id (mapped)",
+          "case_type": "-> case_type",
+          "status": "-> status (map: open->open, closed->resolved, pending->in_progress)",
+          "description": "-> description",
+          "jurisdiction": "-> jurisdiction",
+          "created_at": "-> created_at"
+        }
+      }
+    },
+    "messages": {
+      "source": {
+        "database": "legalbre_main",
+        "table": "messages",
+        "columns": ["id", "user_id", "content", "role", "session_id", "created_at"]
+      },
+      "target": {
+        "table": "public.chat_messages",
+        "mapping": {
+          "id": "-> generates new UUID",
+          "user_id": "-> user_id (mapped)",
+          "content": "-> content",
+          "role": "-> role",
+          "session_id": "-> context_id (mapped to chat_contexts)",
+          "created_at": "-> created_at"
+        }
+      }
+    },
+    "documents": {
+      "source": {
+        "database": "legalbre_main",
+        "table": "documents",
+        "columns": ["id", "user_id", "case_id", "filename", "filepath", "file_type", "size", "created_at"]
+      },
+      "target": {
+        "table": "public.documents",
+        "storage": "supabase.storage.documents",
+        "mapping": {
+          "id": "-> generates new UUID",
+          "user_id": "-> user_id (mapped)",
+          "case_id": "-> case_id (mapped)",
+          "filename": "-> name",
+          "filepath": "-> MIGRATE FILE TO SUPABASE STORAGE",
+          "file_type": "-> type",
+          "size": "-> size",
+          "created_at": "-> created_at"
+        }
+      }
+    },
+    "wordpress_posts": {
+      "source": {
+        "database": "legalbre_wp",
+        "table": "wp_posts",
+        "columns": ["ID", "post_title", "post_content", "post_status", "post_type", "post_date"]
+      },
+      "target": {
+        "table": "public.ezreads_articles",
+        "filter": "WHERE post_type = 'post' AND post_status = 'publish'",
+        "mapping": {
+          "ID": "-> generates new UUID, stored in legacy_wp_id",
+          "post_title": "-> title",
+          "post_content": "-> content (HTML preserved)",
+          "post_status": "-> status (map: publish->published, draft->draft)",
+          "post_date": "-> published_at"
+        }
+      }
+    }
+  },
+  "id_mappings": {
+    "description": "Temporary tables to track old->new ID mappings during migration",
+    "tables": [
+      "migration_user_mapping",
+      "migration_lawyer_mapping",
+      "migration_case_mapping",
+      "migration_document_mapping"
+    ]
+  },
+  "special_handling": {
+    "passwords": "Legacy passwords use different hash algorithm. All users will need to reset passwords via 'Forgot Password' flow.",
+    "files": "Document files must be downloaded from EC2 and uploaded to Supabase Storage.",
+    "embeddings": "FAISS embeddings need to be re-generated using pgvector-compatible format."
+  }
+}

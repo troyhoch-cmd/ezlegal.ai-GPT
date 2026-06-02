@@ -1,0 +1,28 @@
+source_key: az_icp_forms
+source_name: Arizona Independent Contractor Forms
+jurisdiction: AZ
+source_type: agency_guidance
+base_url: https://azcc.gov/
+update_frequency: quarterly
+is_active: false
+rate_limit:
+  requests_per_minute: 20
+  min_delay_seconds: 3
+content_types:
+  - agency_guidance
+targets:
+  - name: business_registration
+    content_type: agency_guidance
+    start_url: https://azcc.gov/corporations/filing-forms
+    selectors:
+      title_list: "a[href$='.pdf']"
+      section_number: "span.form-number"
+      section_title: "h3, h2"
+      content: "main"
+  - name: tax_compliance
+    content_type: agency_guidance
+    start_url: https://azdor.gov/forms/tpt-forms
+    selectors:
+      title_list: "a[href$='.pdf']"
+      section_title: "h3, h2"
+      content: "main"

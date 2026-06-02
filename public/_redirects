@@ -1,0 +1,5 @@
+/sitemap.xml    https://qwzpcswjlhxbsghbnkrn.supabase.co/functions/v1/sitemap    200
+/chatbot        /chat   301
+/chat-v2        /chat   301
+/chatbot-standalone  /chat  301
+/*    /index.html   200

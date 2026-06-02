@@ -1,0 +1,21 @@
+source_key: ca_codes
+source_name: California Codes
+jurisdiction: CA
+source_type: state_statute
+base_url: https://leginfo.legislature.ca.gov/
+update_frequency: monthly
+is_active: true
+rate_limit:
+  requests_per_minute: 20
+  min_delay_seconds: 3
+content_types:
+  - statute
+targets:
+  - name: codes
+    content_type: statute
+    start_url: https://leginfo.legislature.ca.gov/faces/codes.xhtml
+    selectors:
+      title_list: "a.code-link"
+      section_number: "span.section-num"
+      section_title: "h4.section-title"
+      content: "div.section-text"

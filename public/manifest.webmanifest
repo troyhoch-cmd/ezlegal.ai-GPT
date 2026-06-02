@@ -1,0 +1,60 @@
+{
+  "name": "ezLegal.ai - AI Legal Assistant",
+  "short_name": "ezLegal",
+  "description": "AI-powered legal information and self-help tools. Get instant answers 24/7 and connect with licensed attorneys.",
+  "id": "/?pwa=1",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#0d9488",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["productivity", "business", "utilities", "education"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/icons/icon.svg?v=2",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.svg?v=2",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-monochrome.svg?v=2",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "monochrome"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ask a legal question",
+      "short_name": "Ask",
+      "description": "Ask our AI legal assistant a question for free",
+      "url": "/chat?utm_source=pwa_shortcut",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Pro Bono Legal Aid",
+      "short_name": "Pro Bono",
+      "description": "Apply for free legal help",
+      "url": "/pro-bono-intake?utm_source=pwa_shortcut",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Find an attorney",
+      "short_name": "Lawyers",
+      "description": "Browse verified attorneys",
+      "url": "/lawyer-profiles?utm_source=pwa_shortcut",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ]
+}

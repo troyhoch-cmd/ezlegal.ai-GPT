@@ -1,0 +1,22 @@
+source_key: ny_laws
+source_name: New York Consolidated Laws
+jurisdiction: NY
+source_type: state_statute
+base_url: https://www.nysenate.gov/legislation/laws
+update_frequency: monthly
+is_active: true
+rate_limit:
+  requests_per_minute: 20
+  min_delay_seconds: 3
+content_types:
+  - statute
+  - regulation
+targets:
+  - name: consolidated_laws
+    content_type: statute
+    start_url: https://www.nysenate.gov/legislation/laws
+    selectors:
+      title_list: "a.law-link"
+      section_number: "span.section-num"
+      section_title: "h3.section-title"
+      content: "div.law-body"

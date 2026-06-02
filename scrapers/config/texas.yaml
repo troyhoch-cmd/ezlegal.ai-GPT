@@ -1,0 +1,21 @@
+source_key: tx_statutes
+source_name: Texas Statutes
+jurisdiction: TX
+source_type: state_statute
+base_url: https://statutes.capitol.texas.gov/
+update_frequency: monthly
+is_active: true
+rate_limit:
+  requests_per_minute: 30
+  min_delay_seconds: 2
+content_types:
+  - statute
+targets:
+  - name: statutes
+    content_type: statute
+    start_url: https://statutes.capitol.texas.gov/Index.aspx
+    selectors:
+      title_list: "a.statute-link"
+      section_number: "span.section"
+      section_title: "h3.heading"
+      content: "div.content"
