@@ -13,7 +13,7 @@
     "test:security": "vitest run tests/security.static.spec.ts",
     "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 npx playwright test",
     "test:a11y": "PLAYWRIGHT_BROWSERS_PATH=0 npx playwright test accessibility.spec.ts",
-    "check:claims": "node scripts/check-claims.js",
+    "check:claims": "node scripts/check-claims.cjs",
     "test:interaction-budget": "node scripts/interaction-budget-runner.cjs",
     "test:interaction-budget:desktop": "node scripts/assert-interaction-budget.cjs",
     "test:interaction-budget:mobile": "node scripts/assert-interaction-budget-mobile.cjs",
