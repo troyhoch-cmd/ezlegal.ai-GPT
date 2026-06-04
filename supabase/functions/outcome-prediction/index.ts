@@ -23,6 +23,7 @@ interface SimilarCasesRequest {
   factorAnswers: Record<string, string | boolean>;
   predictionScore: number;
   additionalContext?: string;
+  contextCases?: ComparableCase[];
 }
 
 interface ComparableCase {
@@ -37,6 +38,15 @@ interface ComparableCase {
   damages?: string;
   keyTakeaway: string;
   citation?: string;
+}
+
+interface EducationalPattern {
+  patternDescription: string;
+  typicalFactors: string[];
+  typicalOutcome: string;
+  outcomeType: 'favorable' | 'unfavorable' | 'settled' | 'mixed';
+  keyTakeaway: string;
+  disclaimer: string;
 }
 
 interface LegacyRequest {
@@ -281,59 +291,60 @@ function isFactorBasedRequest(request: PredictionRequest): request is FactorBase
 async function findSimilarCases(
   request: SimilarCasesRequest,
   openaiKey: string
-): Promise<ComparableCase[]> {
-  const caseTypePrompt = CASE_TYPE_PROMPTS[request.caseType] || "a legal case";
-  const jurisdictionContext = JURISDICTION_CONTEXT[request.jurisdiction] || "";
+): Promise<{ cases: ComparableCase[]; educationalPatterns: EducationalPattern[]; sourceMode: "verified_cases" | "illustrative_patterns"; warning: string }> {
+  if (request.contextCases && request.contextCases.length > 0) {
+    const verifiedCases: ComparableCase[] = request.contextCases.map((c) => ({
+      caseName: c.caseName,
+      jurisdiction: c.jurisdiction,
+      year: c.year,
+      relevanceScore: c.relevanceScore,
+      factPattern: c.factPattern,
+      keyFacts: Array.isArray(c.keyFacts) ? c.keyFacts : [],
+      outcome: c.outcome,
+      outcomeType: ['favorable', 'unfavorable', 'settled', 'mixed'].includes(c.outcomeType) ? c.outcomeType : 'mixed',
+      damages: c.damages,
+      keyTakeaway: c.keyTakeaway,
+      citation: c.citation,
+    }));
 
+    return {
+      cases: verifiedCases,
+      educationalPatterns: [],
+      sourceMode: "verified_cases",
+      warning: "Cases sourced from provided verified data. Always confirm with an attorney.",
+    };
+  }
+
+  const caseTypePrompt = CASE_TYPE_PROMPTS[request.caseType] || "a legal case";
   const factorSummary = Object.entries(request.factorAnswers)
     .map(([key, value]) => `- ${key.replace(/_/g, ' ')}: ${value}`)
     .join('\n');
 
-  const systemPrompt = `You are an expert legal research assistant specializing in case law analysis. Your task is to identify and summarize cases with similar fact patterns to help users understand how courts have ruled in comparable situations.
+  const systemPrompt = `You are a legal education assistant. You describe GENERAL PATTERNS seen in case law — you do NOT generate fake case names, fake citations, fake years, or fake dollar amounts.
 
-IMPORTANT GUIDELINES:
-1. Generate realistic, representative case summaries based on common case law patterns
-2. Include specific details that make the cases educational and relevant
-3. Vary outcomes to show the range of possible results
-4. Focus on cases from the specified jurisdiction when possible
-5. Include key facts that parallel the user's situation
-6. Provide actionable takeaways from each case
-7. Use appropriate legal terminology but keep summaries accessible
+Your output must be clearly labeled as illustrative patterns, not real cases.
 
-${caseTypePrompt}
+${caseTypePrompt}`;
 
-Jurisdiction context for ${request.jurisdiction}: ${jurisdictionContext}`;
+  const userPrompt = `Describe 3-4 general outcome patterns commonly seen in ${request.caseType} matters in ${request.jurisdiction} with these fact patterns:
 
-  const userPrompt = `Find 3-5 cases with similar fact patterns to this ${request.caseType} matter in ${request.jurisdiction}:
-
-USER'S CASE FACTORS:
 ${factorSummary}
 
-${request.additionalContext ? `ADDITIONAL CONTEXT: ${request.additionalContext}` : ''}
+For each pattern, provide:
+1. A description of the typical fact pattern (no fake names)
+2. Typical factors that lead to this outcome
+3. The typical outcome
+4. A key takeaway
 
-Current prediction score: ${request.predictionScore}/100
-
-Generate cases that:
-1. Have similar fact patterns to the user's situation
-2. Show a realistic range of outcomes based on the prediction score
-3. Include specific details about what made each case succeed or fail
-4. Provide clear lessons the user can apply to their situation
-
-Respond with a JSON array of 3-5 cases in this exact format:
+Respond in JSON:
 {
-  "cases": [
+  "patterns": [
     {
-      "caseName": "Descriptive case name (e.g., 'Smith v. ABC Property Management')",
-      "jurisdiction": "${request.jurisdiction}",
-      "year": <year between 2018-2024>,
-      "relevanceScore": <number 70-95 indicating similarity to user's facts>,
-      "factPattern": "<2-3 sentence description of the case facts>",
-      "keyFacts": ["<fact similar to user's case>", "<another similar fact>", "<third similar fact>"],
-      "outcome": "<1-2 sentence description of what happened>",
+      "patternDescription": "<general description without fake names or citations>",
+      "typicalFactors": ["<factor 1>", "<factor 2>"],
+      "typicalOutcome": "<what typically happens>",
       "outcomeType": "<favorable|unfavorable|settled|mixed>",
-      "damages": "<optional: monetary recovery or other relief obtained>",
-      "keyTakeaway": "<actionable lesson for the user>",
-      "citation": "<optional: realistic citation format>"
+      "keyTakeaway": "<actionable lesson>"
     }
   ]
 }`;
@@ -351,15 +362,13 @@ Respond with a JSON array of 3-5 cases in this exact format:
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
         ],
-        max_tokens: 2500,
-        temperature: 0.7,
+        max_tokens: 1500,
+        temperature: 0.5,
         response_format: { type: "json_object" },
       }),
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("OpenAI API error:", errorText);
       throw new Error("OpenAI API request failed");
     }
 
@@ -367,28 +376,29 @@ Respond with a JSON array of 3-5 cases in this exact format:
     const content = data.choices[0]?.message?.content || "{}";
     const result = JSON.parse(content);
 
-    if (Array.isArray(result.cases)) {
-      return result.cases.slice(0, 5).map((c: ComparableCase) => ({
-        caseName: c.caseName || "Similar Case",
-        jurisdiction: c.jurisdiction || request.jurisdiction,
-        year: c.year || 2023,
-        relevanceScore: Math.min(95, Math.max(70, c.relevanceScore || 80)),
-        factPattern: c.factPattern || "",
-        keyFacts: Array.isArray(c.keyFacts) ? c.keyFacts.slice(0, 4) : [],
-        outcome: c.outcome || "",
-        outcomeType: ['favorable', 'unfavorable', 'settled', 'mixed'].includes(c.outcomeType)
-          ? c.outcomeType
-          : 'mixed',
-        damages: c.damages,
-        keyTakeaway: c.keyTakeaway || "",
-        citation: c.citation,
-      }));
-    }
+    const patterns: EducationalPattern[] = (result.patterns || []).slice(0, 4).map((p: Record<string, unknown>) => ({
+      patternDescription: (p.patternDescription as string) || "",
+      typicalFactors: Array.isArray(p.typicalFactors) ? p.typicalFactors as string[] : [],
+      typicalOutcome: (p.typicalOutcome as string) || "",
+      outcomeType: ['favorable', 'unfavorable', 'settled', 'mixed'].includes(p.outcomeType as string) ? p.outcomeType as EducationalPattern['outcomeType'] : 'mixed',
+      keyTakeaway: (p.keyTakeaway as string) || "",
+      disclaimer: "Illustrative pattern, not a real case.",
+    }));
 
-    return [];
+    return {
+      cases: [],
+      educationalPatterns: patterns,
+      sourceMode: "illustrative_patterns",
+      warning: "No verified case data provided. Patterns shown are illustrative and do not represent real cases. Do not cite these as authority.",
+    };
   } catch (error) {
-    console.error("Similar cases error:", error);
-    return [];
+    console.error("Educational patterns error:", error);
+    return {
+      cases: [],
+      educationalPatterns: [],
+      sourceMode: "illustrative_patterns",
+      warning: "Unable to generate patterns. No verified case data available.",
+    };
   }
 }
 
@@ -540,16 +550,23 @@ Deno.serve(async (req: Request) => {
         );
       }
 
-      const cases = await findSimilarCases(requestData, openaiKey);
+      const result = await findSimilarCases(requestData, openaiKey);
 
       return new Response(
         JSON.stringify({
-          cases,
+          cases: result.cases,
+          educationalPatterns: result.educationalPatterns,
           metadata: {
             caseType: requestData.caseType,
             jurisdiction: requestData.jurisdiction,
             generatedAt: new Date().toISOString(),
-            model: "gpt-4o",
+            sourceMode: result.sourceMode,
+            warning: result.warning,
+          },
+          modelInfo: {
+            version: "v3.1",
+            aiEnhanced: true,
+            accuracyEvidence: "not independently verified",
           },
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -585,10 +602,9 @@ Deno.serve(async (req: Request) => {
             reasoning: prediction.reasoning,
           },
           modelInfo: {
-            version: "v3.0-BlueJ",
-            overallAccuracy: 89.2,
+            version: "v3.1",
             aiEnhanced: !!openaiKey && requestData.useAdvancedReasoning,
-            model: "gpt-4o",
+            accuracyEvidence: "not independently verified",
           },
           tenantId,
         }),
@@ -634,7 +650,7 @@ Deno.serve(async (req: Request) => {
         predicted_outcome: prediction.outcome,
         factors: prediction.factors,
         recommendations: prediction.recommendations,
-        model_version: "v3.0-BlueJ",
+        model_version: "v3.1",
         request_metadata: { input: caseData },
       }).catch(err => console.error("Failed to store prediction:", err));
     }
@@ -649,9 +665,9 @@ Deno.serve(async (req: Request) => {
           recommendations: prediction.recommendations,
         },
         modelInfo: {
-          version: "v3.0-BlueJ",
-          overallAccuracy: 89.2,
+          version: "v3.1",
           aiEnhanced: false,
+          accuracyEvidence: "not independently verified",
         },
         tenantId,
       }),
