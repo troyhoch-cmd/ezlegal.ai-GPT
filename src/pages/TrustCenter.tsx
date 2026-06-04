@@ -15,6 +15,7 @@ import TrustSafetyReportModal from '../components/TrustSafetyReportModal';
 import TrustFAQ from '../components/TrustFAQ';
 import SafeUseChecklist from '../components/SafeUseChecklist';
 import { GovernanceEvidencePanel } from '../components/trust/GovernanceEvidencePanel';
+import TrustEvidenceMatrix from '../components/trust/TrustEvidenceMatrix';
 
 function generatePDF(title: string, content: string) {
   const htmlContent = `
@@ -869,6 +870,10 @@ export default function TrustCenter() {
 
           <div className="mt-10">
             <GovernanceEvidencePanel language={language} variant="full" />
+          </div>
+
+          <div className="mt-10">
+            <TrustEvidenceMatrix />
           </div>
         </div>
       </section>
