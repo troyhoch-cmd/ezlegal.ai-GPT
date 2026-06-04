@@ -81,21 +81,21 @@ interface TriageDraft {
 
 function loadDraft(): TriageDraft | null {
   try {
-    const raw = localStorage.getItem(TRIAGE_DRAFT_KEY);
+    const raw = sessionStorage.getItem(TRIAGE_DRAFT_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch { return null; }
 }
 
 function saveDraft(draft: TriageDraft) {
-  try { localStorage.setItem(TRIAGE_DRAFT_KEY, JSON.stringify(draft)); } catch { /* ignore */ }
+  try { sessionStorage.setItem(TRIAGE_DRAFT_KEY, JSON.stringify(draft)); } catch { /* ignore */ }
 }
 
 function clearDraft() {
-  try { localStorage.removeItem(TRIAGE_DRAFT_KEY); } catch { /* ignore */ }
+  try { sessionStorage.removeItem(TRIAGE_DRAFT_KEY); } catch { /* ignore */ }
 }
 
 function loadSavedState(): string | null {
-  try { return localStorage.getItem(STATE_STORAGE_KEY); } catch { return null; }
+  try { return sessionStorage.getItem(STATE_STORAGE_KEY); } catch { return null; }
 }
 
 export default function PersonaIntake() {
@@ -185,7 +185,7 @@ export default function PersonaIntake() {
   const handleStateSelect = (code: string | null) => {
     setSelectedState(code);
     if (code) {
-      try { localStorage.setItem(STATE_STORAGE_KEY, code); } catch { /* ignore */ }
+      try { sessionStorage.setItem(STATE_STORAGE_KEY, code); } catch { /* ignore */ }
     }
     completeFlow(code);
   };
@@ -193,7 +193,7 @@ export default function PersonaIntake() {
   const completeFlow = (state: string | null) => {
     clearDraft();
     const ctx = { persona, issue, urgency, state, language, ts: new Date().toISOString() };
-    try { localStorage.setItem(TRIAGE_STORAGE_KEY, JSON.stringify(ctx)); } catch { /* ignore */ }
+    try { sessionStorage.setItem(TRIAGE_STORAGE_KEY, JSON.stringify(ctx)); } catch { /* ignore */ }
     trackEvent('triage_completed', { persona, issue, urgency, state });
     trackReviewScreenViewed();
     setStep('results');
@@ -562,83 +562,119 @@ export default function PersonaIntake() {
                   </Link>
                 )}
 
-                {isHighRisk && (
-                  <Link
-                    to="/find-attorney"
-                    className="flex items-center gap-4 w-full p-5 bg-white rounded-xl border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all text-left group"
-                  >
-                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-teal-100 text-teal-700 shrink-0">
-                      <Users className="w-5 h-5" aria-hidden="true" />
-                    </span>
-                    <div className="flex-1">
-                      <p className="font-bold text-slate-900">{en ? 'Find a lawyer or legal aid' : 'Encontrar abogado o ayuda legal'}</p>
-                      <p className="text-sm text-slate-600">{en ? 'Free and low-cost options available' : 'Opciones gratuitas y de bajo costo disponibles'}</p>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
-                  </Link>
+                {/* Individuals: free help first, then chat */}
+                {persona === 'individual' && (
+                  <>
+                    <Link
+                      to="/find-attorney"
+                      className={`flex items-center gap-4 w-full p-5 rounded-xl border hover:shadow-md transition-all text-left group ${
+                        isHighRisk ? 'bg-white border-slate-200 hover:border-teal-300' : 'bg-teal-50 border-teal-200 hover:border-teal-400'
+                      }`}
+                    >
+                      <span className={`inline-flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${isHighRisk ? 'bg-teal-100 text-teal-700' : 'bg-teal-700 text-white'}`}>
+                        <Heart className="w-5 h-5" aria-hidden="true" />
+                      </span>
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-900">{en ? 'Find free or low-cost help' : 'Encontrar ayuda gratuita o de bajo costo'}</p>
+                        <p className="text-sm text-slate-600">{en ? 'Legal aid and community resources near you' : 'Ayuda legal y recursos comunitarios cerca de ti'}</p>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
+                    </Link>
+                    <Link
+                      to="/chat"
+                      className="flex items-center gap-4 w-full p-5 bg-white rounded-xl border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all text-left group"
+                    >
+                      <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 text-slate-700 shrink-0">
+                        <ArrowRight className="w-5 h-5" aria-hidden="true" />
+                      </span>
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-900">{en ? 'Get free legal information' : 'Obtener información legal gratuita'}</p>
+                        <p className="text-sm text-slate-600">{en ? 'Ask questions and get plain-language guidance' : 'Haz preguntas y obtén orientación en lenguaje simple'}</p>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
+                    </Link>
+                  </>
                 )}
 
-                {persona === 'organization' ? (
-                  <Link
-                    to="/partners"
-                    className={`flex items-center gap-4 w-full p-5 rounded-xl border hover:shadow-md transition-all text-left group ${
-                      isHighRisk ? 'bg-white border-slate-200 hover:border-teal-300' : 'bg-teal-50 border-teal-200 hover:border-teal-400'
-                    }`}
-                  >
-                    <span className={`inline-flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${isHighRisk ? 'bg-slate-100 text-slate-700' : 'bg-teal-700 text-white'}`}>
-                      <ArrowRight className="w-5 h-5" aria-hidden="true" />
-                    </span>
-                    <div className="flex-1">
-                      <p className="font-bold text-slate-900">{en ? 'Explore partner workflow' : 'Explorar flujo de socios'}</p>
-                      <p className="text-sm text-slate-600">{en ? 'Intake, triage, and referral tools' : 'Herramientas de admisión, triaje y referencia'}</p>
-                    </div>
-                  </Link>
-                ) : persona === 'business' ? (
-                  <Link
-                    to="/chat"
-                    className={`flex items-center gap-4 w-full p-5 rounded-xl border hover:shadow-md transition-all text-left group ${
-                      isHighRisk ? 'bg-white border-slate-200 hover:border-teal-300' : 'bg-teal-50 border-teal-200 hover:border-teal-400'
-                    }`}
-                  >
-                    <span className={`inline-flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${isHighRisk ? 'bg-slate-100 text-slate-700' : 'bg-teal-700 text-white'}`}>
-                      <ArrowRight className="w-5 h-5" aria-hidden="true" />
-                    </span>
-                    <div className="flex-1">
-                      <p className="font-bold text-slate-900">{en ? 'Get business information' : 'Obtener información para negocio'}</p>
-                      <p className="text-sm text-slate-600">{en ? 'Contracts, compliance, and dispute guidance' : 'Contratos, cumplimiento y orientación de disputas'}</p>
-                    </div>
-                  </Link>
-                ) : (
-                  <Link
-                    to="/chat"
-                    className={`flex items-center gap-4 w-full p-5 rounded-xl border hover:shadow-md transition-all text-left group ${
-                      isHighRisk ? 'bg-white border-slate-200 hover:border-teal-300' : 'bg-teal-50 border-teal-200 hover:border-teal-400'
-                    }`}
-                  >
-                    <span className={`inline-flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${isHighRisk ? 'bg-slate-100 text-slate-700' : 'bg-teal-700 text-white'}`}>
-                      <ArrowRight className="w-5 h-5" aria-hidden="true" />
-                    </span>
-                    <div className="flex-1">
-                      <p className="font-bold text-slate-900">{en ? 'Continue with general information' : 'Continuar con información general'}</p>
-                      <p className="text-sm text-slate-600">{en ? 'Ask questions and get plain-language guidance' : 'Haz preguntas y obtén orientación en lenguaje simple'}</p>
-                    </div>
-                  </Link>
+                {/* SMBs: business tools first, then attorney */}
+                {persona === 'business' && (
+                  <>
+                    <Link
+                      to="/chat"
+                      className={`flex items-center gap-4 w-full p-5 rounded-xl border hover:shadow-md transition-all text-left group ${
+                        isHighRisk ? 'bg-white border-slate-200 hover:border-teal-300' : 'bg-teal-50 border-teal-200 hover:border-teal-400'
+                      }`}
+                    >
+                      <span className={`inline-flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${isHighRisk ? 'bg-slate-100 text-slate-700' : 'bg-teal-700 text-white'}`}>
+                        <ArrowRight className="w-5 h-5" aria-hidden="true" />
+                      </span>
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-900">{en ? 'Get business information' : 'Obtener información para negocio'}</p>
+                        <p className="text-sm text-slate-600">{en ? 'Contracts, compliance, and dispute guidance' : 'Contratos, cumplimiento y orientación de disputas'}</p>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
+                    </Link>
+                    <Link
+                      to="/find-attorney"
+                      className="flex items-center gap-4 w-full p-5 bg-white rounded-xl border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all text-left group"
+                    >
+                      <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 text-slate-700 shrink-0">
+                        <Users className="w-5 h-5" aria-hidden="true" />
+                      </span>
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-900">{en ? 'Find a business attorney' : 'Encontrar un abogado de negocios'}</p>
+                        <p className="text-sm text-slate-600">{en ? 'Get professional help when needed' : 'Obtener ayuda profesional cuando sea necesario'}</p>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
+                    </Link>
+                  </>
                 )}
 
-                {!isHighRisk && (
-                  <Link
-                    to="/find-attorney"
-                    className="flex items-center gap-4 w-full p-5 bg-white rounded-xl border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all text-left group"
-                  >
-                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 text-slate-700 shrink-0">
-                      <Heart className="w-5 h-5" aria-hidden="true" />
-                    </span>
-                    <div className="flex-1">
-                      <p className="font-bold text-slate-900">{en ? 'Find free or low-cost help' : 'Encontrar ayuda gratuita o de bajo costo'}</p>
-                      <p className="text-sm text-slate-600">{en ? 'Legal aid and community resources' : 'Ayuda legal y recursos comunitarios'}</p>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
-                  </Link>
+                {/* Organizations: demo/governance first */}
+                {persona === 'organization' && (
+                  <>
+                    <Link
+                      to="/partner-dashboard-demo"
+                      className={`flex items-center gap-4 w-full p-5 rounded-xl border hover:shadow-md transition-all text-left group ${
+                        isHighRisk ? 'bg-white border-slate-200 hover:border-teal-300' : 'bg-teal-50 border-teal-200 hover:border-teal-400'
+                      }`}
+                    >
+                      <span className={`inline-flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${isHighRisk ? 'bg-slate-100 text-slate-700' : 'bg-teal-700 text-white'}`}>
+                        <ArrowRight className="w-5 h-5" aria-hidden="true" />
+                      </span>
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-900">{en ? 'View partner dashboard demo' : 'Ver demo del panel de socios'}</p>
+                        <p className="text-sm text-slate-600">{en ? 'Intake, triage, and referral tools' : 'Herramientas de admisión, triaje y referencia'}</p>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
+                    </Link>
+                    <Link
+                      to="/ai-governance"
+                      className="flex items-center gap-4 w-full p-5 bg-white rounded-xl border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all text-left group"
+                    >
+                      <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 text-slate-700 shrink-0">
+                        <Shield className="w-5 h-5" aria-hidden="true" />
+                      </span>
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-900">{en ? 'AI governance and safety' : 'Gobernanza y seguridad de IA'}</p>
+                        <p className="text-sm text-slate-600">{en ? 'Review compliance framework' : 'Revisar marco de cumplimiento'}</p>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
+                    </Link>
+                    <Link
+                      to="/contact?subject=partnerships"
+                      className="flex items-center gap-4 w-full p-5 bg-white rounded-xl border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all text-left group"
+                    >
+                      <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 text-slate-700 shrink-0">
+                        <Users className="w-5 h-5" aria-hidden="true" />
+                      </span>
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-900">{en ? 'Talk to partnerships team' : 'Hablar con equipo de alianzas'}</p>
+                        <p className="text-sm text-slate-600">{en ? 'Schedule a call or request information' : 'Programar una llamada o solicitar información'}</p>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
+                    </Link>
+                  </>
                 )}
               </div>
 

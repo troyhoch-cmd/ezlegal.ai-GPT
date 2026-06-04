@@ -45,42 +45,42 @@ export interface HomepageFinalCTA {
 
 export const homepageHero: HomepageHero = {
   headline: {
-    en: 'Free legal help tools in English or Spanish',
-    es: 'Herramientas legales gratuitas en ingl\u00e9s o espa\u00f1ol',
+    en: 'Understand your legal options in 2 minutes',
+    es: 'Entiende tus opciones legales en 2 minutos',
   },
   subline: {
-    en: 'Understand your options before you decide what to do next.',
-    es: 'Entiende tus opciones antes de decidir qu\u00e9 hacer.',
+    en: 'Free tools to help you figure out what to do next \u2014 in plain language.',
+    es: 'Herramientas gratuitas para ayudarte a saber qu\u00e9 hacer \u2014 en lenguaje simple.',
   },
   scopeLine: {
-    en: 'Not a law firm. Not legal advice. No account needed to start.',
-    es: 'No es un bufete. No es asesor\u00eda legal. Sin necesidad de cuenta para empezar.',
+    en: 'Not a law firm. Not legal advice. No account needed.',
+    es: 'No es un bufete. No es asesor\u00eda legal. Sin cuenta necesaria.',
   },
   inputLabel: {
-    en: 'What legal problem do you need help with?',
-    es: '\u00bfCon qu\u00e9 problema legal necesitas ayuda?',
+    en: 'What happened?',
+    es: '\u00bfQu\u00e9 pas\u00f3?',
   },
   inputPlaceholder: {
-    en: 'I received eviction papers and have a deadline\u2026',
-    es: 'Recib\u00ed papeles de desalojo y tengo un plazo\u2026',
+    en: 'e.g. I got an eviction notice and I have 5 days\u2026',
+    es: 'ej. Me lleg\u00f3 un aviso de desalojo y tengo 5 d\u00edas\u2026',
   },
   inputAriaLabel: {
     en: 'Describe your legal situation',
     es: 'Describe tu situaci\u00f3n legal',
   },
   primaryCta: {
-    en: 'Start free 2-minute checkup',
-    es: 'Comenzar revisión gratis de 2 minutos',
+    en: 'Start free checkup',
+    es: 'Comenzar revisi\u00f3n gratis',
   },
   urgentPrompt: {
-    en: 'Need urgent help?',
-    es: '\u00bfNecesitas ayuda urgente?',
+    en: 'In danger or facing a deadline?',
+    es: '\u00bfEn peligro o enfrentas un plazo?',
   },
   urgentLink: {
-    en: 'View emergency and deadline resources',
-    es: 'Ver recursos de emergencia y plazos',
+    en: 'Get emergency help now',
+    es: 'Obtener ayuda de emergencia ahora',
   },
-  spanishReassurance: 'Puedes usar esta herramienta en espa\u00f1ol. No necesitas una cuenta para empezar.',
+  spanishReassurance: 'Disponible completamente en espa\u00f1ol. Sin cuenta necesaria.',
 };
 
 export const homepageSMB: HomepageSMB = {
@@ -143,16 +143,16 @@ export const homepagePartner: HomepagePartner = {
 
 export const homepageFinalCTA: HomepageFinalCTA = {
   heading: {
-    en: 'Tell us what happened.',
-    es: 'Dinos qu\u00e9 pas\u00f3.',
+    en: 'Ready to understand your options?',
+    es: '\u00bfListo para entender tus opciones?',
   },
   subline: {
-    en: 'Legal information, not legal advice. Start free, in English or Spanish. No sign-up needed.',
-    es: 'Informaci\u00f3n legal, no asesor\u00eda legal. Comienza gratis, en ingl\u00e9s o espa\u00f1ol. Sin registro.',
+    en: 'Free legal information in plain language. English or Spanish. No sign-up needed.',
+    es: 'Informaci\u00f3n legal gratis en lenguaje simple. Ingl\u00e9s o espa\u00f1ol. Sin registro.',
   },
   primaryCta: {
-    en: 'Ask a question',
-    es: 'Hacer una pregunta',
+    en: 'Start free checkup',
+    es: 'Comenzar revisi\u00f3n gratis',
   },
-  spanishCta: 'Ayuda en espa\u00f1ol',
+  spanishCta: 'Comenzar en espa\u00f1ol',
 };

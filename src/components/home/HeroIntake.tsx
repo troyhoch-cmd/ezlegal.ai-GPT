@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Send, AlertTriangle, CheckCircle, Briefcase, Users, User } from 'lucide-react';
+import { Send, AlertTriangle, CheckCircle, Briefcase, Users, User, Globe } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { type AudiencePath } from '../../data/audiencePaths';
 import { homepageHero } from '../../data/homepageContent';
@@ -14,10 +14,10 @@ interface HeroIntakeProps {
   currentPath: AudiencePath;
 }
 
-const icpCards: { id: AudiencePath; icon: typeof User; label: { en: string; es: string }; route: string; event: 'icp_individual_click' | 'icp_smb_click' | 'icp_legal_aid_click' }[] = [
-  { id: 'legal-aid', icon: User, label: { en: 'Find free or low-cost legal help', es: 'Encontrar ayuda legal gratuita o de bajo costo' }, route: '/start?path=legal-aid', event: 'icp_individual_click' },
-  { id: 'smb', icon: Briefcase, label: { en: 'View business legal tools', es: 'Ver herramientas legales para negocios' }, route: '/start?path=smb', event: 'icp_smb_click' },
-  { id: 'organizations', icon: Users, label: { en: 'Request partner demo', es: 'Solicitar demo para socios' }, route: '/for-organizations', event: 'icp_legal_aid_click' },
+const icpCards: { id: AudiencePath; icon: typeof User; label: { en: string; es: string }; desc: { en: string; es: string }; route: string; event: 'icp_individual_click' | 'icp_smb_click' | 'icp_legal_aid_click' }[] = [
+  { id: 'legal-aid', icon: User, label: { en: 'I need help for myself or family', es: 'Necesito ayuda para m\u00ed o mi familia' }, desc: { en: 'Free tools. No account needed.', es: 'Gratis. Sin cuenta.' }, route: '/start?path=legal-aid', event: 'icp_individual_click' },
+  { id: 'smb', icon: Briefcase, label: { en: 'I run a small business', es: 'Tengo un peque\u00f1o negocio' }, desc: { en: 'Contracts, compliance, disputes.', es: 'Contratos, cumplimiento, disputas.' }, route: '/start?path=smb', event: 'icp_smb_click' },
+  { id: 'organizations', icon: Users, label: { en: 'I represent an organization', es: 'Represento una organizaci\u00f3n' }, desc: { en: 'Partner tools and demo.', es: 'Herramientas y demo para socios.' }, route: '/for-organizations', event: 'icp_legal_aid_click' },
 ];
 
 const whatHappensNext = {
@@ -68,6 +68,21 @@ export function HeroIntake({ currentPath }: HeroIntakeProps) {
         <p className="mt-0.5 text-[11px] sm:text-xs text-slate-500">
           {en ? h.scopeLine.en : h.scopeLine.es}
         </p>
+
+        {/* Spanish CTA for English users */}
+        {en && (
+          <button
+            type="button"
+            onClick={() => {
+              trackEvent('espanol_cta_clicked', { source: 'hero' });
+              navigate('/es');
+            }}
+            className="mt-1.5 inline-flex items-center gap-1.5 rounded-lg bg-teal-50 border border-teal-100 px-2.5 py-1 text-[11px] sm:text-xs font-medium text-teal-800 hover:bg-teal-100 transition focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+          >
+            <Globe className="w-3 h-3 text-teal-600 flex-shrink-0" aria-hidden="true" />
+            Disponible en espa&ntilde;ol
+          </button>
+        )}
 
         {/* Spanish reassurance */}
         {!en && (
@@ -156,7 +171,7 @@ export function HeroIntake({ currentPath }: HeroIntakeProps) {
         {/* ICP path cards -- full-width stacked on mobile, grid on desktop */}
         <div className="mt-2 sm:mt-3">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            {icpCards.map(({ id, icon: Icon, label, route, event }) => (
+            {icpCards.map(({ id, icon: Icon, label, desc, route, event }) => (
               <button
                 key={id}
                 type="button"
@@ -164,7 +179,10 @@ export function HeroIntake({ currentPath }: HeroIntakeProps) {
                 className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 min-h-[52px] text-left hover:border-teal-300 hover:bg-teal-50/50 transition focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 group"
               >
                 <Icon className="w-5 h-5 text-teal-700 flex-shrink-0 group-hover:text-teal-800" aria-hidden="true" />
-                <span className="text-xs sm:text-xs font-medium text-slate-800 group-hover:text-teal-900">{en ? label.en : label.es}</span>
+                <div className="min-w-0">
+                  <span className="block text-xs font-medium text-slate-800 group-hover:text-teal-900">{en ? label.en : label.es}</span>
+                  <span className="block text-[10px] text-slate-500 mt-0.5">{en ? desc.en : desc.es}</span>
+                </div>
               </button>
             ))}
           </div>

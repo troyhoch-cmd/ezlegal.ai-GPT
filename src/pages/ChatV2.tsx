@@ -620,7 +620,7 @@ export default function ChatV2() {
           <div className="flex items-center justify-center gap-4 sm:gap-6 px-4 py-1.5 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-600 flex-wrap">
             <span className="inline-flex items-center gap-1">
               <Shield className="w-3 h-3 text-teal-600" aria-hidden="true" />
-              {en ? 'AI legal information' : 'Información legal con IA'}
+              {en ? 'Legal information only' : 'Solo información legal'}
             </span>
             <span className="inline-flex items-center gap-1">
               <Lock className="w-3 h-3 text-teal-600" aria-hidden="true" />
@@ -638,6 +638,9 @@ export default function ChatV2() {
               >
                 {en ? 'Change' : 'Cambiar'}
               </button>
+            </span>
+            <span className="inline-flex items-center gap-1 font-medium">
+              {language === 'en' ? 'EN' : 'ES'}
             </span>
           </div>
         </header>
