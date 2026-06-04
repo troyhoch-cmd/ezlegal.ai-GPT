@@ -1,8 +1,12 @@
 import type { LegalAidMatchParams, LegalAidMatchResult, LegalAidOrganization } from './types';
-import { LEGAL_AID_DIRECTORY } from './directory';
+import { LEGAL_AID_DIRECTORY, getVerificationWarnings, type VerificationWarning } from './directory';
 
-export function matchLegalAidOrganizations(params: LegalAidMatchParams): LegalAidMatchResult[] {
-  const results: LegalAidMatchResult[] = [];
+export interface LegalAidMatchResultWithWarnings extends LegalAidMatchResult {
+  verificationWarnings: VerificationWarning[];
+}
+
+export function matchLegalAidOrganizations(params: LegalAidMatchParams): LegalAidMatchResultWithWarnings[] {
+  const results: LegalAidMatchResultWithWarnings[] = [];
 
   for (const org of LEGAL_AID_DIRECTORY) {
     if (org.status === 'unavailable') continue;
@@ -66,7 +70,12 @@ export function matchLegalAidOrganizations(params: LegalAidMatchParams): LegalAi
     }
 
     if (score >= 5) {
-      results.push({ organization: org, matchScore: score, matchReasons: reasons });
+      results.push({
+        organization: org,
+        matchScore: score,
+        matchReasons: reasons,
+        verificationWarnings: getVerificationWarnings(org),
+      });
     }
   }
 
@@ -84,7 +93,7 @@ export function getEmergencyResources(jurisdiction: string, language: string): L
   );
 }
 
-export function hasVerifiedMatch(results: LegalAidMatchResult[]): boolean {
+export function hasVerifiedMatch(results: LegalAidMatchResultWithWarnings[]): boolean {
   return results.some((r) => r.organization.status === 'verified');
 }
 

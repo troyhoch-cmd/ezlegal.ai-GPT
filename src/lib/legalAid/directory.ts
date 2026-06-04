@@ -10,6 +10,38 @@ import type { LegalAidOrganization } from './types';
  * IMPORTANT: Do not fabricate sourceUrl values. Set to null if unknown.
  * Do not invent organization names or contact info.
  */
+
+export interface VerificationWarning {
+  key: 'contact_directly' | 'needs_verification';
+  en: string;
+  es: string;
+}
+
+export function getVerificationWarnings(org: LegalAidOrganization): VerificationWarning[] {
+  const warnings: VerificationWarning[] = [];
+
+  if (!org.sourceUrl) {
+    warnings.push({
+      key: 'contact_directly',
+      en: 'Contact directly to confirm availability.',
+      es: 'Contacte directamente para confirmar disponibilidad.',
+    });
+  }
+
+  if (org.status === 'needs_verification') {
+    warnings.push({
+      key: 'needs_verification',
+      en: 'Information needs verification.',
+      es: 'La información necesita verificación.',
+    });
+  }
+
+  return warnings;
+}
+
+export function needsVerificationDisplay(org: LegalAidOrganization): boolean {
+  return !org.sourceUrl || org.status === 'needs_verification';
+}
 export const LEGAL_AID_DIRECTORY: LegalAidOrganization[] = [
   {
     id: 'az-legal-aid-001',

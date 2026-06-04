@@ -287,12 +287,12 @@ export default function ForOrganizations() {
             </p>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {[
-                { title: 'Referral triage', desc: 'AI-generated intake summaries that surface issue type, urgency, and jurisdiction.' },
-                { title: 'Language access', desc: 'Full intake and output in English and Spanish, with more languages planned.' },
-                { title: 'Deadline and urgency flags', desc: 'Automatic detection of court dates, filing deadlines, and safety concerns.' },
-                { title: 'Consent-based handoff', desc: 'Users control when and how their summary is shared with your team.' },
-                { title: 'Anonymized reporting', desc: 'Aggregate intake data for grant reporting without exposing individual details.' },
-                { title: 'Human review workflow', desc: 'Staff can review, annotate, and route AI-generated summaries before action.' },
+                { title: 'Consent-based referral routing', desc: 'Clients explicitly opt in before any data is shared. Consent is timestamped and revocable.' },
+                { title: 'Staff review workflow', desc: 'Every AI-generated summary is labeled "for staff review" — nothing goes to a client without human approval.' },
+                { title: 'Multilingual intake', desc: 'Full bilingual intake in English and Spanish. Language preference is captured and preserved in referral packets.' },
+                { title: 'Urgency flags and deadline detection', desc: 'Automatic detection of court dates, filing deadlines, and safety concerns with visual priority sorting.' },
+                { title: 'Audit logs', desc: 'Immutable record of all consent events, referral routing, and status changes for compliance and oversight.' },
+                { title: 'Grant reporting (anonymized)', desc: 'Aggregate intake volume, triage outcomes, and demographics for funders. Never includes client names, narratives, or contact info.' },
               ].map((item) => (
                 <div key={item.title} className="p-5 rounded-xl border border-slate-200 bg-white">
                   <h3 className="font-bold text-slate-900 mb-1 text-sm">{item.title}</h3>
@@ -316,9 +316,12 @@ export default function ForOrganizations() {
               <span className="absolute top-3 right-3 inline-flex items-center rounded-full bg-amber-100 border border-amber-300 px-2.5 py-0.5 text-[10px] font-bold text-amber-800 uppercase tracking-wide">
                 Example only
               </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 border border-blue-200 px-2 py-0.5 text-[10px] font-semibold text-blue-700 uppercase tracking-wide mb-4">
+                For staff review
+              </span>
               <div className="space-y-3">
                 <div>
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Issue type</p>
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Issue category</p>
                   <p className="text-sm text-slate-800">Housing — Eviction notice received</p>
                 </div>
                 <div>
@@ -334,7 +337,11 @@ export default function ForOrganizations() {
                   <p className="text-sm text-slate-800">Spanish (intake completed in Spanish)</p>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">AI summary</p>
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Consent source</p>
+                  <p className="text-sm text-slate-800">Explicit opt-in at intake (timestamped)</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Generated summary</p>
                   <p className="text-sm text-slate-800">Tenant received 5-day eviction notice. No prior violations. May qualify for emergency rental assistance. Deadline: response due before court date.</p>
                 </div>
                 <div>
@@ -343,7 +350,7 @@ export default function ForOrganizations() {
                 </div>
               </div>
               <p className="mt-4 text-[11px] text-amber-700 italic">
-                This is a fictional example for demonstration purposes. No real client data is shown.
+                This is a fictional example for demonstration purposes. No real client data is shown. Analytics never include client names, narratives, phone, email, or address.
               </p>
             </div>
           </div>

@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { CheckCircle, AlertTriangle, Shield } from 'lucide-react';
+import { CheckCircle, AlertTriangle, Shield, Clock } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { trackReferralConsentViewed } from './EthicalAnalytics';
 
 interface Props {
-  onConsent: (consented: boolean) => void;
+  onConsent: (consented: boolean, consentSource?: string) => void;
   clientName?: string;
 }
 
-export default function ReferralConsentCard({ onConsent, clientName }: Props) {
+export default function ReferralConsentCard({ onConsent }: Props) {
   const { language } = useLanguage();
   const en = language === 'en';
   const [agreed, setAgreed] = useState(false);
@@ -18,7 +18,7 @@ export default function ReferralConsentCard({ onConsent, clientName }: Props) {
   });
 
   const handleSubmit = () => {
-    onConsent(agreed);
+    onConsent(agreed, agreed ? 'explicit_opt_in_intake_form' : undefined);
   };
 
   return (
@@ -39,10 +39,19 @@ export default function ReferralConsentCard({ onConsent, clientName }: Props) {
 
       <div className="space-y-3 mb-4">
         <div className="bg-white rounded border border-amber-100 p-3">
-          <p className="text-xs text-slate-700 leading-relaxed">
+          <p className="text-xs font-medium text-slate-800 mb-1.5">
+            {en ? 'What will be shared:' : 'Lo que se compartirá:'}
+          </p>
+          <ul className="text-xs text-slate-700 leading-relaxed space-y-0.5">
+            <li>{en ? '- Issue category and urgency level' : '- Categoría del problema y nivel de urgencia'}</li>
+            <li>{en ? '- Jurisdiction (state/county)' : '- Jurisdicción (estado/condado)'}</li>
+            <li>{en ? '- Preferred language' : '- Idioma preferido'}</li>
+            <li>{en ? '- AI-generated structured summary (no free-text narratives)' : '- Resumen estructurado generado por IA (sin narrativas de texto libre)'}</li>
+          </ul>
+          <p className="text-xs text-slate-600 mt-2 leading-relaxed">
             {en
-              ? 'I understand that my intake summary (issue type, urgency level, state, and preferred language) will be shared with the selected organization so they can assess whether they can help me. My free-text description will NOT be shared unless I check the box below.'
-              : 'Entiendo que mi resumen de admisión (tipo de problema, nivel de urgencia, estado e idioma preferido) se compartirá con la organización seleccionada para que puedan evaluar si pueden ayudarme. Mi descripción en texto libre NO se compartirá a menos que marque la casilla a continuación.'}
+              ? 'Your name, phone, email, and address are NOT shared unless you explicitly opt in below.'
+              : 'Tu nombre, teléfono, correo y dirección NO se comparten a menos que lo autorices explícitamente a continuación.'}
           </p>
         </div>
 
@@ -56,8 +65,8 @@ export default function ReferralConsentCard({ onConsent, clientName }: Props) {
           />
           <span id="consent-detail" className="text-xs text-slate-700">
             {en
-              ? 'I consent to sharing my structured intake summary with the organization.'
-              : 'Doy mi consentimiento para compartir mi resumen de admisión estructurado con la organización.'}
+              ? 'I consent to sharing my structured intake summary with the organization for staff review.'
+              : 'Doy mi consentimiento para compartir mi resumen de admisión estructurado con la organización para revision del personal.'}
           </span>
         </label>
       </div>
@@ -81,12 +90,14 @@ export default function ReferralConsentCard({ onConsent, clientName }: Props) {
         </button>
       </div>
 
-      <p className="mt-3 text-[10px] text-slate-500 flex items-start gap-1">
-        <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" aria-hidden="true" />
-        {en
-          ? 'You can revoke consent at any time by contacting us. Your data is not shared until you confirm.'
-          : 'Puedes revocar tu consentimiento en cualquier momento contactándonos. Tus datos no se comparten hasta que confirmes.'}
-      </p>
+      <div className="mt-3 flex items-start gap-1.5 text-[10px] text-slate-500">
+        <Clock className="w-3 h-3 mt-0.5 flex-shrink-0" aria-hidden="true" />
+        <span>
+          {en
+            ? 'Consent is timestamped and logged. You can revoke consent at any time by contacting us. Your data is not shared until you confirm.'
+            : 'El consentimiento se registra con marca de tiempo. Puedes revocar tu consentimiento en cualquier momento contactándonos. Tus datos no se comparten hasta que confirmes.'}
+        </span>
+      </div>
     </div>
   );
 }

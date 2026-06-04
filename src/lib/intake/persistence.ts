@@ -205,6 +205,7 @@ export async function createReferralRoutingRecord(params: {
 export async function recordConsent(params: {
   consentType: string;
   consentText: string;
+  consentSource?: string;
   granted: boolean;
   icp?: ICP;
   metadata?: Record<string, unknown>;
@@ -220,7 +221,11 @@ export async function recordConsent(params: {
       consent_text: params.consentText,
       granted: params.granted,
       icp: params.icp ?? null,
-      metadata: params.metadata ?? {},
+      metadata: {
+        ...(params.metadata ?? {}),
+        consent_source: params.consentSource ?? 'unknown',
+        timestamp: new Date().toISOString(),
+      },
     })
     .select('id')
     .maybeSingle();
