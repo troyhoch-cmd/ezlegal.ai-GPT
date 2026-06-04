@@ -89,7 +89,8 @@ export type ConversionEvent =
   | 'org_governance_clicked'
   | 'sensitive_data_warning_shown'
   | 'conversation_deleted'
-  | 'response_feedback';
+  | 'response_feedback'
+  | 'language_switched';
 
 interface EventProperties {
   [key: string]: string | number | boolean | null;
