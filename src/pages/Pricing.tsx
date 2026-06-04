@@ -10,6 +10,7 @@ import MarketplaceSection from '../components/pricing/MarketplaceSection';
 import ComparisonTable from '../components/pricing/ComparisonTable';
 import AccessToJusticeCard from '../components/trust/AccessToJusticeCard';
 import { pricingAudiences } from '../data/pricing';
+import { fetchPricingTiers, type PricingResult } from '../services/pricingService';
 import { useLanguage } from '../contexts/LanguageContext';
 import { trackEngagement } from '../services/engagement-service';
 import { trackEvent } from '../services/analytics-service';
@@ -25,6 +26,11 @@ export default function Pricing() {
   const initialTab = (searchParams.get('audience') as AudienceId) || 'individuals';
   const [activeTab, setActiveTab] = useState<AudienceId>(TAB_IDS.includes(initialTab) ? initialTab : 'individuals');
   const [showWizard, setShowWizard] = useState(false);
+  const [pricingData, setPricingData] = useState<PricingResult>({ audiences: pricingAudiences, source: 'static_fallback' });
+
+  useEffect(() => {
+    fetchPricingTiers().then(setPricingData);
+  }, []);
 
   useEffect(() => {
     const param = searchParams.get('audience') as AudienceId;
@@ -44,7 +50,7 @@ export default function Pricing() {
     });
   };
 
-  const currentAudience = pricingAudiences.find((a) => a.id === activeTab) ?? pricingAudiences[0];
+  const currentAudience = pricingData.audiences.find((a) => a.id === activeTab) ?? pricingData.audiences[0];
 
   const mainPlans = currentAudience.plans.filter((p) => !p.isAddOn);
   const addOnPlans = currentAudience.plans.filter((p) => p.isAddOn);
@@ -92,6 +98,11 @@ export default function Pricing() {
         {/* Tabs + Cards */}
         <section className="py-6 sm:py-8 bg-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            {import.meta.env.DEV && pricingData.source === 'static_fallback' && (
+              <div className="mb-4 p-2 bg-amber-50 border border-amber-200 rounded-lg text-center">
+                <p className="text-xs text-amber-700 font-medium">Using static pricing fallback.</p>
+              </div>
+            )}
             {/* Tabs */}
             <div className="flex flex-col items-center gap-2 mb-5">
               <div
@@ -99,7 +110,7 @@ export default function Pricing() {
                 role="tablist"
                 aria-label={l === 'es' ? 'Tipo de audiencia' : 'Audience type'}
               >
-                {pricingAudiences.map((aud) => (
+                {pricingData.audiences.map((aud) => (
                   <button
                     key={aud.id}
                     role="tab"

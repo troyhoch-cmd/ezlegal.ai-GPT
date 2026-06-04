@@ -86,7 +86,7 @@ export default function PricingCard({ plan, language }: Props) {
           className={`flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl font-semibold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 ${
             plan.recommended
               ? 'bg-teal-600 hover:bg-teal-700 text-white focus:ring-teal-500 shadow-sm'
-              : plan.id === 'free'
+              : plan.id === 'justice_free'
               ? 'bg-navy-900 hover:bg-navy-800 text-white focus:ring-navy-500'
               : 'bg-white hover:bg-slate-50 text-navy-900 border border-navy-300 focus:ring-teal-500'
           }`}

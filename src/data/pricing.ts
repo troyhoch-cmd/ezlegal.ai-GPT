@@ -30,7 +30,7 @@ export const pricingAudiences: PricingAudience[] = [
     headline: { en: 'Legal clarity for you and your family', es: 'Claridad legal para ti y tu familia' },
     plans: [
       {
-        id: 'free',
+        id: 'justice_free',
         name: { en: 'Free', es: 'Gratis' },
         audience: 'individuals',
         price: { en: '$0', es: '$0' },
@@ -450,7 +450,7 @@ export const comparisonFeatures = [
 ];
 
 export const comparisonData: Record<string, Record<string, { en: string; es: string }>> = {
-  free: {
+  justice_free: {
     questions: { en: '10/month', es: '10/mes' },
     documents: { en: '3/month', es: '3/mes' },
     matters: { en: '1', es: '1' },
