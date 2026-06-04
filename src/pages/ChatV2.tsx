@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Loader2, Mic, Paperclip, ArrowUp, MessageSquare, Shield, Lock, MapPin, Trash2, AlertTriangle } from 'lucide-react';
+import { Loader2, Mic, Paperclip, ArrowUp, Shield, Lock, MapPin, Trash2, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useLanguage, type Language } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import { usePersona } from '../contexts/PersonaContext';
 import {
   UnifiedTrustStrip,
   TabbedResponse,
@@ -15,7 +16,6 @@ import AnswerModeSelector, { type AnswerMode } from '../components/AnswerModeSel
 import GuidedIssueLauncher from '../components/GuidedIssueLauncher';
 import UrgentSignalCard from '../components/UrgentSignalCard';
 import CrisisStrip from '../components/CrisisStrip';
-import EthicalConversionPanel from '../components/EthicalConversionPanel';
 import UserMenu from '../components/UserMenu';
 import { detectUrgentSignals, type UrgentSignal } from '../lib/urgent-signal-detector';
 import { detectSensitiveData, disclaimerCopy } from '../lib/legalSafetyConfig';
@@ -145,7 +145,10 @@ function LanguageToggle() {
 export default function ChatV2() {
   const { user } = useAuth();
   const { language } = useLanguage();
+  const { persona: rawPersona } = usePersona();
   const en = language === 'en';
+
+  const chatPersona = rawPersona === 'business' ? 'smb' : rawPersona === 'legal-aid' ? 'organization' : 'individual';
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -510,7 +513,7 @@ export default function ChatV2() {
 
   const lastAssistantId = [...messages].reverse().find((m) => m.role === 'assistant')?.id;
 
-  function handleConversionAction(action: 'save' | 'checklist' | 'letter' | 'find_legal_help' | 'continue' | 'upgrade') {
+  function handleConversionAction(action: 'save' | 'checklist' | 'letter' | 'find_legal_help' | 'continue' | 'upgrade' | 'attorney-review' | 'partner-dashboard' | 'export') {
     switch (action) {
       case 'save':
         window.location.href = '/dashboard?tab=cases';
@@ -527,6 +530,15 @@ export default function ChatV2() {
         break;
       case 'upgrade':
         window.location.href = '/pricing';
+        break;
+      case 'attorney-review':
+        setShowHandoffForm(true);
+        break;
+      case 'partner-dashboard':
+        window.location.href = '/partner-dashboard';
+        break;
+      case 'export':
+        window.print();
         break;
       case 'continue':
         handleNewChat();
@@ -775,21 +787,13 @@ export default function ChatV2() {
                       </div>
                     ) : (
                       <div className="space-y-3" data-testid="ai-answer">
-                        {message.parsed ? (
-                          <TabbedResponse
-                            summary={message.parsed.summary}
-                            actionSteps={message.parsed.actionSteps}
-                            sources={message.parsed.sources}
-                            fullContent={message.content}
-                            jurisdiction={jurisdiction}
-                          />
-                        ) : (
-                          <div className="bg-slate-50 rounded-2xl rounded-bl-md px-4 py-3 border border-slate-200">
-                            <p className="text-sm text-slate-700 whitespace-pre-wrap">
-                              {message.content}
-                            </p>
-                          </div>
-                        )}
+                        <TabbedResponse
+                          summary={message.parsed?.summary || message.content.substring(0, 300)}
+                          actionSteps={message.parsed?.actionSteps || []}
+                          sources={message.parsed?.sources || []}
+                          fullContent={message.content}
+                          jurisdiction={jurisdiction}
+                        />
 
                         {message.followUpQuestions && message.followUpQuestions.length > 0 && (
                           <div className="flex flex-wrap gap-2 pl-4">
@@ -812,17 +816,17 @@ export default function ChatV2() {
                         )}
 
                         {message.id === lastAssistantId && !isLoading && (
-                          <>
-                            <FinalActionCards
-                              onAction={(action) => {
-                                if (action === 'next-steps') handleConversionAction('save');
-                                else if (action === 'legal-help') handleConversionAction('find_legal_help');
-                                else if (action === 'documents') handleConversionAction('letter');
-                                else if (action === 'follow-up') handleConversionAction('continue');
-                              }}
-                            />
-                            <EthicalConversionPanel onAction={handleConversionAction} />
-                          </>
+                          <FinalActionCards
+                            persona={chatPersona}
+                            onAction={(action) => {
+                              if (action === 'next-steps') handleConversionAction('save');
+                              else if (action === 'legal-help') handleConversionAction('find_legal_help');
+                              else if (action === 'documents' || action === 'export') handleConversionAction('letter');
+                              else if (action === 'follow-up') handleConversionAction('continue');
+                              else if (action === 'attorney-review') handleConversionAction('attorney-review');
+                              else if (action === 'partner-dashboard') handleConversionAction('partner-dashboard');
+                            }}
+                          />
                         )}
                       </div>
                     )}
