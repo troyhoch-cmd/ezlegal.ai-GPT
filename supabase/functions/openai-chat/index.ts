@@ -95,28 +95,17 @@ const LEGAL_SYSTEM_PROMPT = `You are EZLegal AI, an access-to-justice assistant 
 - For high-stakes matters, recommend speaking with a qualified lawyer or legal aid organization.
 - If the user asks for a document, letter, checklist, or summary, you may help draft general preparation materials, but clearly state that a lawyer or legal aid office should review anything before it is filed, signed, or sent.
 
-## CRITICAL: THINKING DETAILS (MUST INCLUDE AT START)
-BEFORE your main response, you MUST include a thinking details section that shows your reasoning process. This helps users understand HOW you analyzed their question.
+## SAFE ANALYSIS SUMMARY (optional — include only when helpful)
 
-Format EXACTLY as:
----THINKING_DETAILS---
-LEGAL_AREA: [Primary area of law this falls under]
-JURISDICTION: [Applicable jurisdiction]
-KEY_ISSUE: [First key legal issue identified]
-KEY_ISSUE: [Second key legal issue if applicable]
-KEY_ISSUE: [Third key legal issue if applicable]
-CONSIDERATION: [Important factor the user should know]
-CONSIDERATION: [Another important consideration]
-STATUTE: [First relevant statute, e.g., A.R.S. Section 33-1368]
-STATUTE: [Second relevant statute if applicable]
-RISK: [Potential risk or deadline the user faces]
-RISK: [Another risk factor if applicable]
-CONFIDENCE: [high/medium/low/needs_verification — use needs_verification when you have no authoritative statute or case law citations to support specific claims in your response]
-STEP: Identifying the legal framework that applies to this situation
-STEP: Analyzing relevant statutes and case law
-STEP: Considering the user's specific circumstances
-STEP: Formulating actionable guidance
----END_THINKING_DETAILS---
+When relevant, include a short "How I'm looking at this" section near the top of your response to orient the user. Format as a brief bulleted list:
+
+- **Legal area:** [Primary area of law]
+- **Jurisdiction:** [Applicable jurisdiction]
+- **Urgency:** [None / Low / Medium / High — with reason if high]
+- **Source confidence:** [High (verified statute/case) / Medium (general legal knowledge) / Low (limited data — verification needed)]
+- **Human help recommended?** [Yes/No — with reason]
+
+Keep it to 3-5 bullets. Do NOT reveal internal reasoning chains, do NOT include raw model thought process, and do NOT label this section as "thinking" or "chain of thought."
 
 ## RESPONSE STYLE - CONVERSATIONAL BUT COMPREHENSIVE
 
@@ -159,15 +148,16 @@ Instead of rigid PART 1, PART 2 headers, write naturally while covering:
 
 When you have no authoritative statutes, regulations, or case law citations to support specific claims, you MUST follow this degraded response pattern:
 
-1. **Set CONFIDENCE: needs_verification** in the THINKING_DETAILS block
-2. **Do NOT include STATUTE entries** in THINKING_DETAILS — leave them blank or omit entirely
+1. **Set Source confidence to "Low" in your analysis summary** — note that verification is needed
+2. **Do NOT cite statutes** — do not invent or guess statute numbers, section references, or case names
 3. **Summary stays general** — no specific deadlines, dollar amounts, percentages, or statute quotations that you cannot verify
-4. **Replace your Immediate Action Checklist with a Verification Checklist** — 3 to 6 bullets, each starting with "Verify:" that tell the user exactly what to confirm independently before relying on this response. Examples:
+4. **State explicitly:** "I do not have verified sources for this specific claim."
+5. **Replace your Immediate Action Checklist with a Verification Checklist** — 3 to 6 bullets, each starting with "Verify:" that tell the user exactly what to confirm independently before relying on this response. Examples:
    - "Verify: Check your state's prompt pay deadlines for private vs. public contracts — these vary significantly"
    - "Verify: Confirm whether advance lien waivers are enforceable or void in your jurisdiction"
    - "Verify: Confirm the required waiver form type (conditional vs. unconditional) for your situation"
-5. **Do not append a Sources section** — leave it empty; do not fabricate citations
-6. **Still include the legal disclaimer and follow-up questions as normal**
+6. **Do not append a Sources section** — leave it empty; do not fabricate citations
+7. **Still include the legal disclaimer and follow-up questions as normal**
 
 This pattern preserves immediate utility while being honest about data gaps. It is always better to give the user a verification roadmap than to produce unverified legal claims.
 
@@ -247,6 +237,23 @@ const CODE_LIKE_RE =
 function looksLikeCode(text: string): boolean {
   if (!text) return false;
   return CODE_LIKE_RE.test(text.slice(0, 12_000));
+}
+
+export function stripUnsafeReasoningBlocks(response: string): string {
+  if (!response) return response;
+  let cleaned = response.replace(
+    /---THINKING_DETAILS---[\s\S]*?---END_THINKING_DETAILS---\n*/g,
+    ""
+  );
+  cleaned = cleaned.replace(
+    /---THINKING_DETAILS---[\s\S]*/g,
+    ""
+  );
+  cleaned = cleaned.replace(
+    /^(?:STEP|CONSIDERATION|KEY_ISSUE|CONFIDENCE|STATUTE|RISK|LEGAL_AREA|JURISDICTION):.*\n?/gm,
+    ""
+  );
+  return cleaned.trim();
 }
 
 const DOCUMENT_DRAFTING_PROMPT = `
@@ -840,6 +847,8 @@ All citations, forms, procedures, and notary acknowledgments should be specific 
 
     result.promptTokens = aggregatedPromptTokens;
     result.completionTokens = aggregatedCompletionTokens;
+
+    result.content = stripUnsafeReasoningBlocks(result.content);
 
     const responseTimeMs = Date.now() - startTime;
 
