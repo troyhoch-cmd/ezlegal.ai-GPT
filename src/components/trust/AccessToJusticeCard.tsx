@@ -114,6 +114,12 @@ export default function AccessToJusticeCard({ variant = 'full', showProBono = tr
           </Link>
         </div>
       )}
+
+      <p className="text-[10px] text-slate-500 mt-4 leading-relaxed">
+        {en
+          ? 'Free and emergency resources are never ranked by payment. Paid options appear only after eligibility screening.'
+          : 'Los recursos gratuitos y de emergencia nunca se clasifican por pago. Las opciones pagadas aparecen solo despues de la evaluacion de elegibilidad.'}
+      </p>
     </div>
   );
 }

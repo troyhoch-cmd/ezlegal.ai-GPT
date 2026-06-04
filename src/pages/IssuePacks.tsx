@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Globe, Building2, Users, Briefcase, FileWarning, Handshake, CheckCircle, ArrowRight, Shield, Clock, FileText, AlertTriangle, Lock, Eye, RefreshCw, Phone, Ligature as FileSignature, UserCog, Landmark, BookOpen, BarChart3, Mail } from 'lucide-react';
+import { Globe, Building2, Users, Briefcase, FileWarning, Handshake, CheckCircle, ArrowRight, Shield, Clock, FileText, AlertTriangle, Lock, Eye, RefreshCw, Phone, Ligature as FileSignature, UserCog, Landmark, BookOpen, BarChart3, Mail, Scale } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -13,8 +13,11 @@ import AttorneyReferralDisclosure from '../components/AttorneyReferralDisclosure
 import RelatedLinks from '../components/RelatedLinks';
 import IssuePackPreviewModal from '../components/IssuePackPreviewModal';
 import IssuePackDeadlineScreening from '../components/IssuePackDeadlineScreening';
+import { trackEvent } from '../services/analytics-service';
 
 type Audience = 'individuals' | 'business' | 'legal_aid';
+
+const ATTORNEY_REVIEW_PACKS = ['smb_employee', 'smb_contract', 'smb_vendor'];
 
 interface PackDef {
   id: string;
@@ -243,6 +246,15 @@ export default function IssuePacks() {
   const [lsoSubmitting, setLsoSubmitting] = useState(false);
   const lang = language === 'en' ? 'en' : 'es';
 
+  const hasUrgentSession = (() => {
+    try {
+      const draft = sessionStorage.getItem('ez_triage_draft');
+      if (!draft) return false;
+      const parsed = JSON.parse(draft);
+      return ['critical', 'detention', 'eviction-lockout', 'custody-emergency'].includes(parsed?.urgency);
+    } catch { return false; }
+  })();
+
   const visiblePacks = activeAudience === 'legal_aid'
     ? PACKS.filter((p) => p.audience.includes('individuals'))
     : PACKS.filter((p) => p.audience.includes(activeAudience));
@@ -253,6 +265,9 @@ export default function IssuePacks() {
   };
 
   const handlePurchase = (pack: PackDef) => {
+    if (pack.audience.includes('business')) {
+      trackEvent('smb_pricing_clicked', { pack_id: pack.id, price: pack.price });
+    }
     if (pack.highRisk) {
       setScreeningPack(pack);
     } else {
@@ -474,6 +489,38 @@ export default function IssuePacks() {
 
         <section className="py-8 sm:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {activeAudience === 'individuals' && hasUrgentSession && (
+              <div className="mb-8 max-w-3xl mx-auto rounded-2xl border-2 border-amber-300 bg-amber-50 p-5">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <div>
+                    <h2 className="text-base font-bold text-amber-900 mb-1">
+                      {language === 'en' ? 'Your situation may need urgent free help first' : 'Tu situacion puede necesitar ayuda gratuita urgente primero'}
+                    </h2>
+                    <p className="text-sm text-amber-800 mb-3">
+                      {language === 'en'
+                        ? 'Based on your earlier answers, you may qualify for free emergency resources. We recommend exploring those before purchasing.'
+                        : 'Según tus respuestas anteriores, podrías calificar para recursos de emergencia gratuitos. Recomendamos explorarlos antes de comprar.'}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <Link
+                        to="/emergency-resources"
+                        className="inline-flex items-center gap-1.5 px-3 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-lg"
+                      >
+                        <Phone className="w-4 h-4" />
+                        {language === 'en' ? 'Free emergency resources' : 'Recursos de emergencia gratuitos'}
+                      </Link>
+                      <Link
+                        to="/pro-bono"
+                        className="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-amber-300 text-amber-700 hover:bg-amber-50 text-sm font-semibold rounded-lg"
+                      >
+                        {language === 'en' ? 'Free legal aid' : 'Ayuda legal gratuita'}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             {activeAudience === 'legal_aid' && (
               <div className="text-center mb-8">
                 <p className="text-sm text-navy-500">
@@ -528,6 +575,15 @@ export default function IssuePacks() {
                           <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
                           <span className="text-xs text-amber-700 font-medium">
                             {language === 'en' ? 'High-stakes situation - includes safety screening before purchase' : 'Situación de alto riesgo - incluye evaluacion de seguridad'}
+                          </span>
+                        </div>
+                      )}
+
+                      {ATTORNEY_REVIEW_PACKS.includes(pack.id) && (
+                        <div className="flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-lg px-3 py-2 mb-3">
+                          <Scale className="w-4 h-4 text-sky-600 flex-shrink-0" />
+                          <span className="text-xs text-sky-700 font-medium">
+                            {language === 'en' ? 'Attorney review recommended for complex matters' : 'Revision de abogado recomendada para asuntos complejos'}
                           </span>
                         </div>
                       )}

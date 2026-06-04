@@ -98,3 +98,12 @@ export function shouldRecommendAttorneyReview(segment: string): boolean {
   const triggers = ['employment_contract', 'investor_funding', 'litigation_dispute', 'government_regulatory', 'high_value_transaction'];
   return triggers.includes(segment);
 }
+
+export function shouldBlockCheckoutForUrgency(): boolean {
+  try {
+    const draft = sessionStorage.getItem('ez_triage_draft');
+    if (!draft) return false;
+    const parsed = JSON.parse(draft);
+    return ['critical', 'detention', 'eviction-lockout', 'custody-emergency'].includes(parsed?.urgency);
+  } catch { return false; }
+}

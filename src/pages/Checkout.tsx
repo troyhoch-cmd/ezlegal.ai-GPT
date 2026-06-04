@@ -101,6 +101,7 @@ export default function Checkout() {
   const [processing, setProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [waitlistMsg, setWaitlistMsg] = useState('');
+  const [scopeAcknowledged, setScopeAcknowledged] = useState(false);
 
   if (!user) {
     setPendingPlan(plan, 'checkout-gate');
@@ -275,6 +276,27 @@ export default function Checkout() {
                   </div>
                 )}
 
+                {isBusiness && (
+                  <label className="flex items-start gap-3 mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={scopeAcknowledged}
+                      onChange={(e) => {
+                        setScopeAcknowledged(e.target.checked);
+                        if (e.target.checked) {
+                          trackEvent('smb_checkout_scope_acknowledged', { plan });
+                        }
+                      }}
+                      className="mt-0.5 w-4 h-4 text-teal-600 border-navy-300 rounded focus:ring-teal-500"
+                    />
+                    <span className="text-xs text-navy-700 leading-relaxed">
+                      {language === 'en'
+                        ? 'I understand this provides legal information and templates, not legal advice. Attorney review is recommended for complex or high-value matters.'
+                        : 'Entiendo que esto proporciona informacion legal y plantillas, no asesoria legal. Se recomienda revision de abogado para asuntos complejos.'}
+                    </span>
+                  </label>
+                )}
+
                 <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6">
                   <div className="flex items-center gap-2 text-sm text-green-700">
                     <Shield className="w-4 h-4" />
@@ -287,7 +309,8 @@ export default function Checkout() {
 
                 <button
                   onClick={() => setStep('payment')}
-                  className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2"
+                  disabled={isBusiness && !scopeAcknowledged}
+                  className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {language === 'en' ? 'Continue to Payment' : 'Continuar al Pago'}
                   <ArrowRight className="w-5 h-5" />
@@ -445,6 +468,16 @@ export default function Checkout() {
                 <div className="flex items-center gap-2"><Lock className="w-3 h-3 text-green-600" /> TLS 1.3 + AES-256</div>
                 <div className="flex items-center gap-2"><Shield className="w-3 h-3 text-green-600" /> {language === 'en' ? '7-day refund guarantee' : 'Garantia de 7 dias'}</div>
                 <div className="flex items-center gap-2"><Zap className="w-3 h-3 text-green-600" /> {language === 'en' ? 'Instant access' : 'Acceso instantaneo'}</div>
+              </div>
+              <div className="mt-4 pt-3 border-t border-navy-200 space-y-1.5">
+                <p className="text-[10px] text-navy-500">
+                  {language === 'en'
+                    ? 'Legal information, not legal advice. Attorney review optional unless separately engaged.'
+                    : 'Información legal, no asesoría legal. Revisión de abogado opcional.'}
+                </p>
+                <p className="text-[10px] text-navy-500">
+                  {language === 'en' ? '7-day full refund if not satisfied.' : 'Reembolso completo en 7 días si no estás satisfecho.'}
+                </p>
               </div>
             </div>
           </div>

@@ -90,7 +90,8 @@ export type ConversionEvent =
   | 'sensitive_data_warning_shown'
   | 'conversation_deleted'
   | 'response_feedback'
-  | 'language_switched';
+  | 'language_switched'
+  | 'pricing_tab_selected';
 
 interface EventProperties {
   [key: string]: string | number | boolean | null;

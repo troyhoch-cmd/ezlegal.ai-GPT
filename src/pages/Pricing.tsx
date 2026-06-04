@@ -8,9 +8,11 @@ import HelpMeChoose from '../components/pricing/HelpMeChoose';
 import PricingFAQ from '../components/pricing/PricingFAQ';
 import MarketplaceSection from '../components/pricing/MarketplaceSection';
 import ComparisonTable from '../components/pricing/ComparisonTable';
+import AccessToJusticeCard from '../components/trust/AccessToJusticeCard';
 import { pricingAudiences } from '../data/pricing';
 import { useLanguage } from '../contexts/LanguageContext';
 import { trackEngagement } from '../services/engagement-service';
+import { trackEvent } from '../services/analytics-service';
 
 type AudienceId = 'individuals' | 'business' | 'legal-aid';
 
@@ -34,6 +36,7 @@ export default function Pricing() {
   const handleTabChange = (id: AudienceId) => {
     setActiveTab(id);
     setSearchParams({ audience: id });
+    trackEvent('pricing_tab_selected', { tab: id });
     trackEngagement({
       featureName: 'pricing_tab_selected',
       engagementType: 'click',
@@ -141,6 +144,60 @@ export default function Pricing() {
                 <PricingCard key={plan.id} plan={plan} language={l} />
               ))}
             </div>
+
+            {/* Paid plan disclaimer */}
+            {mainPlans.some((p) => p.price[l] !== '$0' && !p.price[l].includes('Free') && !p.price[l].includes('Gratis')) && (
+              <div className="mt-4 max-w-2xl mx-auto text-center">
+                <p className="text-[11px] text-navy-500 leading-relaxed">
+                  {l === 'es'
+                    ? 'Información legal, no asesoría legal. Revisión de abogado opcional a menos que se contrate por separado. Garantía de reembolso de 7 días en todos los planes pagados.'
+                    : 'Legal information, not legal advice. Attorney review optional unless separately engaged. 7-day refund guarantee on all paid plans.'}
+                </p>
+              </div>
+            )}
+
+            {/* Access to justice card for individuals */}
+            {activeTab === 'individuals' && (
+              <div className="mt-6 max-w-lg mx-auto">
+                <AccessToJusticeCard variant="compact" />
+              </div>
+            )}
+
+            {/* Organization quick-access paths */}
+            {activeTab === 'legal-aid' && (
+              <div className="mt-6 max-w-2xl mx-auto">
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <Link
+                    to="/schedule-demo"
+                    className="flex items-center gap-2 px-4 py-3 bg-teal-50 border border-teal-200 rounded-xl text-sm font-medium text-teal-800 hover:bg-teal-100 transition-colors"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                    {l === 'es' ? 'Solicitar demo' : 'Schedule a demo'}
+                  </Link>
+                  <Link
+                    to="/for-organizations"
+                    className="flex items-center gap-2 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 hover:bg-slate-100 transition-colors"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                    {l === 'es' ? 'Portal de socios' : 'Partner hub'}
+                  </Link>
+                  <Link
+                    to="/ai-governance"
+                    className="flex items-center gap-2 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 hover:bg-slate-100 transition-colors"
+                  >
+                    <Shield className="w-4 h-4" />
+                    {l === 'es' ? 'Gobernanza y seguridad' : 'Governance & security'}
+                  </Link>
+                  <Link
+                    to="/grant-reporting"
+                    className="flex items-center gap-2 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 hover:bg-slate-100 transition-colors"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                    {l === 'es' ? 'Reportes de subvenciones' : 'Grant reporting'}
+                  </Link>
+                </div>
+              </div>
+            )}
 
             {/* Add-on cards (Boost) */}
             {addOnPlans.length > 0 && (
