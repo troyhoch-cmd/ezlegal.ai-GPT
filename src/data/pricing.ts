@@ -38,7 +38,7 @@ export const pricingAudiences: PricingAudience[] = [
         isFinalPrice: true,
         description: {
           en: 'For basic legal questions and safe next steps.',
-          es: 'Para preguntas legales basicas y proximos pasos seguros.',
+          es: 'Para preguntas legales básicas y próximos pasos seguros.',
         },
         features: {
           en: [
@@ -50,19 +50,19 @@ export const pricingAudiences: PricingAudience[] = [
             'No credit card required',
           ],
           es: [
-            'Haz preguntas legales en ingles o espanol',
+            'Haz preguntas legales en inglés o español',
             'Recibe explicaciones en lenguaje simple',
             'Entiende documentos legales comunes',
             'Encuentra ayuda gratuita o de bajo costo',
             'Enlaces de ayuda urgente siempre gratis',
-            'Sin tarjeta de credito',
+            'Sin tarjeta de crédito',
           ],
         },
         ctaLabel: { en: 'Start free', es: 'Comenzar gratis' },
         ctaHref: '/chat',
         ethicalNote: {
           en: 'No credit card required',
-          es: 'Sin tarjeta de credito',
+          es: 'Sin tarjeta de crédito',
         },
       },
       {
@@ -86,12 +86,12 @@ export const pricingAudiences: PricingAudience[] = [
             'Downloadable summaries for attorney review',
           ],
           es: [
-            'Mas preguntas por mes',
-            'Mas analisis de documentos',
-            'Planes de proximos pasos',
+            'Más preguntas por mes',
+            'Más análisis de documentos',
+            'Planes de próximos pasos',
             'Guarda y organiza asuntos',
             'Procesamiento prioritario de documentos',
-            'Resumenes descargables para revision de abogado',
+            'Resumenes descargables para revisión de abogado',
           ],
         },
         ctaLabel: { en: 'Get Everyday Plus', es: 'Obtener Diario Plus' },
@@ -122,9 +122,9 @@ export const pricingAudiences: PricingAudience[] = [
           es: [
             'Multiples asuntos del hogar',
             'Organizacion compartida de documentos',
-            'Soporte en espanol e ingles',
+            'Soporte en español e inglés',
             'Recursos de planificacion de seguridad familiar',
-            'Mas uso mensual',
+            'Más uso mensual',
           ],
         },
         ctaLabel: { en: 'Choose Family', es: 'Elegir Familia' },
@@ -139,7 +139,7 @@ export const pricingAudiences: PricingAudience[] = [
         name: { en: 'Boost', es: 'Boost' },
         audience: 'individuals',
         price: { en: '$5', es: '$5' },
-        priceNote: { en: 'one-time', es: 'unico pago' },
+        priceNote: { en: 'one-time', es: 'único pago' },
         isFinalPrice: false,
         isAddOn: true,
         description: {
@@ -154,8 +154,8 @@ export const pricingAudiences: PricingAudience[] = [
             'Referral-ready summary',
           ],
           es: [
-            'Impulso de documento unico',
-            'Procesamiento mas rapido',
+            'Impulso de documento único',
+            'Procesamiento más rapido',
             'Lista de fechas limite',
             'Resumen listo para referencia',
           ],
@@ -230,7 +230,7 @@ export const pricingAudiences: PricingAudience[] = [
             'Mayor volumen de documentos',
             'Acceso de equipo',
             'Organizacion de asuntos',
-            'Flujos de revision de politicas y contratos',
+            'Flujos de revisión de politicas y contratos',
             'Paquetes listos para referencia',
           ],
         },
@@ -338,7 +338,7 @@ export const pricingAudiences: PricingAudience[] = [
             'Enrutamiento multi-organizacional',
             'Flujos de referencia compartidos',
             'Reportes agregados',
-            'Campanas de acceso en espanol primero',
+            'Campanas de acceso en español primero',
             'Areas de problemas configurables',
           ],
         },
@@ -366,7 +366,7 @@ export const pricingAudiences: PricingAudience[] = [
           es: [
             'Opciones de implementacion segura',
             'Auditoria y reportes',
-            'Flujos de revision humana',
+            'Flujos de revisión humana',
             'Contenido personalizado y enrutamiento jurisdiccional',
             'Soporte de implementacion',
           ],
@@ -383,28 +383,28 @@ export const pricingFAQ = [
     q: { en: 'Is ezLegal.ai a lawyer?', es: 'Es ezLegal.ai un abogado?' },
     a: {
       en: 'No. ezLegal.ai is an AI-powered legal information tool. We help you understand legal situations, documents, and next steps, but we are not a law firm and do not provide legal advice or representation.',
-      es: 'No. ezLegal.ai es una herramienta de informacion legal impulsada por IA. Te ayudamos a entender situaciones legales, documentos y proximos pasos, pero no somos un bufete de abogados y no proporcionamos asesoramiento ni representacion legal.',
+      es: 'No. ezLegal.ai es una herramienta de información legal impulsada por IA. Te ayudamos a entender situaciones legales, documentos y próximos pasos, pero no somos un bufete de abogados y no proporcionamos asesoramiento ni representacion legal.',
     },
   },
   {
     q: { en: 'Is this legal advice?', es: 'Esto es asesoramiento legal?' },
     a: {
       en: 'No. We provide legal information in plain language. For legal advice specific to your situation, consult a licensed attorney. We can help you prepare for that conversation.',
-      es: 'No. Proporcionamos informacion legal en lenguaje simple. Para asesoramiento legal especifico a tu situacion, consulta con un abogado licenciado. Podemos ayudarte a prepararte para esa conversacion.',
+      es: 'No. Proporcionamos información legal en lenguaje simple. Para asesoramiento legal especifico a tu situacion, consulta con un abogado licenciado. Podemos ayudarte a prepararte para esa conversacion.',
     },
   },
   {
     q: { en: 'What is free?', es: 'Que es gratis?' },
     a: {
       en: 'Basic legal questions, plain-language explanations, understanding common documents, finding free or low-cost help, and all urgent-help resources are completely free. No credit card needed.',
-      es: 'Las preguntas legales basicas, explicaciones en lenguaje simple, entender documentos comunes, encontrar ayuda gratuita o de bajo costo, y todos los recursos de ayuda urgente son completamente gratis. Sin tarjeta de credito.',
+      es: 'Las preguntas legales básicas, explicaciones en lenguaje simple, entender documentos comunes, encontrar ayuda gratuita o de bajo costo, y todos los recursos de ayuda urgente son completamente gratis. Sin tarjeta de crédito.',
     },
   },
   {
-    q: { en: 'Do you support Spanish?', es: 'Ofrecen soporte en espanol?' },
+    q: { en: 'Do you support Spanish?', es: 'Ofrecen soporte en español?' },
     a: {
       en: 'Yes. ezLegal.ai works in both English and Spanish. You can ask questions, upload documents, and get guidance in either language.',
-      es: 'Si. ezLegal.ai funciona en ingles y espanol. Puedes hacer preguntas, subir documentos y recibir orientacion en cualquier idioma.',
+      es: 'Si. ezLegal.ai funciona en inglés y español. Puedes hacer preguntas, subir documentos y recibir orientacion en cualquier idioma.',
     },
   },
   {
@@ -418,14 +418,14 @@ export const pricingFAQ = [
     q: { en: 'How do legal-aid organizations use this?', es: 'Como usan esto las organizaciones de ayuda legal?' },
     a: {
       en: 'Legal-aid organizations can use ezLegal.ai for intake support, multilingual self-help tools, document review, triage, and referral routing. Qualified organizations may access these tools at no cost.',
-      es: 'Las organizaciones de ayuda legal pueden usar ezLegal.ai para soporte de admision, herramientas de autoayuda multilingues, revision de documentos, triaje y enrutamiento de referencias. Las organizaciones calificadas pueden acceder sin costo.',
+      es: 'Las organizaciones de ayuda legal pueden usar ezLegal.ai para soporte de admision, herramientas de autoayuda multilingues, revisión de documentos, triaje y enrutamiento de referencias. Las organizaciones calificadas pueden acceder sin costo.',
     },
   },
   {
     q: { en: 'Are urgent-help resources free?', es: 'Son gratis los recursos de ayuda urgente?' },
     a: {
       en: 'Always. Safety information, crisis hotlines, legal-aid finder, and urgent-help resources are never behind a paywall.',
-      es: 'Siempre. La informacion de seguridad, lineas de crisis, buscador de ayuda legal y recursos de ayuda urgente nunca estan detras de un muro de pago.',
+      es: 'Siempre. La información de seguridad, lineas de crisis, buscador de ayuda legal y recursos de ayuda urgente nunca estan detras de un muro de pago.',
     },
   },
   {
@@ -439,9 +439,9 @@ export const pricingFAQ = [
 
 export const comparisonFeatures = [
   { key: 'questions', en: 'Questions per month', es: 'Preguntas por mes' },
-  { key: 'documents', en: 'Document analysis', es: 'Analisis de documentos' },
+  { key: 'documents', en: 'Document analysis', es: 'Análisis de documentos' },
   { key: 'matters', en: 'Saved matters', es: 'Asuntos guardados' },
-  { key: 'spanish', en: 'Spanish support', es: 'Soporte en espanol' },
+  { key: 'spanish', en: 'Spanish support', es: 'Soporte en español' },
   { key: 'summaries', en: 'Referral-ready summaries', es: 'Resumenes para referencia' },
   { key: 'priority', en: 'Priority processing', es: 'Procesamiento prioritario' },
   { key: 'team', en: 'Team access', es: 'Acceso de equipo' },

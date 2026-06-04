@@ -32,6 +32,7 @@
     "qa:e2e:spanish": "PLAYWRIGHT_BROWSERS_PATH=0 npx playwright test spanish-flow.spec.ts",
     "qa:e2e:safety": "PLAYWRIGHT_BROWSERS_PATH=0 npx playwright test safety-contracts.spec.ts",
     "qa:e2e:a11y": "PLAYWRIGHT_BROWSERS_PATH=0 npx playwright test accessibility.spec.ts",
+    "qa:spanish": "node scripts/audit-spanish-copy.cjs",
     "qa:security": "node tests/security/secrets-scan.cjs",
     "qa:severity-gate": "node scripts/severity-gate.cjs",
     "prelaunch": "npm run build && npm run qa:severity-gate"
