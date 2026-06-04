@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate, Link, useSearchParams } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams, useLocation } from 'react-router-dom';
 import {
   User, Building2, Users, ArrowRight, ArrowLeft,
   Shield, AlertTriangle, Clock, Globe, Heart, CheckCircle,
-  Search, MapPin, Save, X
+  Search, MapPin, Save, X, DollarSign
 } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
@@ -12,9 +12,11 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { trackEvent } from '../services/analytics-service';
 import { trackReviewScreenViewed } from '../components/EthicalAnalytics';
 import { US_STATES } from '../data/jurisdictions';
+import { SCOPE_DISCLAIMER } from '../lib/intake/scopeBoundaries';
 
 type Persona = 'individual' | 'business' | 'organization';
-type Step = 'who' | 'what' | 'urgency' | 'state' | 'results';
+type Step = 'who' | 'what' | 'urgency' | 'affordability' | 'state' | 'results';
+type AffordabilityLevel = 'cannot-pay' | 'low-cost' | 'can-pay';
 
 const TRIAGE_STORAGE_KEY = 'ezlegal_triage_context';
 const TRIAGE_DRAFT_KEY = 'ezlegal_triage_draft';
@@ -49,14 +51,23 @@ const ORG_ISSUES = [
   { id: 'other', label: 'Not sure', labelEs: 'No estoy seguro/a', urgent: false },
 ];
 
-type UrgencyLevel = 'court-date' | 'unsafe' | 'legal-papers' | 'soon' | 'none';
+type UrgencyLevel = 'court-date' | 'unsafe' | 'legal-papers' | 'detention' | 'eviction-lockout' | 'custody-emergency' | 'soon' | 'none';
 
 const URGENCY_OPTIONS: { id: UrgencyLevel; label: string; labelEs: string; isHighRisk: boolean; icon: typeof Clock }[] = [
   { id: 'court-date', label: 'I have a court date or deadline', labelEs: 'Tengo una fecha de tribunal o plazo', isHighRisk: true, icon: Clock },
-  { id: 'unsafe', label: 'I may be unsafe', labelEs: 'Puedo estar en peligro', isHighRisk: true, icon: AlertTriangle },
-  { id: 'legal-papers', label: 'I received legal papers', labelEs: 'Recibí documentos legales', isHighRisk: true, icon: AlertTriangle },
+  { id: 'unsafe', label: 'I may be unsafe or in danger', labelEs: 'Puedo estar en peligro', isHighRisk: true, icon: AlertTriangle },
+  { id: 'eviction-lockout', label: 'I am being evicted or locked out', labelEs: 'Me están desalojando o impidiendo entrar', isHighRisk: true, icon: AlertTriangle },
+  { id: 'detention', label: 'Immigration detention or criminal arrest', labelEs: 'Detención migratoria o arresto criminal', isHighRisk: true, icon: AlertTriangle },
+  { id: 'custody-emergency', label: 'Custody emergency or child safety', labelEs: 'Emergencia de custodia o seguridad de menores', isHighRisk: true, icon: AlertTriangle },
+  { id: 'legal-papers', label: 'I received legal papers', labelEs: 'Recibí documentos legales', isHighRisk: true, icon: Clock },
   { id: 'soon', label: 'I need help soon but not today', labelEs: 'Necesito ayuda pronto pero no hoy', isHighRisk: false, icon: Clock },
   { id: 'none', label: 'Not urgent / just exploring', labelEs: 'No es urgente / solo estoy explorando', isHighRisk: false, icon: Shield },
+];
+
+const AFFORDABILITY_OPTIONS: { id: AffordabilityLevel; label: string; labelEs: string; icon: typeof DollarSign }[] = [
+  { id: 'cannot-pay', label: 'I cannot pay for legal help', labelEs: 'No puedo pagar por ayuda legal', icon: Heart },
+  { id: 'low-cost', label: 'I need low-cost options', labelEs: 'Necesito opciones de bajo costo', icon: DollarSign },
+  { id: 'can-pay', label: 'I can pay if needed', labelEs: 'Puedo pagar si es necesario', icon: DollarSign },
 ];
 
 function getIssues(persona: Persona) {
@@ -75,6 +86,7 @@ interface TriageDraft {
   persona?: Persona | null;
   issue?: string | null;
   urgency?: UrgencyLevel | null;
+  affordability?: AffordabilityLevel | null;
   state?: string | null;
   step?: Step;
 }
@@ -101,11 +113,14 @@ function loadSavedState(): string | null {
 export default function PersonaIntake() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     const langParam = searchParams.get('lang');
     if (langParam === 'es') setLanguage('es');
+    const from = (location.state as { from?: string } | null)?.from;
+    if (from === '/espanol' || from === '/es') setLanguage('es');
     const pathParam = searchParams.get('path');
     if (pathParam === 'legal-aid' && !persona) {
       setPersona('individual');
@@ -117,7 +132,7 @@ export default function PersonaIntake() {
       setPersona('organization');
       setStep('what');
     }
-  }, [searchParams, setLanguage]);
+  }, [searchParams, setLanguage, location.state]);
 
   const en = language === 'en';
 
@@ -126,6 +141,7 @@ export default function PersonaIntake() {
   const [persona, setPersona] = useState<Persona | null>(null);
   const [issue, setIssue] = useState<string | null>(null);
   const [urgency, setUrgency] = useState<UrgencyLevel | null>(null);
+  const [affordability, setAffordability] = useState<AffordabilityLevel | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(loadSavedState);
   const [stateSearch, setStateSearch] = useState('');
 
@@ -142,6 +158,7 @@ export default function PersonaIntake() {
       setPersona(draft.persona || null);
       setIssue(draft.issue || null);
       setUrgency(draft.urgency || null);
+      setAffordability(draft.affordability || null);
       setSelectedState(draft.state || loadSavedState());
       setStep(draft.step || 'who');
     }
@@ -155,10 +172,11 @@ export default function PersonaIntake() {
     setPersona(null);
     setIssue(null);
     setUrgency(null);
+    setAffordability(null);
   };
 
-  const stepNumber = step === 'who' ? 1 : step === 'what' ? 2 : step === 'urgency' ? 3 : step === 'state' ? 4 : 4;
-  const totalSteps = 4;
+  const stepNumber = step === 'who' ? 1 : step === 'what' ? 2 : step === 'urgency' ? 3 : step === 'affordability' ? 4 : step === 'state' ? (persona === 'individual' ? 5 : 4) : 5;
+  const totalSteps = persona === 'individual' ? 5 : 4;
   const progressPercent = step === 'results' ? 100 : (stepNumber / totalSteps) * 100;
 
   const handlePersonaSelect = (p: Persona) => {
@@ -177,8 +195,19 @@ export default function PersonaIntake() {
 
   const handleUrgencySelect = (u: UrgencyLevel) => {
     setUrgency(u);
-    saveDraft({ persona, issue, urgency: u, step: 'state' });
     trackEvent('triage_urgency_selected', { urgency: u });
+    if (persona === 'individual') {
+      saveDraft({ persona, issue, urgency: u, step: 'affordability' });
+      setStep('affordability');
+    } else {
+      saveDraft({ persona, issue, urgency: u, step: 'state' });
+      setStep('state');
+    }
+  };
+
+  const handleAffordabilitySelect = (a: AffordabilityLevel) => {
+    setAffordability(a);
+    saveDraft({ persona, issue, urgency, affordability: a, step: 'state' });
     setStep('state');
   };
 
@@ -200,6 +229,7 @@ export default function PersonaIntake() {
   };
 
   const isHighRisk = urgency === 'court-date' || urgency === 'unsafe' || urgency === 'legal-papers' ||
+    urgency === 'detention' || urgency === 'eviction-lockout' || urgency === 'custody-emergency' ||
     (issue && INDIVIDUAL_ISSUES.find((i) => i.id === issue)?.urgent && urgency !== 'none');
 
   const isDV = issue === 'family' && (urgency === 'unsafe' || urgency === 'court-date');
@@ -207,13 +237,14 @@ export default function PersonaIntake() {
 
   const goBack = () => {
     if (step === 'results') setStep('state');
-    else if (step === 'state') setStep('urgency');
+    else if (step === 'state') setStep(persona === 'individual' ? 'affordability' : 'urgency');
+    else if (step === 'affordability') setStep('urgency');
     else if (step === 'urgency') setStep('what');
     else if (step === 'what') setStep('who');
   };
 
   const handleSaveAndExit = () => {
-    saveDraft({ persona, issue, urgency, state: selectedState, step });
+    saveDraft({ persona, issue, urgency, affordability, state: selectedState, step });
     navigate('/');
   };
 
@@ -366,6 +397,33 @@ export default function PersonaIntake() {
                       } hover:shadow-md`}
                     >
                       <Icon className={`w-5 h-5 shrink-0 ${opt.isHighRisk ? 'text-amber-600' : 'text-slate-400'}`} aria-hidden="true" />
+                      <span className="font-medium text-slate-800">{en ? opt.label : opt.labelEs}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Step 4 (individuals only): Affordability */}
+          {step === 'affordability' && persona === 'individual' && (
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-black text-center mb-2">
+                {en ? 'Can you pay for legal help?' : '¿Puedes pagar por ayuda legal?'}
+              </h2>
+              <p className="text-center text-slate-600 mb-8">
+                {en ? 'This helps us show the right resources first.' : 'Esto nos ayuda a mostrar los recursos correctos primero.'}
+              </p>
+              <div className="grid gap-3">
+                {AFFORDABILITY_OPTIONS.map((opt) => {
+                  const Icon = opt.icon;
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => handleAffordabilitySelect(opt.id)}
+                      className="flex items-center gap-4 w-full p-4 bg-white rounded-xl border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all text-left"
+                    >
+                      <Icon className="w-5 h-5 shrink-0 text-teal-600" aria-hidden="true" />
                       <span className="font-medium text-slate-800">{en ? opt.label : opt.labelEs}</span>
                     </button>
                   );
@@ -555,18 +613,18 @@ export default function PersonaIntake() {
                       <AlertTriangle className="w-5 h-5" aria-hidden="true" />
                     </span>
                     <div className="flex-1">
-                      <p className="font-bold text-amber-900">{en ? 'Find urgent resources' : 'Encontrar recursos urgentes'}</p>
+                      <p className="font-bold text-amber-900">{en ? 'Get urgent resources' : 'Obtener recursos urgentes'}</p>
                       <p className="text-sm text-amber-700">{en ? 'Hotlines, legal aid, and emergency help' : 'Líneas de ayuda, asistencia legal y ayuda de emergencia'}</p>
                     </div>
                     <ArrowRight className="w-4 h-4 text-amber-400 group-hover:text-amber-600" />
                   </Link>
                 )}
 
-                {/* Individuals: free help first, then chat */}
+                {/* Individuals: free help first (especially if cannot pay), then general info */}
                 {persona === 'individual' && (
                   <>
                     <Link
-                      to="/find-attorney"
+                      to={affordability === 'cannot-pay' ? '/pro-bono' : '/find-attorney'}
                       className={`flex items-center gap-4 w-full p-5 rounded-xl border hover:shadow-md transition-all text-left group ${
                         isHighRisk ? 'bg-white border-slate-200 hover:border-teal-300' : 'bg-teal-50 border-teal-200 hover:border-teal-400'
                       }`}
@@ -576,7 +634,11 @@ export default function PersonaIntake() {
                       </span>
                       <div className="flex-1">
                         <p className="font-bold text-slate-900">{en ? 'Find free or low-cost help' : 'Encontrar ayuda gratuita o de bajo costo'}</p>
-                        <p className="text-sm text-slate-600">{en ? 'Legal aid and community resources near you' : 'Ayuda legal y recursos comunitarios cerca de ti'}</p>
+                        <p className="text-sm text-slate-600">
+                          {affordability === 'cannot-pay'
+                            ? (en ? 'Pro bono and legal aid resources' : 'Recursos pro bono y de ayuda legal')
+                            : (en ? 'Legal aid and community resources near you' : 'Ayuda legal y recursos comunitarios cerca de ti')}
+                        </p>
                       </div>
                       <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
                     </Link>
@@ -588,7 +650,7 @@ export default function PersonaIntake() {
                         <ArrowRight className="w-5 h-5" aria-hidden="true" />
                       </span>
                       <div className="flex-1">
-                        <p className="font-bold text-slate-900">{en ? 'Get free legal information' : 'Obtener información legal gratuita'}</p>
+                        <p className="font-bold text-slate-900">{en ? 'Continue with general legal information' : 'Continuar con información legal general'}</p>
                         <p className="text-sm text-slate-600">{en ? 'Ask questions and get plain-language guidance' : 'Haz preguntas y obtén orientación en lenguaje simple'}</p>
                       </div>
                       <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
@@ -596,7 +658,7 @@ export default function PersonaIntake() {
                   </>
                 )}
 
-                {/* SMBs: business tools first, then attorney */}
+                {/* SMBs: Start business chat + optional attorney review */}
                 {persona === 'business' && (
                   <>
                     <Link
@@ -609,7 +671,7 @@ export default function PersonaIntake() {
                         <ArrowRight className="w-5 h-5" aria-hidden="true" />
                       </span>
                       <div className="flex-1">
-                        <p className="font-bold text-slate-900">{en ? 'Get business information' : 'Obtener información para negocio'}</p>
+                        <p className="font-bold text-slate-900">{en ? 'Start business chat' : 'Iniciar chat de negocio'}</p>
                         <p className="text-sm text-slate-600">{en ? 'Contracts, compliance, and dispute guidance' : 'Contratos, cumplimiento y orientación de disputas'}</p>
                       </div>
                       <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
@@ -622,7 +684,7 @@ export default function PersonaIntake() {
                         <Users className="w-5 h-5" aria-hidden="true" />
                       </span>
                       <div className="flex-1">
-                        <p className="font-bold text-slate-900">{en ? 'Find a business attorney' : 'Encontrar un abogado de negocios'}</p>
+                        <p className="font-bold text-slate-900">{en ? 'Optional attorney review' : 'Revisión de abogado opcional'}</p>
                         <p className="text-sm text-slate-600">{en ? 'Get professional help when needed' : 'Obtener ayuda profesional cuando sea necesario'}</p>
                       </div>
                       <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
@@ -630,7 +692,7 @@ export default function PersonaIntake() {
                   </>
                 )}
 
-                {/* Organizations: demo/governance first */}
+                {/* Organizations: Book partner demo + View governance */}
                 {persona === 'organization' && (
                   <>
                     <Link
@@ -643,7 +705,7 @@ export default function PersonaIntake() {
                         <ArrowRight className="w-5 h-5" aria-hidden="true" />
                       </span>
                       <div className="flex-1">
-                        <p className="font-bold text-slate-900">{en ? 'View partner dashboard demo' : 'Ver demo del panel de socios'}</p>
+                        <p className="font-bold text-slate-900">{en ? 'Book partner demo' : 'Reservar demo de socios'}</p>
                         <p className="text-sm text-slate-600">{en ? 'Intake, triage, and referral tools' : 'Herramientas de admisión, triaje y referencia'}</p>
                       </div>
                       <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
@@ -656,8 +718,8 @@ export default function PersonaIntake() {
                         <Shield className="w-5 h-5" aria-hidden="true" />
                       </span>
                       <div className="flex-1">
-                        <p className="font-bold text-slate-900">{en ? 'AI governance and safety' : 'Gobernanza y seguridad de IA'}</p>
-                        <p className="text-sm text-slate-600">{en ? 'Review compliance framework' : 'Revisar marco de cumplimiento'}</p>
+                        <p className="font-bold text-slate-900">{en ? 'View governance' : 'Ver gobernanza'}</p>
+                        <p className="text-sm text-slate-600">{en ? 'AI safety and compliance framework' : 'Marco de seguridad y cumplimiento de IA'}</p>
                       </div>
                       <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-600" />
                     </Link>
@@ -678,10 +740,9 @@ export default function PersonaIntake() {
                 )}
               </div>
 
+              {/* Scope disclaimer */}
               <p className="mt-6 text-center text-xs text-slate-500 max-w-md mx-auto">
-                {en
-                  ? 'This is legal information, not legal advice. Using this does not create an attorney-client relationship. For advice about your specific situation, contact a licensed attorney or legal aid organization.'
-                  : 'Esto es información legal, no asesoría legal. Usar esto no crea una relación abogado-cliente. Para asesoría sobre su situación específica, contacte a un abogado licenciado o una organización de ayuda legal.'}
+                {en ? SCOPE_DISCLAIMER.en : SCOPE_DISCLAIMER.es}
               </p>
             </div>
           )}
