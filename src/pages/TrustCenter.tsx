@@ -106,7 +106,7 @@ const pdfContents = {
   dataSovereignty: {
     title: 'Data Sovereignty & AI Training Policy',
     content: `
-      <h2>Zero Training Guarantee</h2>
+      <h2>Zero Training Policy</h2>
       <p><strong>Your client data is NEVER used to train foundational large language models.</strong> This is a core principle of our platform architecture, not just a policy choice.</p>
 
       <h2>Inference-Only Architecture</h2>
@@ -115,7 +115,7 @@ const pdfContents = {
       <h2>Isolated Processing</h2>
       <p>Your data runs in its own space. It is never mixed with another client's data at any step.</p>
 
-      <h2>White-Label Client Guarantees</h2>
+      <h2>White-Label Client Commitments</h2>
       <h3>Logical Isolation</h3>
       <p>Each white-label setup runs in its own space. It has its own database, API routes, and access rules.</p>
 
@@ -125,7 +125,7 @@ const pdfContents = {
       <h3>Data Hosting</h3>
       <p>Data is hosted in the United States via Supabase's managed cloud infrastructure.</p>
 
-      <h2>What We Guarantee</h2>
+      <h2>What We Commit To</h2>
       <ul>
         <li><span class="check">&#10003;</span> Your data is never used to train, fine-tune, or improve any AI models</li>
         <li><span class="check">&#10003;</span> Your data is never shared with AI model providers for their training purposes</li>
@@ -520,10 +520,14 @@ export default function TrustCenter() {
                 <Ban className="w-7 h-7 text-teal-600" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-navy-900 mb-2">Zero Training Guarantee</h3>
+                <h3 className="text-xl font-bold text-navy-900 mb-2">Zero Training Policy</h3>
                 <p className="text-navy-700 text-lg">
                   <strong>Your client data is NEVER used to train foundational large language models.</strong> This is a core principle of our platform architecture, not just a policy choice.
                 </p>
+                <details className="mt-2 text-sm text-navy-600">
+                  <summary className="cursor-pointer text-teal-600 hover:text-teal-700 font-medium text-sm">Why this claim appears</summary>
+                  <p className="mt-1 leading-relaxed">Enforced via OpenAI API Terms of Service (API data not used for training) and our inference-only architecture. No fine-tuning or model improvement pipelines receive user data. Claim owner: ezLegal Engineering. Last reviewed: 2026-02.</p>
+                </details>
               </div>
             </div>
 
@@ -553,7 +557,7 @@ export default function TrustCenter() {
           <div className="mb-8">
             <h3 className="text-lg font-bold text-navy-900 mb-4 flex items-center gap-2">
               <Building2 className="w-5 h-5 text-navy-600" />
-              White-Label Client Guarantees
+              White-Label Client Commitments
             </h3>
             <div className="bg-white rounded-xl border border-navy-200 overflow-hidden">
               <div className="grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-navy-200">
@@ -598,7 +602,7 @@ export default function TrustCenter() {
             <div className="bg-white rounded-xl p-6 border border-navy-200">
               <h4 className="font-bold text-navy-900 mb-4 flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-green-600" />
-                What We Guarantee
+                What We Commit To
               </h4>
               <ul className="space-y-3 text-sm text-navy-600">
                 <li className="flex items-start gap-2">
@@ -678,6 +682,10 @@ export default function TrustCenter() {
               <p className="text-navy-600 text-sm">
                 All data is encrypted in transit using TLS 1.3 and at rest using AES-256 encryption via our cloud infrastructure provider.
               </p>
+              <details className="mt-2 text-xs text-navy-500">
+                <summary className="cursor-pointer text-teal-600 hover:text-teal-700 font-medium">Why this claim appears</summary>
+                <p className="mt-1 leading-relaxed">Provided by Supabase/AWS infrastructure. Covers data in transit and at rest only. Does not create attorney-client privilege.</p>
+              </details>
               <div className="mt-3 pt-3 border-t border-navy-100">
                 <p className="text-xs text-navy-500">
                   <span className="font-semibold">Last verified:</span> January 2026

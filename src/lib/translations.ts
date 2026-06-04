@@ -268,7 +268,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'home.faq1.q': 'Is ezLegal.ai a replacement for a lawyer?',
     'home.faq1.a': 'No. We provide legal information to help you understand your situation — not legal advice. For complex matters or court representation, we connect you with licensed attorneys through our referral network.',
     'home.faq2.q': 'Is my information private?',
-    'home.faq2.a': 'Yes. We encrypt your conversations with bank-level security and never use them to train AI models. We follow California privacy law (CCPA). Note: because we are not a law firm, attorney-client privilege does not apply to these conversations.',
+    'home.faq2.a': 'Yes. We encrypt your conversations with TLS 1.3 in transit and AES-256 at rest (via our cloud infrastructure provider) and never use them to train AI models. We follow California privacy law (CCPA). Note: because we are not a law firm, attorney-client privilege does not apply to these conversations.',
     'home.faq3.q': 'Is it really free?',
     'home.faq3.a': 'Yes. Basic legal Q&A is completely free with no credit card required. You only pay if you choose optional premium features like detailed action plans or document templates.',
     'home.faq4.q': 'What makes ezLegal.ai ethical?',
@@ -276,7 +276,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'home.faq5.q': 'How accurate is the legal information?',
     'home.faq5.a': 'We train our AI on official legal sources, and legal professionals review it regularly. However, laws vary by state and change often. We provide general information — for advice about your specific case, consult a licensed attorney.',
     'home.readyTitle': 'Ready to Get Started?',
-    'home.readySubtitle': 'Join thousands getting clear answers to their legal questions',
+    'home.readySubtitle': 'Get clear, actionable answers to your legal questions today',
     'home.startFree': "Start Now - It's Free",
     'home.chatFirst': 'Prefer to chat first?',
 
@@ -1323,7 +1323,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'home.faq1.q': '¿Es ezLegal.ai un reemplazo para un abogado?',
     'home.faq1.a': 'No. Proporcionamos información legal para ayudarte a entender tu situación — no asesoramiento legal. Para asuntos complejos o representación en la corte, te conectamos con abogados licenciados a través de nuestra red de referencias.',
     'home.faq2.q': '¿Es mi información privada?',
-    'home.faq2.a': 'Sí. Ciframos tus conversaciones con seguridad de nivel bancario y nunca las usamos para entrenar modelos de IA. Cumplimos con la ley de privacidad de California (CCPA). Nota: como no somos un bufete de abogados, el privilegio abogado-cliente no aplica a estas conversaciones.',
+    'home.faq2.a': 'Sí. Ciframos tus conversaciones con TLS 1.3 en tránsito y AES-256 en reposo (a través de nuestro proveedor de infraestructura en la nube) y nunca las usamos para entrenar modelos de IA. Cumplimos con la ley de privacidad de California (CCPA). Nota: como no somos un bufete de abogados, el privilegio abogado-cliente no aplica a estas conversaciones.',
     'home.faq3.q': '¿Es realmente gratis?',
     'home.faq3.a': 'Sí. Las preguntas legales básicas son completamente gratis sin necesidad de tarjeta de crédito. Solo pagas si eliges características premium opcionales como planes de acción detallados o plantillas de documentos.',
     'home.faq4.q': '¿Qué hace a ezLegal.ai ético?',
@@ -1331,7 +1331,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'home.faq5.q': '¿Qué tan precisa es la información legal?',
     'home.faq5.a': 'Entrenamos nuestra IA con fuentes legales oficiales, y profesionales legales la revisan regularmente. Sin embargo, las leyes varían según el estado y cambian frecuentemente. Proporcionamos información general — para consejo sobre tu caso específico, consulta a un abogado con licencia.',
     'home.readyTitle': '¿Listo Para Comenzar?',
-    'home.readySubtitle': 'Únete a miles obteniendo respuestas claras a sus preguntas legales',
+    'home.readySubtitle': 'Obtenga respuestas claras y prácticas a sus preguntas legales hoy',
     'home.startFree': 'Comenzar Ahora - Es Gratis',
     'home.chatFirst': '¿Prefieres chatear primero?',
 
@@ -1949,7 +1949,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'checkout.termsNote': 'Al comprar, aceptas nuestros Términos de Servicio y Política de Privacidad.',
 
     // Login Page
-    'login.joinThousands': 'Únete a miles de personas obténiendo ayuda legal accesible en Arizona',
+    'login.joinThousands': 'Obtenga información legal accesible impulsada por IA en Arizona',
 
     // Dashboard Page
     'dash.welcomeBack': 'Bienvenido de nuevo',

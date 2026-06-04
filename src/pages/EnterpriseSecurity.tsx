@@ -15,6 +15,7 @@ const certifications = [
     status: 'Via Supabase',
     description: 'Our database and infrastructure provider (Supabase) maintains SOC 2 Type II certification for security, availability, and confidentiality controls',
     lastAudit: 'Supabase audit current',
+    evidence: 'Certification held by Supabase (infrastructure provider), not by ezLegal application layer directly.',
     icon: <ShieldCheck className="w-6 h-6" />
   },
   {
@@ -22,6 +23,7 @@ const certifications = [
     status: 'Compliant',
     description: 'We honor California Consumer Privacy Act data access and deletion requests',
     lastAudit: 'Ongoing',
+    evidence: 'Data export, deletion, and opt-out endpoints implemented with 45-day fulfillment target.',
     icon: <FileCheck className="w-6 h-6" />
   },
   {
@@ -29,13 +31,15 @@ const certifications = [
     status: 'Active',
     description: 'TLS 1.3 in transit and AES-256 at rest via our cloud infrastructure provider',
     lastAudit: 'Continuous',
+    evidence: 'Provided by Supabase/AWS infrastructure. Covers data in transit and at rest; does not create attorney-client privilege.',
     icon: <Lock className="w-6 h-6" />
   },
   {
     name: 'Zero AI Training',
-    status: 'Guaranteed',
+    status: 'Policy',
     description: 'Your data is never used to train AI models per our provider agreements',
     lastAudit: 'Contractual',
+    evidence: 'Internal policy enforced via OpenAI API ToS (data not used for training) and architecture design (inference-only mode).',
     icon: <Shield className="w-6 h-6" />
   }
 ];
@@ -230,6 +234,10 @@ export default function EnterpriseSecurity() {
                       {cert.status}
                     </span>
                     <p className="text-sm text-navy-600 mb-3">{cert.description}</p>
+                    <details className="text-xs text-navy-500 mb-2">
+                      <summary className="cursor-pointer text-teal-600 hover:text-teal-700 font-medium">Why this claim appears</summary>
+                      <p className="mt-1 text-navy-600 leading-relaxed">{cert.evidence}</p>
+                    </details>
                     <p className="text-xs text-navy-500">
                       <span className="font-medium">Last verified:</span> {cert.lastAudit}
                     </p>
@@ -244,7 +252,7 @@ export default function EnterpriseSecurity() {
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold text-navy-900 mb-4">Data Security Architecture</h2>
                 <p className="text-lg text-navy-600 max-w-2xl mx-auto">
-                  Multi-layered security designed for attorney-client confidentiality requirements.
+                  Multi-layered security designed for sensitive legal data. Note: encryption and access controls do not create attorney-client privilege.
                 </p>
               </div>
 
