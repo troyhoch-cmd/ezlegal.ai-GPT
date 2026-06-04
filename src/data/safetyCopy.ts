@@ -1,6 +1,6 @@
 export const safetyCopy = {
   urgentStrip: {
-    heading: { en: 'Urgent deadline or danger?', es: '¿Tiene una fecha límite o peligro urgente?' },
+    heading: { en: 'Urgent deadline or danger?', es: '¿Plazo urgente o peligro inmediato?' },
     examples: { en: 'Court papers, eviction, abuse, detention, deadline today/tomorrow, shutoff, lockout', es: 'Papeles de corte, desalojo, abuso, detención, plazo hoy/mañana, corte de servicios, cierre' },
     cta: { en: 'Get help now', es: 'Obtener ayuda ahora' },
   },

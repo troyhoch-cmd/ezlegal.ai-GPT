@@ -31,8 +31,8 @@ describe('1. Primary CTAs have accessible names', () => {
   });
 
   it('Home ICP path cards have visible text', () => {
-    expect(HERO_INTAKE).toContain("I need free or low-cost legal help");
-    expect(HERO_INTAKE).toContain("I'm a small business");
+    expect(HERO_INTAKE).toContain("I can't afford a lawyer");
+    expect(HERO_INTAKE).toContain('I run a small business');
   });
 
   it('PersonaIntake buttons have visible labels', () => {
@@ -69,7 +69,7 @@ describe('3. Spanish mode changes new homepage sections', () => {
 
   it('safetyCopy has ES translations for urgent strip', () => {
     const safety = readSrc('data/safetyCopy.ts');
-    expect(safety).toContain("es: '¿Tiene una fecha l");
+    expect(safety).toContain("es: '¿Plazo urgente o peligro");
   });
 
   it('Home assembler imports schema-driven components', () => {
@@ -171,7 +171,7 @@ describe('9. Pages have "not a law firm" / legal information disclosure', () => 
   });
 
   it('PersonaIntake has legal disclosure', () => {
-    expect(PERSONA_INTAKE).toContain('Not legal advice');
+    expect(PERSONA_INTAKE).toContain('not legal advice');
   });
 
   it('AI Safety page references governance disclaimer', () => {

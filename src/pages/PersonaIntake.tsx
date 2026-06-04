@@ -752,8 +752,8 @@ export default function PersonaIntake() {
             <div className="mt-10">
               <p className="text-center text-xs text-slate-500 max-w-md mx-auto">
                 {en
-                  ? 'Not a law firm. Not legal advice.'
-                  : 'No es un bufete. No es asesoría legal.'}
+                  ? 'This tool provides legal information, not legal advice. Not a law firm.'
+                  : 'Esta herramienta provee información legal, no asesoría legal. No es un bufete.'}
               </p>
               {step !== 'who' && (
                 <p className="text-center text-xs text-slate-400 mt-2">

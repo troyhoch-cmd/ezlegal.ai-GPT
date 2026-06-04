@@ -60,12 +60,12 @@ const HOMEPAGE_CONTENT = readSrc('data/homepageContent.ts');
 
 describe('Bilingual parity — Home components', () => {
   it('hero has both English and Spanish headlines in content data', () => {
-    expect(HOMEPAGE_CONTENT).toContain('Understand your legal options in 2 minutes');
-    expect(HOMEPAGE_CONTENT).toContain('Entiende tus opciones legales en 2 minutos');
+    expect(HOMEPAGE_CONTENT).toContain('Free legal help tools in English or Spanish');
+    expect(HOMEPAGE_CONTENT).toContain('Herramientas legales gratuitas en ingl');
   });
 
   it('hero ICP cards have Spanish variants', () => {
-    expect(HERO_INTAKE).toContain('Necesito ayuda legal gratuita o de bajo costo');
+    expect(HERO_INTAKE).toContain('No puedo pagar un abogado');
     expect(HERO_INTAKE).toContain('Tengo un peque');
   });
 
@@ -78,7 +78,7 @@ describe('Bilingual parity — Home components', () => {
   });
 
   it('language toggle tracks selection', () => {
-    expect(MOBILE_STICKY).toContain('trackLanguageSelected');
+    expect(HERO_INTAKE).toContain('trackLanguageSelected');
   });
 
   it('homepageContent SMB has full bilingual parity', () => {

@@ -16,7 +16,7 @@ export function UrgentStrip() {
   }
 
   return (
-    <section className="bg-rose-50 border-b border-rose-100" aria-label={en ? 'Urgent deadline or danger' : 'Plazo urgente o peligro'}>
+    <section className="bg-rose-50 border-b border-rose-100" data-testid="urgent-strip" aria-label={en ? 'Urgent deadline or danger' : 'Plazo urgente o peligro'}>
       {/* Mobile: single-line compact */}
       <div className="sm:hidden mx-auto max-w-3xl px-4 py-1 flex items-center gap-1.5 justify-center">
         <AlertTriangle className="w-3 h-3 text-rose-600 flex-shrink-0" aria-hidden="true" />

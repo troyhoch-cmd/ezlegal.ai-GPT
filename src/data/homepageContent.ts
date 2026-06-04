@@ -45,16 +45,16 @@ export interface HomepageFinalCTA {
 
 export const homepageHero: HomepageHero = {
   headline: {
-    en: 'Understand your legal options in 2 minutes',
-    es: 'Entiende tus opciones legales en 2 minutos',
+    en: 'Free legal help tools in English or Spanish',
+    es: 'Herramientas legales gratuitas en inglés o español',
   },
   subline: {
     en: 'Free tools to help you figure out what to do next \u2014 in plain language.',
     es: 'Herramientas gratuitas para ayudarte a saber qu\u00e9 hacer \u2014 en lenguaje simple.',
   },
   scopeLine: {
-    en: 'Not a law firm. Not legal advice. No account needed.',
-    es: 'No es un bufete. No es asesor\u00eda legal. Sin cuenta necesaria.',
+    en: 'Not a law firm. Not legal advice. No account needed to start.',
+    es: 'No es un bufete. No es asesor\u00eda legal. Sin cuenta necesaria para empezar.',
   },
   inputLabel: {
     en: 'What happened?',
@@ -77,8 +77,8 @@ export const homepageHero: HomepageHero = {
     es: '\u00bfEn peligro o enfrentas un plazo?',
   },
   urgentLink: {
-    en: 'Get emergency help now',
-    es: 'Obtener ayuda de emergencia ahora',
+    en: 'View emergency and deadline resources',
+    es: 'Ver recursos de emergencia y plazos',
   },
   spanishReassurance: 'Disponible completamente en espa\u00f1ol. Sin cuenta necesaria.',
 };
@@ -143,8 +143,8 @@ export const homepagePartner: HomepagePartner = {
 
 export const homepageFinalCTA: HomepageFinalCTA = {
   heading: {
-    en: 'Ready to understand your options?',
-    es: '\u00bfListo para entender tus opciones?',
+    en: 'Tell us what happened.',
+    es: 'Dinos qué pasó.',
   },
   subline: {
     en: 'Free legal information in plain language. English or Spanish. No sign-up needed.',
