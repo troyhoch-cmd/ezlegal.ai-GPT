@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Briefcase, CreditCard, CheckCircle } from 'lucide-react';
+import { Briefcase, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { homepageSMB } from '../../data/homepageContent';
 import { trackEvent } from '../../services/analytics-service';
@@ -44,9 +44,8 @@ export function SMBConversionSection() {
           </Link>
           <Link
             to={s.secondaryHref}
-            className="inline-flex items-center gap-2 rounded-full border-2 border-sky-200 bg-white px-5 py-2.5 text-sm font-semibold text-sky-800 hover:bg-sky-50 transition focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 no-underline"
+            className="text-xs font-medium text-sky-700 underline underline-offset-2 hover:text-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 rounded no-underline"
           >
-            <CreditCard className="w-4 h-4" aria-hidden="true" />
             {en ? s.secondaryCta.en : s.secondaryCta.es}
           </Link>
         </div>

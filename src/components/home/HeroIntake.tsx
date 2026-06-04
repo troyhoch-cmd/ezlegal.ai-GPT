@@ -15,9 +15,9 @@ interface HeroIntakeProps {
 }
 
 const icpCards: { id: AudiencePath; icon: typeof User; label: { en: string; es: string }; desc: { en: string; es: string }; route: string; event: 'icp_individual_click' | 'icp_smb_click' | 'icp_legal_aid_click' }[] = [
-  { id: 'legal-aid', icon: User, label: { en: 'I need help for myself or family', es: 'Necesito ayuda para m\u00ed o mi familia' }, desc: { en: 'Free tools. No account needed.', es: 'Gratis. Sin cuenta.' }, route: '/start?path=legal-aid', event: 'icp_individual_click' },
-  { id: 'smb', icon: Briefcase, label: { en: 'I run a small business', es: 'Tengo un peque\u00f1o negocio' }, desc: { en: 'Contracts, compliance, disputes.', es: 'Contratos, cumplimiento, disputas.' }, route: '/start?path=smb', event: 'icp_smb_click' },
-  { id: 'organizations', icon: Users, label: { en: 'I represent an organization', es: 'Represento una organizaci\u00f3n' }, desc: { en: 'Partner tools and demo.', es: 'Herramientas y demo para socios.' }, route: '/for-organizations', event: 'icp_legal_aid_click' },
+  { id: 'legal-aid', icon: User, label: { en: 'I need free or low-cost legal help', es: 'Necesito ayuda legal gratuita o de bajo costo' }, desc: { en: 'Free tools. No account needed.', es: 'Gratis. Sin cuenta.' }, route: '/start?path=legal-aid', event: 'icp_individual_click' },
+  { id: 'smb', icon: Briefcase, label: { en: "I'm a small business", es: 'Tengo un peque\u00f1o negocio' }, desc: { en: 'Contracts, compliance, disputes.', es: 'Contratos, cumplimiento, disputas.' }, route: '/start?path=smb', event: 'icp_smb_click' },
+  { id: 'organizations', icon: Users, label: { en: 'I work with a legal aid / nonprofit organization', es: 'Trabajo con una organizaci\u00f3n legal / sin fines de lucro' }, desc: { en: 'Partner tools and demo.', es: 'Herramientas y demo para socios.' }, route: '/for-organizations', event: 'icp_legal_aid_click' },
 ];
 
 const whatHappensNext = {
@@ -143,6 +143,11 @@ export function HeroIntake({ currentPath }: HeroIntakeProps) {
               </span>
             ))}
           </div>
+
+          {/* Persistent microcopy */}
+          <p className="mt-1.5 text-[10px] sm:text-[11px] text-slate-500 leading-snug">
+            {en ? 'Legal information, not legal advice. Do not enter SSN, passwords, or bank account numbers.' : 'Información legal, no asesoría legal. No ingrese SSN, contraseñas ni números de cuenta bancaria.'}
+          </p>
         </div>
 
         {/* Urgent help -- 44px tap target */}

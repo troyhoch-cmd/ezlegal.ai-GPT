@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Users, MessageSquare, CheckCircle, ArrowRight } from 'lucide-react';
+import { Users, CheckCircle, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { homepagePartner } from '../../data/homepageContent';
 import { trackEvent } from '../../services/analytics-service';
@@ -33,7 +33,7 @@ export function LegalAidPartnerSection() {
           ))}
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <div className="flex flex-col items-center gap-3">
           <Link
             to={p.primaryHref}
             onClick={() => trackEvent('partner_demo_clicked', { source: 'homepage' })}
@@ -42,23 +42,22 @@ export function LegalAidPartnerSection() {
             <Users className="w-4 h-4" aria-hidden="true" />
             {en ? p.primaryCta.en : p.primaryCta.es}
           </Link>
-          <Link
-            to={p.secondaryHref}
-            className="inline-flex items-center gap-2 rounded-full border-2 border-emerald-200 bg-white px-5 py-2.5 text-sm font-semibold text-emerald-800 hover:bg-emerald-50 transition focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 no-underline"
-          >
-            <MessageSquare className="w-4 h-4" aria-hidden="true" />
-            {en ? p.secondaryCta.en : p.secondaryCta.es}
-          </Link>
-        </div>
-        <div className="mt-3 text-center">
-          <Link
-            to="/for-organizations"
-            onClick={() => trackEvent('partner_cta_clicked', { cta: 'explore_workflow' })}
-            className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-800 underline underline-offset-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded"
-          >
-            {en ? 'Explore partner workflow' : 'Explorar flujo de socios'}
-            <ArrowRight className="w-3 h-3" aria-hidden="true" />
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              to={p.secondaryHref}
+              className="text-xs font-medium text-emerald-700 underline underline-offset-2 hover:text-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded"
+            >
+              {en ? p.secondaryCta.en : p.secondaryCta.es}
+            </Link>
+            <Link
+              to="/for-organizations"
+              onClick={() => trackEvent('partner_cta_clicked', { cta: 'explore_workflow' })}
+              className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 underline underline-offset-2 hover:text-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded"
+            >
+              {en ? 'Explore partner workflow' : 'Explorar flujo de socios'}
+              <ArrowRight className="w-3 h-3" aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>
