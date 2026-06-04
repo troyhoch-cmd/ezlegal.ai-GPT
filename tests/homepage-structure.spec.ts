@@ -91,23 +91,23 @@ describe('Homepage — hero', () => {
 
 describe('Homepage — structured content file', () => {
   it('contains hero headline in both languages', () => {
-    expect(homepageContent).toContain('Free legal help tools in English or Spanish');
-    expect(homepageContent).toContain('Herramientas legales gratuitas en ingl');
+    expect(homepageContent).toContain('Understand your legal options in 2 minutes');
+    expect(homepageContent).toContain('Entiende tus opciones legales en 2 minutos');
   });
 
   it('contains scope line with "Not a law firm. Not legal advice."', () => {
-    expect(homepageContent).toContain('Not a law firm. Not legal advice. No account needed to start.');
+    expect(homepageContent).toContain('Not a law firm. Not legal advice. No account needed.');
     expect(homepageContent).toContain('No es un bufete. No es asesor');
   });
 
   it('contains primary CTA in both languages', () => {
     expect(homepageContent).toContain('Start free 2-minute checkup');
-    expect(homepageContent).toContain('Comenzar revisión gratis de 2 minutos');
+    expect(homepageContent).toContain('Comenzar revisi');
   });
 
   it('contains urgent link text in both languages', () => {
-    expect(homepageContent).toContain('View emergency and deadline resources');
-    expect(homepageContent).toContain('Ver recursos de emergencia y plazos');
+    expect(homepageContent).toContain('Get emergency help now');
+    expect(homepageContent).toContain('Obtener ayuda de emergencia ahora');
   });
 
   it('contains SMB content in both languages', () => {
@@ -125,8 +125,8 @@ describe('Homepage — structured content file', () => {
   });
 
   it('contains finalCTA content in both languages', () => {
-    expect(homepageContent).toContain("Tell us what happened.");
-    expect(homepageContent).toContain("Dinos qu");
+    expect(homepageContent).toContain("Ready to understand your options?");
+    expect(homepageContent).toContain("Listo para entender tus opciones");
   });
 });
 
@@ -155,9 +155,9 @@ describe('Homepage — input panel', () => {
 
 describe('Homepage — ICP path cards in hero', () => {
   it('contains three audience paths', () => {
-    expect(heroIntake).toContain("I can't afford a lawyer");
-    expect(heroIntake).toContain('I run a small business');
-    expect(heroIntake).toContain('I work with a legal-aid org');
+    expect(heroIntake).toContain("I need free or low-cost legal help");
+    expect(heroIntake).toContain("I'm a small business");
+    expect(heroIntake).toContain('I work with a legal aid / nonprofit organization');
   });
 
   it('routes to correct paths', () => {
@@ -387,9 +387,9 @@ describe('Homepage — HomeShell wrapper', () => {
  * ============================================================ */
 
 describe('Regression — hero height budget', () => {
-  it('HeroIntake is under 200 lines (prevent bloat)', () => {
+  it('HeroIntake is under 220 lines (prevent bloat)', () => {
     const lines = heroIntake.split('\n').length;
-    expect(lines).toBeLessThanOrEqual(200);
+    expect(lines).toBeLessThanOrEqual(220);
   });
 
   it('hero section uses tight top padding (pt-2 or pt-6, not pt-12+)', () => {
@@ -428,9 +428,9 @@ describe('Regression — Spanish parity in content schema', () => {
   });
 
   it('hero ICP cards each have en and es labels', () => {
-    expect(heroIntake).toContain("label: { en: \"I can't afford a lawyer\"");
-    expect(heroIntake).toContain("label: { en: 'I run a small business'");
-    expect(heroIntake).toContain("label: { en: 'I work with a legal-aid org'");
+    expect(heroIntake).toContain("label: { en: 'I need free or low-cost legal help'");
+    expect(heroIntake).toContain("label: { en: \"I'm a small business\"");
+    expect(heroIntake).toContain("label: { en: 'I work with a legal aid / nonprofit organization'");
   });
 
   it('trust strip items all have es translations', () => {

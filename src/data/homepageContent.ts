@@ -69,8 +69,8 @@ export const homepageHero: HomepageHero = {
     es: 'Describe tu situaci\u00f3n legal',
   },
   primaryCta: {
-    en: 'Start free checkup',
-    es: 'Comenzar revisi\u00f3n gratis',
+    en: 'Start free 2-minute checkup',
+    es: 'Comenzar revisión gratis de 2 minutos',
   },
   urgentPrompt: {
     en: 'In danger or facing a deadline?',
@@ -151,8 +151,8 @@ export const homepageFinalCTA: HomepageFinalCTA = {
     es: 'Informaci\u00f3n legal gratis en lenguaje simple. Ingl\u00e9s o espa\u00f1ol. Sin registro.',
   },
   primaryCta: {
-    en: 'Start free checkup',
-    es: 'Comenzar revisi\u00f3n gratis',
+    en: 'Start free 2-minute checkup',
+    es: 'Comenzar revisión gratis de 2 minutos',
   },
   spanishCta: 'Comenzar en espa\u00f1ol',
 };

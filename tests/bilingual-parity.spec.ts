@@ -19,6 +19,8 @@ const HOME = readSrc('pages/Home.tsx');
 const HERO_INTAKE = readSrc('components/home/HeroIntake.tsx');
 const URGENT_STRIP = readSrc('components/home/UrgentStrip.tsx');
 
+const MOBILE_STICKY = readSrc('components/home/MobileStickyBar.tsx');
+
 const AUDIENCE_PATHS_SOURCE = fs.readFileSync(
   path.resolve(__dirname, '../src/data/audiencePaths.ts'),
   'utf-8'
@@ -58,12 +60,12 @@ const HOMEPAGE_CONTENT = readSrc('data/homepageContent.ts');
 
 describe('Bilingual parity — Home components', () => {
   it('hero has both English and Spanish headlines in content data', () => {
-    expect(HOMEPAGE_CONTENT).toContain('Free legal help tools in English or Spanish');
-    expect(HOMEPAGE_CONTENT).toContain('Herramientas legales gratuitas en ingl');
+    expect(HOMEPAGE_CONTENT).toContain('Understand your legal options in 2 minutes');
+    expect(HOMEPAGE_CONTENT).toContain('Entiende tus opciones legales en 2 minutos');
   });
 
   it('hero ICP cards have Spanish variants', () => {
-    expect(HERO_INTAKE).toContain('No puedo pagar un abogado');
+    expect(HERO_INTAKE).toContain('Necesito ayuda legal gratuita o de bajo costo');
     expect(HERO_INTAKE).toContain('Tengo un peque');
   });
 
@@ -76,7 +78,7 @@ describe('Bilingual parity — Home components', () => {
   });
 
   it('language toggle tracks selection', () => {
-    expect(HERO_INTAKE).toContain('trackLanguageSelected');
+    expect(MOBILE_STICKY).toContain('trackLanguageSelected');
   });
 
   it('homepageContent SMB has full bilingual parity', () => {
