@@ -11,6 +11,8 @@ import DocumentOCRProcessor from '../components/DocumentOCRProcessor';
 import AIModelSelector from '../components/AIModelSelector';
 import DocumentIntelligencePanel from '../components/DocumentIntelligencePanel';
 import { getFieldConfig, validateField } from '../lib/document-validation';
+import { isHighRiskDocument, DOCUMENT_DRAFT_FOOTER, SOURCES_UNAVAILABLE_NOTICE } from '../lib/legalSafetyConfig';
+import LegalDisclaimer from '../components/shared/LegalDisclaimer';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -1196,6 +1198,8 @@ export default function Documents() {
   }>>([]);
   const [isGeneratingCustom, setIsGeneratingCustom] = useState(false);
   const [generationStage, setGenerationStage] = useState('');
+  const [scopeAcknowledged, setScopeAcknowledged] = useState(false);
+  const [highRiskAcknowledged, setHighRiskAcknowledged] = useState(false);
   const [analyzingDocument, setAnalyzingDocument] = useState<Document | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showIntelligenceHub, setShowIntelligenceHub] = useState(false);
@@ -1204,6 +1208,16 @@ export default function Documents() {
   const { isBusiness, isOrganization } = usePersonaRouting();
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const isHighRisk = useMemo(() => {
+    if (selectedTemplate && selectedTemplate !== 'custom') {
+      return isHighRiskDocument(selectedTemplate, templates[selectedTemplate].name);
+    }
+    if (selectedTemplate === 'custom' && customDocumentType) {
+      return isHighRiskDocument('custom', customDocumentType);
+    }
+    return false;
+  }, [selectedTemplate, customDocumentType]);
 
   useEffect(() => {
     loadDocuments();
@@ -1351,7 +1365,7 @@ export default function Documents() {
 
       setGenerationStage(
         draftingMode === 'partner'
-          ? 'Drafting senior-partner document (multi-pass)'
+          ? 'Drafting detailed document (multi-pass)'
           : draftingMode === 'associate'
           ? 'Drafting associate-level document'
           : 'Generating form'
@@ -1364,7 +1378,10 @@ DOCUMENT TYPE: ${customDocumentType}
 DESCRIPTION / PURPOSE: ${customDocumentDescription}
 
 ${customDocumentParties ? `PARTIES INVOLVED: ${customDocumentParties}\n` : ''}${customDocumentDetails ? `ADDITIONAL DETAILS: ${customDocumentDetails}\n` : ''}${documentJurisdiction ? `GOVERNING JURISDICTION: ${documentJurisdiction}\n` : ''}
-Follow the drafting posture defined in your system instructions. Return the execution-ready document text only.`;
+IMPORTANT RULES:
+- Do NOT fabricate statute numbers, case citations, or legal authorities. If you cannot verify a citation, omit it or state "Verify with local counsel."
+- This is an educational draft only, not legal advice.
+- Follow the drafting posture defined in your system instructions. Return the execution-ready document text only.`;
 
       const response = await fetch(`${SUPABASE_URL}/functions/v1/openai-chat`, {
         method: 'POST',
@@ -1444,8 +1461,11 @@ Follow the drafting posture defined in your system instructions. Return the exec
   const handleSaveDocument = async () => {
     if (!generatedContent) return;
 
+    const footer = `\n\n---\n${language === 'en' ? DOCUMENT_DRAFT_FOOTER.en : DOCUMENT_DRAFT_FOOTER.es}`;
+    const contentWithFooter = generatedContent + footer;
+
     if (!user) {
-      const blob = new Blob([generatedContent], { type: 'text/plain' });
+      const blob = new Blob([contentWithFooter], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -1463,7 +1483,7 @@ Follow the drafting posture defined in your system instructions. Return the exec
       user_id: user.id,
       title: documentTitle,
       document_type: selectedTemplate || 'custom',
-      content: generatedContent,
+      content: contentWithFooter,
       template_used: selectedTemplate || null,
       case_id: null,
       jurisdiction: documentJurisdiction || null,
@@ -1526,6 +1546,10 @@ Follow the drafting posture defined in your system instructions. Return the exec
         <p className="text-navy-600">
           {language === 'en' ? 'Generate professional legal documents in minutes' : 'Genera documentos legales profesionales en minutos'}
         </p>
+      </div>
+
+      <div className="mb-6">
+        <LegalDisclaimer variant="document" showLinks />
       </div>
 
       <div className="mb-6 rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50 via-white to-white p-5 shadow-sm">
@@ -1767,6 +1791,8 @@ Follow the drafting posture defined in your system instructions. Return the exec
                   setCustomDocumentDescription('');
                   setCustomDocumentParties('');
                   setCustomDocumentDetails('');
+                  setScopeAcknowledged(false);
+                  setHighRiskAcknowledged(false);
                 }}
                 className="text-navy-400 hover:text-navy-600 transition-colors"
               >
@@ -1905,7 +1931,7 @@ Follow the drafting posture defined in your system instructions. Return the exec
                       {[
                         { mode: 'quick_form' as const, icon: FileText, label: 'Quick Form', blurb: 'Clean fillable template. Ready in seconds.', badge: 'Free' },
                         { mode: 'associate' as const, icon: Scale, label: 'Associate Draft', blurb: 'Mid-level associate quality. Jurisdiction-aware.', badge: 'Free' },
-                        { mode: 'partner' as const, icon: Award, label: 'Senior Partner', blurb: 'Am Law 100 execution-quality. Multi-pass with authority grounding.', badge: 'Premium' },
+                        { mode: 'partner' as const, icon: Award, label: 'Detailed Draft', blurb: 'Multi-pass with authority grounding and additional checks.', badge: 'Premium' },
                       ].map(({ mode, icon: Icon, label, blurb, badge }) => {
                         const isSelected = draftingMode === mode;
                         return (
@@ -1941,7 +1967,7 @@ Follow the drafting posture defined in your system instructions. Return the exec
                       <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2">
                         <Gavel className="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
                         <p className="text-xs text-amber-900">
-                          Senior-partner mode retrieves controlling statutes and case law, drafts in three passes with self-critique, and produces a Drafting Notes appendix citing only verified authorities. Generation may take 30-90 seconds.
+                          Detailed draft mode retrieves controlling statutes and case law, drafts in multiple passes with self-critique, and produces a Drafting Notes appendix citing only verified authorities. Generation may take 30-90 seconds.
                         </p>
                       </div>
                     )}
@@ -1960,6 +1986,59 @@ Follow the drafting posture defined in your system instructions. Return the exec
                     </div>
                   )}
 
+                  {isHighRisk && (
+                    <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-semibold text-amber-900 text-sm">
+                            {language === 'en' ? 'High-risk document detected' : 'Documento de alto riesgo detectado'}
+                          </p>
+                          <p className="text-xs text-amber-800 mt-1 leading-relaxed">
+                            {language === 'en'
+                              ? 'This document type involves significant legal consequences. Attorney review is strongly recommended before signing or relying on this draft. This tool produces educational drafts only.'
+                              : 'Este tipo de documento implica consecuencias legales significativas. Se recomienda encarecidamente la revision de un abogado antes de firmar o depender de este borrador. Esta herramienta produce borradores educativos únicamente.'}
+                          </p>
+                          <Link
+                            to="/lawyer-profiles"
+                            className="inline-flex items-center gap-1.5 mt-2 text-xs font-medium text-amber-800 hover:text-amber-950 underline"
+                          >
+                            {language === 'en' ? 'Find an attorney for review' : 'Encontrar un abogado para revision'}
+                          </Link>
+                          <label className="flex items-start gap-2 mt-3 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={highRiskAcknowledged}
+                              onChange={(e) => setHighRiskAcknowledged(e.target.checked)}
+                              className="mt-0.5 rounded border-amber-400 text-amber-600 focus:ring-amber-500"
+                            />
+                            <span className="text-xs text-amber-900">
+                              {language === 'en'
+                                ? 'I understand this is an educational draft only and that attorney review is recommended before use.'
+                                : 'Entiendo que este es solo un borrador educativo y que se recomienda revision de un abogado antes de usarlo.'}
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={scopeAcknowledged}
+                        onChange={(e) => setScopeAcknowledged(e.target.checked)}
+                        className="mt-0.5 rounded border-slate-400 text-teal-600 focus:ring-teal-500"
+                      />
+                      <span className="text-xs text-slate-700 leading-relaxed">
+                        {language === 'en'
+                          ? 'I understand that this document is generated for informational and educational purposes only. It does not constitute legal advice, and no attorney-client relationship is created. I will have this document reviewed by a licensed attorney before relying on it for any legal purpose.'
+                          : 'Entiendo que este documento se genera solo con fines informativos y educativos. No constituye asesoría legal y no se crea una relación abogado-cliente. Haré que un abogado licenciado revise este documento antes de depender de el para cualquier propósito legal.'}
+                      </span>
+                    </label>
+                  </div>
+
                   <div className="flex items-center justify-between mt-8 pt-6 border-t border-navy-200">
                     <div className="text-sm text-navy-500">
                       <span className="text-red-500">*</span> Required fields
@@ -1972,6 +2051,8 @@ Follow the drafting posture defined in your system instructions. Return the exec
                           setCustomDocumentDescription('');
                           setCustomDocumentParties('');
                           setCustomDocumentDetails('');
+                          setScopeAcknowledged(false);
+                          setHighRiskAcknowledged(false);
                         }}
                         className="px-6 py-2.5 border border-navy-300 text-navy-700 rounded-lg font-medium hover:bg-navy-50 transition-colors"
                       >
@@ -1979,9 +2060,9 @@ Follow the drafting posture defined in your system instructions. Return the exec
                       </button>
                       <button
                         onClick={generateCustomDocument}
-                        disabled={!customDocumentType.trim() || !customDocumentDescription.trim() || isGeneratingCustom}
+                        disabled={!customDocumentType.trim() || !customDocumentDescription.trim() || isGeneratingCustom || !scopeAcknowledged || (isHighRisk && !highRiskAcknowledged)}
                         className={`px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-all ${
-                          customDocumentType.trim() && customDocumentDescription.trim() && !isGeneratingCustom
+                          customDocumentType.trim() && customDocumentDescription.trim() && !isGeneratingCustom && scopeAcknowledged && (!isHighRisk || highRiskAcknowledged)
                             ? 'bg-teal-600 hover:bg-teal-700 text-white'
                             : 'bg-navy-200 text-navy-400 cursor-not-allowed'
                         }`}
@@ -2002,17 +2083,38 @@ Follow the drafting posture defined in your system instructions. Return the exec
                   </div>
                 </div>
               ) : selectedTemplate !== 'custom' && !generatedContent ? (
-                <DocumentFormFields
-                  selectedTemplate={selectedTemplate as keyof typeof templates}
-                  templates={templates}
-                  formData={formData}
-                  setFormData={setFormData}
-                  onBack={() => {
-                    setSelectedTemplate('');
-                    setFormData({});
-                  }}
-                  onGenerate={generateDocument}
-                />
+                <div>
+                  <DocumentFormFields
+                    selectedTemplate={selectedTemplate as keyof typeof templates}
+                    templates={templates}
+                    formData={formData}
+                    setFormData={setFormData}
+                    onBack={() => {
+                      setSelectedTemplate('');
+                      setFormData({});
+                      setScopeAcknowledged(false);
+                      setHighRiskAcknowledged(false);
+                    }}
+                    onGenerate={generateDocument}
+                  />
+                  {isHighRisk && (
+                    <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-semibold text-amber-900 text-sm">
+                            {language === 'en' ? 'High-risk document type' : 'Tipo de documento de alto riesgo'}
+                          </p>
+                          <p className="text-xs text-amber-800 mt-1">
+                            {language === 'en'
+                              ? 'This document involves significant legal consequences. Attorney review is strongly recommended.'
+                              : 'Este documento implica consecuencias legales significativas. Se recomienda revision de un abogado.'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div>
                   <h3 className="text-lg font-semibold text-navy-900 mb-4">Preview & Save</h3>
@@ -2061,6 +2163,17 @@ Follow the drafting posture defined in your system instructions. Return the exec
                     <pre className="whitespace-pre-wrap text-sm text-navy-700 font-mono">
                       {generatedContent}
                     </pre>
+                    <div className="mt-6 pt-4 border-t-2 border-dashed border-navy-300">
+                      <p className="text-xs font-semibold text-navy-600 uppercase tracking-wide">
+                        {language === 'en' ? DOCUMENT_DRAFT_FOOTER.en : DOCUMENT_DRAFT_FOOTER.es}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 text-slate-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-slate-600">
+                      {language === 'en' ? SOURCES_UNAVAILABLE_NOTICE.en : SOURCES_UNAVAILABLE_NOTICE.es}
+                    </p>
                   </div>
                   <div className="flex gap-3 justify-end">
                     <button

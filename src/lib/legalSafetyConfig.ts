@@ -74,6 +74,45 @@ export const escalationMessages = {
   },
 };
 
+export const HIGH_RISK_DOCUMENT_TYPES = [
+  'employee_severance',
+  'employee_stock_option',
+  'employment_agreement',
+  'non_compete_agreement',
+  'demand_letter',
+  'settlement_agreement',
+  'power_of_attorney',
+  'shareholder_agreement',
+  'buy_sell_agreement',
+  'asset_sale_purchase',
+];
+
+export const HIGH_RISK_DOCUMENT_KEYWORDS = [
+  'termination', 'severance', 'firing', 'layoff',
+  'investor', 'funding', 'securities', 'equity',
+  'litigation', 'dispute', 'lawsuit', 'claim',
+  'government', 'regulatory', 'compliance', 'filing',
+  'immigration', 'visa', 'deportation', 'asylum',
+  'custody', 'divorce', 'domestic', 'restraining',
+  'high-value', 'real estate', 'merger', 'acquisition',
+];
+
+export function isHighRiskDocument(templateKey: string, documentType: string): boolean {
+  if (HIGH_RISK_DOCUMENT_TYPES.includes(templateKey)) return true;
+  const lower = documentType.toLowerCase();
+  return HIGH_RISK_DOCUMENT_KEYWORDS.some((kw) => lower.includes(kw));
+}
+
+export const DOCUMENT_DRAFT_FOOTER = {
+  en: 'DRAFT FOR INFORMATIONAL PURPOSES ONLY. This is not legal advice. No attorney-client relationship is created. Attorney review is recommended before use.',
+  es: 'BORRADOR SOLO CON FINES INFORMATIVOS. Esto no es asesoría legal. No se crea una relación abogado-cliente. Se recomienda revision de un abogado antes de usar.',
+};
+
+export const SOURCES_UNAVAILABLE_NOTICE = {
+  en: 'Sources unavailable for this draft. Do not rely on any statute numbers or case citations without independent verification. If specific citations are needed, consult an attorney or official legal database.',
+  es: 'Fuentes no disponibles para este borrador. No confíe en números de estatutos o citas de casos sin verificación independiente. Si necesita citas específicas, consulte a un abogado o base de datos legal oficial.',
+};
+
 export function detectSensitiveData(text: string): { detected: boolean; types: string[] } {
   if (!text || text.length < 5) return { detected: false, types: [] };
   const types: string[] = [];
