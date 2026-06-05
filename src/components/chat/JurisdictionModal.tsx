@@ -135,6 +135,7 @@ export default function JurisdictionModal({ open, value, onChange, onClose }: Ju
           <button
             onClick={handleConfirm}
             disabled={!pending}
+            data-testid="jurisdiction-change"
             className="w-full py-3 bg-teal-600 hover:bg-teal-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl transition-colors"
           >
             {pending

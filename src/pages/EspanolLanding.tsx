@@ -117,6 +117,7 @@ export default function EspanolLanding() {
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 to="/es/chat"
+                data-testid="espanol-primary-cta"
                 onClick={() => trackEvent('espanol_cta_clicked', { cta: 'empezar' })}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-teal-700 px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-teal-700/20 hover:bg-teal-800 transition focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
               >

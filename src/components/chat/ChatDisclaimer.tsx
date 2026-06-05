@@ -9,7 +9,7 @@ export default function ChatDisclaimer() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="text-center">
+    <div className="text-center" data-testid="chat-disclaimer">
       <p className="text-[11px] text-slate-500">
         {en
           ? 'This is legal information, not legal advice. Using this does not create an attorney-client relationship.'

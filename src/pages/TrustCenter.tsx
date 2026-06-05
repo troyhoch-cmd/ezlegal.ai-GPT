@@ -1011,6 +1011,13 @@ export default function TrustCenter() {
               <span className="font-medium text-navy-900">AI Governance</span>
             </Link>
             <Link
+              to="/qa-evidence"
+              className="flex items-center gap-3 p-4 bg-navy-50 border border-navy-200 rounded-xl hover:border-teal-400 transition-colors"
+            >
+              <Shield className="w-5 h-5 text-teal-600" />
+              <span className="font-medium text-navy-900">QA Evidence</span>
+            </Link>
+            <Link
               to="/contact"
               className="flex items-center gap-3 p-4 bg-navy-50 border border-navy-200 rounded-xl hover:border-teal-400 transition-colors"
             >

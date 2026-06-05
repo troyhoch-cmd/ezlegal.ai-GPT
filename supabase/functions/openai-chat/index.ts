@@ -242,6 +242,14 @@ function looksLikeCode(text: string): boolean {
 export function stripUnsafeReasoningBlocks(response: string): string {
   if (!response) return response;
   let cleaned = response.replace(
+    /---ANSWER_BASIS---[\s\S]*?---END_ANSWER_BASIS---\n*/g,
+    ""
+  );
+  cleaned = cleaned.replace(
+    /---ANSWER_BASIS---[\s\S]*/g,
+    ""
+  );
+  cleaned = cleaned.replace(
     /---THINKING_DETAILS---[\s\S]*?---END_THINKING_DETAILS---\n*/g,
     ""
   );

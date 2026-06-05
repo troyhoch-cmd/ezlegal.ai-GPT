@@ -20,6 +20,10 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 function stripThinkingDetails(text: string): string {
   if (!text) return '';
   let out = text;
+  // Strip ANSWER_BASIS blocks (new format)
+  out = out.replace(/---ANSWER_BASIS---[\s\S]*?---END_ANSWER_BASIS---\n*/g, '');
+  out = out.replace(/---ANSWER_BASIS---[\s\S]*/g, '');
+  // Strip legacy THINKING_DETAILS blocks
   const endMarker = out.indexOf('---END_THINKING---');
   if (endMarker !== -1) {
     out = out.slice(endMarker + '---END_THINKING---'.length);

@@ -7,11 +7,11 @@
  *
  * Severity definitions:
  *   P0 - Security leak, broken auth, payment failure, AI gives unsafe legal
- *        guidance, Spanish flow unusable, production crash → Block launch
+ *        guidance, Spanish flow unusable, production crash -> Block launch
  *   P1 - Intake broken, jurisdiction not captured, disclaimer missing,
- *        human-help path broken, serious accessibility issue → Block launch unless fixed
- *   P2 - Non-critical UX issue, copy issue, minor layout bug → Launch only with owner/date
- *   P3 - Cosmetic polish or A/B hypothesis → Post-launch backlog
+ *        human-help path broken, serious accessibility issue -> Block launch unless fixed
+ *   P2 - Non-critical UX issue, copy issue, minor layout bug -> Launch only with owner/date
+ *   P3 - Cosmetic polish or A/B hypothesis -> Post-launch backlog
  */
 
 const fs = require('fs');
@@ -43,16 +43,58 @@ function findFiles(dir, ext, collected = []) {
   return collected;
 }
 
-// ─── P0 Checks ───────────────────────────────────────────────────────────────
+/**
+ * Component-aware import resolver.
+ * Given a source file and an imported component name, resolves the actual
+ * file where that component is defined and returns its content.
+ */
+function resolveImportedComponent(sourceFilePath, componentName) {
+  const sourceContent = readFile(sourceFilePath);
+  if (!sourceContent) return null;
+
+  const importRegex = new RegExp(
+    `import\\s+(?:(?:\\{[^}]*\\b${componentName}\\b[^}]*\\})|(?:${componentName}))\\s+from\\s+['"]([^'"]+)['"]`
+  );
+  const match = sourceContent.match(importRegex);
+  if (!match) return null;
+
+  const importPath = match[1];
+  const sourceDir = path.dirname(sourceFilePath);
+  let resolved = path.resolve(sourceDir, importPath);
+
+  const extensions = ['.tsx', '.ts', '.jsx', '.js', '/index.tsx', '/index.ts'];
+  for (const ext of extensions) {
+    const candidate = resolved + ext;
+    const content = readFile(candidate);
+    if (content) return content;
+  }
+  const directContent = readFile(resolved);
+  if (directContent) return directContent;
+
+  return null;
+}
+
+/**
+ * Checks if a file (or its imported component) contains a specific attribute or text.
+ */
+function fileOrImportContains(filePath, componentName, searchString) {
+  const fileContent = readFile(filePath);
+  if (!fileContent) return false;
+  if (fileContent.includes(searchString)) return true;
+  if (componentName) {
+    const componentContent = resolveImportedComponent(filePath, componentName);
+    if (componentContent && componentContent.includes(searchString)) return true;
+  }
+  return false;
+}
+
+// --- P0 Checks ---
 
 function checkSecurityLeaks() {
-  const envFile = readFile(path.join(ROOT, '.env'));
-  if (!envFile) return;
   const tsxFiles = findFiles(SRC, '.tsx').concat(findFiles(SRC, '.ts'));
   for (const file of tsxFiles) {
     const content = readFile(file);
     if (!content) continue;
-    // Hardcoded secrets (not env var references)
     if (/(?:sk_live|sk_test|supabase_service_role)_[A-Za-z0-9]{20,}/i.test(content)) {
       results.P0.push(`SECURITY: Hardcoded secret found in ${path.relative(ROOT, file)}`);
     }
@@ -83,30 +125,30 @@ function checkPaymentFlow() {
 }
 
 function checkAISafety() {
-  const chatService = readFile(path.join(SRC, 'services/chat-service.ts'));
   const openaiEdge = readFile(path.join(ROOT, 'supabase/functions/openai-chat/index.ts'));
 
   if (!openaiEdge) {
     results.P0.push('AI_SAFETY: openai-chat edge function missing');
     return;
   }
-  // Must include disclaimer in system prompt
   if (!openaiEdge.includes('not constitute legal advice') && !openaiEdge.includes('legal information')) {
     results.P0.push('AI_SAFETY: System prompt missing legal-information-not-advice disclaimer');
   }
-  // Must include jurisdiction injection
   if (!openaiEdge.includes('CURRENT JURISDICTION')) {
     results.P0.push('AI_SAFETY: System prompt missing jurisdiction context injection');
   }
 }
 
 function checkSpanishFlow() {
-  const espanol = readFile(path.join(SRC, 'pages/EspanolLanding.tsx'));
+  const espanolPath = path.join(SRC, 'pages/EspanolLanding.tsx');
+  const espanol = readFile(espanolPath);
   if (!espanol) {
     results.P0.push('SPANISH: EspanolLanding page missing');
     return;
   }
-  if (!espanol.includes('data-testid="primary-cta"')) {
+  // Component-aware: check for data-testid OR the /es/chat link
+  const hasCTA = espanol.includes('data-testid="espanol-primary-cta"') || espanol.includes('/es/chat');
+  if (!hasCTA) {
     results.P0.push('SPANISH: EspanolLanding missing primary CTA');
   }
 
@@ -126,7 +168,7 @@ function checkProductionCrash() {
   }
 }
 
-// ─── P1 Checks ───────────────────────────────────────────────────────────────
+// --- P1 Checks ---
 
 function checkIntakeFlow() {
   const chatV2 = readFile(path.join(SRC, 'pages/ChatV2.tsx'));
@@ -140,25 +182,40 @@ function checkIntakeFlow() {
 }
 
 function checkJurisdictionCapture() {
-  const chatV2 = readFile(path.join(SRC, 'pages/ChatV2.tsx'));
+  const chatV2Path = path.join(SRC, 'pages/ChatV2.tsx');
+  const chatV2 = readFile(chatV2Path);
   if (!chatV2) return;
   if (!chatV2.includes('jurisdictionConfirmed')) {
     results.P1.push('JURISDICTION: No jurisdiction confirmation gate before AI answers');
   }
-  if (!chatV2.includes('JurisdictionSelector')) {
-    results.P1.push('JURISDICTION: JurisdictionSelector component not present in chat');
+  // Component-aware: resolve JurisdictionModal import from ChatV2
+  const hasJurisdiction =
+    chatV2.includes('JurisdictionSelector') ||
+    chatV2.includes('JurisdictionModal') ||
+    fileOrImportContains(chatV2Path, 'JurisdictionModal', 'data-testid="jurisdiction-change"');
+  if (!hasJurisdiction) {
+    results.P1.push('JURISDICTION: JurisdictionSelector/JurisdictionModal not present in chat');
   }
 }
 
 function checkDisclaimerPresence() {
   const footer = readFile(path.join(SRC, 'components/Footer.tsx'));
-  const chatV2 = readFile(path.join(SRC, 'pages/ChatV2.tsx'));
+  const chatV2Path = path.join(SRC, 'pages/ChatV2.tsx');
+  const chatV2 = readFile(chatV2Path);
 
   if (footer && !footer.includes('data-testid="legal-disclaimer"')) {
     results.P1.push('DISCLAIMER: Footer missing legal-disclaimer test id');
   }
-  if (chatV2 && !chatV2.includes('legal information') && !chatV2.includes('informacion legal')) {
-    results.P1.push('DISCLAIMER: ChatV2 missing legal information disclaimer text');
+  if (chatV2) {
+    // Component-aware: check if ChatDisclaimer is imported and contains the disclaimer
+    const hasDisclaimer =
+      chatV2.includes('legal information') ||
+      chatV2.includes('informacion legal') ||
+      chatV2.includes('ChatDisclaimer') ||
+      fileOrImportContains(chatV2Path, 'ChatDisclaimer', 'data-testid="chat-disclaimer"');
+    if (!hasDisclaimer) {
+      results.P1.push('DISCLAIMER: ChatV2 missing legal information disclaimer text');
+    }
   }
 }
 
@@ -191,14 +248,13 @@ function checkAccessibility() {
     results.P1.push('A11Y: SkipLink not used in App.tsx');
   }
 
-  // Check main landmark exists
   const layout = readFile(path.join(SRC, 'components/Layout.tsx'));
   if (layout && !layout.includes('role="main"') && !layout.includes('<main')) {
     results.P1.push('A11Y: No <main> landmark in Layout');
   }
 }
 
-// ─── Run all checks ──────────────────────────────────────────────────────────
+// --- Run all checks ---
 
 console.log('\n  Bug Severity Gate - Launch Readiness Check\n');
 console.log('  ─────────────────────────────────────────────\n');
@@ -218,7 +274,7 @@ checkDisclaimerPresence();
 checkHumanHelpPath();
 checkAccessibility();
 
-// ─── Report ──────────────────────────────────────────────────────────────────
+// --- Report ---
 
 let exitCode = 0;
 

@@ -97,12 +97,25 @@ function isLikelyNetworkError(error: unknown): boolean {
   return /TypeError|fetch|network|failed to fetch|load failed|abort|ECONNRESET|ENOTFOUND|ETIMEDOUT/i.test(message);
 }
 
-function parseThinkingDetails(response: string): { content: string; thinking: ThinkingDetails | null } {
-  const thinkingStartMarker = '---THINKING_DETAILS---';
-  const thinkingEndMarker = '---END_THINKING_DETAILS---';
+export type AnswerBasis = ThinkingDetails;
 
-  const startIdx = response.indexOf(thinkingStartMarker);
-  const endIdx = response.indexOf(thinkingEndMarker);
+function parseThinkingDetails(response: string): { content: string; thinking: ThinkingDetails | null } {
+  const basisStart = '---ANSWER_BASIS---';
+  const basisEnd = '---END_ANSWER_BASIS---';
+  const legacyStart = '---THINKING_DETAILS---';
+  const legacyEnd = '---END_THINKING_DETAILS---';
+
+  let thinkingStartMarker = basisStart;
+  let thinkingEndMarker = basisEnd;
+  let startIdx = response.indexOf(basisStart);
+  let endIdx = response.indexOf(basisEnd);
+
+  if (startIdx === -1 || endIdx === -1) {
+    thinkingStartMarker = legacyStart;
+    thinkingEndMarker = legacyEnd;
+    startIdx = response.indexOf(legacyStart);
+    endIdx = response.indexOf(legacyEnd);
+  }
 
   if (startIdx === -1 || endIdx === -1) {
     return { content: response, thinking: null };

@@ -4,6 +4,14 @@ import { describe, it, expect } from 'vitest';
 function stripUnsafeReasoningBlocks(response: string): string {
   if (!response) return response;
   let cleaned = response.replace(
+    /---ANSWER_BASIS---[\s\S]*?---END_ANSWER_BASIS---\n*/g,
+    ""
+  );
+  cleaned = cleaned.replace(
+    /---ANSWER_BASIS---[\s\S]*/g,
+    ""
+  );
+  cleaned = cleaned.replace(
     /---THINKING_DETAILS---[\s\S]*?---END_THINKING_DETAILS---\n*/g,
     ""
   );
@@ -94,4 +102,46 @@ Your landlord must provide written notice.`;
     const result = stripUnsafeReasoningBlocks(input);
     expect(result).toBe(input);
   });
+
+  it('removes a complete ANSWER_BASIS block', () => {
+    const input = `---ANSWER_BASIS---
+LEGAL_AREA: Family Law
+JURISDICTION: California
+KEY_ISSUE: Child custody modification
+CONFIDENCE: high
+STEP: Reviewing best-interest factors
+---END_ANSWER_BASIS---
+
+Here is the custody information.`;
+
+    const result = stripUnsafeReasoningBlocks(input);
+    expect(result).toBe('Here is the custody information.');
+    expect(result).not.toContain('ANSWER_BASIS');
+    expect(result).not.toContain('LEGAL_AREA');
+  });
+
+  it('removes an unclosed ANSWER_BASIS block', () => {
+    const input = `---ANSWER_BASIS---
+LEGAL_AREA: Immigration
+STEP: Checking visa requirements
+This leaked content should not appear.`;
+
+    const result = stripUnsafeReasoningBlocks(input);
+    expect(result).toBe('');
+  });
+
+  it('removes ANSWER_BASIS before THINKING_DETAILS when both present', () => {
+    const input = `---ANSWER_BASIS---
+LEGAL_AREA: Tax
+---END_ANSWER_BASIS---
+---THINKING_DETAILS---
+STEP: extra reasoning
+---END_THINKING_DETAILS---
+
+Clean response here.`;
+
+    const result = stripUnsafeReasoningBlocks(input);
+    expect(result).toBe('Clean response here.');
+  });
 });
+

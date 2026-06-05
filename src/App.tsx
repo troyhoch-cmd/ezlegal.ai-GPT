@@ -133,6 +133,8 @@ const AIModelCard = lazy(() => import('./pages/AIModelCard'));
 const AlgorithmicImpactAssessment = lazy(() => import('./pages/AlgorithmicImpactAssessment'));
 const BiasMonitoring = lazy(() => import('./pages/BiasMonitoring'));
 const PartnerDashboardDemo = lazy(() => import('./pages/PartnerDashboardDemo'));
+const QAEvidence = lazy(() => import('./pages/QAEvidence'));
+const BenchmarkEvidence = lazy(() => import('./pages/BenchmarkEvidence'));
 
 function PageLoader() {
   return (
@@ -309,6 +311,7 @@ function App() {
                   <Route path="/negotiate" element={<Negotiate />} />
                   <Route path="/site-review" element={<SiteReview />} />
                   <Route path="/route-audit" element={<RouteAudit />} />
+                  <Route path="/qa-evidence" element={<QAEvidence />} />
                   <Route path="/qa" element={<QADashboard />} />
                   <Route path="/demo" element={<Demo />} />
                   <Route path="/demo/legal-aid" element={<DemoLegalAid />} />
@@ -334,6 +337,7 @@ function App() {
                     <Route path="audit-log" element={<AdminAuditLog />} />
                     <Route path="collateral" element={<CollateralStudio />} />
                     <Route path="collateral/:id" element={<CollateralEditor />} />
+                    <Route path="benchmark-evidence" element={<BenchmarkEvidence />} />
                     <Route path="*" element={<Admin />} />
                   </Route>
                   <Route path="/ask" element={<Ask />} />
