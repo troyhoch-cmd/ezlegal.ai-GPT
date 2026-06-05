@@ -135,6 +135,7 @@ const BiasMonitoring = lazy(() => import('./pages/BiasMonitoring'));
 const PartnerDashboardDemo = lazy(() => import('./pages/PartnerDashboardDemo'));
 const QAEvidence = lazy(() => import('./pages/QAEvidence'));
 const BenchmarkEvidence = lazy(() => import('./pages/BenchmarkEvidence'));
+const LaunchReadiness = lazy(() => import('./pages/LaunchReadiness'));
 
 function PageLoader() {
   return (
@@ -338,6 +339,7 @@ function App() {
                     <Route path="collateral" element={<CollateralStudio />} />
                     <Route path="collateral/:id" element={<CollateralEditor />} />
                     <Route path="benchmark-evidence" element={<BenchmarkEvidence />} />
+                    <Route path="launch-readiness" element={<LaunchReadiness />} />
                     <Route path="*" element={<Admin />} />
                   </Route>
                   <Route path="/ask" element={<Ask />} />
