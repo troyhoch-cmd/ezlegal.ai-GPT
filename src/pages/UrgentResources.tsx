@@ -80,7 +80,7 @@ export default function UrgentResources() {
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <Link
-                      to="/lawyer-profiles"
+                      to="/find-attorney"
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg text-sm transition-colors"
                     >
                       <Users className="w-4 h-4" />
@@ -176,7 +176,7 @@ export default function UrgentResources() {
             </h2>
             <div className="grid sm:grid-cols-3 gap-3">
               <Link
-                to="/lawyer-profiles"
+                to="/find-attorney"
                 className="flex flex-col items-center gap-2 p-5 bg-white rounded-xl border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all text-center group"
               >
                 <Heart className="w-6 h-6 text-teal-600" aria-hidden="true" />

@@ -158,7 +158,7 @@ export default function CollapsibleSidebar({
       label: 'Find Legal Help',
       labelEs: 'Encontrar Ayuda Legal',
       icon: Users,
-      href: '/lawyer-profiles',
+      href: '/find-attorney',
       description: 'Browse attorneys and legal aid',
       descriptionEs: 'Busca abogados y ayuda legal',
     },

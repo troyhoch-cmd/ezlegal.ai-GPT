@@ -526,7 +526,7 @@ export default function ChatV2() {
         window.print();
         break;
       case 'find_legal_help':
-        window.location.href = '/lawyer-profiles';
+        window.location.href = '/find-attorney';
         break;
       case 'upgrade':
         window.location.href = '/pricing';

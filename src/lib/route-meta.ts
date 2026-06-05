@@ -49,7 +49,6 @@ export const ROUTE_META: Record<string, RouteMeta> = {
   '/espanol':        { label: { en: 'En Español',    es: 'En Español' },      parent: '/' },
   '/media-kit':      { label: { en: 'Media Kit',     es: 'Kit de Prensa' },   parent: '/' },
   '/partner-hub':    { label: { en: 'Partner Hub',   es: 'Centro de Socios' },parent: '/for-partners' },
-  '/lawyer-profiles':{ label: { en: 'Lawyer Profiles', es: 'Perfiles de Abogados' }, parent: '/' },
   '/issue-packs':    { label: { en: 'Issue Packs',   es: 'Paquetes de Temas' }, parent: '/' },
   '/site-review':    { label: { en: 'Site Review',   es: 'Revision del Sitio' }, parent: '/' },
 

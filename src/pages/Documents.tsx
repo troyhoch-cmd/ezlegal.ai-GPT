@@ -2004,7 +2004,7 @@ IMPORTANT RULES:
                               : 'Este tipo de documento implica consecuencias legales significativas. Se recomienda encarecidamente la revision de un abogado antes de firmar o depender de este borrador. Esta herramienta produce borradores educativos únicamente.'}
                           </p>
                           <Link
-                            to="/lawyer-profiles"
+                            to="/find-attorney"
                             className="inline-flex items-center gap-1.5 mt-2 text-xs font-medium text-amber-800 hover:text-amber-950 underline"
                           >
                             {language === 'en' ? 'Find an attorney for review' : 'Encontrar un abogado para revision'}

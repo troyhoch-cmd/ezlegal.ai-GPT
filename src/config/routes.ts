@@ -103,8 +103,8 @@ export const APP_ROUTE_META: Record<string, AppRouteMeta> = {
     riskLevel: 'high',
     navGroup: 'get-help',
   },
-  '/lawyer-profiles': {
-    path: '/lawyer-profiles',
+  '/find-attorney': {
+    path: '/find-attorney',
     label: { en: 'Find Legal Help', es: 'Encontrar Ayuda Legal' },
     plainLanguageLabel: { en: 'Browse attorneys and legal aid organizations', es: 'Busca abogados y organizaciones de ayuda legal' },
     audience: ['individual', 'spanish-individual'],

@@ -58,7 +58,7 @@ export default function RouteDisclaimerBanner() {
         <div className="flex items-center gap-2 flex-shrink-0">
           {showEscalation && (
             <Link
-              to="/lawyer-profiles"
+              to="/find-attorney"
               className="inline-flex items-center gap-1 text-xs font-medium text-teal-700 hover:text-teal-900"
             >
               <Heart className="w-3 h-3" aria-hidden="true" />
@@ -120,7 +120,7 @@ export function HighRiskAcknowledgment({ onAcknowledge }: { onAcknowledge: () =>
             {en ? 'I understand, continue' : 'Entiendo, continuar'}
           </button>
           <Link
-            to="/lawyer-profiles"
+            to="/find-attorney"
             className="flex-1 py-2.5 border border-slate-300 text-slate-700 font-semibold rounded-xl text-center hover:bg-slate-50 transition-colors text-sm"
           >
             {en ? 'Find a lawyer instead' : 'Buscar un abogado'}

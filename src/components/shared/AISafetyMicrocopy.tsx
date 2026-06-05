@@ -71,7 +71,7 @@ export function HumanEscalationCard({ variant = 'info', className = '' }: BasePr
             : 'Puede necesitar un abogado u organización de ayuda legal para este asunto.'}
         </p>
         <Link
-          to="/lawyer-profiles"
+          to="/find-attorney"
           className="inline-block mt-1.5 text-sm font-medium underline underline-offset-2 hover:opacity-80"
         >
           {en ? 'Find legal help' : 'Encontrar ayuda legal'}

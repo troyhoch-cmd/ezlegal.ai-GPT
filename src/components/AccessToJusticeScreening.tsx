@@ -85,7 +85,7 @@ export default function AccessToJusticeScreening({ onContinueToCheckout }: Acces
             {en ? 'Free or lower-cost options to consider' : 'Opciones gratuitas o de menor costo'}
           </h3>
           <Link
-            to="/lawyer-profiles"
+            to="/find-attorney"
             className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:border-teal-300 hover:bg-teal-50 transition-all group"
           >
             <Users className="w-5 h-5 text-teal-600 flex-shrink-0" aria-hidden="true" />
@@ -147,7 +147,7 @@ export default function AccessToJusticeScreening({ onContinueToCheckout }: Acces
 
           <div className="pt-4 space-y-2">
             <Link
-              to="/lawyer-profiles"
+              to="/find-attorney"
               className="w-full flex items-center justify-center gap-2 py-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl transition-colors text-sm"
             >
               {en ? 'Explore free and low-cost options' : 'Explorar opciones gratuitas'}

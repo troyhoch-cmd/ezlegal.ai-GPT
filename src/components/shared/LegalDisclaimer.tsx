@@ -123,7 +123,7 @@ export default function LegalDisclaimer({
             </ul>
             {showLinks && (
               <div className="flex flex-wrap items-center gap-3 mt-2">
-                <Link to="/lawyer-profiles" className="text-xs text-amber-700 hover:underline font-medium">
+                <Link to="/find-attorney" className="text-xs text-amber-700 hover:underline font-medium">
                   {en ? 'Find an attorney' : 'Encontrar un abogado'}
                 </Link>
                 <Link to="/scope-disclaimers" className="text-xs text-amber-700 hover:underline font-medium">
