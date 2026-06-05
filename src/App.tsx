@@ -136,6 +136,7 @@ const PartnerDashboardDemo = lazy(() => import('./pages/PartnerDashboardDemo'));
 const QAEvidence = lazy(() => import('./pages/QAEvidence'));
 const BenchmarkEvidence = lazy(() => import('./pages/BenchmarkEvidence'));
 const LaunchReadiness = lazy(() => import('./pages/LaunchReadiness'));
+const SiteAudit = lazy(() => import('./pages/SiteAudit'));
 
 function PageLoader() {
   return (
@@ -311,6 +312,7 @@ function App() {
                   <Route path="/access" element={<AccessGate />} />
                   <Route path="/negotiate" element={<Negotiate />} />
                   <Route path="/site-review" element={<SiteReview />} />
+                  <Route path="/site-audit" element={<SiteAudit />} />
                   <Route path="/route-audit" element={<RouteAudit />} />
                   <Route path="/qa-evidence" element={<QAEvidence />} />
                   <Route path="/qa" element={<QADashboard />} />
