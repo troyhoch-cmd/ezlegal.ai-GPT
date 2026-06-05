@@ -222,7 +222,7 @@ function checkDisclaimerPresence() {
 function checkHumanHelpPath() {
   const chatV2 = readFile(path.join(SRC, 'pages/ChatV2.tsx'));
   if (!chatV2) return;
-  if (!chatV2.includes('human-help-link') && !chatV2.includes('lawyer-profiles')) {
+  if (!chatV2.includes('human-help-link') && !chatV2.includes('find-attorney')) {
     results.P1.push('HUMAN_HELP: No human-help link found in chat interface');
   }
 

@@ -285,7 +285,7 @@ export default function Contact() {
                   Questions About Pricing?
                 </h3>
                 <p className="text-navy-600 mb-4">
-                  We believe in transparent pricing. Free unlimited questions for everyone. Issue Packs from $29 when you need action plans. Businesses from $99/month. No hidden fees, ever.
+                  We believe in transparent pricing. Free unlimited questions for everyone. Issue Packs from $29 when you need action plans. Businesses from $29/month. No hidden fees, ever.
                 </p>
                 <Link
                   to="/pricing"

@@ -115,8 +115,8 @@ export const governanceChecklist: GovernanceItem[] = [
       es: 'Precisión de contenido específico por jurisdicción',
     },
     description: {
-      en: 'State-specific guidance verified against current statutes and regulations',
-      es: 'Guía específica del estado verificada contra estatutos y regulaciones vigentes',
+      en: 'State-specific information cross-referenced with current statutes and regulations',
+      es: 'Información específica del estado con referencias cruzadas a estatutos y regulaciones vigentes',
     },
     status: 'not-started',
     owner: 'Legal content team',

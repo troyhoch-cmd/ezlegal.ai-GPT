@@ -266,8 +266,8 @@ export default function TermsOfService() {
                   <ul className="space-y-3 text-navy-700">
                     <li><strong>Free Tier:</strong> Unlimited AI questions, basic legal guides, attorney directory access</li>
                     <li><strong>Issue Packs ($29-$49 one-time):</strong> Detailed action plans, document templates, deadline checklists</li>
-                    <li><strong>Business Plans (from $99/month):</strong> Team access, branded portal, compliance monitoring</li>
-                    <li><strong>Organization Plans (from $199/month):</strong> For Legal Service Organizations with grant reporting and custom features</li>
+                    <li><strong>Business Plans (from $29/month):</strong> Team access, branded portal, compliance monitoring</li>
+                    <li><strong>Organization Plans (from $79/month):</strong> For Legal Service Organizations with grant reporting and custom features</li>
                   </ul>
                 </div>
 

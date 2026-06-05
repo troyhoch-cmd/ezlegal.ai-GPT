@@ -327,8 +327,8 @@ export default function IssuePacks() {
             </h1>
             <p className="text-xl text-navy-100 max-w-3xl mx-auto mb-8">
               {language === 'en'
-                ? 'Each Issue Pack gives you a complete action plan built from attorney-reviewed templates, with document checklists, deadline trackers, and a matched attorney referral for your specific legal situation.'
-                : 'Cada Paquete te da un plan de accion completo basado en plantillas revisadas por abogados, con listas de verificacion, rastreadores de fechas y referencia a abogado.'
+                ? 'Each Issue Pack gives you a complete action plan built from attorney-reviewed templates, with document checklists, deadline trackers, and an attorney directory to find representation when needed.'
+                : 'Cada Paquete te da un plan de accion completo basado en plantillas revisadas por abogados, con listas de verificacion, rastreadores de fechas y un directorio de abogados para cuando necesites representacion.'
               }
             </p>
             <div className="flex items-center justify-center gap-8 text-sm text-navy-200">

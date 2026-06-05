@@ -99,7 +99,7 @@ const technologyFeatures = [
     icon: Brain,
     title: 'Legalbreeze® AI',
     titleStyled: true,
-    description: 'Powered by state-of-the-art AI models fine-tuned specifically for legal guidance and assistance.',
+    description: 'Powered by state-of-the-art AI models fine-tuned specifically for legal information and plain-language explanations.',
     link: '/ai-governance'
   },
   {
