@@ -132,6 +132,8 @@ const Report = lazy(() => import('./pages/Report'));
 const AIModelCard = lazy(() => import('./pages/AIModelCard'));
 const AlgorithmicImpactAssessment = lazy(() => import('./pages/AlgorithmicImpactAssessment'));
 const BiasMonitoring = lazy(() => import('./pages/BiasMonitoring'));
+const AIDataProvenance = lazy(() => import('./pages/AIDataProvenance'));
+const AuditReadiness = lazy(() => import('./pages/AuditReadiness'));
 const PartnerDashboardDemo = lazy(() => import('./pages/PartnerDashboardDemo'));
 const QAEvidence = lazy(() => import('./pages/QAEvidence'));
 const BenchmarkEvidence = lazy(() => import('./pages/BenchmarkEvidence'));
@@ -284,6 +286,8 @@ function App() {
                   <Route path="/ai-model-card" element={<AIModelCard />} />
                   <Route path="/algorithmic-impact-assessment" element={<AlgorithmicImpactAssessment />} />
                   <Route path="/bias-monitoring" element={<BiasMonitoring />} />
+                  <Route path="/ai-data-provenance" element={<AIDataProvenance />} />
+                  <Route path="/audit-readiness" element={<AuditReadiness />} />
                   <Route path="/terms" element={<TermsOfService />} />
                   <Route path="/terms-of-service" element={<DeprecatedRouteRedirect to="/terms" oldPath="/terms-of-service" />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />

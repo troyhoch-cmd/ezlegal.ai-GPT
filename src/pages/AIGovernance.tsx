@@ -1,4 +1,4 @@
-import { Shield, Brain, Eye, Users, Lock, Scale, AlertTriangle, CheckCircle, FileText, ShieldCheck, Heart, MapPin, Phone, MessageSquare, Clock, Download, Flag } from 'lucide-react';
+import { Shield, Brain, Eye, Users, Lock, Scale, AlertTriangle, CheckCircle, FileText, ShieldCheck, Heart, MapPin, Phone, MessageSquare, Clock, Download, Flag, Database } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
@@ -590,7 +590,7 @@ export default function AIGovernance() {
           <div className="bg-white rounded-2xl p-6 border border-navy-200">
             <h3 className="font-bold text-navy-900 mb-4">Transparency Documentation</h3>
             <p className="text-sm text-navy-600 mb-4">We publish comprehensive documentation exceeding regulatory requirements. No other consumer legal AI product makes this information publicly available.</p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <Link to="/ai-model-card" className="group bg-navy-50 rounded-xl p-4 border border-navy-200 hover:border-teal-300 hover:bg-teal-50 transition-colors">
                 <Brain className="w-6 h-6 text-teal-600 mb-2" />
                 <h4 className="font-semibold text-navy-900 text-sm group-hover:text-teal-700">AI Model Card</h4>
@@ -605,6 +605,11 @@ export default function AIGovernance() {
                 <Scale className="w-6 h-6 text-teal-600 mb-2" />
                 <h4 className="font-semibold text-navy-900 text-sm group-hover:text-teal-700">Bias Monitoring</h4>
                 <p className="text-xs text-navy-500 mt-1">Public fairness testing results updated quarterly</p>
+              </Link>
+              <Link to="/ai-data-provenance" className="group bg-navy-50 rounded-xl p-4 border border-navy-200 hover:border-teal-300 hover:bg-teal-50 transition-colors">
+                <Database className="w-6 h-6 text-teal-600 mb-2" />
+                <h4 className="font-semibold text-navy-900 text-sm group-hover:text-teal-700">Data Provenance</h4>
+                <p className="text-xs text-navy-500 mt-1">Ethical sourcing and data handling transparency</p>
               </Link>
               <Link to="/scope-disclaimers" className="group bg-navy-50 rounded-xl p-4 border border-navy-200 hover:border-teal-300 hover:bg-teal-50 transition-colors">
                 <AlertTriangle className="w-6 h-6 text-teal-600 mb-2" />
