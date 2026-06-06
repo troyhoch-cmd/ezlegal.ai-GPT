@@ -18,6 +18,14 @@ export const translations = {
     'nav.logout': 'Sign Out',
     'nav.help': 'Help',
     'nav.about': 'About',
+    'nav.adminDashboard': 'Admin Dashboard',
+    'nav.aiGovernance': 'AI Governance',
+    'nav.contact': 'Contact',
+    'nav.getHelp': 'Get Help',
+    'nav.howAiWorks': 'How AI Works',
+    'nav.legalGuides': 'Legal Guides',
+    'nav.partnerProgram': 'Partner Program',
+    'nav.trustSafety': 'Trust & Safety',
 
     // Hero Section
     'hero.tagline': 'AI-Powered Legal Guidance, Instantly',
@@ -25,6 +33,7 @@ export const translations = {
     'hero.cta': 'Start Free',
     'hero.secondary': 'Schedule Demo',
     'hero.badge': 'Trusted by thousands',
+    'hero.noCreditCard': 'No credit card required',
 
     // Home Page
     'home.title': 'ezLegal.ai - Your AI Legal Assistant',
@@ -75,6 +84,65 @@ export const translations = {
     'common.terms': 'Terms of Service',
     'common.privacy': 'Privacy Policy',
 
+    // Login Page
+    'login.welcomeBack': 'Welcome Back',
+    'login.continueHelp': 'Continue where you left off',
+    'login.freeToStart': 'Free to start',
+    'login.freeForever': 'Free forever plan available',
+    'login.noCreditCard': 'No credit card required',
+    'login.ethicalAi': 'Ethical AI',
+    'login.neverTrains': 'Your data is never used to train AI models',
+    'login.access247': '24/7 Access',
+    'login.wheneverYouNeed': 'Get legal guidance whenever you need it',
+    'login.bankSecurity': 'Bank-Level Security',
+    'login.encryption': '256-bit encryption protects your data',
+    'login.enterPassword': 'Enter your password',
+    'login.signingIn': 'Signing in...',
+    'login.viewPricing': 'View Pricing',
+
+    // Signup Page
+    'signup.freeBanner': 'Start free, upgrade only when you need more',
+    'signup.heroTitle': 'Get Legal Answers',
+    'signup.heroHighlight': 'In Seconds',
+    'signup.heroSuffix': ', Not Weeks',
+    'signup.heroSubtitle': 'AI-powered legal guidance reviewed by licensed attorneys. Start free today.',
+    'signup.mobileTitle': 'Legal Help, Instantly',
+    'signup.mobileSubtitle': 'AI-powered legal guidance reviewed by attorneys',
+    'signup.freeForever': 'Free forever plan',
+    'signup.formTitle': 'Create Your Account',
+    'signup.formSubtitle': 'Takes less than 30 seconds',
+    'signup.unlimitedQuestions': 'Unlimited AI legal questions',
+    'signup.payOnlyForPacks': 'Pay only for Issue Packs you need',
+    'signup.continueGoogle': 'Continue with Google',
+    'signup.continueMicrosoft': 'Continue with Microsoft',
+    'signup.orEmail': 'or continue with email',
+    'signup.createPassword': 'Create a secure password',
+    'signup.confirmPassword': 'Confirm your password',
+    'signup.creating': 'Creating account...',
+    'signup.createFreeAccount': 'Create Free Account',
+    'signup.guarantee': '30-day money-back guarantee on all paid plans',
+    'signup.secure': 'Secure & encrypted',
+    'signup.agreeTerms': 'By signing up, you agree to our',
+    'signup.fiveStarRated': '4.9/5 star rated',
+    'signup.savingsAmount': 'Save up to 90% vs. traditional legal fees',
+    'signup.socialProof': 'Join thousands who already trust ezLegal.ai',
+    'signup.benefit1Title': 'Instant Answers',
+    'signup.benefit1Desc': 'Get answers to your legal questions in seconds',
+    'signup.benefit2Title': 'Attorney Reviewed',
+    'signup.benefit2Desc': 'All responses reviewed by licensed attorneys',
+    'signup.benefit3Title': 'Secure & Private',
+    'signup.benefit3Desc': 'Your data is encrypted and never shared',
+    'signup.benefit4Title': 'Always Available',
+    'signup.benefit4Desc': 'Your data is encrypted and never used to train AI models',
+
+    // Forgot Password
+    'forgot.checkEmail': 'Check Your Email',
+    'forgot.sentTo': 'We sent a reset link to',
+    'forgot.clickLink': 'Click the link in the email to reset your password',
+    'forgot.checkSpam': 'Check your spam folder if you do not see it',
+    'forgot.tryAgain': 'Try again',
+    'forgot.sending': 'Sending...',
+
     // Authentication
     'auth.login.title': 'Sign In',
     'auth.login.email': 'Email Address',
@@ -99,7 +167,7 @@ export const translations = {
     'auth.forgot.title': 'Reset Password',
     'auth.forgot.email': 'Email Address',
     'auth.forgot.submit': 'Reset Password',
-    'auth.forgot.subtitle': 'Enter your email and we\'ll send you a password reset link',
+    'auth.forgot.subtitle': "Enter your email and we'll send you a password reset link",
     'auth.forgot.back': 'Back to Sign In',
 
     // Features
@@ -121,7 +189,7 @@ export const translations = {
 
     // Pricing
     'pricing.title': 'Simple, Transparent Pricing',
-    'pricing.subtitle': 'Choose the plan that\'s right for you',
+    'pricing.subtitle': "Choose the plan that's right for you",
     'pricing.basic': 'Basic',
     'pricing.pro': 'Professional',
     'pricing.business': 'Business',
@@ -131,7 +199,7 @@ export const translations = {
     'pricing.annually': 'billed annually',
     'pricing.cta': 'Get Started',
     'pricing.guarantee': '30-day money-back guarantee',
-    'pricing.guaranteeDesc': 'Try ezLegal.ai risk-free. If you\'re not satisfied, we\'ll refund every cent.',
+    'pricing.guaranteeDesc': "Try ezLegal.ai risk-free. If you're not satisfied, we'll refund every cent.",
     'pricing.features': 'Features included',
     'pricing.aiQuestions': 'AI-powered answers',
     'pricing.documents': 'Document uploads',
@@ -174,7 +242,7 @@ export const translations = {
     'crisis.title': 'Crisis Resources',
     'crisis.label': 'In Crisis?',
     'crisis.cta': 'Get Help Now',
-    'crisis.description': 'If you\'re in immediate danger, please call 911',
+    'crisis.description': "If you're in immediate danger, please call 911",
     'crisisResources.call911': 'Call 911 for Emergencies',
     'crisisResources.call211': 'Call 211 for Local Resources',
     'crisisResources.dvHotline': 'Domestic Violence Hotline',
@@ -186,8 +254,37 @@ export const translations = {
     'emergency.medical': 'Medical Emergency',
     'emergency.mentalHealth': 'Mental Health Crisis',
 
+    // Safety
+    'safety.needMore': 'Need More Help?',
+    'safety.urgentHelp': 'Urgent Help',
+    'safety.freeLegalAid': 'Free Legal Aid',
+    'safety.findLawyer': 'Find a Lawyer',
+
+    // Urgent Help
+    'urgent.allResources': 'View All Emergency Resources',
+    'urgent.housingMessage': 'Facing eviction or housing emergency?',
+    'urgent.housingDetail': 'Get immediate help with housing issues',
+    'urgent.familyMessage': 'Family safety concern?',
+    'urgent.familyDetail': 'Connect with domestic violence resources now',
+    'urgent.immigrationMessage': 'Immigration emergency?',
+    'urgent.immigrationDetail': 'Find immediate immigration legal help',
+    'urgent.employmentMessage': 'Workplace emergency?',
+    'urgent.employmentDetail': 'Get help with urgent employment issues',
+
+    // High Risk
+    'highRisk.immediateHelp': 'Get Immediate Help',
+    'highRisk.title': 'This Situation May Need Immediate Attention',
+    'highRisk.description': 'Based on your responses, we recommend speaking with a professional right away.',
+
+    // Trust
+    'trust.ssl': 'SSL Encrypted',
+    'trust.verified': 'Verified',
+    'trust.secure': 'Secure',
+    'trust.attorneyReviewed': 'Attorney Reviewed',
+    'trust.dataSafe': 'Your Data is Safe',
+
     // Footer
-    'footer.copyright': '© {year} ezLegal.ai. All rights reserved.',
+    'footer.copyright': '\u00A9 {year} ezLegal.ai. All rights reserved.',
     'footer.company': 'Company',
     'footer.about': 'About Us',
     'footer.blog': 'Blog',
@@ -230,6 +327,23 @@ export const translations = {
     'footer.howReportsReviewed': 'How We Review Reports',
     'footer.lastUpdate': 'Last Update',
     'footer.lastUpdateDate': '{date}',
+    'footer.trustCenter': 'Trust Center',
+    'footer.verificationCycle': 'Verification Cycle',
+    'footer.verificationText': 'All legal content is reviewed quarterly by licensed attorneys.',
+    'footer.lawsVary': 'Laws vary by state and jurisdiction. Content is for informational purposes only.',
+
+    // Guides
+    'guides.searchPlaceholder': 'Describe your legal situation...',
+    'guides.searchLabel': 'Search Legal Guides',
+    'guides.clearSearch': 'Clear search',
+    'guides.commonSituations': 'Common Legal Situations',
+    'guides.popular': 'Popular',
+    'guides.quick.securityDeposit': 'Security deposit not returned',
+    'guides.quick.eviction': 'Facing eviction',
+    'guides.quick.wageTheft': 'Employer not paying wages',
+    'guides.quick.childCustody': 'Child custody dispute',
+    'guides.quick.debtCollector': 'Debt collector harassment',
+    'guides.quick.smallClaims': 'Filing small claims court',
 
     // Articles
     'article.aiCanHelp': 'How AI Can Help',
@@ -246,6 +360,10 @@ export const translations = {
     'article.officialSources': 'Official Sources',
     'article.save': 'Save Article',
     'article.share': 'Share Article',
+    'article.published': 'Published',
+    'article.author': 'By {author}',
+    'article.readTime': '{minutes} min read',
+    'article.relatedArticles': 'Related Articles',
 
     // Topics
     'topics.immigration': 'Immigration Concerns',
@@ -266,18 +384,6 @@ export const translations = {
     // CTA
     'cta.subtitle': 'Start your free trial and get answers in minutes.',
     'cta.contactUs': 'Contact Us',
-
-    // Signup
-    'signup.benefit1Title': 'Instant Answers',
-    'signup.benefit1Desc': 'Get answers to your legal questions in seconds',
-    'signup.benefit2Title': 'Attorney Reviewed',
-    'signup.benefit2Desc': 'All responses reviewed by licensed attorneys',
-    'signup.benefit3Title': 'Secure & Private',
-    'signup.benefit3Desc': 'Your data is encrypted and never shared',
-    'signup.benefit4Title': 'Always Available',
-    'signup.benefit4Desc': 'Your data is encrypted and never used to train AI models',
-    'signup.formTitle': 'Create Your Account',
-    'signup.formSubtitle': 'Takes less than 30 seconds',
 
     // Client Management
     'clients.title': 'My Clients',
@@ -302,12 +408,6 @@ export const translations = {
 
     // Accessibility
     'a11y.skipToMain': 'Skip to main content',
-
-    // Articles & Content
-    'article.published': 'Published',
-    'article.author': 'By {author}',
-    'article.readTime': '{minutes} min read',
-    'article.relatedArticles': 'Related Articles',
 
     // Errors & Messages
     'error.title': 'Something went wrong',
@@ -365,6 +465,18 @@ export const translations = {
     'dashboard.trackCase': 'Track a Case',
     'dashboard.viewResources': 'View Resources',
 
+    // Dashboard Purchases
+    'dash.purchases': 'Your Purchases & Subscriptions',
+    'dash.expires': 'Expires',
+    'dash.expired': 'Expired',
+    'dash.renew': 'Renew',
+    'dash.updatePayment': 'Update payment method',
+    'dash.noPurchases': 'No active purchases',
+    'dash.actionPlan': 'Action Plan',
+    'dash.recentActivity': 'Recent Activity',
+    'dash.tasks': 'Tasks',
+    'dash.progress': 'Progress',
+
     // Partner Kit
     'partner.title': 'Partner Kit',
     'partner.description': 'Resources for partners',
@@ -377,17 +489,263 @@ export const translations = {
     'database.title': 'Database Dashboard',
     'database.description': 'Manage your database',
 
-    // Dashboard purchases
-    'dash.purchases': 'Your Purchases & Subscriptions',
-    'dash.expires': 'Expires',
-    'dash.expired': 'Expired',
-    'dash.renew': 'Renew',
-    'dash.updatePayment': 'Update payment method',
-    'dash.noPurchases': 'No active purchases',
-    'dash.actionPlan': 'Action Plan',
-    'dash.recentActivity': 'Recent Activity',
-    'dash.tasks': 'Tasks',
-    'dash.progress': 'Progress',
+    // Contact Page
+    'contact.title': 'Contact Us',
+    'contact.subtitle': 'We are here to help. Reach out with any questions.',
+    'contact.name': 'Your Name',
+    'contact.email': 'Your Email',
+    'contact.subject': 'Subject',
+    'contact.message': 'Message',
+    'contact.send': 'Send Message',
+    'contact.sent': 'Message sent! We will respond within 24 hours.',
+    'contact.office': 'Our Office',
+    'contact.hours': 'Business Hours',
+    'contact.phone': 'Phone',
+
+    // About Page
+    'about.title': 'About ezLegal.ai',
+    'about.mission': 'Our Mission',
+    'about.missionText': 'Democratizing access to justice through ethical AI.',
+    'about.team': 'Our Team',
+    'about.values': 'Our Values',
+    'about.story': 'Our Story',
+
+    // How It Works
+    'howItWorks.title': 'How It Works',
+    'howItWorks.step1Title': 'Describe Your Situation',
+    'howItWorks.step1Desc': 'Tell us about your legal question in plain language.',
+    'howItWorks.step2Title': 'AI Analysis',
+    'howItWorks.step2Desc': 'Our AI analyzes your situation and provides guidance.',
+    'howItWorks.step3Title': 'Attorney Review',
+    'howItWorks.step3Desc': 'A licensed attorney reviews the AI response.',
+    'howItWorks.step4Title': 'Take Action',
+    'howItWorks.step4Desc': 'Get a clear action plan with next steps.',
+
+    // For Business
+    'forBusiness.title': 'Legal AI for Your Business',
+    'forBusiness.subtitle': 'Reduce legal costs and get answers faster.',
+    'forBusiness.cta': 'Start Business Plan',
+    'forBusiness.benefit1': 'Reduce legal spend by up to 80%',
+    'forBusiness.benefit2': 'Instant contract review',
+    'forBusiness.benefit3': 'Compliance monitoring',
+
+    // For Organizations
+    'forOrgs.title': 'For Legal Aid Organizations',
+    'forOrgs.subtitle': 'Empower your team to serve more clients.',
+    'forOrgs.cta': 'Learn More',
+    'forOrgs.benefit1': 'Serve 10x more clients',
+    'forOrgs.benefit2': 'Automated intake screening',
+    'forOrgs.benefit3': 'Grant reporting dashboards',
+
+    // Issue Packs
+    'issuePacks.title': 'Issue Packs',
+    'issuePacks.subtitle': 'Focused legal guidance packages for specific situations.',
+    'issuePacks.preview': 'Preview',
+    'issuePacks.purchase': 'Purchase Pack',
+    'issuePacks.included': 'What is included',
+    'issuePacks.jurisdiction': 'Jurisdiction',
+
+    // AI Assistant / Chat
+    'chat.placeholder': 'Describe your legal question...',
+    'chat.send': 'Send',
+    'chat.disclaimer': 'AI responses are for informational purposes only and do not constitute legal advice.',
+    'chat.thinking': 'Analyzing your question...',
+    'chat.newChat': 'New Conversation',
+    'chat.history': 'Chat History',
+    'chat.share': 'Share This Response',
+    'chat.copy': 'Copy Response',
+    'chat.helpful': 'Was this helpful?',
+    'chat.sources': 'Sources',
+    'chat.jurisdiction': 'Jurisdiction',
+
+    // Documents
+    'documents.title': 'My Documents',
+    'documents.upload': 'Upload Document',
+    'documents.analyze': 'Analyze',
+    'documents.empty': 'No documents yet',
+    'documents.uploadFirst': 'Upload your first document for AI analysis',
+    'documents.supported': 'Supported: PDF, DOCX, TXT',
+    'documents.processing': 'Processing document...',
+    'documents.ready': 'Analysis ready',
+
+    // Research
+    'research.title': 'Legal Research',
+    'research.subtitle': 'Search our legal database',
+    'research.placeholder': 'Search cases, statutes, regulations...',
+    'research.filters': 'Filters',
+    'research.results': 'Results',
+    'research.noResults': 'No results found',
+
+    // Profile
+    'profile.title': 'Your Profile',
+    'profile.personalInfo': 'Personal Information',
+    'profile.security': 'Security',
+    'profile.notifications': 'Notifications',
+    'profile.preferences': 'Preferences',
+    'profile.saveChanges': 'Save Changes',
+    'profile.changePassword': 'Change Password',
+    'profile.deleteAccount': 'Delete Account',
+
+    // Billing
+    'billing.title': 'Billing',
+    'billing.currentPlan': 'Current Plan',
+    'billing.paymentMethod': 'Payment Method',
+    'billing.history': 'Billing History',
+    'billing.upgrade': 'Upgrade Plan',
+    'billing.cancel': 'Cancel Subscription',
+    'billing.invoice': 'Invoice',
+
+    // Matters
+    'matters.title': 'My Matters',
+    'matters.subtitle': 'Track your legal matters',
+    'matters.add': 'Add Matter',
+    'matters.status': 'Status',
+    'matters.open': 'Open',
+    'matters.closed': 'Closed',
+    'matters.pending': 'Pending',
+    'matters.empty': 'No matters yet',
+
+    // Privacy
+    'privacy.title': 'Privacy Policy',
+    'privacy.lastUpdated': 'Last updated',
+    'privacy.dataCollection': 'Data Collection',
+    'privacy.dataUse': 'How We Use Your Data',
+    'privacy.dataSharing': 'Data Sharing',
+    'privacy.yourRights': 'Your Rights',
+    'privacy.contact': 'Contact Us',
+
+    // Terms
+    'terms.title': 'Terms of Service',
+    'terms.lastUpdated': 'Last updated',
+    'terms.acceptance': 'Acceptance',
+    'terms.services': 'Services',
+    'terms.limitations': 'Limitations',
+    'terms.termination': 'Termination',
+
+    // Accessibility Statement
+    'accessibility.title': 'Accessibility Statement',
+    'accessibility.commitment': 'Our Commitment',
+    'accessibility.standards': 'Standards',
+    'accessibility.features': 'Accessibility Features',
+    'accessibility.feedback': 'Feedback',
+
+    // EZReads
+    'ezreads.title': 'EZ Reads',
+    'ezreads.subtitle': 'Legal guides written in plain language',
+    'ezreads.readMore': 'Read More',
+    'ezreads.categories': 'Categories',
+    'ezreads.featured': 'Featured',
+    'ezreads.recent': 'Recent',
+
+    // Negotiate
+    'negotiate.title': 'Negotiation Tools',
+    'negotiate.subtitle': 'AI-powered negotiation strategy and templates',
+    'negotiate.startNew': 'Start New Negotiation',
+    'negotiate.templates': 'Templates',
+    'negotiate.history': 'History',
+    'negotiate.tips': 'Tips',
+
+    // Media Kit
+    'mediaKit.title': 'Media Kit',
+    'mediaKit.subtitle': 'Press resources and brand assets',
+    'mediaKit.logos': 'Logos',
+    'mediaKit.photos': 'Photos',
+    'mediaKit.pressRelease': 'Press Releases',
+    'mediaKit.factSheet': 'Fact Sheet',
+    'mediaKit.download': 'Download All',
+
+    // Admin
+    'admin.title': 'Admin Panel',
+    'admin.users': 'Users',
+    'admin.content': 'Content',
+    'admin.analytics': 'Analytics',
+    'admin.settings': 'Settings',
+    'admin.reports': 'Reports',
+
+    // LSO Dashboard
+    'lso.title': 'Legal Services Dashboard',
+    'lso.clients': 'Active Clients',
+    'lso.cases': 'Open Cases',
+    'lso.metrics': 'Performance Metrics',
+    'lso.governance': 'Governance',
+
+    // Partner Hub
+    'partnerHub.title': 'Partner Hub',
+    'partnerHub.overview': 'Overview',
+    'partnerHub.resources': 'Resources',
+    'partnerHub.referrals': 'Referrals',
+    'partnerHub.earnings': 'Earnings',
+    'partnerHub.support': 'Support',
+
+    // Trust Center
+    'trustCenter.title': 'Trust Center',
+    'trustCenter.security': 'Security',
+    'trustCenter.privacy': 'Privacy',
+    'trustCenter.compliance': 'Compliance',
+    'trustCenter.certifications': 'Certifications',
+    'trustCenter.practices': 'Best Practices',
+
+    // AI Governance
+    'aiGovernance.title': 'AI Governance Hub',
+    'aiGovernance.modelCard': 'Model Card',
+    'aiGovernance.biasMonitoring': 'Bias Monitoring',
+    'aiGovernance.impactAssessment': 'Impact Assessment',
+    'aiGovernance.dataProvenance': 'Data Provenance',
+    'aiGovernance.scopeDisclaimers': 'Scope Disclaimers',
+    'aiGovernance.principles': 'Our Principles',
+
+    // Schedule Demo
+    'scheduleDemo.title': 'Schedule a Demo',
+    'scheduleDemo.subtitle': 'Book a personalized demo with our team.',
+    'scheduleDemo.name': 'Full Name',
+    'scheduleDemo.email': 'Email',
+    'scheduleDemo.organization': 'Organization',
+    'scheduleDemo.preferredTime': 'Preferred Time',
+    'scheduleDemo.submit': 'Request Demo',
+    'scheduleDemo.success': 'Thanks! We will be in touch soon.',
+
+    // Feature Guide
+    'featureGuide.title': 'Feature Guide',
+    'featureGuide.subtitle': 'Learn how to get the most from ezLegal.ai',
+
+    // Toolkit
+    'toolkit.title': 'Legal Toolkit',
+    'toolkit.subtitle': 'Essential tools for your legal needs',
+    'toolkit.templates': 'Document Templates',
+    'toolkit.calculators': 'Legal Calculators',
+    'toolkit.checklists': 'Checklists',
+
+    // Cases
+    'cases.title': 'Case Predictor',
+    'cases.subtitle': 'AI-powered case outcome prediction',
+    'cases.start': 'Start Prediction',
+    'cases.disclaimer': 'Predictions are estimates only, not guarantees.',
+
+    // Site Audit
+    'siteAudit.title': 'Site Audit',
+    'siteAudit.status': 'Status',
+    'siteAudit.passed': 'Passed',
+    'siteAudit.failed': 'Failed',
+    'siteAudit.warning': 'Warning',
+
+    // Espanol Landing
+    'espanol.title': 'Asistencia Legal con IA',
+    'espanol.subtitle': 'Orientación legal en español, impulsada por inteligencia artificial.',
+    'espanol.cta': 'Comenzar Ahora',
+    'espanol.immigration': 'Inmigración',
+    'espanol.housing': 'Vivienda',
+    'espanol.employment': 'Empleo',
+    'espanol.family': 'Familia',
+
+    // Offline
+    'offline.title': 'You are offline',
+    'offline.message': 'Some features may be unavailable until you reconnect.',
+    'offline.retry': 'Retry connection',
+
+    // PWA
+    'pwa.install': 'Install App',
+    'pwa.installDesc': 'Add ezLegal.ai to your home screen for quick access.',
+    'pwa.later': 'Maybe Later',
   },
   es: {
     // Navegación
@@ -408,6 +766,14 @@ export const translations = {
     'nav.logout': 'Cerrar sesión',
     'nav.help': 'Ayuda',
     'nav.about': 'Acerca de',
+    'nav.adminDashboard': 'Panel de administración',
+    'nav.aiGovernance': 'Gobernanza de IA',
+    'nav.contact': 'Contacto',
+    'nav.getHelp': 'Obtener ayuda',
+    'nav.howAiWorks': 'Cómo funciona la IA',
+    'nav.legalGuides': 'Guías legales',
+    'nav.partnerProgram': 'Programa de asociados',
+    'nav.trustSafety': 'Confianza y seguridad',
 
     // Sección Hero
     'hero.tagline': 'Orientación legal impulsada por IA, instantáneamente',
@@ -415,6 +781,7 @@ export const translations = {
     'hero.cta': 'Comenzar gratuitamente',
     'hero.secondary': 'Programar demostración',
     'hero.badge': 'Confiado por miles',
+    'hero.noCreditCard': 'No se requiere tarjeta de crédito',
 
     // Página de inicio
     'home.title': 'ezLegal.ai - Tu asistente legal con IA',
@@ -458,20 +825,79 @@ export const translations = {
     'common.share': 'Compartir',
     'common.copy': 'Copiar',
     'common.copyLink': 'Copiar enlace',
-    'common.copied': '¡Copiado!',
+    'common.copied': '\u00A1Copiado!',
     'common.tryAgain': 'Intentar de nuevo',
     'common.noResults': 'No se encontraron resultados',
     'common.empty': 'No hay datos disponibles',
     'common.terms': 'Términos de servicio',
     'common.privacy': 'Política de privacidad',
 
+    // Página de inicio de sesión
+    'login.welcomeBack': 'Bienvenido de nuevo',
+    'login.continueHelp': 'Continúa donde lo dejaste',
+    'login.freeToStart': 'Gratis para comenzar',
+    'login.freeForever': 'Plan gratuito para siempre disponible',
+    'login.noCreditCard': 'No se requiere tarjeta de crédito',
+    'login.ethicalAi': 'IA Ética',
+    'login.neverTrains': 'Tus datos nunca se usan para entrenar modelos de IA',
+    'login.access247': 'Acceso 24/7',
+    'login.wheneverYouNeed': 'Obtén orientación legal cuando la necesites',
+    'login.bankSecurity': 'Seguridad bancaria',
+    'login.encryption': 'Encriptación de 256 bits protege tus datos',
+    'login.enterPassword': 'Ingresa tu contraseña',
+    'login.signingIn': 'Iniciando sesión...',
+    'login.viewPricing': 'Ver precios',
+
+    // Página de registro
+    'signup.freeBanner': 'Comienza gratis, mejora solo cuando necesites más',
+    'signup.heroTitle': 'Obtén respuestas legales',
+    'signup.heroHighlight': 'en segundos',
+    'signup.heroSuffix': ', no en semanas',
+    'signup.heroSubtitle': 'Orientación legal impulsada por IA y revisada por abogados licenciados. Comienza gratis hoy.',
+    'signup.mobileTitle': 'Ayuda legal, instantáneamente',
+    'signup.mobileSubtitle': 'Orientación legal impulsada por IA revisada por abogados',
+    'signup.freeForever': 'Plan gratuito para siempre',
+    'signup.formTitle': 'Crear tu cuenta',
+    'signup.formSubtitle': 'Toma menos de 30 segundos',
+    'signup.unlimitedQuestions': 'Preguntas legales de IA ilimitadas',
+    'signup.payOnlyForPacks': 'Paga solo por los Paquetes que necesites',
+    'signup.continueGoogle': 'Continuar con Google',
+    'signup.continueMicrosoft': 'Continuar con Microsoft',
+    'signup.orEmail': 'o continuar con correo',
+    'signup.createPassword': 'Crea una contraseña segura',
+    'signup.confirmPassword': 'Confirma tu contraseña',
+    'signup.creating': 'Creando cuenta...',
+    'signup.createFreeAccount': 'Crear cuenta gratuita',
+    'signup.guarantee': 'Garantía de devolución de 30 días en todos los planes de pago',
+    'signup.secure': 'Seguro y encriptado',
+    'signup.agreeTerms': 'Al registrarte, aceptas nuestros',
+    'signup.fiveStarRated': '4.9/5 estrellas',
+    'signup.savingsAmount': 'Ahorra hasta un 90% comparado con tarifas legales tradicionales',
+    'signup.socialProof': 'Únete a miles que ya confían en ezLegal.ai',
+    'signup.benefit1Title': 'Respuestas instantáneas',
+    'signup.benefit1Desc': 'Obtén respuestas a tus preguntas legales en segundos',
+    'signup.benefit2Title': 'Revisado por abogados',
+    'signup.benefit2Desc': 'Todas las respuestas revisadas por abogados licenciados',
+    'signup.benefit3Title': 'Seguro y privado',
+    'signup.benefit3Desc': 'Tus datos están encriptados y nunca se comparten',
+    'signup.benefit4Title': 'Siempre disponible',
+    'signup.benefit4Desc': 'Tus datos están encriptados y nunca se usan para entrenar modelos de IA',
+
+    // Olvidé contraseña
+    'forgot.checkEmail': 'Revisa tu correo',
+    'forgot.sentTo': 'Enviamos un enlace de restablecimiento a',
+    'forgot.clickLink': 'Haz clic en el enlace del correo para restablecer tu contraseña',
+    'forgot.checkSpam': 'Revisa tu carpeta de spam si no lo ves',
+    'forgot.tryAgain': 'Intentar de nuevo',
+    'forgot.sending': 'Enviando...',
+
     // Autenticación
     'auth.login.title': 'Iniciar sesión',
     'auth.login.email': 'Dirección de correo electrónico',
     'auth.login.password': 'Contraseña',
-    'auth.login.forgot': '¿Olvidó su contraseña?',
+    'auth.login.forgot': '\u00BFOlvidó su contraseña?',
     'auth.login.submit': 'Iniciar sesión',
-    'auth.login.noAccount': '¿No tienes cuenta?',
+    'auth.login.noAccount': '\u00BFNo tienes cuenta?',
     'auth.login.signUp': 'Crear una',
     'auth.login.subtitle': 'Bienvenido de nuevo a ezLegal.ai',
     'auth.signup.title': 'Crear cuenta',
@@ -481,7 +907,7 @@ export const translations = {
     'auth.signup.passwordMismatch': 'Las contraseñas no coinciden',
     'auth.signup.passwordWeak': 'La contraseña es demasiado débil',
     'auth.signup.submit': 'Crear cuenta',
-    'auth.signup.hasAccount': '¿Ya tienes cuenta?',
+    'auth.signup.hasAccount': '\u00BFYa tienes cuenta?',
     'auth.signup.signIn': 'Iniciar sesión',
     'auth.signup.termsLink': 'Términos de servicio',
     'auth.signup.privacyLink': 'Política de privacidad',
@@ -557,12 +983,12 @@ export const translations = {
     'checkout.privacy': 'Acepto la Política de privacidad',
     'checkout.subscribe': 'Suscribirse ahora',
     'checkout.processing': 'Procesando...',
-    'checkout.success': '¡Pago exitoso!',
+    'checkout.success': '\u00A1Pago exitoso!',
     'checkout.error': 'El pago falló. Por favor, inténtalo de nuevo.',
 
     // Crisis/Emergencia
     'crisis.title': 'Recursos de crisis',
-    'crisis.label': '¿En crisis?',
+    'crisis.label': '\u00BFEn crisis?',
     'crisis.cta': 'Obtener ayuda ahora',
     'crisis.description': 'Si estás en peligro inmediato, llama al 911',
     'crisisResources.call911': 'Llamar al 911 en caso de emergencia',
@@ -576,8 +1002,37 @@ export const translations = {
     'emergency.medical': 'Emergencia médica',
     'emergency.mentalHealth': 'Crisis de salud mental',
 
+    // Seguridad
+    'safety.needMore': '\u00BFNecesitas más ayuda?',
+    'safety.urgentHelp': 'Ayuda urgente',
+    'safety.freeLegalAid': 'Asistencia legal gratuita',
+    'safety.findLawyer': 'Encontrar un abogado',
+
+    // Ayuda urgente
+    'urgent.allResources': 'Ver todos los recursos de emergencia',
+    'urgent.housingMessage': '\u00BFEnfrentando desalojo o emergencia de vivienda?',
+    'urgent.housingDetail': 'Obtén ayuda inmediata con problemas de vivienda',
+    'urgent.familyMessage': '\u00BFPreocupación de seguridad familiar?',
+    'urgent.familyDetail': 'Conéctate con recursos de violencia doméstica ahora',
+    'urgent.immigrationMessage': '\u00BFEmergencia de inmigración?',
+    'urgent.immigrationDetail': 'Encuentra ayuda legal de inmigración inmediata',
+    'urgent.employmentMessage': '\u00BFEmergencia laboral?',
+    'urgent.employmentDetail': 'Obtén ayuda con problemas urgentes de empleo',
+
+    // Alto riesgo
+    'highRisk.immediateHelp': 'Obtener ayuda inmediata',
+    'highRisk.title': 'Esta situación puede necesitar atención inmediata',
+    'highRisk.description': 'Según tus respuestas, recomendamos hablar con un profesional de inmediato.',
+
+    // Confianza
+    'trust.ssl': 'Encriptado SSL',
+    'trust.verified': 'Verificado',
+    'trust.secure': 'Seguro',
+    'trust.attorneyReviewed': 'Revisado por abogado',
+    'trust.dataSafe': 'Tus datos están seguros',
+
     // Pie de página
-    'footer.copyright': '© {year} ezLegal.ai. Todos los derechos reservados.',
+    'footer.copyright': '\u00A9 {year} ezLegal.ai. Todos los derechos reservados.',
     'footer.company': 'Empresa',
     'footer.about': 'Acerca de nosotros',
     'footer.blog': 'Blog',
@@ -620,6 +1075,23 @@ export const translations = {
     'footer.howReportsReviewed': 'Cómo revisamos los reportes',
     'footer.lastUpdate': 'Última actualización',
     'footer.lastUpdateDate': '{date}',
+    'footer.trustCenter': 'Centro de confianza',
+    'footer.verificationCycle': 'Ciclo de verificación',
+    'footer.verificationText': 'Todo el contenido legal es revisado trimestralmente por abogados licenciados.',
+    'footer.lawsVary': 'Las leyes varían por estado y jurisdicción. El contenido es solo para fines informativos.',
+
+    // Guías
+    'guides.searchPlaceholder': 'Describe tu situación legal...',
+    'guides.searchLabel': 'Buscar guías legales',
+    'guides.clearSearch': 'Limpiar búsqueda',
+    'guides.commonSituations': 'Situaciones legales comunes',
+    'guides.popular': 'Popular',
+    'guides.quick.securityDeposit': 'Depósito de seguridad no devuelto',
+    'guides.quick.eviction': 'Enfrentando desalojo',
+    'guides.quick.wageTheft': 'Empleador no paga salarios',
+    'guides.quick.childCustody': 'Disputa de custodia de hijos',
+    'guides.quick.debtCollector': 'Acoso de cobradores de deuda',
+    'guides.quick.smallClaims': 'Presentar demanda de reclamos menores',
 
     // Artículos
     'article.aiCanHelp': 'Cómo la IA puede ayudarte',
@@ -631,11 +1103,15 @@ export const translations = {
     'article.goBack': 'Volver',
     'article.lastReviewed': 'Última revisión',
     'article.loading': 'Cargando artículo...',
-    'article.needGuidance': '¿Necesitas más orientación?',
+    'article.needGuidance': '\u00BFNecesitas más orientación?',
     'article.notFound': 'Artículo no encontrado',
     'article.officialSources': 'Fuentes oficiales',
     'article.save': 'Guardar artículo',
     'article.share': 'Compartir artículo',
+    'article.published': 'Publicado',
+    'article.author': 'Por {author}',
+    'article.readTime': '{minutes} min de lectura',
+    'article.relatedArticles': 'Artículos relacionados',
 
     // Tópicos
     'topics.immigration': 'Preocupaciones de inmigración',
@@ -656,18 +1132,6 @@ export const translations = {
     // CTA
     'cta.subtitle': 'Comienza tu prueba gratuita y obtén respuestas en minutos.',
     'cta.contactUs': 'Contáctanos',
-
-    // Registro
-    'signup.benefit1Title': 'Respuestas instantáneas',
-    'signup.benefit1Desc': 'Obtén respuestas a tus preguntas legales en segundos',
-    'signup.benefit2Title': 'Revisado por abogados',
-    'signup.benefit2Desc': 'Todas las respuestas revisadas por abogados licenciados',
-    'signup.benefit3Title': 'Seguro y privado',
-    'signup.benefit3Desc': 'Tus datos están encriptados y nunca se comparten',
-    'signup.benefit4Title': 'Siempre disponible',
-    'signup.benefit4Desc': 'Tus datos están encriptados y nunca se usan para entrenar modelos de IA',
-    'signup.formTitle': 'Crear tu cuenta',
-    'signup.formSubtitle': 'Toma menos de 30 segundos',
 
     // Gestión de clientes
     'clients.title': 'Mis clientes',
@@ -692,12 +1156,6 @@ export const translations = {
 
     // Accesibilidad
     'a11y.skipToMain': 'Ir al contenido principal',
-
-    // Artículos y contenido
-    'article.published': 'Publicado',
-    'article.author': 'Por {author}',
-    'article.readTime': '{minutes} min de lectura',
-    'article.relatedArticles': 'Artículos relacionados',
 
     // Errores y mensajes
     'error.title': 'Algo salió mal',
@@ -742,7 +1200,7 @@ export const translations = {
 
     // Panel de control
     'dashboard.title': 'Panel de control',
-    'dashboard.welcome': '¡Bienvenido de nuevo, {name}!',
+    'dashboard.welcome': '\u00A1Bienvenido de nuevo, {name}!',
     'dashboard.recentActivity': 'Actividad reciente',
     'dashboard.noActivity': 'Sin actividad reciente',
     'dashboard.stats': 'Tus estadísticas',
@@ -754,6 +1212,18 @@ export const translations = {
     'dashboard.uploadDocument': 'Cargar documento',
     'dashboard.trackCase': 'Rastrear un caso',
     'dashboard.viewResources': 'Ver recursos',
+
+    // Compras del panel
+    'dash.purchases': 'Tus compras y suscripciones',
+    'dash.expires': 'Vence',
+    'dash.expired': 'Vencido',
+    'dash.renew': 'Renovar',
+    'dash.updatePayment': 'Actualizar método de pago',
+    'dash.noPurchases': 'Sin compras activas',
+    'dash.actionPlan': 'Plan de acción',
+    'dash.recentActivity': 'Actividad reciente',
+    'dash.tasks': 'Tareas',
+    'dash.progress': 'Progreso',
 
     // Kit de asociado
     'partner.title': 'Kit de asociado',
@@ -767,16 +1237,262 @@ export const translations = {
     'database.title': 'Panel de base de datos',
     'database.description': 'Gestiona tu base de datos',
 
-    // Dashboard purchases
-    'dash.purchases': 'Tus Compras y Suscripciones',
-    'dash.expires': 'Vence',
-    'dash.expired': 'Vencido',
-    'dash.renew': 'Renovar',
-    'dash.updatePayment': 'Actualizar método de pago',
-    'dash.noPurchases': 'Sin compras activas',
-    'dash.actionPlan': 'Plan de acción',
-    'dash.recentActivity': 'Actividad reciente',
-    'dash.tasks': 'Tareas',
-    'dash.progress': 'Progreso',
+    // Página de contacto
+    'contact.title': 'Contáctanos',
+    'contact.subtitle': 'Estamos aquí para ayudar. Comunícate con cualquier pregunta.',
+    'contact.name': 'Tu nombre',
+    'contact.email': 'Tu correo electrónico',
+    'contact.subject': 'Asunto',
+    'contact.message': 'Mensaje',
+    'contact.send': 'Enviar mensaje',
+    'contact.sent': '\u00A1Mensaje enviado! Responderemos dentro de 24 horas.',
+    'contact.office': 'Nuestra oficina',
+    'contact.hours': 'Horario de atención',
+    'contact.phone': 'Teléfono',
+
+    // Página acerca de
+    'about.title': 'Acerca de ezLegal.ai',
+    'about.mission': 'Nuestra misión',
+    'about.missionText': 'Democratizar el acceso a la justicia a través de IA ética.',
+    'about.team': 'Nuestro equipo',
+    'about.values': 'Nuestros valores',
+    'about.story': 'Nuestra historia',
+
+    // Cómo funciona
+    'howItWorks.title': 'Cómo funciona',
+    'howItWorks.step1Title': 'Describe tu situación',
+    'howItWorks.step1Desc': 'Cuéntanos sobre tu pregunta legal en lenguaje sencillo.',
+    'howItWorks.step2Title': 'Análisis de IA',
+    'howItWorks.step2Desc': 'Nuestra IA analiza tu situación y proporciona orientación.',
+    'howItWorks.step3Title': 'Revisión de abogado',
+    'howItWorks.step3Desc': 'Un abogado licenciado revisa la respuesta de la IA.',
+    'howItWorks.step4Title': 'Toma acción',
+    'howItWorks.step4Desc': 'Obtén un plan de acción claro con los siguientes pasos.',
+
+    // Para negocios
+    'forBusiness.title': 'IA Legal para tu Negocio',
+    'forBusiness.subtitle': 'Reduce costos legales y obtén respuestas más rápido.',
+    'forBusiness.cta': 'Comenzar plan de negocio',
+    'forBusiness.benefit1': 'Reduce gastos legales hasta un 80%',
+    'forBusiness.benefit2': 'Revisión instantánea de contratos',
+    'forBusiness.benefit3': 'Monitoreo de cumplimiento',
+
+    // Para organizaciones
+    'forOrgs.title': 'Para organizaciones de asistencia legal',
+    'forOrgs.subtitle': 'Empodere a su equipo para atender más clientes.',
+    'forOrgs.cta': 'Saber Más',
+    'forOrgs.benefit1': 'Atienda 10 veces más clientes',
+    'forOrgs.benefit2': 'Evaluación de ingreso automatizada',
+    'forOrgs.benefit3': 'Paneles de informes de subvenciones',
+
+    // Paquetes de temas
+    'issuePacks.title': 'Paquetes de temas',
+    'issuePacks.subtitle': 'Paquetes de orientación legal enfocada para situaciones específicas.',
+    'issuePacks.preview': 'Vista previa',
+    'issuePacks.purchase': 'Comprar paquete',
+    'issuePacks.included': 'Qué incluye',
+    'issuePacks.jurisdiction': 'Jurisdicción',
+
+    // Asistente de IA / Chat
+    'chat.placeholder': 'Describe tu pregunta legal...',
+    'chat.send': 'Enviar',
+    'chat.disclaimer': 'Las respuestas de IA son solo con fines informativos y no constituyen asesoramiento legal.',
+    'chat.thinking': 'Analizando tu pregunta...',
+    'chat.newChat': 'Nueva conversación',
+    'chat.history': 'Historial de chat',
+    'chat.share': 'Compartir esta respuesta',
+    'chat.copy': 'Copiar respuesta',
+    'chat.helpful': '\u00BFFue útil?',
+    'chat.sources': 'Fuentes',
+    'chat.jurisdiction': 'Jurisdicción',
+
+    // Documentos
+    'documents.title': 'Mis documentos',
+    'documents.upload': 'Cargar documento',
+    'documents.analyze': 'Analizar',
+    'documents.empty': 'Sin documentos aún',
+    'documents.uploadFirst': 'Carga tu primer documento para análisis de IA',
+    'documents.supported': 'Soportado: PDF, DOCX, TXT',
+    'documents.processing': 'Procesando documento...',
+    'documents.ready': 'Análisis listo',
+
+    // Investigación
+    'research.title': 'Investigación legal',
+    'research.subtitle': 'Busca en nuestra base de datos legal',
+    'research.placeholder': 'Buscar casos, estatutos, regulaciones...',
+    'research.filters': 'Filtros',
+    'research.results': 'Resultados',
+    'research.noResults': 'No se encontraron resultados',
+
+    // Perfil
+    'profile.title': 'Tu perfil',
+    'profile.personalInfo': 'Información personal',
+    'profile.security': 'Seguridad',
+    'profile.notifications': 'Notificaciones',
+    'profile.preferences': 'Preferencias',
+    'profile.saveChanges': 'Guardar cambios',
+    'profile.changePassword': 'Cambiar contraseña',
+    'profile.deleteAccount': 'Eliminar cuenta',
+
+    // Facturación
+    'billing.title': 'Facturación',
+    'billing.currentPlan': 'Plan actual',
+    'billing.paymentMethod': 'Método de pago',
+    'billing.history': 'Historial de facturación',
+    'billing.upgrade': 'Mejorar plan',
+    'billing.cancel': 'Cancelar suscripción',
+    'billing.invoice': 'Factura',
+
+    // Asuntos
+    'matters.title': 'Mis asuntos',
+    'matters.subtitle': 'Seguimiento de tus asuntos legales',
+    'matters.add': 'Agregar asunto',
+    'matters.status': 'Estado',
+    'matters.open': 'Abierto',
+    'matters.closed': 'Cerrado',
+    'matters.pending': 'Pendiente',
+    'matters.empty': 'Sin asuntos aún',
+
+    // Privacidad
+    'privacy.title': 'Política de privacidad',
+    'privacy.lastUpdated': 'Última actualización',
+    'privacy.dataCollection': 'Recopilación de datos',
+    'privacy.dataUse': 'Cómo usamos tus datos',
+    'privacy.dataSharing': 'Compartición de datos',
+    'privacy.yourRights': 'Tus derechos',
+    'privacy.contact': 'Contáctanos',
+
+    // Términos
+    'terms.title': 'Términos de servicio',
+    'terms.lastUpdated': 'Última actualización',
+    'terms.acceptance': 'Aceptación',
+    'terms.services': 'Servicios',
+    'terms.limitations': 'Limitaciones',
+    'terms.termination': 'Terminación',
+
+    // Declaración de accesibilidad
+    'accessibility.title': 'Declaración de accesibilidad',
+    'accessibility.commitment': 'Nuestro compromiso',
+    'accessibility.standards': 'Estándares',
+    'accessibility.features': 'Características de accesibilidad',
+    'accessibility.feedback': 'Comentarios',
+
+    // EZReads
+    'ezreads.title': 'EZ Reads',
+    'ezreads.subtitle': 'Guías legales escritas en lenguaje sencillo',
+    'ezreads.readMore': 'Leer más',
+    'ezreads.categories': 'Categorías',
+    'ezreads.featured': 'Destacado',
+    'ezreads.recent': 'Reciente',
+
+    // Negociación
+    'negotiate.title': 'Herramientas de negociación',
+    'negotiate.subtitle': 'Estrategia y plantillas de negociación impulsadas por IA',
+    'negotiate.startNew': 'Iniciar nueva negociación',
+    'negotiate.templates': 'Plantillas',
+    'negotiate.history': 'Historial',
+    'negotiate.tips': 'Consejos',
+
+    // Kit de medios
+    'mediaKit.title': 'Kit de medios',
+    'mediaKit.subtitle': 'Recursos de prensa y activos de marca',
+    'mediaKit.logos': 'Logotipos',
+    'mediaKit.photos': 'Fotos',
+    'mediaKit.pressRelease': 'Comunicados de prensa',
+    'mediaKit.factSheet': 'Hoja de datos',
+    'mediaKit.download': 'Descargar todo',
+
+    // Administración
+    'admin.title': 'Panel de administración',
+    'admin.users': 'Usuarios',
+    'admin.content': 'Contenido',
+    'admin.analytics': 'Analítica',
+    'admin.settings': 'Configuración',
+    'admin.reports': 'Reportes',
+
+    // Panel LSO
+    'lso.title': 'Panel de servicios legales',
+    'lso.clients': 'Clientes activos',
+    'lso.cases': 'Casos abiertos',
+    'lso.metrics': 'Métricas de rendimiento',
+    'lso.governance': 'Gobernanza',
+
+    // Hub de asociados
+    'partnerHub.title': 'Hub de asociados',
+    'partnerHub.overview': 'Resumen',
+    'partnerHub.resources': 'Recursos',
+    'partnerHub.referrals': 'Referidos',
+    'partnerHub.earnings': 'Ganancias',
+    'partnerHub.support': 'Soporte',
+
+    // Centro de confianza
+    'trustCenter.title': 'Centro de confianza',
+    'trustCenter.security': 'Seguridad',
+    'trustCenter.privacy': 'Privacidad',
+    'trustCenter.compliance': 'Cumplimiento',
+    'trustCenter.certifications': 'Certificaciones',
+    'trustCenter.practices': 'Mejores prácticas',
+
+    // Gobernanza de IA
+    'aiGovernance.title': 'Centro de gobernanza de IA',
+    'aiGovernance.modelCard': 'Tarjeta de modelo',
+    'aiGovernance.biasMonitoring': 'Monitoreo de sesgo',
+    'aiGovernance.impactAssessment': 'Evaluación de impacto',
+    'aiGovernance.dataProvenance': 'Procedencia de datos',
+    'aiGovernance.scopeDisclaimers': 'Declaraciones de alcance',
+    'aiGovernance.principles': 'Nuestros principios',
+
+    // Programar demo
+    'scheduleDemo.title': 'Programar una demostración',
+    'scheduleDemo.subtitle': 'Reserva una demostración personalizada con nuestro equipo.',
+    'scheduleDemo.name': 'Nombre completo',
+    'scheduleDemo.email': 'Correo electrónico',
+    'scheduleDemo.organization': 'Organización',
+    'scheduleDemo.preferredTime': 'Hora preferida',
+    'scheduleDemo.submit': 'Solicitar demostración',
+    'scheduleDemo.success': '\u00A1Gracias! Nos pondremos en contacto pronto.',
+
+    // Guía de funciones
+    'featureGuide.title': 'Guía de funciones',
+    'featureGuide.subtitle': 'Aprende cómo sacar el máximo provecho de ezLegal.ai',
+
+    // Herramientas
+    'toolkit.title': 'Herramientas legales',
+    'toolkit.subtitle': 'Herramientas esenciales para tus necesidades legales',
+    'toolkit.templates': 'Plantillas de documentos',
+    'toolkit.calculators': 'Calculadoras legales',
+    'toolkit.checklists': 'Listas de verificación',
+
+    // Casos
+    'cases.title': 'Predictor de casos',
+    'cases.subtitle': 'Predicción de resultados de casos impulsada por IA',
+    'cases.start': 'Iniciar predicción',
+    'cases.disclaimer': 'Las predicciones son solo estimaciones, no garantías.',
+
+    // Auditoría del sitio
+    'siteAudit.title': 'Auditoría del sitio',
+    'siteAudit.status': 'Estado',
+    'siteAudit.passed': 'Aprobado',
+    'siteAudit.failed': 'Fallido',
+    'siteAudit.warning': 'Advertencia',
+
+    // Landing en español
+    'espanol.title': 'Asistencia Legal con IA',
+    'espanol.subtitle': 'Orientación legal en español, impulsada por inteligencia artificial.',
+    'espanol.cta': 'Comenzar Ahora',
+    'espanol.immigration': 'Inmigración',
+    'espanol.housing': 'Vivienda',
+    'espanol.employment': 'Empleo',
+    'espanol.family': 'Familia',
+
+    // Sin conexión
+    'offline.title': 'Sin conexión',
+    'offline.message': 'Algunas funciones pueden no estar disponibles hasta que te reconectes.',
+    'offline.retry': 'Reintentar conexión',
+
+    // PWA
+    'pwa.install': 'Instalar aplicación',
+    'pwa.installDesc': 'Agrega ezLegal.ai a tu pantalla de inicio para acceso rápido.',
+    'pwa.later': 'Quizás después',
   }
 };
