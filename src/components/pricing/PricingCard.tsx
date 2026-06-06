@@ -7,11 +7,12 @@ import { trackEngagement } from '../../services/engagement-service';
 interface Props {
   plan: PricingPlan;
   language: 'en' | 'es';
+  billingCycle?: 'monthly' | 'annual';
 }
 
 const MAX_VISIBLE_FEATURES = 4;
 
-export default function PricingCard({ plan, language }: Props) {
+export default function PricingCard({ plan, language, billingCycle = 'monthly' }: Props) {
   const l = language === 'es' ? 'es' : 'en';
   const [expanded, setExpanded] = useState(false);
   const features = plan.features[l];
@@ -22,9 +23,12 @@ export default function PricingCard({ plan, language }: Props) {
     trackEngagement({
       featureName: 'pricing_plan_cta_clicked',
       engagementType: 'click',
-      metadata: { planId: plan.id, audience: plan.audience },
+      metadata: { planId: plan.id, audience: plan.audience, billingCycle },
     });
   };
+
+  const showAnnual = billingCycle === 'annual' && plan.annualPriceDisplay;
+  const displayPrice = showAnnual ? plan.annualPriceDisplay![l] : plan.priceDisplay[l];
 
   const badgeText = plan.badge?.[l] || (plan.recommended ? (l === 'es' ? 'Recomendado' : 'Recommended') : null);
 
@@ -46,17 +50,29 @@ export default function PricingCard({ plan, language }: Props) {
 
       <header className="mb-3">
         <h3 className="text-base font-bold text-navy-900">{plan.name[l]}</h3>
-        <div className="mt-1.5 flex items-baseline gap-1.5">
-          <span className="text-2xl font-extrabold text-navy-900">{plan.price[l]}</span>
+        <div className="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
+          <span className="text-2xl font-extrabold text-navy-900">{displayPrice}</span>
           {plan.priceNote && (
             <span className="text-xs text-navy-500">{plan.priceNote[l]}</span>
           )}
-          {!plan.isFinalPrice && (
-            <span className="ml-1 text-[10px] text-amber-600 font-medium">
-              {l === 'es' ? 'precio piloto' : 'pilot pricing'}
+          {plan.isFoundingPrice && (
+            <span className="ml-1 text-[10px] text-teal-700 font-semibold bg-teal-50 px-1.5 py-0.5 rounded">
+              {l === 'es' ? 'Precio fundador — fijado 12 meses' : 'Founding price — locked 12 mo'}
+            </span>
+          )}
+          {plan.isStartingAt && (
+            <span className="ml-1 text-[10px] text-navy-500 font-medium">
+              {l === 'es' ? 'precio base' : 'base price'}
             </span>
           )}
         </div>
+        {showAnnual && plan.monthlyPrice && (
+          <p className="mt-1 text-xs text-teal-600 font-medium">
+            {l === 'es'
+              ? `Ahorra vs mensual ($${plan.monthlyPrice * 12 - plan.annualPrice!} menos/año)`
+              : `Save vs monthly ($${plan.monthlyPrice * 12 - plan.annualPrice!} off/year)`}
+          </p>
+        )}
         <p className="mt-1.5 text-sm text-navy-600 leading-snug">{plan.description[l]}</p>
       </header>
 
@@ -83,6 +99,7 @@ export default function PricingCard({ plan, language }: Props) {
         <Link
           to={plan.ctaHref}
           onClick={handleCTAClick}
+          aria-label={`${plan.ctaLabel[l]} - ${plan.name[l]}`}
           className={`flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl font-semibold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 ${
             plan.recommended
               ? 'bg-teal-600 hover:bg-teal-700 text-white focus:ring-teal-500 shadow-sm'

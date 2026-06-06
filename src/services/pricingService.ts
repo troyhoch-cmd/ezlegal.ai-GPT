@@ -52,13 +52,17 @@ function dbTierToFrontend(tier: PricingTier): PricingPlan {
       ? '$0'
       : `$${tier.priceMonthly}/mo`;
 
+  const annualLabel = tier.priceAnnual > 0 ? `$${tier.priceAnnual}/year` : undefined;
   const frontendAudience = AUDIENCE_MAP[tier.audience] || 'individuals';
 
   return {
     id: tier.id,
     name: { en: tier.name, es: tier.name },
     audience: frontendAudience,
-    price: { en: priceLabel, es: priceLabel },
+    monthlyPrice: tier.oneTimePrice ? null : tier.priceMonthly,
+    annualPrice: tier.priceAnnual > 0 ? tier.priceAnnual : null,
+    priceDisplay: { en: priceLabel, es: priceLabel },
+    annualPriceDisplay: annualLabel ? { en: annualLabel, es: annualLabel } : undefined,
     priceNote: tier.oneTimePrice
       ? { en: 'one-time', es: 'unico pago' }
       : tier.priceMonthly === 0
@@ -77,6 +81,7 @@ function dbTierToFrontend(tier: PricingTier): PricingPlan {
       ? { en: 'No credit card required', es: 'Sin tarjeta de credito' }
       : { en: 'Cancel anytime', es: 'Cancela cuando quieras' },
     isFinalPrice: tier.priceMonthly === 0 && !tier.oneTimePrice,
+    isFoundingPrice: tier.priceMonthly > 0 && !tier.oneTimePrice,
     isAddOn: !!tier.oneTimePrice,
   };
 }

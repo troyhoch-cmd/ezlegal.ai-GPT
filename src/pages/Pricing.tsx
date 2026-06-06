@@ -4,6 +4,7 @@ import { Shield, HelpCircle, Globe, ArrowRight, Zap } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import PricingCard from '../components/pricing/PricingCard';
+import PricingTrustStrip from '../components/pricing/PricingTrustStrip';
 import HelpMeChoose from '../components/pricing/HelpMeChoose';
 import PricingFAQ from '../components/pricing/PricingFAQ';
 import MarketplaceSection from '../components/pricing/MarketplaceSection';
@@ -16,6 +17,7 @@ import { trackEngagement } from '../services/engagement-service';
 import { trackEvent } from '../services/analytics-service';
 
 type AudienceId = 'individuals' | 'business' | 'legal-aid';
+type BillingCycle = 'monthly' | 'annual';
 
 const TAB_IDS: AudienceId[] = ['individuals', 'business', 'legal-aid'];
 
@@ -25,6 +27,7 @@ export default function Pricing() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = (searchParams.get('audience') as AudienceId) || 'individuals';
   const [activeTab, setActiveTab] = useState<AudienceId>(TAB_IDS.includes(initialTab) ? initialTab : 'individuals');
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>('annual');
   const [showWizard, setShowWizard] = useState(false);
   const [pricingData, setPricingData] = useState<PricingResult>({ audiences: pricingAudiences, source: 'static_fallback' });
 
@@ -50,10 +53,15 @@ export default function Pricing() {
     });
   };
 
-  const currentAudience = pricingData.audiences.find((a) => a.id === activeTab) ?? pricingData.audiences[0];
+  const handleBillingToggle = (cycle: BillingCycle) => {
+    setBillingCycle(cycle);
+    trackEvent('pricing_billing_toggle', { cycle });
+  };
 
+  const currentAudience = pricingData.audiences.find((a) => a.id === activeTab) ?? pricingData.audiences[0];
   const mainPlans = currentAudience.plans.filter((p) => !p.isAddOn);
   const addOnPlans = currentAudience.plans.filter((p) => p.isAddOn);
+  const hasAnnualPlans = mainPlans.some((p) => p.annualPriceDisplay);
 
   const gridCols = mainPlans.length >= 4
     ? 'sm:grid-cols-2 lg:grid-cols-4'
@@ -64,7 +72,7 @@ export default function Pricing() {
       <Navigation />
 
       <main id="main-content" className="pt-16">
-        {/* Compressed Hero */}
+        {/* Hero */}
         <section className="pt-6 pb-4 sm:pt-8 sm:pb-5 bg-slate-50 border-b border-slate-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
             <h1 className="text-2xl sm:text-3xl font-bold text-navy-900 mb-2 leading-tight">
@@ -89,11 +97,14 @@ export default function Pricing() {
               </p>
               <p className="inline-flex items-center gap-1.5 text-xs text-navy-500">
                 <Globe className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" aria-hidden="true" />
-                Available in English and Spanish / Disponible en inglés y español
+                Available in English and Spanish / Disponible en ingles y espanol
               </p>
             </div>
           </div>
         </section>
+
+        {/* Trust strip below hero */}
+        <PricingTrustStrip language={l} />
 
         {/* Tabs + Cards */}
         <section className="py-6 sm:py-8 bg-white">
@@ -103,6 +114,7 @@ export default function Pricing() {
                 <p className="text-xs text-amber-700 font-medium">Using static pricing fallback.</p>
               </div>
             )}
+
             {/* Tabs */}
             <div className="flex flex-col items-center gap-2 mb-5">
               <div
@@ -115,6 +127,7 @@ export default function Pricing() {
                     key={aud.id}
                     role="tab"
                     aria-selected={activeTab === aud.id}
+                    aria-label={`${l === 'es' ? 'Ver planes para' : 'View plans for'} ${aud.label[l]}`}
                     onClick={() => handleTabChange(aud.id)}
                     className={`px-4 sm:px-5 py-2 text-sm font-semibold rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-1 ${
                       activeTab === aud.id
@@ -133,9 +146,42 @@ export default function Pricing() {
                 }}
                 className="text-xs text-navy-400 hover:text-teal-600 transition-colors"
               >
-                {l === 'es' ? 'No estás seguro? Ayúdame a elegir.' : 'Not sure? Help me choose.'}
+                {l === 'es' ? 'No estas seguro? Ayudame a elegir.' : 'Not sure? Help me choose.'}
               </button>
             </div>
+
+            {/* Billing cycle toggle */}
+            {hasAnnualPlans && (
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <button
+                  onClick={() => handleBillingToggle('monthly')}
+                  aria-label={l === 'es' ? 'Facturación mensual' : 'Monthly billing'}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+                    billingCycle === 'monthly'
+                      ? 'bg-navy-900 text-white shadow-sm'
+                      : 'text-navy-500 hover:text-navy-700'
+                  }`}
+                >
+                  {l === 'es' ? 'Mensual' : 'Monthly'}
+                </button>
+                <button
+                  onClick={() => handleBillingToggle('annual')}
+                  aria-label={l === 'es' ? 'Facturación anual — 2 meses gratis' : 'Annual billing — 2 months free'}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+                    billingCycle === 'annual'
+                      ? 'bg-navy-900 text-white shadow-sm'
+                      : 'text-navy-500 hover:text-navy-700'
+                  }`}
+                >
+                  {l === 'es' ? 'Anual' : 'Annual'}
+                </button>
+                {billingCycle === 'annual' && (
+                  <span className="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-1 rounded-full">
+                    {l === 'es' ? '2 meses gratis' : '2 months free'}
+                  </span>
+                )}
+              </div>
+            )}
 
             {/* Audience headline + subline */}
             <div className="text-center mb-6">
@@ -152,16 +198,16 @@ export default function Pricing() {
               aria-label={currentAudience.label[l]}
             >
               {mainPlans.map((plan) => (
-                <PricingCard key={plan.id} plan={plan} language={l} />
+                <PricingCard key={plan.id} plan={plan} language={l} billingCycle={billingCycle} />
               ))}
             </div>
 
             {/* Paid plan disclaimer */}
-            {mainPlans.some((p) => p.price[l] !== '$0' && !p.price[l].includes('Free') && !p.price[l].includes('Gratis')) && (
+            {mainPlans.some((p) => p.monthlyPrice && p.monthlyPrice > 0) && (
               <div className="mt-4 max-w-2xl mx-auto text-center">
                 <p className="text-[11px] text-navy-500 leading-relaxed">
                   {l === 'es'
-                    ? 'Información legal, no asesoría legal. Revisión de abogado opcional a menos que se contrate por separado. Garantía de reembolso de 7 días en todos los planes pagados.'
+                    ? 'Informacion legal, no asesoria legal. Revision de abogado opcional a menos que se contrate por separado. Garantia de reembolso de 7 dias en todos los planes pagados.'
                     : 'Legal information, not legal advice. Attorney review optional unless separately engaged. 7-day refund guarantee on all paid plans.'}
                 </p>
               </div>
@@ -224,8 +270,7 @@ export default function Pricing() {
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm font-bold text-navy-900">
-                          {plan.name[l]} — {plan.price[l]} {plan.priceNote && <span className="font-normal text-navy-500">{plan.priceNote[l]}</span>}
-                          {!plan.isFinalPrice && <span className="ml-1 text-[10px] text-amber-600 font-medium">{l === 'es' ? 'precio piloto' : 'pilot pricing'}</span>}
+                          {plan.name[l]} — {plan.priceDisplay[l]} {plan.priceNote && <span className="font-normal text-navy-500">{plan.priceNote[l]}</span>}
                         </p>
                         <p className="text-xs text-navy-600 mt-0.5">{plan.description[l]}</p>
                       </div>
@@ -275,6 +320,9 @@ export default function Pricing() {
             )}
           </div>
         </section>
+
+        {/* Trust strip below cards */}
+        <PricingTrustStrip language={l} />
 
         {/* Comparison table (individuals only) */}
         {activeTab === 'individuals' && <ComparisonTable language={l} />}
