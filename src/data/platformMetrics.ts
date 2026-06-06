@@ -16,6 +16,8 @@ export const platformMetrics = {
     supported: ['en', 'es'] as const,
     partial: ['ar'] as const,
     translationKeys: 960,
+    criticalFlowCoverage: 100,
+    criticalFlowsAudited: 16,
     lastVerified: '2026-06-06',
   },
   accessibility: {
