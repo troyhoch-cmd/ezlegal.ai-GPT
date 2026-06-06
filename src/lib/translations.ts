@@ -957,6 +957,11 @@ export const translations: Record<Language, Record<string, string>> = {
     'dash.allVerified': 'All attorneys verified & bar-licensed',
     'dash.responseTime': 'Response time: 3-4 minutes average',
     'dash.growingCommunity': 'Growing community of clients',
+    'dash.purchases': 'Your Purchases & Subscriptions',
+    'dash.expires': 'Expires',
+    'dash.expired': 'Expired',
+    'dash.renew': 'Renew',
+    'dash.updatePayment': 'Update payment method',
 
     // Sidebar Layout
     'sidebar.startNewChat': 'Start New Chat',
@@ -2012,6 +2017,11 @@ export const translations: Record<Language, Record<string, string>> = {
     'dash.allVerified': 'Todos los abogados verificados y licenciados',
     'dash.responseTime': 'Tiempo de respuesta: 3-4 minutos promedio',
     'dash.growingCommunity': 'Comunidad de clientes en crecimiento',
+    'dash.purchases': 'Tus Compras y Suscripciones',
+    'dash.expires': 'Vence',
+    'dash.expired': 'Vencido',
+    'dash.renew': 'Renovar',
+    'dash.updatePayment': 'Actualizar método de pago',
 
     // Sidebar Layout
     'sidebar.startNewChat': 'Iniciar Nuevo Chat',

@@ -337,7 +337,7 @@ export default function Dashboard() {
           <div className="bg-white rounded-xl p-6 border border-navy-200 shadow-sm mb-8">
             <h3 className="text-lg font-bold text-navy-900 mb-4 flex items-center gap-2">
               <Award className="w-5 h-5 text-teal-600" />
-              Your Purchases & Subscriptions
+              {t('dash.purchases')}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {entitlements.map((ent) => {
@@ -357,17 +357,17 @@ export default function Dashboard() {
                     )}
                     {ent.expires_at && (
                       <p className="text-xs text-navy-400">
-                        {ent.status === 'active' ? 'Expires' : 'Expired'}: {new Date(ent.expires_at).toLocaleDateString()}
+                        {ent.status === 'active' ? t('dash.expires') : t('dash.expired')}: {new Date(ent.expires_at).toLocaleDateString()}
                       </p>
                     )}
                     {ent.status === 'expired' && (
                       <Link to="/pricing" className="text-xs text-teal-600 hover:underline font-medium mt-1 inline-block">
-                        Renew
+                        {t('dash.renew')}
                       </Link>
                     )}
                     {ent.status === 'payment_failed' && (
                       <Link to="/pricing" className="text-xs text-red-600 hover:underline font-medium mt-1 inline-block">
-                        Update payment method
+                        {t('dash.updatePayment')}
                       </Link>
                     )}
                   </div>
