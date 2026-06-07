@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Send, AlertCircle, MapPin, Globe, Lock, ArrowLeft } from 'lucide-react';
+import { Send, AlertCircle, Globe, Lock, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
+import JurisdictionSelector from '../components/shared/JurisdictionSelector';
 
 interface Message {
   id: string;
@@ -17,7 +18,7 @@ export default function ChatV2() {
   const { language, setLanguage } = useLanguage();
   const { user } = useAuth();
   const en = language === 'en';
-  const [jurisdiction, setJurisdiction] = useState('california');
+  const [jurisdiction, setJurisdiction] = useState('CA');
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [showUrgencyWarning, setShowUrgencyWarning] = useState(false);
@@ -96,19 +97,12 @@ export default function ChatV2() {
             </h1>
 
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-slate-600" />
-                <select
-                  value={jurisdiction}
-                  onChange={(e) => setJurisdiction(e.target.value)}
-                  className="px-3 py-1 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600"
-                >
-                  <option value="california">California</option>
-                  <option value="texas">Texas</option>
-                  <option value="newyork">New York</option>
-                  <option value="florida">Florida</option>
-                </select>
-              </div>
+              <JurisdictionSelector
+                value={jurisdiction}
+                onChange={setJurisdiction}
+                variant="compact"
+                statesOnly
+              />
 
               <button
                 onClick={() => setLanguage(en ? 'es' : 'en')}

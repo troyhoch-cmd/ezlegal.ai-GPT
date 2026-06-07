@@ -85,12 +85,12 @@ describe('3. Spanish mode changes new homepage sections', () => {
 
 describe('4. Pricing does not say "free" without showing what costs extra', () => {
   it('pricing data shows free tier clearly', () => {
-    expect(PRICING).toContain("price: { en: '$0', es: '$0' }");
+    expect(PRICING).toContain("priceDisplay: { en: '$0', es: '$0' }");
   });
 
   it('pricing data shows paid tiers', () => {
-    expect(PRICING).toContain("price: { en: '$9/mo'");
-    expect(PRICING).toContain("price: { en: '$29/mo'");
+    expect(PRICING).toContain("priceDisplay: { en: '$9/mo'");
+    expect(PRICING).toContain("priceDisplay: { en: '$29/mo'");
   });
 
   it('PricingPreview includes disclaimer from homeCopy', () => {
