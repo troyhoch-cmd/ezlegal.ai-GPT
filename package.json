@@ -25,6 +25,8 @@
     "audit:headings": "node scripts/audit-headings.cjs",
     "audit:readability": "node scripts/audit-readability.cjs",
     "audit:images": "node scripts/audit-images.cjs",
+    "merge:compare": "node scripts/export-baseline-comparison.cjs",
+    "merge:export": "node scripts/export-for-gpt-review.cjs",
     "qa": "npm run typecheck && npm run test:security && npm run test && npm run build && npm run test:e2e",
     "qa:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 npx playwright test",
     "qa:e2e:smoke": "PLAYWRIGHT_BROWSERS_PATH=0 npx playwright test smoke.spec.ts",
