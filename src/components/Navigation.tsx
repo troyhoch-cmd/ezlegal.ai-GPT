@@ -267,7 +267,17 @@ export default function Navigation() {
               </Link>
 
               {user ? (
-                <UserMenu />
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-navy-700 hover:text-teal-700 transition-colors rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    aria-current={location.pathname.startsWith('/dashboard') ? 'page' : undefined}
+                  >
+                    <Home className="h-4 w-4" aria-hidden="true" />
+                    {language === 'es' ? 'Panel' : 'Dashboard'}
+                  </Link>
+                  <UserMenu />
+                </>
               ) : (
                 <Link
                   to="/login"

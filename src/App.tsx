@@ -69,6 +69,7 @@ const AdminAuditLog = lazy(() => import('./pages/AdminAuditLog'));
 const CollateralStudio = lazy(() => import('./pages/CollateralStudio'));
 const CollateralEditor = lazy(() => import('./pages/CollateralEditor'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
+const DashboardHome = lazy(() => import('./pages/DashboardHome'));
 const LegalSafetyNet = lazy(() => import('./pages/LegalSafetyNet'));
 const AIAssistant = lazy(() => import('./pages/AIAssistant'));
 const ProBonoIntake = lazy(() => import('./pages/ProBonoIntake'));
@@ -214,6 +215,14 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function AuthAwareHome() {
+  const { user, loading } = useAuth();
+  const { isDemoMode } = useDemo();
+  if (loading) return <PageLoader />;
+  if (user && !isDemoMode) return <Navigate to="/dashboard" replace />;
+  return <Home />;
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -237,7 +246,7 @@ function App() {
               <ErrorBoundary scope="routes">
               <Suspense fallback={<PageLoader />}>
                 <Routes>
-                  <Route path="/" element={<Home />} />
+                  <Route path="/" element={<AuthAwareHome />} />
                   <Route path="/start" element={<PersonaIntake />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
@@ -363,7 +372,7 @@ function App() {
                   <Route path="/help/which-feature" element={<FeatureGuide />} />
                   <Route path="/safety-net" element={<LegalSafetyNet />} />
                   <Route path="/dashboard" element={<PrivateRoute><Layout /></PrivateRoute>}>
-                    <Route index element={<Navigate to="/chat" replace />} />
+                    <Route index element={<DashboardHome />} />
                     <Route path="action-plan" element={<Dashboard />} />
                     <Route path="ai-assistant" element={<AIAssistant />} />
                     <Route path="cases" element={<Cases />} />

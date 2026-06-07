@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Send, AlertCircle, MapPin, Globe, Lock } from 'lucide-react';
+import { Send, AlertCircle, MapPin, Globe, Lock, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Message {
   id: string;
@@ -13,6 +15,7 @@ interface Message {
 
 export default function ChatV2() {
   const { language, setLanguage } = useLanguage();
+  const { user } = useAuth();
   const en = language === 'en';
   const [jurisdiction, setJurisdiction] = useState('california');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -78,6 +81,15 @@ export default function ChatV2() {
 
       <main className="flex-1 flex flex-col pt-20">
         <div className="max-w-3xl mx-auto w-full px-4 sm:px-6 lg:px-8 mb-6">
+          {user && (
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-1.5 text-sm text-teal-600 hover:text-teal-800 font-medium mb-4 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+              {en ? 'Back to Dashboard' : 'Volver al Panel'}
+            </Link>
+          )}
           <div className="flex flex-col sm:flex-row items-center gap-4 justify-between">
             <h1 className="text-2xl font-bold text-slate-900">
               {en ? 'AI Assistant' : 'Asistente IA'}
