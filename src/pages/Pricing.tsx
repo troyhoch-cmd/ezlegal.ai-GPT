@@ -236,12 +236,12 @@ export default function Pricing() {
             </div>
 
             {/* Paid plan disclaimer */}
-            {mainPlans.some((p) => p.monthlyPrice && p.monthlyPrice > 0) && (
+            {mainPlans.some((p) => p.commerceModel === 'self_serve_subscription') && (
               <div className="mt-4 max-w-2xl mx-auto text-center">
                 <p className="text-[11px] text-navy-500 leading-relaxed">
                   {l === 'es'
-                    ? 'Información legal, no asesoría legal. Revisión de abogado opcional a menos que se contrate por separado. Garantía de reembolso de 7 días en todos los planes pagados.'
-                    : 'Legal information, not legal advice. Attorney review optional unless separately engaged. 7-day refund guarantee on all paid plans.'}
+                    ? 'Información legal, no asesoría legal. Revisión de abogado opcional a menos que se contrate por separado. Garantía de reembolso de 7 días en suscripciones nuevas.'
+                    : 'Legal information, not legal advice. Attorney review optional unless separately engaged. 7-day refund guarantee on new subscriptions.'}
                 </p>
               </div>
             )}

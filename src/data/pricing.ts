@@ -1,7 +1,22 @@
+export type CommerceModel =
+  | 'free'
+  | 'self_serve_subscription'
+  | 'one_time_addon'
+  | 'partner_custom'
+  | 'grant_or_free_access';
+
+export interface TermsMicrocopy {
+  cancel?: { en: string; es: string };
+  refund?: { en: string; es: string };
+  data?: { en: string; es: string };
+}
+
 export interface PricingPlan {
   id: string;
   name: { en: string; es: string };
   audience: 'individuals' | 'business' | 'legal-aid';
+  commerceModel: CommerceModel;
+  termsMicrocopy?: TermsMicrocopy;
   monthlyPrice: number | null;
   annualPrice: number | null;
   priceDisplay: { en: string; es: string };
@@ -38,6 +53,7 @@ export const pricingAudiences: PricingAudience[] = [
         id: 'justice_free',
         name: { en: 'Free', es: 'Gratis' },
         audience: 'individuals',
+        commerceModel: 'free',
         monthlyPrice: 0,
         annualPrice: 0,
         priceDisplay: { en: '$0', es: '$0' },
@@ -77,6 +93,12 @@ export const pricingAudiences: PricingAudience[] = [
         id: 'everyday-plus',
         name: { en: 'Everyday Plus', es: 'Diario Plus' },
         audience: 'individuals',
+        commerceModel: 'self_serve_subscription',
+        termsMicrocopy: {
+          cancel: { en: 'Cancel anytime', es: 'Cancela cuando quieras' },
+          refund: { en: '7-day refund guarantee', es: 'Garantía de reembolso de 7 días' },
+          data: { en: 'Your data never trains AI', es: 'Tus datos nunca entrenan IA' },
+        },
         monthlyPrice: 9,
         annualPrice: 89,
         priceDisplay: { en: '$9/mo', es: '$9/mes' },
@@ -117,6 +139,12 @@ export const pricingAudiences: PricingAudience[] = [
         id: 'family',
         name: { en: 'Family', es: 'Familia' },
         audience: 'individuals',
+        commerceModel: 'self_serve_subscription',
+        termsMicrocopy: {
+          cancel: { en: 'Cancel anytime', es: 'Cancela cuando quieras' },
+          refund: { en: '7-day refund guarantee', es: 'Garantía de reembolso de 7 días' },
+          data: { en: 'Your data never trains AI', es: 'Tus datos nunca entrenan IA' },
+        },
         monthlyPrice: 19,
         annualPrice: 189,
         priceDisplay: { en: '$19/mo', es: '$19/mes' },
@@ -156,6 +184,10 @@ export const pricingAudiences: PricingAudience[] = [
         id: 'boost',
         name: { en: 'Boost', es: 'Boost' },
         audience: 'individuals',
+        commerceModel: 'one_time_addon',
+        termsMicrocopy: {
+          data: { en: 'Your data never trains AI', es: 'Tus datos nunca entrenan IA' },
+        },
         monthlyPrice: null,
         annualPrice: null,
         priceDisplay: { en: '$5', es: '$5' },
@@ -199,6 +231,12 @@ export const pricingAudiences: PricingAudience[] = [
         id: 'business-starter',
         name: { en: 'Business Starter', es: 'Negocio Inicial' },
         audience: 'business',
+        commerceModel: 'self_serve_subscription',
+        termsMicrocopy: {
+          cancel: { en: 'Cancel anytime', es: 'Cancela cuando quieras' },
+          refund: { en: '7-day refund guarantee', es: 'Garantía de reembolso de 7 días' },
+          data: { en: 'Your data never trains AI', es: 'Tus datos nunca entrenan IA' },
+        },
         monthlyPrice: 29,
         annualPrice: 290,
         priceDisplay: { en: '$29/mo', es: '$29/mes' },
@@ -239,6 +277,12 @@ export const pricingAudiences: PricingAudience[] = [
         id: 'business-plus',
         name: { en: 'Business Plus', es: 'Negocio Plus' },
         audience: 'business',
+        commerceModel: 'self_serve_subscription',
+        termsMicrocopy: {
+          cancel: { en: 'Cancel anytime', es: 'Cancela cuando quieras' },
+          refund: { en: '7-day refund guarantee', es: 'Garantía de reembolso de 7 días' },
+          data: { en: 'Your data never trains AI', es: 'Tus datos nunca entrenan IA' },
+        },
         monthlyPrice: 79,
         annualPrice: 790,
         priceDisplay: { en: '$79/mo', es: '$79/mes' },
@@ -278,6 +322,7 @@ export const pricingAudiences: PricingAudience[] = [
         id: 'business-pro',
         name: { en: 'Business Pro', es: 'Negocio Pro' },
         audience: 'business',
+        commerceModel: 'partner_custom',
         monthlyPrice: null,
         annualPrice: null,
         priceDisplay: { en: 'Custom', es: 'Personalizado' },
@@ -323,6 +368,7 @@ export const pricingAudiences: PricingAudience[] = [
         id: 'verified-legal-aid',
         name: { en: 'Verified Legal Aid', es: 'Ayuda Legal Verificada' },
         audience: 'legal-aid',
+        commerceModel: 'grant_or_free_access',
         monthlyPrice: 0,
         annualPrice: 0,
         priceDisplay: { en: 'Free / Sponsored', es: 'Gratis / Patrocinado' },
@@ -362,6 +408,7 @@ export const pricingAudiences: PricingAudience[] = [
         id: 'coalition',
         name: { en: 'Coalition / Statewide', es: 'Coalición / Estatal' },
         audience: 'legal-aid',
+        commerceModel: 'partner_custom',
         monthlyPrice: 499,
         annualPrice: null,
         priceDisplay: { en: 'Starting at $499/mo', es: 'Desde $499/mes' },
@@ -402,6 +449,7 @@ export const pricingAudiences: PricingAudience[] = [
         id: 'enterprise-gov',
         name: { en: 'Enterprise / Government', es: 'Empresa / Gobierno' },
         audience: 'legal-aid',
+        commerceModel: 'partner_custom',
         monthlyPrice: null,
         annualPrice: null,
         priceDisplay: { en: 'Custom', es: 'Personalizado' },
