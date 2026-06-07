@@ -36,16 +36,23 @@ export default function PricingFAQ({ language }: Props) {
                 onClick={() => toggle(i)}
                 className="w-full flex items-center justify-between gap-3 p-5 text-left bg-white hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500"
                 aria-expanded={openIndex === i}
+                aria-controls={`pricing-faq-panel-${i}`}
+                id={`pricing-faq-btn-${i}`}
               >
                 <span className="font-semibold text-navy-900 text-sm sm:text-base">{faq.q[l]}</span>
                 {openIndex === i ? (
-                  <ChevronUp className="w-5 h-5 text-teal-600 flex-shrink-0" />
+                  <ChevronUp className="w-5 h-5 text-teal-600 flex-shrink-0" aria-hidden="true" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-navy-400 flex-shrink-0" />
+                  <ChevronDown className="w-5 h-5 text-navy-400 flex-shrink-0" aria-hidden="true" />
                 )}
               </button>
               {openIndex === i && (
-                <div className="px-5 pb-5 bg-slate-50 border-t border-slate-200">
+                <div
+                  id={`pricing-faq-panel-${i}`}
+                  role="region"
+                  aria-labelledby={`pricing-faq-btn-${i}`}
+                  className="px-5 pb-5 bg-slate-50 border-t border-slate-200"
+                >
                   <p className="text-sm text-navy-600 leading-relaxed pt-4">{faq.a[l]}</p>
                 </div>
               )}

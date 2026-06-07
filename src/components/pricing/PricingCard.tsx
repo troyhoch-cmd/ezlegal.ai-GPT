@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { CheckCircle, ArrowRight, ChevronDown } from 'lucide-react';
+import { CheckCircle, ArrowRight, ChevronDown, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { PricingPlan } from '../../data/pricing';
+import { savingsLabel } from '../../lib/pricingMath';
 import { trackEngagement } from '../../services/engagement-service';
 
 interface Props {
@@ -66,17 +67,16 @@ export default function PricingCard({ plan, language, billingCycle = 'monthly' }
             </span>
           )}
         </div>
-        {showAnnual && plan.monthlyPrice && (
-          <p className="mt-1 text-xs text-teal-600 font-medium">
-            {l === 'es'
-              ? `Ahorra vs mensual ($${plan.monthlyPrice * 12 - plan.annualPrice!} menos/año)`
-              : `Save vs monthly ($${plan.monthlyPrice * 12 - plan.annualPrice!} off/year)`}
-          </p>
-        )}
+        {showAnnual && (() => {
+          const label = savingsLabel(plan, l);
+          return label ? (
+            <p className="mt-1 text-xs text-teal-600 font-medium">{label}</p>
+          ) : null;
+        })()}
         <p className="mt-1.5 text-sm text-navy-600 leading-snug">{plan.description[l]}</p>
       </header>
 
-      <ul className="flex-1 space-y-2 mb-4" role="list">
+      <ul className="flex-1 space-y-2 mb-4" role="list" id={`features-${plan.id}`}>
         {visibleFeatures.map((feature) => (
           <li key={feature} className="flex items-start gap-2 text-sm text-navy-700">
             <CheckCircle className="w-3.5 h-3.5 text-teal-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
@@ -88,9 +88,11 @@ export default function PricingCard({ plan, language, billingCycle = 'monthly' }
       {hasMore && !expanded && (
         <button
           onClick={() => setExpanded(true)}
+          aria-expanded={false}
+          aria-controls={`features-${plan.id}`}
           className="flex items-center gap-1 text-xs text-teal-600 hover:text-teal-800 font-medium mb-4 transition-colors"
         >
-          <ChevronDown className="w-3.5 h-3.5" />
+          <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" />
           {l === 'es' ? 'Ver todas las funciones' : 'See all features'}
         </button>
       )}
@@ -111,6 +113,16 @@ export default function PricingCard({ plan, language, billingCycle = 'monthly' }
           {plan.ctaLabel[l]}
           <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
         </Link>
+        {plan.monthlyPrice && plan.monthlyPrice > 0 && (
+          <div className="flex items-center justify-center gap-1.5 pt-1">
+            <Shield className="w-3 h-3 text-teal-600 flex-shrink-0" aria-hidden="true" />
+            <span className="text-[10px] text-navy-500 leading-tight">
+              {l === 'es'
+                ? 'Cancela gratis. Tus datos nunca entrenan IA.'
+                : 'Cancel free. Your data never trains AI.'}
+            </span>
+          </div>
+        )}
         {plan.ethicalNote && (
           <p className="text-center text-[11px] text-navy-400">{plan.ethicalNote[l]}</p>
         )}

@@ -493,6 +493,34 @@ export const pricingFAQ = [
       es: 'Siempre. La información de seguridad, líneas de crisis, buscador de ayuda legal y recursos de ayuda urgente nunca están detrás de un muro de pago.',
     },
   },
+  {
+    q: { en: 'How does renewal work and are there taxes?', es: '¿Cómo funciona la renovación y hay impuestos?' },
+    a: {
+      en: 'Plans renew automatically at the end of each billing cycle (monthly or annual). You will receive a reminder email 7 days before renewal. Applicable sales tax is calculated at checkout based on your billing address. Prices shown exclude tax unless otherwise noted.',
+      es: 'Los planes se renuevan automáticamente al final de cada ciclo de facturación (mensual o anual). Recibirás un correo recordatorio 7 días antes de la renovación. El impuesto de venta aplicable se calcula al pagar según tu dirección de facturación. Los precios mostrados no incluyen impuestos a menos que se indique lo contrario.',
+    },
+  },
+  {
+    q: { en: 'What happens after the founding-price period?', es: '¿Qué pasa después del período de precio fundador?' },
+    a: {
+      en: 'Founding prices are locked for 12 months from your signup date. After that, your plan may adjust to the then-current standard rate. We will notify you at least 30 days in advance of any price change, and you can cancel or downgrade before it takes effect.',
+      es: 'Los precios fundadores están fijados por 12 meses desde tu fecha de registro. Después, tu plan puede ajustarse a la tarifa estándar vigente. Te notificaremos al menos 30 días antes de cualquier cambio de precio, y puedes cancelar o cambiar de plan antes de que entre en vigor.',
+    },
+  },
+  {
+    q: { en: 'How do refunds work?', es: '¿Cómo funcionan los reembolsos?' },
+    a: {
+      en: 'New subscriptions include a 7-day money-back guarantee — no questions asked. After 7 days, monthly plans are not refundable but you can cancel to stop future charges. Annual plans receive a prorated refund for remaining whole months. Refunds are processed within 5-10 business days.',
+      es: 'Las nuevas suscripciones incluyen una garantía de devolución de 7 días — sin preguntas. Después de 7 días, los planes mensuales no son reembolsables, pero puedes cancelar para detener cargos futuros. Los planes anuales reciben un reembolso prorrateado por meses completos restantes. Los reembolsos se procesan en 5-10 días hábiles.',
+    },
+  },
+  {
+    q: { en: 'What does human review include and what does it cost?', es: '¿Qué incluye la revisión humana y cuánto cuesta?' },
+    a: {
+      en: 'Human review is available on all paid plans at no extra cost for safety-critical outputs (e.g., court filings, custody matters). A trained reviewer checks AI-generated content for accuracy, completeness, and safety. Reviews typically complete within 24 hours on business days. High-priority matters may be expedited.',
+      es: 'La revisión humana está disponible en todos los planes pagados sin costo adicional para resultados críticos de seguridad (ej., documentos judiciales, asuntos de custodia). Un revisor capacitado verifica el contenido generado por IA en cuanto a precisión, completitud y seguridad. Las revisiones típicamente se completan dentro de 24 horas en días hábiles. Los asuntos de alta prioridad pueden ser acelerados.',
+    },
+  },
 ];
 
 export const comparisonFeatures = [
