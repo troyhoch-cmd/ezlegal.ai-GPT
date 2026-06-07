@@ -113,21 +113,15 @@ export default function PricingCard({ plan, language, billingCycle = 'monthly' }
           {plan.ctaLabel[l]}
           <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
         </Link>
-        {plan.commerceModel === 'self_serve_subscription' && plan.termsMicrocopy && (
+        {plan.termsMicrocopy && (
           <div className="flex items-center justify-center gap-1.5 pt-1">
             <Shield className="w-3 h-3 text-teal-600 flex-shrink-0" aria-hidden="true" />
             <span className="text-[10px] text-navy-500 leading-tight">
               {plan.termsMicrocopy.cancel?.[l]}
-              {plan.termsMicrocopy.cancel && plan.termsMicrocopy.data && '. '}
+              {plan.termsMicrocopy.cancel && plan.termsMicrocopy.refund && '. '}
+              {plan.termsMicrocopy.refund?.[l]}
+              {(plan.termsMicrocopy.cancel || plan.termsMicrocopy.refund) && plan.termsMicrocopy.data && '. '}
               {plan.termsMicrocopy.data?.[l]}
-            </span>
-          </div>
-        )}
-        {plan.commerceModel === 'one_time_addon' && plan.termsMicrocopy?.data && (
-          <div className="flex items-center justify-center gap-1.5 pt-1">
-            <Shield className="w-3 h-3 text-teal-600 flex-shrink-0" aria-hidden="true" />
-            <span className="text-[10px] text-navy-500 leading-tight">
-              {plan.termsMicrocopy.data[l]}
             </span>
           </div>
         )}

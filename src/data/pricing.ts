@@ -84,9 +84,8 @@ export const pricingAudiences: PricingAudience[] = [
         },
         ctaLabel: { en: 'Start free', es: 'Comenzar gratis' },
         ctaHref: '/chat',
-        ethicalNote: {
-          en: 'No credit card required',
-          es: 'Sin tarjeta de crédito',
+        termsMicrocopy: {
+          data: { en: 'No credit card required', es: 'Sin tarjeta de crédito' },
         },
       },
       {
@@ -117,7 +116,6 @@ export const pricingAudiences: PricingAudience[] = [
             'Next-step action plans',
             'Priority document processing',
             'Downloadable summaries for attorney review',
-            'Cancel anytime',
           ],
           es: [
             'Historial de asuntos guardados y recordatorios',
@@ -125,15 +123,10 @@ export const pricingAudiences: PricingAudience[] = [
             'Planes de acción con próximos pasos',
             'Procesamiento prioritario de documentos',
             'Resúmenes descargables para revisión de abogado',
-            'Cancela cuando quieras',
           ],
         },
         ctaLabel: { en: 'Get Everyday Plus', es: 'Obtener Diario Plus' },
         ctaHref: '/chat?plan=everyday-plus',
-        ethicalNote: {
-          en: 'Cancel anytime. 7-day refund guarantee.',
-          es: 'Cancela cuando quieras. Garantía de reembolso de 7 días.',
-        },
       },
       {
         id: 'family',
@@ -175,10 +168,6 @@ export const pricingAudiences: PricingAudience[] = [
         },
         ctaLabel: { en: 'Choose Family', es: 'Elegir Familia' },
         ctaHref: '/chat?plan=family',
-        ethicalNote: {
-          en: 'Cancel anytime. 7-day refund guarantee.',
-          es: 'Cancela cuando quieras. Garantía de reembolso de 7 días.',
-        },
       },
       {
         id: 'boost',
@@ -255,7 +244,6 @@ export const pricingAudiences: PricingAudience[] = [
             'Dispute preparation tools',
             'Employment and vendor issue spotting',
             'Save and organize business matters',
-            'Cancel anytime',
           ],
           es: [
             'Resúmenes de contratos y documentos',
@@ -263,15 +251,10 @@ export const pricingAudiences: PricingAudience[] = [
             'Herramientas de preparación de disputas',
             'Detección de problemas laborales y de proveedores',
             'Guarda y organiza asuntos de negocio',
-            'Cancela cuando quieras',
           ],
         },
         ctaLabel: { en: 'Start Business', es: 'Comenzar Negocio' },
         ctaHref: '/signup?plan=business-starter',
-        ethicalNote: {
-          en: 'Cancel anytime. Attorney review available separately.',
-          es: 'Cancela cuando quieras. Revisión de abogado disponible por separado.',
-        },
       },
       {
         id: 'business-plus',
@@ -313,16 +296,15 @@ export const pricingAudiences: PricingAudience[] = [
         },
         ctaLabel: { en: 'Choose Business Plus', es: 'Elegir Negocio Plus' },
         ctaHref: '/signup?plan=business-plus',
-        ethicalNote: {
-          en: 'Cancel anytime. Attorney review available separately.',
-          es: 'Cancela cuando quieras. Revisión de abogado disponible por separado.',
-        },
       },
       {
         id: 'business-pro',
         name: { en: 'Business Pro', es: 'Negocio Pro' },
         audience: 'business',
         commerceModel: 'partner_custom',
+        termsMicrocopy: {
+          data: { en: 'Terms set by partnership agreement', es: 'Términos establecidos por acuerdo de asociación' },
+        },
         monthlyPrice: null,
         annualPrice: null,
         priceDisplay: { en: 'Custom', es: 'Personalizado' },
@@ -369,6 +351,9 @@ export const pricingAudiences: PricingAudience[] = [
         name: { en: 'Verified Legal Aid', es: 'Ayuda Legal Verificada' },
         audience: 'legal-aid',
         commerceModel: 'grant_or_free_access',
+        termsMicrocopy: {
+          data: { en: 'No credit card required. Free access subject to eligibility.', es: 'Sin tarjeta de crédito. Acceso gratuito sujeto a elegibilidad.' },
+        },
         monthlyPrice: 0,
         annualPrice: 0,
         priceDisplay: { en: 'Free / Sponsored', es: 'Gratis / Patrocinado' },
@@ -409,6 +394,9 @@ export const pricingAudiences: PricingAudience[] = [
         name: { en: 'Coalition / Statewide', es: 'Coalición / Estatal' },
         audience: 'legal-aid',
         commerceModel: 'partner_custom',
+        termsMicrocopy: {
+          data: { en: 'No payment collected online. Terms set by partnership agreement.', es: 'No se cobra en línea. Términos establecidos por acuerdo de asociación.' },
+        },
         monthlyPrice: 499,
         annualPrice: null,
         priceDisplay: { en: 'Starting at $499/mo', es: 'Desde $499/mes' },
@@ -450,6 +438,9 @@ export const pricingAudiences: PricingAudience[] = [
         name: { en: 'Enterprise / Government', es: 'Empresa / Gobierno' },
         audience: 'legal-aid',
         commerceModel: 'partner_custom',
+        termsMicrocopy: {
+          data: { en: 'No payment collected online. Terms set by partnership agreement.', es: 'No se cobra en línea. Términos establecidos por acuerdo de asociación.' },
+        },
         monthlyPrice: null,
         annualPrice: null,
         priceDisplay: { en: 'Custom', es: 'Personalizado' },
