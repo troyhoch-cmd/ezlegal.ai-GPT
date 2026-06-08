@@ -1,5 +1,5 @@
 # ezLegal.ai Post-Merge Audit Bundle
-# Generated: 2026-06-08T20:25:44.675Z
+# Generated: 2026-06-08T22:06:43.063Z
 # Use with: scripts/gpt-post-merge-audit-prompt.md
 
 ---
@@ -26,6 +26,7 @@ import RelatedLinks from '../components/RelatedLinks';
 import { AttorneyServiceDisclosure } from '../components/shared';
 import Footer from '../components/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
+import { pricingAudiences } from '../data/pricing';
 import type { LucideIcon } from 'lucide-react';
 import {
   Building2, FileText, Shield, Clock, DollarSign, Users, CheckCircle2,
@@ -93,7 +94,7 @@ const painPoints: Record<'en' | 'es', PainPoint[]> = {
       stat: '5-10 days',
       statLabel: 'typical turnaround',
       citationId: 2,
-      solution: 'AI-powered review in minutes, not days',
+      solution: 'AI-assisted review workflow helps surface key issues faster',
     },
     {
       icon: AlertTriangle,
@@ -101,7 +102,7 @@ const painPoints: Record<'en' | 'es', PainPoint[]> = {
       stat: '$4.45M',
       statLabel: 'avg breach cost (IBM 2023)',
       citationId: 3,
-      solution: 'Proactive compliance monitoring & alerts',
+      solution: 'Compliance checklists and monitoring alerts',
     },
     {
       icon: Users,
@@ -127,7 +128,7 @@ const painPoints: Record<'en' | 'es', PainPoint[]> = {
       stat: '5-10 dias',
       statLabel: 'tiempo de respuesta tipico',
       citationId: 2,
-      solution: 'Revision con AI en minutos, no dias',
+      solution: 'Flujo de revision asistido por AI para detectar problemas clave mas rapido',
     },
     {
       icon: AlertTriangle,
@@ -135,7 +136,7 @@ const painPoints: Record<'en' | 'es', PainPoint[]> = {
       stat: '$4.45M',
       statLabel: 'costo promedio de brecha (IBM 2023)',
       citationId: 3,
-      solution: 'Monitoreo proactivo de cumplimiento y alertas',
+      solution: 'Listas de cumplimiento y alertas de monitoreo',
     },
     {
       icon: Users,
@@ -207,7 +208,7 @@ const valueProps: Record<'en' | 'es', ValueProp[]> = {
   en: [
     {
       title: 'Faster Contract Reviews',
-      description: 'AI-powered contract analysis helps your team review agreements in hours instead of weeks, so deals close faster.',
+      description: 'AI-assisted contract analysis helps your team identify key clauses and potential issues more quickly, accelerating your review process.',
       benefit: 'Designed to accelerate review workflows',
       icon: 'speed',
     },
@@ -227,7 +228,7 @@ const valueProps: Record<'en' | 'es', ValueProp[]> = {
   es: [
     {
       title: 'Revisiones de Contratos mas Rapidas',
-      description: 'El analisis de contratos con AI ayuda a tu equipo a revisar acuerdos en horas en lugar de semanas.',
+      description: 'El analisis de contratos asistido por AI ayuda a tu equipo a identificar clausulas clave y problemas potenciales mas rapidamente.',
       benefit: 'Disenado para acelerar flujos de revision',
       icon: 'speed',
     },
@@ -253,8 +254,8 @@ const faqs: Record<'en' | 'es', FAQ[]> = {
       answer: "ezLegal.ai is purpose-built for legal work with jurisdiction-specific accuracy, attorney-reviewed templates, and compliance tracking. General AI tools lack legal context, can't produce structured legal document drafts, and don't understand state-specific requirements. Our AI is built with legal research methodology and reviewed by practicing attorneys.",
     },
     {
-      question: "Can ezLegal.ai replace our attorney entirely?",
-      answer: "No, and we don't try to. ezLegal.ai handles routine legal information tasks so you can reserve attorney time for complex matters. Think of us as your first line of defense that escalates to human attorneys when needed. We even help you find and brief attorneys when you need them.",
+      question: "Do we still need an attorney if we use ezLegal.ai?",
+      answer: "Yes — ezLegal.ai is not a substitute for legal counsel. We handle routine legal information tasks so you can reserve attorney time for complex matters that require professional judgment. Think of us as your first line of defense that escalates to human attorneys when needed. We even help you find and brief attorneys when you need them.",
     },
     {
       question: "Is our data secure and confidential?",
@@ -275,8 +276,8 @@ const faqs: Record<'en' | 'es', FAQ[]> = {
       answer: "ezLegal.ai esta construido especificamente para trabajo legal con precision por jurisdiccion, plantillas revisadas por abogados y seguimiento de cumplimiento. Las herramientas AI generales carecen de contexto legal y no entienden requisitos especificos por estado.",
     },
     {
-      question: "Puede ezLegal.ai reemplazar completamente a nuestro abogado?",
-      answer: "No, y no pretendemos hacerlo. ezLegal.ai maneja tareas de informacion legal rutinarias para que puedas reservar tiempo de abogado para asuntos complejos. Te ayudamos a encontrar y preparar abogados cuando los necesitas.",
+      question: "Seguimos necesitando un abogado si usamos ezLegal.ai?",
+      answer: "Si — ezLegal.ai no sustituye asesoramiento legal profesional. Manejamos tareas de informacion legal rutinarias para que puedas reservar tiempo de abogado para asuntos complejos que requieren juicio profesional. Te ayudamos a encontrar y preparar abogados cuando los necesitas.",
     },
     {
       question: "Nuestros datos son seguros y confidenciales?",
@@ -336,7 +337,11 @@ export default function ForBusiness() {
   });
 
   const annualSavings = calculatorInputs.contracts * 12 * calculatorInputs.hourlyRate * calculatorInputs.hoursPerContract;
-  const ezLegalCost = 149 * 12;
+  const businessStarterPlan = pricingAudiences
+    .find(a => a.id === 'business')
+    ?.plans.find(p => p.id === 'business-starter');
+  const ezLegalMonthly = businessStarterPlan?.monthlyPrice ?? 29;
+  const ezLegalCost = ezLegalMonthly * 12;
   const netSavings = annualSavings - ezLegalCost;
 
   const lang = language === 'es' ? 'es' : 'en';
@@ -374,8 +379,8 @@ export default function ForBusiness() {
 
                 <p className="text-xl text-slate-300 mb-8 leading-relaxed">
                   {en
-                    ? 'Stop overpaying for legal services. Our AI handles contracts, compliance, and everyday legal tasks so you can focus on growing your business.'
-                    : 'Deja de pagar de mas por servicios legales. Nuestra AI maneja contratos, cumplimiento y tareas legales cotidianas para que te enfoques en crecer tu negocio.'}
+                    ? 'Stop overpaying for routine legal work. Our AI helps your team navigate contracts, compliance questions, and everyday legal workflows — so you can focus on growing your business.'
+                    : 'Deja de pagar de mas por trabajo legal rutinario. Nuestra AI ayuda a tu equipo a navegar contratos, preguntas de cumplimiento y flujos legales cotidianos — para que te enfoques en crecer tu negocio.'}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -474,9 +479,9 @@ export default function ForBusiness() {
                         </div>
                         <div className="bg-slate-800/50 rounded-lg p-3">
                           <p className="text-xs text-slate-400 mb-1">
-                            {en ? 'With ezLegal.ai' : 'Con ezLegal.ai'}
+                            {en ? 'With ezLegal.ai (from)' : 'Con ezLegal.ai (desde)'}
                           </p>
-                          <p className="text-xl font-bold text-green-400">${ezLegalCost.toLocaleString()}</p>
+                          <p className="text-xl font-bold text-green-400">${ezLegalCost.toLocaleString()}/yr</p>
                         </div>
                       </div>
                       <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-4 text-center">
@@ -487,8 +492,8 @@ export default function ForBusiness() {
                       </div>
                       <p className="text-xs text-slate-500 mt-2 text-center">
                         {en
-                          ? 'Estimate based on your inputs. Actual savings may vary.'
-                          : 'Estimacion basada en tus datos. Los ahorros reales pueden variar.'}
+                          ? 'Estimate based on your inputs and our Business Starter plan. Actual savings may vary. See pricing page for current plan details.'
+                          : 'Estimacion basada en tus datos y nuestro plan Negocio Inicial. Los ahorros reales pueden variar. Consulta la pagina de precios para detalles actuales.'}
                       </p>
                     </div>
                   </div>
@@ -500,6 +505,18 @@ export default function ForBusiness() {
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
         </section>
 
+        {/* Scope Boundary */}
+        <div className="bg-amber-50 border-b border-amber-200 py-3">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-sm text-amber-800 text-center font-medium">
+              <Scale className="w-4 h-4 inline-block mr-1.5 -mt-0.5" />
+              {en
+                ? 'ezLegal.ai provides legal information and workflow support — not legal advice. For legal decisions, consult a licensed attorney.'
+                : 'ezLegal.ai proporciona informacion legal y apoyo de flujos de trabajo — no asesoramiento legal. Para decisiones legales, consulte a un abogado licenciado.'}
+            </p>
+          </div>
+        </div>
+
         {/* Trust Bar */}
         <section className="py-8 bg-slate-50 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -508,7 +525,7 @@ export default function ForBusiness() {
                 <Shield className="w-5 h-5 text-green-600" />
                 <span className="font-semibold">{en ? 'CCPA Compliant' : 'Cumple CCPA'}</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-600">
+              <div className="flex items-center gap-2 text-slate-600" title={en ? 'Encryption provided via our infrastructure provider (Supabase)' : 'Cifrado proporcionado por nuestro proveedor de infraestructura (Supabase)'}>
                 <Lock className="w-5 h-5 text-teal-600" />
                 <span className="font-semibold">{en ? 'TLS 1.3 + AES-256 Encryption' : 'Cifrado TLS 1.3 + AES-256'}</span>
               </div>
@@ -805,8 +822,8 @@ export default function ForBusiness() {
             </h2>
             <p className="text-xl text-teal-100 mb-8 max-w-2xl mx-auto">
               {en
-                ? 'Businesses of all sizes use ezLegal.ai to handle contracts, compliance, and everyday legal tasks.'
-                : 'Empresas de todos los tamanos usan ezLegal.ai para manejar contratos, cumplimiento y tareas legales cotidianas.'}
+                ? 'Growing businesses use ezLegal.ai to navigate contracts, compliance questions, and everyday legal workflows more efficiently.'
+                : 'Empresas en crecimiento usan ezLegal.ai para navegar contratos, preguntas de cumplimiento y flujos legales cotidianos de forma mas eficiente.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -921,7 +938,7 @@ const FALLBACK_ARTICLES_EN = [
   },
   {
     slug: 'small-claims-court-guide',
-    title: 'Small Claims Court: How to File and Win Your Case',
+    title: 'Small Claims Court: How to File and Prepare Your Case',
     excerpt: 'A step-by-step guide to navigating small claims court without an attorney. Learn what cases qualify, how to file, and tips for presenting your case.',
     category: 'Civil Law',
     read_time: '8 min read',
@@ -972,7 +989,7 @@ const FALLBACK_ARTICLES_ES = [
   },
   {
     slug: 'guia-reclamos-menores',
-    title: 'Tribunal de Reclamos Menores: Como Presentar y Ganar Tu Caso',
+    title: 'Tribunal de Reclamos Menores: Como Presentar y Preparar Tu Caso',
     excerpt: 'Guia paso a paso para navegar el tribunal de reclamos menores sin abogado.',
     category: 'Derecho Civil',
     read_time: '8 min de lectura',
@@ -996,7 +1013,7 @@ const FALLBACK_ARTICLES_ES = [
   },
 ];
 
-function formatUpdatedDate(dateStr: string, lang: string): string {
+function formatUpdatedDate(dateStr: string, lang: 'en' | 'es'): string {
   const date = new Date(dateStr);
   const now = new Date();
   const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
@@ -1019,24 +1036,37 @@ function toArticle(a: (typeof FALLBACK_ARTICLES_EN)[number], i: number): Article
     content: '',
     is_featured: i === 0,
     author_name: 'EZLegal.ai',
-    published_at: new Date().toISOString(),
+    published_at: '2026-04-15T00:00:00.000Z',
     jurisdiction: null,
     review_status: 'editorial_review',
     sources: null,
-    updated_at: new Date().toISOString(),
-    last_reviewed_at: null,
+    updated_at: '2026-05-20T00:00:00.000Z',
+    last_reviewed_at: '2026-05-20T00:00:00.000Z',
   };
 }
 
-function useCategories(t: (key: string) => string) {
-  return useMemo(() => [
-    { name: t('ezreads.category.housingLaw'), icon: Home, count: 14, examples: t('ezreads.category.housingExamples'), dbName: 'Housing Law' },
-    { name: t('ezreads.category.employmentLaw'), icon: Users, count: 18, examples: t('ezreads.category.employmentExamples'), dbName: 'Employment Law' },
-    { name: t('ezreads.category.consumerProtection'), icon: Shield, count: 15, examples: t('ezreads.category.consumerExamples'), dbName: 'Consumer Protection' },
-    { name: t('ezreads.category.familyLaw'), icon: FileText, count: 12, examples: t('ezreads.category.familyExamples'), dbName: 'Family Law' },
-    { name: t('ezreads.category.willsProbate'), icon: BookOpen, count: 8, examples: t('ezreads.category.willsExamples'), dbName: 'Wills & Probate' },
-    { name: t('ezreads.category.civilLaw'), icon: Scale, count: 14, examples: t('ezreads.category.civilExamples'), dbName: 'Civil Law' },
-  ], [t]);
+interface CategoryConfig {
+  name: string;
+  icon: typeof Home;
+  count: number;
+  examples: string;
+  dbName: string;
+}
+
+function useCategories(t: (key: string) => string, articles: Article[]): CategoryConfig[] {
+  return useMemo(() => {
+    const countByCategory = (dbName: string): number =>
+      articles.filter((a: Article) => a.category === dbName).length || 0;
+
+    return [
+      { name: t('ezreads.category.housingLaw'), icon: Home, count: countByCategory('Housing Law'), examples: t('ezreads.category.housingExamples'), dbName: 'Housing Law' },
+      { name: t('ezreads.category.employmentLaw'), icon: Users, count: countByCategory('Employment Law'), examples: t('ezreads.category.employmentExamples'), dbName: 'Employment Law' },
+      { name: t('ezreads.category.consumerProtection'), icon: Shield, count: countByCategory('Consumer Protection'), examples: t('ezreads.category.consumerExamples'), dbName: 'Consumer Protection' },
+      { name: t('ezreads.category.familyLaw'), icon: FileText, count: countByCategory('Family Law'), examples: t('ezreads.category.familyExamples'), dbName: 'Family Law' },
+      { name: t('ezreads.category.willsProbate'), icon: BookOpen, count: countByCategory('Wills & Probate'), examples: t('ezreads.category.willsExamples'), dbName: 'Wills & Probate' },
+      { name: t('ezreads.category.civilLaw'), icon: Scale, count: countByCategory('Civil Law'), examples: t('ezreads.category.civilExamples'), dbName: 'Civil Law' },
+    ];
+  }, [t, articles]);
 }
 
 export default function EZReads() {
@@ -1048,9 +1078,12 @@ export default function EZReads() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isArticleLoading, setIsArticleLoading] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
   const { language, t } = useLanguage();
 
-  const categories = useCategories(t);
+  const lang = language === 'es' ? 'es' : 'en' as const;
+  const categories = useCategories(t, articles);
   const fallbackArticles = language === 'es' ? FALLBACK_ARTICLES_ES : FALLBACK_ARTICLES_EN;
   const dateLocale = language === 'es' ? 'es-ES' : 'en-US';
 
@@ -1523,7 +1556,7 @@ export default function EZReads() {
                             {article.updated_at !== article.published_at && (
                               <>
                                 <span className="text-navy-300">|</span>
-                                <span>{formatUpdatedDate(article.updated_at, language)}</span>
+                                <span>{formatUpdatedDate(article.updated_at, lang)}</span>
                               </>
                             )}
                             {article.jurisdiction && (
@@ -1573,16 +1606,32 @@ export default function EZReads() {
           <p className="text-xl text-navy-100 mb-8 max-w-2xl mx-auto">
             {t('ezreads.stayInformedDesc')}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder={t('ezreads.enterEmail')}
-              className="flex-1 px-4 py-3 rounded-lg text-navy-900 placeholder:text-navy-400 focus:outline-none focus:ring-2 focus:ring-teal-300"
-            />
-            <button className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors whitespace-nowrap">
-              {t('ezreads.subscribe')}
-            </button>
-          </div>
+          {newsletterSubmitted ? (
+            <p className="text-teal-300 font-medium">{lang === 'es' ? 'Gracias por suscribirte.' : 'Thank you for subscribing.'}</p>
+          ) : (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (newsletterEmail.includes('@')) {
+                  supabase.from('email_captures').insert({ email: newsletterEmail, source: 'ezreads_newsletter', language: lang }).then(() => {});
+                  setNewsletterSubmitted(true);
+                }
+              }}
+              className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
+            >
+              <input
+                type="email"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                placeholder={t('ezreads.enterEmail')}
+                required
+                className="flex-1 px-4 py-3 rounded-lg text-navy-900 placeholder:text-navy-400 focus:outline-none focus:ring-2 focus:ring-teal-300"
+              />
+              <button type="submit" className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors whitespace-nowrap">
+                {t('ezreads.subscribe')}
+              </button>
+            </form>
+          )}
           <p className="text-navy-200 text-sm mt-4">{t('ezreads.freeResources')}</p>
         </div>
       </section>
@@ -2774,7 +2823,7 @@ export default function Documents() {
 
   useEffect(() => {
     loadDocuments();
-  }, []);
+  }, [user?.id]);
 
   const loadDocuments = async () => {
     if (!user) {
@@ -2818,11 +2867,15 @@ export default function Documents() {
 
   const generateCustomDocument = async () => {
     if (!customDocumentType.trim() || !customDocumentDescription.trim()) return;
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      alert(language === 'en' ? 'Service configuration error. Please try again later.' : 'Error de configuracion del servicio. Intente de nuevo mas tarde.');
+      return;
+    }
 
     setIsGeneratingCustom(true);
 
     try {
-      const prompt = `Generate a professional legal document with the following specifications:
+      const prompt = `Generate an informational legal draft with the following specifications. This draft is for educational/informational purposes and should be reviewed by a licensed attorney before use.
 
 DOCUMENT TYPE: ${customDocumentType}
 
@@ -2834,13 +2887,13 @@ ${customDocumentDetails ? `ADDITIONAL DETAILS: ${customDocumentDetails}` : ''}
 
 ${documentJurisdiction ? `JURISDICTION: ${documentJurisdiction}` : ''}
 
-Please generate a complete, professional legal document that:
+Please generate a complete draft document that:
 1. Includes all standard sections appropriate for this type of document
 2. Uses proper legal formatting with numbered articles/sections
 3. Includes signature blocks where appropriate
 4. Uses placeholder text in [BRACKETS] for any specific information that needs to be filled in
 5. Includes standard legal disclaimers and boilerplate language
-6. Is ready for review and customization
+6. Is ready for attorney review and customization
 
 Generate the complete document text now.`;
 
@@ -2861,11 +2914,14 @@ Generate the complete document text now.`;
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate document');
+        throw new Error(`Failed to generate document (status ${response.status})`);
       }
 
       const data = await response.json();
-      let generatedText = data.response || '';
+      if (!data || typeof data.response !== 'string' || !data.response.trim()) {
+        throw new Error('Invalid response from document generation service');
+      }
+      let generatedText = data.response;
 
       const followUpStart = generatedText.indexOf('---FOLLOW_UP_QUESTIONS---');
       if (followUpStart !== -1) {
@@ -2944,8 +3000,8 @@ Generate the complete document text now.`;
             <div className="flex items-center gap-3">
               <Sparkles className="w-6 h-6 text-green-600" />
               <div>
-                <p className="font-semibold text-navy-900">Try Document Generation Free!</p>
-                <p className="text-sm text-navy-600">Generate documents now, sign up to save them online</p>
+                <p className="font-semibold text-navy-900">{language === 'en' ? 'Try Document Generation Free!' : 'Prueba la Generacion de Documentos Gratis!'}</p>
+                <p className="text-sm text-navy-600">{language === 'en' ? 'Generate documents now, sign up to save them online' : 'Genera documentos ahora, registrate para guardarlos en linea'}</p>
               </div>
             </div>
             <div className="flex gap-2">
@@ -2953,7 +3009,7 @@ Generate the complete document text now.`;
                 to="/signup"
                 className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all font-semibold shadow-md text-sm"
               >
-                Create Account
+                {language === 'en' ? 'Create Account' : 'Crear Cuenta'}
               </Link>
             </div>
           </div>
@@ -2965,7 +3021,7 @@ Generate the complete document text now.`;
           {language === 'en' ? 'Legal Documents' : 'Documentos Legales'}
         </h1>
         <p className="text-navy-600">
-          {language === 'en' ? 'Generate professional legal documents in minutes' : 'Genera documentos legales profesionales en minutos'}
+          {language === 'en' ? 'Create informational legal drafts for review by a licensed attorney' : 'Crea borradores legales informativos para revision por un abogado licenciado'}
         </p>
       </div>
 
@@ -3023,7 +3079,7 @@ Generate the complete document text now.`;
                 className="flex-1 px-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 aria-label="Filter by jurisdiction"
               >
-                <option value="">All Jurisdictions</option>
+                <option value="">{language === 'en' ? 'All Jurisdictions' : 'Todas las Jurisdicciones'}</option>
                 {JURISDICTION_GROUPS.map((group) => (
                   <optgroup key={group.label} label={group.label}>
                     {group.options.map((jurisdiction) => (
@@ -3084,7 +3140,20 @@ Generate the complete document text now.`;
                   </span>
                 )}
               </div>
-              <button className="text-teal-600 hover:text-teal-700 flex items-center gap-1">
+              <button
+                onClick={() => {
+                  const blob = new Blob([doc.content], { type: 'text/plain' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `${doc.title || 'document'}.txt`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                }}
+                className="text-teal-600 hover:text-teal-700 flex items-center gap-1"
+              >
                 <Download className="w-4 h-4" />
                 {language === 'en' ? 'Download' : 'Descargar'}
               </button>
@@ -3102,7 +3171,7 @@ Generate the complete document text now.`;
             {language === 'en' ? 'No documents found' : 'No se encontraron documentos'}
           </h3>
           <p className="text-navy-600 mb-4">
-            {language === 'en' ? 'Generate your first legal document' : 'Genera tu primer documento legal'}
+            {language === 'en' ? 'Create your first informational legal draft' : 'Crea tu primer borrador legal informativo'}
           </p>
           <button
             onClick={() => setShowModal(true)}
@@ -3143,7 +3212,9 @@ Generate the complete document text now.`;
             <div className="p-6">
               {!selectedTemplate ? (
                 <div>
-                  <h3 className="text-lg font-semibold text-navy-900 mb-4">Choose a Template</h3>
+                  <h3 className="text-lg font-semibold text-navy-900 mb-4">
+                    {language === 'en' ? 'Choose a Template' : 'Elige una Plantilla'}
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(templates).map(([key, template]) => (
                       <button
@@ -3167,8 +3238,8 @@ Generate the complete document text now.`;
                         <Wand2 className="w-8 h-8 text-teal-600" />
                         <span className="text-xs font-medium px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full">AI-Powered</span>
                       </div>
-                      <h4 className="font-semibold text-navy-900">Custom Document</h4>
-                      <p className="text-sm text-navy-500 mt-1">Describe any document type and let AI generate it for you</p>
+                      <h4 className="font-semibold text-navy-900">{language === 'en' ? 'Custom Document' : 'Documento Personalizado'}</h4>
+                      <p className="text-sm text-navy-500 mt-1">{language === 'en' ? 'Describe any document type and let AI generate it for you' : 'Describe cualquier tipo de documento y deja que la AI lo genere por ti'}</p>
                     </button>
                   </div>
                 </div>
@@ -3176,8 +3247,8 @@ Generate the complete document text now.`;
                 <div>
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h3 className="text-lg font-semibold text-navy-900">Create Custom Document</h3>
-                      <p className="text-sm text-navy-500 mt-1">Describe the document you need and AI will generate it</p>
+                      <h3 className="text-lg font-semibold text-navy-900">{language === 'en' ? 'Create Custom Document' : 'Crear Documento Personalizado'}</h3>
+                      <p className="text-sm text-navy-500 mt-1">{language === 'en' ? 'Describe the document you need and AI will generate it' : 'Describe el documento que necesitas y la AI lo generara'}</p>
                     </div>
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-teal-50 rounded-full">
                       <Wand2 className="w-4 h-4 text-teal-600" />
@@ -3188,26 +3259,26 @@ Generate the complete document text now.`;
                   <div className="space-y-5">
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Document Type <span className="text-red-500">*</span>
+                        {language === 'en' ? 'Document Type' : 'Tipo de Documento'} <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={customDocumentType}
                         onChange={(e) => setCustomDocumentType(e.target.value)}
-                        placeholder="e.g., Independent Contractor Agreement, Cease and Desist Letter, Release of Liability..."
+                        placeholder={language === 'en' ? 'e.g., Independent Contractor Agreement, Cease and Desist Letter, Release of Liability...' : 'ej., Contrato de Contratista Independiente, Carta de Cese y Desista, Liberacion de Responsabilidad...'}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
-                      <p className="text-xs text-navy-500 mt-1">Enter any type of legal document you need</p>
+                      <p className="text-xs text-navy-500 mt-1">{language === 'en' ? 'Enter any type of legal document you need' : 'Ingresa cualquier tipo de documento legal que necesites'}</p>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Description & Purpose <span className="text-red-500">*</span>
+                        {language === 'en' ? 'Description & Purpose' : 'Descripcion y Proposito'} <span className="text-red-500">*</span>
                       </label>
                       <textarea
                         value={customDocumentDescription}
                         onChange={(e) => setCustomDocumentDescription(e.target.value)}
-                        placeholder="Describe what this document is for, its purpose, and any specific requirements..."
+                        placeholder={language === 'en' ? 'Describe what this document is for, its purpose, and any specific requirements...' : 'Describe para que es este documento, su proposito y cualquier requisito especifico...'}
                         rows={4}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
@@ -3215,25 +3286,25 @@ Generate the complete document text now.`;
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Parties Involved
+                        {language === 'en' ? 'Parties Involved' : 'Partes Involucradas'}
                       </label>
                       <input
                         type="text"
                         value={customDocumentParties}
                         onChange={(e) => setCustomDocumentParties(e.target.value)}
-                        placeholder="e.g., Company ABC (Employer) and John Doe (Contractor)"
+                        placeholder={language === 'en' ? 'e.g., Company ABC (Employer) and John Doe (Contractor)' : 'ej., Empresa ABC (Empleador) y Juan Perez (Contratista)'}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Additional Details
+                        {language === 'en' ? 'Additional Details' : 'Detalles Adicionales'}
                       </label>
                       <textarea
                         value={customDocumentDetails}
                         onChange={(e) => setCustomDocumentDetails(e.target.value)}
-                        placeholder="Any specific terms, clauses, dates, amounts, or other details to include..."
+                        placeholder={language === 'en' ? 'Any specific terms, clauses, dates, amounts, or other details to include...' : 'Cualquier termino, clausula, fecha, monto u otros detalles especificos a incluir...'}
                         rows={3}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
@@ -3241,14 +3312,14 @@ Generate the complete document text now.`;
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Jurisdiction
+                        {language === 'en' ? 'Jurisdiction' : 'Jurisdiccion'}
                       </label>
                       <select
                         value={documentJurisdiction}
                         onChange={(e) => setDocumentJurisdiction(e.target.value)}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       >
-                        <option value="">Select Jurisdiction (optional)</option>
+                        <option value="">{language === 'en' ? 'Select Jurisdiction (optional)' : 'Seleccionar Jurisdiccion (opcional)'}</option>
                         {JURISDICTION_GROUPS.map((group) => (
                           <optgroup key={group.label} label={group.label}>
                             {group.options.map((jurisdiction) => (
@@ -3259,7 +3330,7 @@ Generate the complete document text now.`;
                           </optgroup>
                         ))}
                       </select>
-                      <p className="text-xs text-navy-500 mt-1">If applicable, select the state whose laws should govern this document</p>
+                      <p className="text-xs text-navy-500 mt-1">{language === 'en' ? 'If applicable, select the state whose laws should govern this document' : 'Si aplica, selecciona el estado cuyas leyes deben regir este documento'}</p>
                     </div>
                   </div>
 
@@ -3268,15 +3339,15 @@ Generate the complete document text now.`;
                       selectedModel={selectedModel}
                       onModelChange={setSelectedModel}
                       variant="compact"
-                      label="AI Model for Document Generation"
+                      label={language === 'en' ? 'AI Model for Document Generation' : 'Modelo AI para Generacion de Documentos'}
                       showDescription={false}
                     />
-                    <p className="text-xs text-navy-500 mt-2">Premium models (GPT-5 series) provide more comprehensive and sophisticated legal documents</p>
+                    <p className="text-xs text-navy-500 mt-2">{language === 'en' ? 'Premium models (GPT-5 series) provide more comprehensive and sophisticated legal documents' : 'Los modelos premium (serie GPT-5) proporcionan documentos legales mas completos y sofisticados'}</p>
                   </div>
 
                   <div className="flex items-center justify-between mt-8 pt-6 border-t border-navy-200">
                     <div className="text-sm text-navy-500">
-                      <span className="text-red-500">*</span> Required fields
+                      <span className="text-red-500">*</span> {language === 'en' ? 'Required fields' : 'Campos obligatorios'}
                     </div>
                     <div className="flex gap-3">
                       <button
@@ -3289,7 +3360,7 @@ Generate the complete document text now.`;
                         }}
                         className="px-6 py-2.5 border border-navy-300 text-navy-700 rounded-lg font-medium hover:bg-navy-50 transition-colors"
                       >
-                        Back
+                        {language === 'en' ? 'Back' : 'Volver'}
                       </button>
                       <button
                         onClick={generateCustomDocument}
@@ -3303,12 +3374,12 @@ Generate the complete document text now.`;
                         {isGeneratingCustom ? (
                           <>
                             <Loader2 className="w-5 h-5 animate-spin" />
-                            Generating...
+                            {language === 'en' ? 'Generating...' : 'Generando...'}
                           </>
                         ) : (
                           <>
                             <Wand2 className="w-5 h-5" />
-                            Generate Document
+                            {language === 'en' ? 'Generate Document' : 'Generar Documento'}
                           </>
                         )}
                       </button>
@@ -3329,11 +3400,30 @@ Generate the complete document text now.`;
                 />
               ) : (
                 <div>
-                  <h3 className="text-lg font-semibold text-navy-900 mb-4">Preview & Save</h3>
+                  <h3 className="text-lg font-semibold text-navy-900 mb-4">
+                    {language === 'en' ? 'Preview & Save' : 'Vista Previa y Guardar'}
+                  </h3>
+
+                  {/* Non-dismissible legal disclaimer */}
+                  <div className="mb-4 p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-lg">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                      <div className="text-sm">
+                        <p className="font-semibold text-amber-800">
+                          {language === 'en' ? 'Important: This is an informational draft only' : 'Importante: Este es solo un borrador informativo'}
+                        </p>
+                        <p className="text-amber-700 mt-1">
+                          {language === 'en'
+                            ? 'This AI-generated document is not legal advice and may not be suitable for your specific situation. Have a licensed attorney review any document before signing or relying on it.'
+                            : 'Este documento generado por AI no es asesoramiento legal y puede no ser adecuado para su situacion especifica. Haga que un abogado licenciado revise cualquier documento antes de firmarlo o depender de el.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Document Title
+                        {language === 'en' ? 'Document Title' : 'Titulo del Documento'}
                       </label>
                       <input
                         type="text"
@@ -3344,7 +3434,7 @@ Generate the complete document text now.`;
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Jurisdiction
+                        {language === 'en' ? 'Jurisdiction' : 'Jurisdiccion'}
                       </label>
                       <div className="flex items-center gap-2">
                         <MapPin className="text-navy-400 w-5 h-5 flex-shrink-0" />
@@ -3354,7 +3444,7 @@ Generate the complete document text now.`;
                           className="flex-1 px-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                           aria-label="Select document jurisdiction"
                         >
-                          <option value="">Select Jurisdiction</option>
+                          <option value="">{language === 'en' ? 'Select Jurisdiction' : 'Seleccionar Jurisdiccion'}</option>
                           {JURISDICTION_GROUPS.map((group) => (
                             <optgroup key={group.label} label={group.label}>
                               {group.options.map((jurisdiction) => (
@@ -3367,7 +3457,7 @@ Generate the complete document text now.`;
                         </select>
                       </div>
                       <p className="text-xs text-navy-500 mt-1">
-                        Select the jurisdiction this document applies to
+                        {language === 'en' ? 'Select the jurisdiction this document applies to' : 'Selecciona la jurisdiccion a la que aplica este documento'}
                       </p>
                     </div>
                   </div>
@@ -3381,13 +3471,15 @@ Generate the complete document text now.`;
                       onClick={() => setGeneratedContent('')}
                       className="px-6 py-2 border border-navy-300 text-navy-700 rounded-lg font-medium hover:bg-navy-50"
                     >
-                      Edit
+                      {language === 'en' ? 'Edit' : 'Editar'}
                     </button>
                     <button
                       onClick={handleSaveDocument}
                       className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium"
                     >
-                      {user ? 'Save Document' : 'Download Document'}
+                      {user
+                        ? (language === 'en' ? 'Save Document' : 'Guardar Documento')
+                        : (language === 'en' ? 'Download Document' : 'Descargar Documento')}
                     </button>
                   </div>
                 </div>
