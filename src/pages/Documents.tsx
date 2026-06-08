@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import usePersonaRouting from '../hooks/usePersonaRouting';
 import { supabase } from '../lib/supabase';
-import { Plus, FileText, Download, Search, Sparkles, X, MapPin, CheckCircle, AlertTriangle, Wand2, Loader2, ScanLine, Building2, Users } from 'lucide-react';
+import { Plus, FileText, Download, Search, Sparkles, X, MapPin, CheckCircle, AlertTriangle, Wand2, Loader2, ScanLine, Building2, Users, Globe } from 'lucide-react';
 import { JURISDICTION_GROUPS, getJurisdictionName } from '../data/jurisdictions';
 import ValidatedFormField from '../components/ValidatedFormField';
 import DocumentOCRProcessor from '../components/DocumentOCRProcessor';
@@ -1604,6 +1604,14 @@ Generate the complete document text now.`;
                   <h3 className="text-lg font-semibold text-navy-900 mb-4">
                     {language === 'en' ? 'Choose a Template' : 'Elige una Plantilla'}
                   </h3>
+                  {language === 'es' && (
+                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
+                      <Globe className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <p className="text-xs text-blue-700">
+                        Los documentos legales se generan en ingles para garantizar la precision juridica. Para uso en espanol, recomendamos la revision y traduccion por un abogado licenciado.
+                      </p>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(templates).map(([key, template]) => (
                       <button
@@ -1810,6 +1818,16 @@ Generate the complete document text now.`;
                       </div>
                     </div>
                   </div>
+
+                  {language === 'es' && (
+                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
+                      <Globe className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <p className="text-xs text-blue-700">
+                        Los documentos legales se generan en ingles para garantizar la precision juridica. Para uso en espanol, recomendamos la revision y traduccion por un abogado licenciado.
+                      </p>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">

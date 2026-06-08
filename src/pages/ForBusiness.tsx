@@ -569,7 +569,7 @@ export default function ForBusiness() {
                             ref={citationPopoverRef}
                             id={`citation-popover-${point.citationId}`}
                             role="dialog"
-                            aria-label={`Source: ${cite.source}`}
+                            aria-label={en ? `Source: ${cite.source}` : `Fuente: ${cite.source}`}
                             className="absolute left-0 right-0 top-full mt-1 z-20 bg-white border border-slate-200 rounded-lg shadow-lg p-3 text-xs"
                           >
                             <div className="flex items-start justify-between gap-2">

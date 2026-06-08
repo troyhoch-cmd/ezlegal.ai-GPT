@@ -643,7 +643,7 @@ export default function EZReads() {
                         />
                         <div className="absolute top-3 left-3 flex items-center gap-2">
                           <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-teal-600 text-xs font-semibold rounded-full">
-                            {article.category}
+                            {lang === 'es' ? (categories.find(c => c.dbName === article.category)?.name || article.category) : article.category}
                           </span>
                           {article.jurisdiction && (
                             <span className="px-2 py-1 bg-navy-800/80 backdrop-blur-sm text-white text-xs font-medium rounded-full flex items-center gap-1">

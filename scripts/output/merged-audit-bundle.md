@@ -1,5 +1,5 @@
 # ezLegal.ai Post-Merge Audit Bundle
-# Generated: 2026-06-08T22:48:30.292Z
+# Generated: 2026-06-08T23:07:20.279Z
 # Use with: scripts/gpt-post-merge-audit-prompt.md
 
 ---
@@ -589,7 +589,7 @@ export default function ForBusiness() {
                             ref={citationPopoverRef}
                             id={`citation-popover-${point.citationId}`}
                             role="dialog"
-                            aria-label={`Source: ${cite.source}`}
+                            aria-label={en ? `Source: ${cite.source}` : `Fuente: ${cite.source}`}
                             className="absolute left-0 right-0 top-full mt-1 z-20 bg-white border border-slate-200 rounded-lg shadow-lg p-3 text-xs"
                           >
                             <div className="flex items-start justify-between gap-2">
@@ -1506,7 +1506,7 @@ export default function EZReads() {
                         />
                         <div className="absolute top-3 left-3 flex items-center gap-2">
                           <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-teal-600 text-xs font-semibold rounded-full">
-                            {article.category}
+                            {lang === 'es' ? (categories.find(c => c.dbName === article.category)?.name || article.category) : article.category}
                           </span>
                           {article.jurisdiction && (
                             <span className="px-2 py-1 bg-navy-800/80 backdrop-blur-sm text-white text-xs font-medium rounded-full flex items-center gap-1">
@@ -1661,7 +1661,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import usePersonaRouting from '../hooks/usePersonaRouting';
 import { supabase } from '../lib/supabase';
-import { Plus, FileText, Download, Search, Sparkles, X, MapPin, CheckCircle, AlertTriangle, Wand2, Loader2, ScanLine, Building2, Users } from 'lucide-react';
+import { Plus, FileText, Download, Search, Sparkles, X, MapPin, CheckCircle, AlertTriangle, Wand2, Loader2, ScanLine, Building2, Users, Globe } from 'lucide-react';
 import { JURISDICTION_GROUPS, getJurisdictionName } from '../data/jurisdictions';
 import ValidatedFormField from '../components/ValidatedFormField';
 import DocumentOCRProcessor from '../components/DocumentOCRProcessor';
@@ -3261,6 +3261,14 @@ Generate the complete document text now.`;
                   <h3 className="text-lg font-semibold text-navy-900 mb-4">
                     {language === 'en' ? 'Choose a Template' : 'Elige una Plantilla'}
                   </h3>
+                  {language === 'es' && (
+                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
+                      <Globe className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <p className="text-xs text-blue-700">
+                        Los documentos legales se generan en ingles para garantizar la precision juridica. Para uso en espanol, recomendamos la revision y traduccion por un abogado licenciado.
+                      </p>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(templates).map(([key, template]) => (
                       <button
@@ -3467,6 +3475,16 @@ Generate the complete document text now.`;
                       </div>
                     </div>
                   </div>
+
+                  {language === 'es' && (
+                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
+                      <Globe className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <p className="text-xs text-blue-700">
+                        Los documentos legales se generan en ingles para garantizar la precision juridica. Para uso en espanol, recomendamos la revision y traduccion por un abogado licenciado.
+                      </p>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
