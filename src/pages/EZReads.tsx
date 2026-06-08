@@ -74,7 +74,7 @@ const FALLBACK_ARTICLES_EN = [
   },
   {
     slug: 'small-claims-court-guide',
-    title: 'Small Claims Court: How to File and Win Your Case',
+    title: 'Small Claims Court: How to File and Prepare Your Case',
     excerpt: 'A step-by-step guide to navigating small claims court without an attorney. Learn what cases qualify, how to file, and tips for presenting your case.',
     category: 'Civil Law',
     read_time: '8 min read',
@@ -125,7 +125,7 @@ const FALLBACK_ARTICLES_ES = [
   },
   {
     slug: 'guia-reclamos-menores',
-    title: 'Tribunal de Reclamos Menores: Como Presentar y Ganar Tu Caso',
+    title: 'Tribunal de Reclamos Menores: Como Presentar y Preparar Tu Caso',
     excerpt: 'Guia paso a paso para navegar el tribunal de reclamos menores sin abogado.',
     category: 'Derecho Civil',
     read_time: '8 min de lectura',
@@ -149,7 +149,7 @@ const FALLBACK_ARTICLES_ES = [
   },
 ];
 
-function formatUpdatedDate(dateStr: string, lang: string): string {
+function formatUpdatedDate(dateStr: string, lang: 'en' | 'es'): string {
   const date = new Date(dateStr);
   const now = new Date();
   const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
@@ -172,24 +172,37 @@ function toArticle(a: (typeof FALLBACK_ARTICLES_EN)[number], i: number): Article
     content: '',
     is_featured: i === 0,
     author_name: 'EZLegal.ai',
-    published_at: new Date().toISOString(),
+    published_at: '2026-04-15T00:00:00.000Z',
     jurisdiction: null,
     review_status: 'editorial_review',
     sources: null,
-    updated_at: new Date().toISOString(),
-    last_reviewed_at: null,
+    updated_at: '2026-05-20T00:00:00.000Z',
+    last_reviewed_at: '2026-05-20T00:00:00.000Z',
   };
 }
 
-function useCategories(t: (key: string) => string) {
-  return useMemo(() => [
-    { name: t('ezreads.category.housingLaw'), icon: Home, count: 14, examples: t('ezreads.category.housingExamples'), dbName: 'Housing Law' },
-    { name: t('ezreads.category.employmentLaw'), icon: Users, count: 18, examples: t('ezreads.category.employmentExamples'), dbName: 'Employment Law' },
-    { name: t('ezreads.category.consumerProtection'), icon: Shield, count: 15, examples: t('ezreads.category.consumerExamples'), dbName: 'Consumer Protection' },
-    { name: t('ezreads.category.familyLaw'), icon: FileText, count: 12, examples: t('ezreads.category.familyExamples'), dbName: 'Family Law' },
-    { name: t('ezreads.category.willsProbate'), icon: BookOpen, count: 8, examples: t('ezreads.category.willsExamples'), dbName: 'Wills & Probate' },
-    { name: t('ezreads.category.civilLaw'), icon: Scale, count: 14, examples: t('ezreads.category.civilExamples'), dbName: 'Civil Law' },
-  ], [t]);
+interface CategoryConfig {
+  name: string;
+  icon: typeof Home;
+  count: number;
+  examples: string;
+  dbName: string;
+}
+
+function useCategories(t: (key: string) => string, articles: Article[]): CategoryConfig[] {
+  return useMemo(() => {
+    const countByCategory = (dbName: string): number =>
+      articles.filter((a: Article) => a.category === dbName).length || 0;
+
+    return [
+      { name: t('ezreads.category.housingLaw'), icon: Home, count: countByCategory('Housing Law'), examples: t('ezreads.category.housingExamples'), dbName: 'Housing Law' },
+      { name: t('ezreads.category.employmentLaw'), icon: Users, count: countByCategory('Employment Law'), examples: t('ezreads.category.employmentExamples'), dbName: 'Employment Law' },
+      { name: t('ezreads.category.consumerProtection'), icon: Shield, count: countByCategory('Consumer Protection'), examples: t('ezreads.category.consumerExamples'), dbName: 'Consumer Protection' },
+      { name: t('ezreads.category.familyLaw'), icon: FileText, count: countByCategory('Family Law'), examples: t('ezreads.category.familyExamples'), dbName: 'Family Law' },
+      { name: t('ezreads.category.willsProbate'), icon: BookOpen, count: countByCategory('Wills & Probate'), examples: t('ezreads.category.willsExamples'), dbName: 'Wills & Probate' },
+      { name: t('ezreads.category.civilLaw'), icon: Scale, count: countByCategory('Civil Law'), examples: t('ezreads.category.civilExamples'), dbName: 'Civil Law' },
+    ];
+  }, [t, articles]);
 }
 
 export default function EZReads() {
@@ -201,9 +214,12 @@ export default function EZReads() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isArticleLoading, setIsArticleLoading] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
   const { language, t } = useLanguage();
 
-  const categories = useCategories(t);
+  const lang = language === 'es' ? 'es' : 'en' as const;
+  const categories = useCategories(t, articles);
   const fallbackArticles = language === 'es' ? FALLBACK_ARTICLES_ES : FALLBACK_ARTICLES_EN;
   const dateLocale = language === 'es' ? 'es-ES' : 'en-US';
 
@@ -676,7 +692,7 @@ export default function EZReads() {
                             {article.updated_at !== article.published_at && (
                               <>
                                 <span className="text-navy-300">|</span>
-                                <span>{formatUpdatedDate(article.updated_at, language)}</span>
+                                <span>{formatUpdatedDate(article.updated_at, lang)}</span>
                               </>
                             )}
                             {article.jurisdiction && (
@@ -726,16 +742,32 @@ export default function EZReads() {
           <p className="text-xl text-navy-100 mb-8 max-w-2xl mx-auto">
             {t('ezreads.stayInformedDesc')}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder={t('ezreads.enterEmail')}
-              className="flex-1 px-4 py-3 rounded-lg text-navy-900 placeholder:text-navy-400 focus:outline-none focus:ring-2 focus:ring-teal-300"
-            />
-            <button className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors whitespace-nowrap">
-              {t('ezreads.subscribe')}
-            </button>
-          </div>
+          {newsletterSubmitted ? (
+            <p className="text-teal-300 font-medium">{lang === 'es' ? 'Gracias por suscribirte.' : 'Thank you for subscribing.'}</p>
+          ) : (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (newsletterEmail.includes('@')) {
+                  supabase.from('email_captures').insert({ email: newsletterEmail, source: 'ezreads_newsletter', language: lang }).then(() => {});
+                  setNewsletterSubmitted(true);
+                }
+              }}
+              className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
+            >
+              <input
+                type="email"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                placeholder={t('ezreads.enterEmail')}
+                required
+                className="flex-1 px-4 py-3 rounded-lg text-navy-900 placeholder:text-navy-400 focus:outline-none focus:ring-2 focus:ring-teal-300"
+              />
+              <button type="submit" className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors whitespace-nowrap">
+                {t('ezreads.subscribe')}
+              </button>
+            </form>
+          )}
           <p className="text-navy-200 text-sm mt-4">{t('ezreads.freeResources')}</p>
         </div>
       </section>

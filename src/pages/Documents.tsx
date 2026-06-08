@@ -1165,7 +1165,7 @@ export default function Documents() {
 
   useEffect(() => {
     loadDocuments();
-  }, []);
+  }, [user?.id]);
 
   const loadDocuments = async () => {
     if (!user) {
@@ -1209,11 +1209,15 @@ export default function Documents() {
 
   const generateCustomDocument = async () => {
     if (!customDocumentType.trim() || !customDocumentDescription.trim()) return;
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      alert(language === 'en' ? 'Service configuration error. Please try again later.' : 'Error de configuracion del servicio. Intente de nuevo mas tarde.');
+      return;
+    }
 
     setIsGeneratingCustom(true);
 
     try {
-      const prompt = `Generate a professional legal document with the following specifications:
+      const prompt = `Generate an informational legal draft with the following specifications. This draft is for educational/informational purposes and should be reviewed by a licensed attorney before use.
 
 DOCUMENT TYPE: ${customDocumentType}
 
@@ -1225,13 +1229,13 @@ ${customDocumentDetails ? `ADDITIONAL DETAILS: ${customDocumentDetails}` : ''}
 
 ${documentJurisdiction ? `JURISDICTION: ${documentJurisdiction}` : ''}
 
-Please generate a complete, professional legal document that:
+Please generate a complete draft document that:
 1. Includes all standard sections appropriate for this type of document
 2. Uses proper legal formatting with numbered articles/sections
 3. Includes signature blocks where appropriate
 4. Uses placeholder text in [BRACKETS] for any specific information that needs to be filled in
 5. Includes standard legal disclaimers and boilerplate language
-6. Is ready for review and customization
+6. Is ready for attorney review and customization
 
 Generate the complete document text now.`;
 
@@ -1252,11 +1256,14 @@ Generate the complete document text now.`;
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate document');
+        throw new Error(`Failed to generate document (status ${response.status})`);
       }
 
       const data = await response.json();
-      let generatedText = data.response || '';
+      if (!data || typeof data.response !== 'string' || !data.response.trim()) {
+        throw new Error('Invalid response from document generation service');
+      }
+      let generatedText = data.response;
 
       const followUpStart = generatedText.indexOf('---FOLLOW_UP_QUESTIONS---');
       if (followUpStart !== -1) {
@@ -1335,8 +1342,8 @@ Generate the complete document text now.`;
             <div className="flex items-center gap-3">
               <Sparkles className="w-6 h-6 text-green-600" />
               <div>
-                <p className="font-semibold text-navy-900">Try Document Generation Free!</p>
-                <p className="text-sm text-navy-600">Generate documents now, sign up to save them online</p>
+                <p className="font-semibold text-navy-900">{language === 'en' ? 'Try Document Generation Free!' : 'Prueba la Generacion de Documentos Gratis!'}</p>
+                <p className="text-sm text-navy-600">{language === 'en' ? 'Generate documents now, sign up to save them online' : 'Genera documentos ahora, registrate para guardarlos en linea'}</p>
               </div>
             </div>
             <div className="flex gap-2">
@@ -1344,7 +1351,7 @@ Generate the complete document text now.`;
                 to="/signup"
                 className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all font-semibold shadow-md text-sm"
               >
-                Create Account
+                {language === 'en' ? 'Create Account' : 'Crear Cuenta'}
               </Link>
             </div>
           </div>
@@ -1356,7 +1363,7 @@ Generate the complete document text now.`;
           {language === 'en' ? 'Legal Documents' : 'Documentos Legales'}
         </h1>
         <p className="text-navy-600">
-          {language === 'en' ? 'Generate professional legal documents in minutes' : 'Genera documentos legales profesionales en minutos'}
+          {language === 'en' ? 'Create informational legal drafts for review by a licensed attorney' : 'Crea borradores legales informativos para revision por un abogado licenciado'}
         </p>
       </div>
 
@@ -1414,7 +1421,7 @@ Generate the complete document text now.`;
                 className="flex-1 px-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 aria-label="Filter by jurisdiction"
               >
-                <option value="">All Jurisdictions</option>
+                <option value="">{language === 'en' ? 'All Jurisdictions' : 'Todas las Jurisdicciones'}</option>
                 {JURISDICTION_GROUPS.map((group) => (
                   <optgroup key={group.label} label={group.label}>
                     {group.options.map((jurisdiction) => (
@@ -1475,7 +1482,20 @@ Generate the complete document text now.`;
                   </span>
                 )}
               </div>
-              <button className="text-teal-600 hover:text-teal-700 flex items-center gap-1">
+              <button
+                onClick={() => {
+                  const blob = new Blob([doc.content], { type: 'text/plain' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `${doc.title || 'document'}.txt`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                }}
+                className="text-teal-600 hover:text-teal-700 flex items-center gap-1"
+              >
                 <Download className="w-4 h-4" />
                 {language === 'en' ? 'Download' : 'Descargar'}
               </button>
@@ -1493,7 +1513,7 @@ Generate the complete document text now.`;
             {language === 'en' ? 'No documents found' : 'No se encontraron documentos'}
           </h3>
           <p className="text-navy-600 mb-4">
-            {language === 'en' ? 'Generate your first legal document' : 'Genera tu primer documento legal'}
+            {language === 'en' ? 'Create your first informational legal draft' : 'Crea tu primer borrador legal informativo'}
           </p>
           <button
             onClick={() => setShowModal(true)}
@@ -1534,7 +1554,9 @@ Generate the complete document text now.`;
             <div className="p-6">
               {!selectedTemplate ? (
                 <div>
-                  <h3 className="text-lg font-semibold text-navy-900 mb-4">Choose a Template</h3>
+                  <h3 className="text-lg font-semibold text-navy-900 mb-4">
+                    {language === 'en' ? 'Choose a Template' : 'Elige una Plantilla'}
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(templates).map(([key, template]) => (
                       <button
@@ -1558,8 +1580,8 @@ Generate the complete document text now.`;
                         <Wand2 className="w-8 h-8 text-teal-600" />
                         <span className="text-xs font-medium px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full">AI-Powered</span>
                       </div>
-                      <h4 className="font-semibold text-navy-900">Custom Document</h4>
-                      <p className="text-sm text-navy-500 mt-1">Describe any document type and let AI generate it for you</p>
+                      <h4 className="font-semibold text-navy-900">{language === 'en' ? 'Custom Document' : 'Documento Personalizado'}</h4>
+                      <p className="text-sm text-navy-500 mt-1">{language === 'en' ? 'Describe any document type and let AI generate it for you' : 'Describe cualquier tipo de documento y deja que la AI lo genere por ti'}</p>
                     </button>
                   </div>
                 </div>
@@ -1567,8 +1589,8 @@ Generate the complete document text now.`;
                 <div>
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h3 className="text-lg font-semibold text-navy-900">Create Custom Document</h3>
-                      <p className="text-sm text-navy-500 mt-1">Describe the document you need and AI will generate it</p>
+                      <h3 className="text-lg font-semibold text-navy-900">{language === 'en' ? 'Create Custom Document' : 'Crear Documento Personalizado'}</h3>
+                      <p className="text-sm text-navy-500 mt-1">{language === 'en' ? 'Describe the document you need and AI will generate it' : 'Describe el documento que necesitas y la AI lo generara'}</p>
                     </div>
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-teal-50 rounded-full">
                       <Wand2 className="w-4 h-4 text-teal-600" />
@@ -1579,26 +1601,26 @@ Generate the complete document text now.`;
                   <div className="space-y-5">
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Document Type <span className="text-red-500">*</span>
+                        {language === 'en' ? 'Document Type' : 'Tipo de Documento'} <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={customDocumentType}
                         onChange={(e) => setCustomDocumentType(e.target.value)}
-                        placeholder="e.g., Independent Contractor Agreement, Cease and Desist Letter, Release of Liability..."
+                        placeholder={language === 'en' ? 'e.g., Independent Contractor Agreement, Cease and Desist Letter, Release of Liability...' : 'ej., Contrato de Contratista Independiente, Carta de Cese y Desista, Liberacion de Responsabilidad...'}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
-                      <p className="text-xs text-navy-500 mt-1">Enter any type of legal document you need</p>
+                      <p className="text-xs text-navy-500 mt-1">{language === 'en' ? 'Enter any type of legal document you need' : 'Ingresa cualquier tipo de documento legal que necesites'}</p>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Description & Purpose <span className="text-red-500">*</span>
+                        {language === 'en' ? 'Description & Purpose' : 'Descripcion y Proposito'} <span className="text-red-500">*</span>
                       </label>
                       <textarea
                         value={customDocumentDescription}
                         onChange={(e) => setCustomDocumentDescription(e.target.value)}
-                        placeholder="Describe what this document is for, its purpose, and any specific requirements..."
+                        placeholder={language === 'en' ? 'Describe what this document is for, its purpose, and any specific requirements...' : 'Describe para que es este documento, su proposito y cualquier requisito especifico...'}
                         rows={4}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
@@ -1606,25 +1628,25 @@ Generate the complete document text now.`;
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Parties Involved
+                        {language === 'en' ? 'Parties Involved' : 'Partes Involucradas'}
                       </label>
                       <input
                         type="text"
                         value={customDocumentParties}
                         onChange={(e) => setCustomDocumentParties(e.target.value)}
-                        placeholder="e.g., Company ABC (Employer) and John Doe (Contractor)"
+                        placeholder={language === 'en' ? 'e.g., Company ABC (Employer) and John Doe (Contractor)' : 'ej., Empresa ABC (Empleador) y Juan Perez (Contratista)'}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Additional Details
+                        {language === 'en' ? 'Additional Details' : 'Detalles Adicionales'}
                       </label>
                       <textarea
                         value={customDocumentDetails}
                         onChange={(e) => setCustomDocumentDetails(e.target.value)}
-                        placeholder="Any specific terms, clauses, dates, amounts, or other details to include..."
+                        placeholder={language === 'en' ? 'Any specific terms, clauses, dates, amounts, or other details to include...' : 'Cualquier termino, clausula, fecha, monto u otros detalles especificos a incluir...'}
                         rows={3}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
@@ -1632,14 +1654,14 @@ Generate the complete document text now.`;
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Jurisdiction
+                        {language === 'en' ? 'Jurisdiction' : 'Jurisdiccion'}
                       </label>
                       <select
                         value={documentJurisdiction}
                         onChange={(e) => setDocumentJurisdiction(e.target.value)}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       >
-                        <option value="">Select Jurisdiction (optional)</option>
+                        <option value="">{language === 'en' ? 'Select Jurisdiction (optional)' : 'Seleccionar Jurisdiccion (opcional)'}</option>
                         {JURISDICTION_GROUPS.map((group) => (
                           <optgroup key={group.label} label={group.label}>
                             {group.options.map((jurisdiction) => (
@@ -1650,7 +1672,7 @@ Generate the complete document text now.`;
                           </optgroup>
                         ))}
                       </select>
-                      <p className="text-xs text-navy-500 mt-1">If applicable, select the state whose laws should govern this document</p>
+                      <p className="text-xs text-navy-500 mt-1">{language === 'en' ? 'If applicable, select the state whose laws should govern this document' : 'Si aplica, selecciona el estado cuyas leyes deben regir este documento'}</p>
                     </div>
                   </div>
 
@@ -1659,15 +1681,15 @@ Generate the complete document text now.`;
                       selectedModel={selectedModel}
                       onModelChange={setSelectedModel}
                       variant="compact"
-                      label="AI Model for Document Generation"
+                      label={language === 'en' ? 'AI Model for Document Generation' : 'Modelo AI para Generacion de Documentos'}
                       showDescription={false}
                     />
-                    <p className="text-xs text-navy-500 mt-2">Premium models (GPT-5 series) provide more comprehensive and sophisticated legal documents</p>
+                    <p className="text-xs text-navy-500 mt-2">{language === 'en' ? 'Premium models (GPT-5 series) provide more comprehensive and sophisticated legal documents' : 'Los modelos premium (serie GPT-5) proporcionan documentos legales mas completos y sofisticados'}</p>
                   </div>
 
                   <div className="flex items-center justify-between mt-8 pt-6 border-t border-navy-200">
                     <div className="text-sm text-navy-500">
-                      <span className="text-red-500">*</span> Required fields
+                      <span className="text-red-500">*</span> {language === 'en' ? 'Required fields' : 'Campos obligatorios'}
                     </div>
                     <div className="flex gap-3">
                       <button
@@ -1680,7 +1702,7 @@ Generate the complete document text now.`;
                         }}
                         className="px-6 py-2.5 border border-navy-300 text-navy-700 rounded-lg font-medium hover:bg-navy-50 transition-colors"
                       >
-                        Back
+                        {language === 'en' ? 'Back' : 'Volver'}
                       </button>
                       <button
                         onClick={generateCustomDocument}
@@ -1694,12 +1716,12 @@ Generate the complete document text now.`;
                         {isGeneratingCustom ? (
                           <>
                             <Loader2 className="w-5 h-5 animate-spin" />
-                            Generating...
+                            {language === 'en' ? 'Generating...' : 'Generando...'}
                           </>
                         ) : (
                           <>
                             <Wand2 className="w-5 h-5" />
-                            Generate Document
+                            {language === 'en' ? 'Generate Document' : 'Generar Documento'}
                           </>
                         )}
                       </button>
@@ -1720,11 +1742,30 @@ Generate the complete document text now.`;
                 />
               ) : (
                 <div>
-                  <h3 className="text-lg font-semibold text-navy-900 mb-4">Preview & Save</h3>
+                  <h3 className="text-lg font-semibold text-navy-900 mb-4">
+                    {language === 'en' ? 'Preview & Save' : 'Vista Previa y Guardar'}
+                  </h3>
+
+                  {/* Non-dismissible legal disclaimer */}
+                  <div className="mb-4 p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-lg">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                      <div className="text-sm">
+                        <p className="font-semibold text-amber-800">
+                          {language === 'en' ? 'Important: This is an informational draft only' : 'Importante: Este es solo un borrador informativo'}
+                        </p>
+                        <p className="text-amber-700 mt-1">
+                          {language === 'en'
+                            ? 'This AI-generated document is not legal advice and may not be suitable for your specific situation. Have a licensed attorney review any document before signing or relying on it.'
+                            : 'Este documento generado por AI no es asesoramiento legal y puede no ser adecuado para su situacion especifica. Haga que un abogado licenciado revise cualquier documento antes de firmarlo o depender de el.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Document Title
+                        {language === 'en' ? 'Document Title' : 'Titulo del Documento'}
                       </label>
                       <input
                         type="text"
@@ -1735,7 +1776,7 @@ Generate the complete document text now.`;
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        Jurisdiction
+                        {language === 'en' ? 'Jurisdiction' : 'Jurisdiccion'}
                       </label>
                       <div className="flex items-center gap-2">
                         <MapPin className="text-navy-400 w-5 h-5 flex-shrink-0" />
@@ -1745,7 +1786,7 @@ Generate the complete document text now.`;
                           className="flex-1 px-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                           aria-label="Select document jurisdiction"
                         >
-                          <option value="">Select Jurisdiction</option>
+                          <option value="">{language === 'en' ? 'Select Jurisdiction' : 'Seleccionar Jurisdiccion'}</option>
                           {JURISDICTION_GROUPS.map((group) => (
                             <optgroup key={group.label} label={group.label}>
                               {group.options.map((jurisdiction) => (
@@ -1758,7 +1799,7 @@ Generate the complete document text now.`;
                         </select>
                       </div>
                       <p className="text-xs text-navy-500 mt-1">
-                        Select the jurisdiction this document applies to
+                        {language === 'en' ? 'Select the jurisdiction this document applies to' : 'Selecciona la jurisdiccion a la que aplica este documento'}
                       </p>
                     </div>
                   </div>
@@ -1772,13 +1813,15 @@ Generate the complete document text now.`;
                       onClick={() => setGeneratedContent('')}
                       className="px-6 py-2 border border-navy-300 text-navy-700 rounded-lg font-medium hover:bg-navy-50"
                     >
-                      Edit
+                      {language === 'en' ? 'Edit' : 'Editar'}
                     </button>
                     <button
                       onClick={handleSaveDocument}
                       className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium"
                     >
-                      {user ? 'Save Document' : 'Download Document'}
+                      {user
+                        ? (language === 'en' ? 'Save Document' : 'Guardar Documento')
+                        : (language === 'en' ? 'Download Document' : 'Descargar Documento')}
                     </button>
                   </div>
                 </div>

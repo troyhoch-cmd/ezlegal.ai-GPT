@@ -6,6 +6,7 @@ import RelatedLinks from '../components/RelatedLinks';
 import { AttorneyServiceDisclosure } from '../components/shared';
 import Footer from '../components/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
+import { pricingAudiences } from '../data/pricing';
 import type { LucideIcon } from 'lucide-react';
 import {
   Building2, FileText, Shield, Clock, DollarSign, Users, CheckCircle2,
@@ -73,7 +74,7 @@ const painPoints: Record<'en' | 'es', PainPoint[]> = {
       stat: '5-10 days',
       statLabel: 'typical turnaround',
       citationId: 2,
-      solution: 'AI-powered review in minutes, not days',
+      solution: 'AI-assisted review workflow helps surface key issues faster',
     },
     {
       icon: AlertTriangle,
@@ -81,7 +82,7 @@ const painPoints: Record<'en' | 'es', PainPoint[]> = {
       stat: '$4.45M',
       statLabel: 'avg breach cost (IBM 2023)',
       citationId: 3,
-      solution: 'Proactive compliance monitoring & alerts',
+      solution: 'Compliance checklists and monitoring alerts',
     },
     {
       icon: Users,
@@ -107,7 +108,7 @@ const painPoints: Record<'en' | 'es', PainPoint[]> = {
       stat: '5-10 dias',
       statLabel: 'tiempo de respuesta tipico',
       citationId: 2,
-      solution: 'Revision con AI en minutos, no dias',
+      solution: 'Flujo de revision asistido por AI para detectar problemas clave mas rapido',
     },
     {
       icon: AlertTriangle,
@@ -115,7 +116,7 @@ const painPoints: Record<'en' | 'es', PainPoint[]> = {
       stat: '$4.45M',
       statLabel: 'costo promedio de brecha (IBM 2023)',
       citationId: 3,
-      solution: 'Monitoreo proactivo de cumplimiento y alertas',
+      solution: 'Listas de cumplimiento y alertas de monitoreo',
     },
     {
       icon: Users,
@@ -187,7 +188,7 @@ const valueProps: Record<'en' | 'es', ValueProp[]> = {
   en: [
     {
       title: 'Faster Contract Reviews',
-      description: 'AI-powered contract analysis helps your team review agreements in hours instead of weeks, so deals close faster.',
+      description: 'AI-assisted contract analysis helps your team identify key clauses and potential issues more quickly, accelerating your review process.',
       benefit: 'Designed to accelerate review workflows',
       icon: 'speed',
     },
@@ -207,7 +208,7 @@ const valueProps: Record<'en' | 'es', ValueProp[]> = {
   es: [
     {
       title: 'Revisiones de Contratos mas Rapidas',
-      description: 'El analisis de contratos con AI ayuda a tu equipo a revisar acuerdos en horas en lugar de semanas.',
+      description: 'El analisis de contratos asistido por AI ayuda a tu equipo a identificar clausulas clave y problemas potenciales mas rapidamente.',
       benefit: 'Disenado para acelerar flujos de revision',
       icon: 'speed',
     },
@@ -233,8 +234,8 @@ const faqs: Record<'en' | 'es', FAQ[]> = {
       answer: "ezLegal.ai is purpose-built for legal work with jurisdiction-specific accuracy, attorney-reviewed templates, and compliance tracking. General AI tools lack legal context, can't produce structured legal document drafts, and don't understand state-specific requirements. Our AI is built with legal research methodology and reviewed by practicing attorneys.",
     },
     {
-      question: "Can ezLegal.ai replace our attorney entirely?",
-      answer: "No, and we don't try to. ezLegal.ai handles routine legal information tasks so you can reserve attorney time for complex matters. Think of us as your first line of defense that escalates to human attorneys when needed. We even help you find and brief attorneys when you need them.",
+      question: "Do we still need an attorney if we use ezLegal.ai?",
+      answer: "Yes — ezLegal.ai is not a substitute for legal counsel. We handle routine legal information tasks so you can reserve attorney time for complex matters that require professional judgment. Think of us as your first line of defense that escalates to human attorneys when needed. We even help you find and brief attorneys when you need them.",
     },
     {
       question: "Is our data secure and confidential?",
@@ -255,8 +256,8 @@ const faqs: Record<'en' | 'es', FAQ[]> = {
       answer: "ezLegal.ai esta construido especificamente para trabajo legal con precision por jurisdiccion, plantillas revisadas por abogados y seguimiento de cumplimiento. Las herramientas AI generales carecen de contexto legal y no entienden requisitos especificos por estado.",
     },
     {
-      question: "Puede ezLegal.ai reemplazar completamente a nuestro abogado?",
-      answer: "No, y no pretendemos hacerlo. ezLegal.ai maneja tareas de informacion legal rutinarias para que puedas reservar tiempo de abogado para asuntos complejos. Te ayudamos a encontrar y preparar abogados cuando los necesitas.",
+      question: "Seguimos necesitando un abogado si usamos ezLegal.ai?",
+      answer: "Si — ezLegal.ai no sustituye asesoramiento legal profesional. Manejamos tareas de informacion legal rutinarias para que puedas reservar tiempo de abogado para asuntos complejos que requieren juicio profesional. Te ayudamos a encontrar y preparar abogados cuando los necesitas.",
     },
     {
       question: "Nuestros datos son seguros y confidenciales?",
@@ -316,7 +317,11 @@ export default function ForBusiness() {
   });
 
   const annualSavings = calculatorInputs.contracts * 12 * calculatorInputs.hourlyRate * calculatorInputs.hoursPerContract;
-  const ezLegalCost = 149 * 12;
+  const businessStarterPlan = pricingAudiences
+    .find(a => a.id === 'business')
+    ?.plans.find(p => p.id === 'business-starter');
+  const ezLegalMonthly = businessStarterPlan?.monthlyPrice ?? 29;
+  const ezLegalCost = ezLegalMonthly * 12;
   const netSavings = annualSavings - ezLegalCost;
 
   const lang = language === 'es' ? 'es' : 'en';
@@ -354,8 +359,8 @@ export default function ForBusiness() {
 
                 <p className="text-xl text-slate-300 mb-8 leading-relaxed">
                   {en
-                    ? 'Stop overpaying for legal services. Our AI handles contracts, compliance, and everyday legal tasks so you can focus on growing your business.'
-                    : 'Deja de pagar de mas por servicios legales. Nuestra AI maneja contratos, cumplimiento y tareas legales cotidianas para que te enfoques en crecer tu negocio.'}
+                    ? 'Stop overpaying for routine legal work. Our AI helps your team navigate contracts, compliance questions, and everyday legal workflows — so you can focus on growing your business.'
+                    : 'Deja de pagar de mas por trabajo legal rutinario. Nuestra AI ayuda a tu equipo a navegar contratos, preguntas de cumplimiento y flujos legales cotidianos — para que te enfoques en crecer tu negocio.'}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -454,9 +459,9 @@ export default function ForBusiness() {
                         </div>
                         <div className="bg-slate-800/50 rounded-lg p-3">
                           <p className="text-xs text-slate-400 mb-1">
-                            {en ? 'With ezLegal.ai' : 'Con ezLegal.ai'}
+                            {en ? 'With ezLegal.ai (from)' : 'Con ezLegal.ai (desde)'}
                           </p>
-                          <p className="text-xl font-bold text-green-400">${ezLegalCost.toLocaleString()}</p>
+                          <p className="text-xl font-bold text-green-400">${ezLegalCost.toLocaleString()}/yr</p>
                         </div>
                       </div>
                       <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-4 text-center">
@@ -467,8 +472,8 @@ export default function ForBusiness() {
                       </div>
                       <p className="text-xs text-slate-500 mt-2 text-center">
                         {en
-                          ? 'Estimate based on your inputs. Actual savings may vary.'
-                          : 'Estimacion basada en tus datos. Los ahorros reales pueden variar.'}
+                          ? 'Estimate based on your inputs and our Business Starter plan. Actual savings may vary. See pricing page for current plan details.'
+                          : 'Estimacion basada en tus datos y nuestro plan Negocio Inicial. Los ahorros reales pueden variar. Consulta la pagina de precios para detalles actuales.'}
                       </p>
                     </div>
                   </div>
@@ -480,6 +485,18 @@ export default function ForBusiness() {
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
         </section>
 
+        {/* Scope Boundary */}
+        <div className="bg-amber-50 border-b border-amber-200 py-3">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-sm text-amber-800 text-center font-medium">
+              <Scale className="w-4 h-4 inline-block mr-1.5 -mt-0.5" />
+              {en
+                ? 'ezLegal.ai provides legal information and workflow support — not legal advice. For legal decisions, consult a licensed attorney.'
+                : 'ezLegal.ai proporciona informacion legal y apoyo de flujos de trabajo — no asesoramiento legal. Para decisiones legales, consulte a un abogado licenciado.'}
+            </p>
+          </div>
+        </div>
+
         {/* Trust Bar */}
         <section className="py-8 bg-slate-50 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -488,7 +505,7 @@ export default function ForBusiness() {
                 <Shield className="w-5 h-5 text-green-600" />
                 <span className="font-semibold">{en ? 'CCPA Compliant' : 'Cumple CCPA'}</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-600">
+              <div className="flex items-center gap-2 text-slate-600" title={en ? 'Encryption provided via our infrastructure provider (Supabase)' : 'Cifrado proporcionado por nuestro proveedor de infraestructura (Supabase)'}>
                 <Lock className="w-5 h-5 text-teal-600" />
                 <span className="font-semibold">{en ? 'TLS 1.3 + AES-256 Encryption' : 'Cifrado TLS 1.3 + AES-256'}</span>
               </div>
@@ -785,8 +802,8 @@ export default function ForBusiness() {
             </h2>
             <p className="text-xl text-teal-100 mb-8 max-w-2xl mx-auto">
               {en
-                ? 'Businesses of all sizes use ezLegal.ai to handle contracts, compliance, and everyday legal tasks.'
-                : 'Empresas de todos los tamanos usan ezLegal.ai para manejar contratos, cumplimiento y tareas legales cotidianas.'}
+                ? 'Growing businesses use ezLegal.ai to navigate contracts, compliance questions, and everyday legal workflows more efficiently.'
+                : 'Empresas en crecimiento usan ezLegal.ai para navegar contratos, preguntas de cumplimiento y flujos legales cotidianos de forma mas eficiente.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
