@@ -49,13 +49,13 @@ interface Citation {
   source: string;
   url: string;
   year: string;
-  accessNote?: string;
+  accessNote?: { en: string; es: string };
 }
 
 const citations: Citation[] = [
-  { id: 1, label: 'Clio Legal Trends Report', source: 'Clio', url: 'https://www.clio.com/resources/legal-trends/', year: '2023', accessNote: 'Free with registration' },
-  { id: 2, label: 'Legal Industry Survey', source: 'Thomson Reuters', url: 'https://legal.thomsonreuters.com/en/insights', year: '2023', accessNote: 'May require subscription' },
-  { id: 3, label: 'Cost of a Data Breach Report', source: 'IBM/Ponemon Institute', url: 'https://www.ibm.com/reports/data-breach', year: '2023', accessNote: 'Free with registration' },
+  { id: 1, label: 'Clio Legal Trends Report', source: 'Clio', url: 'https://www.clio.com/resources/legal-trends/', year: '2023', accessNote: { en: 'Free with registration', es: 'Gratis con registro' } },
+  { id: 2, label: 'Legal Industry Survey', source: 'Thomson Reuters', url: 'https://legal.thomsonreuters.com/en/insights', year: '2023', accessNote: { en: 'May require subscription', es: 'Puede requerir suscripcion' } },
+  { id: 3, label: 'Cost of a Data Breach Report', source: 'IBM/Ponemon Institute', url: 'https://www.ibm.com/reports/data-breach', year: '2023', accessNote: { en: 'Free with registration', es: 'Gratis con registro' } },
 ];
 
 const painPoints: Record<'en' | 'es', PainPoint[]> = {
@@ -261,7 +261,7 @@ const faqs: Record<'en' | 'es', FAQ[]> = {
     },
     {
       question: "Nuestros datos son seguros y confidenciales?",
-      answer: "Si. Usamos cifrado TLS 1.3 en transito y AES-256 en reposo. Nunca usamos tus datos para entrenar modelos AI. Tu informacion comercial permanece privada y cumplimos con CCPA.",
+      answer: "Si. Usamos cifrado TLS 1.3 en transito y AES-256 en reposo a traves de nuestro proveedor de infraestructura (Supabase, que cuenta con certificacion SOC 2 Tipo II). Nunca usamos tus datos para entrenar modelos AI. Tu informacion comercial permanece privada y cumplimos con CCPA.",
     },
     {
       question: "Que tan rapido podemos empezar?",
@@ -318,10 +318,9 @@ export default function ForBusiness() {
 
   const annualSavings = calculatorInputs.contracts * 12 * calculatorInputs.hourlyRate * calculatorInputs.hoursPerContract;
   const businessStarterPlan = pricingAudiences
-    .find(a => a.id === 'business')
-    ?.plans.find(p => p.id === 'business-starter');
-  const ezLegalMonthly = businessStarterPlan?.monthlyPrice ?? 29;
-  const ezLegalCost = ezLegalMonthly * 12;
+    .find(a => a.id === 'business')!
+    .plans.find(p => p.id === 'business-starter')!;
+  const ezLegalCost = businessStarterPlan.monthlyPrice! * 12;
   const netSavings = annualSavings - ezLegalCost;
 
   const lang = language === 'es' ? 'es' : 'en';
@@ -472,8 +471,8 @@ export default function ForBusiness() {
                       </div>
                       <p className="text-xs text-slate-500 mt-2 text-center">
                         {en
-                          ? 'Estimate based on your inputs and our Business Starter plan. Actual savings may vary. See pricing page for current plan details.'
-                          : 'Estimacion basada en tus datos y nuestro plan Negocio Inicial. Los ahorros reales pueden variar. Consulta la pagina de precios para detalles actuales.'}
+                          ? <>Estimate based on your inputs and our Business Starter plan. Actual savings may vary. <Link to="/pricing?tab=business" className="text-teal-400 hover:text-teal-300 underline">See pricing page</Link> for current plan details.</>
+                          : <>Estimacion basada en tus datos y nuestro plan Negocio Inicial. Los ahorros reales pueden variar. <Link to="/pricing?tab=business" className="text-teal-400 hover:text-teal-300 underline">Consulta la pagina de precios</Link> para detalles actuales.</>}
                       </p>
                     </div>
                   </div>
@@ -578,7 +577,7 @@ export default function ForBusiness() {
                                 <p className="font-semibold text-slate-900">{cite.source} ({cite.year})</p>
                                 <p className="text-slate-600 mt-0.5">{cite.label}</p>
                                 {cite.accessNote && (
-                                  <p className="text-slate-400 mt-0.5 italic">{cite.accessNote}</p>
+                                  <p className="text-slate-400 mt-0.5 italic">{cite.accessNote[lang]}</p>
                                 )}
                               </div>
                               <button
@@ -627,7 +626,7 @@ export default function ForBusiness() {
                       {cite.source} ({cite.year}) <ExternalLink className="w-2.5 h-2.5" />
                     </a>
                     {cite.accessNote && (
-                      <span className="text-[10px] text-slate-400 italic">{cite.accessNote}</span>
+                      <span className="text-[10px] text-slate-400 italic">{cite.accessNote[lang]}</span>
                     )}
                   </div>
                 ))}

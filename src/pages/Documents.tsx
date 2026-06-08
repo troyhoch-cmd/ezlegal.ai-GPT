@@ -14,6 +14,35 @@ import { getFieldConfig, validateField } from '../lib/document-validation';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+const templateNameES: Record<string, string> = {
+  '501c3_formation': 'Formacion 501(c)(3)',
+  general_partnership_formation: 'Formacion de Sociedad General',
+  llc_dissolution: 'Disolucion de LLC',
+  multiple_member_llc_formation: 'Formacion de LLC Multi-Miembro',
+  asset_sale_purchase: 'Acuerdo de Compraventa de Activos',
+  buy_sell_agreement: 'Acuerdo de Compra-Venta',
+  consultant_agreement: 'Contrato de Consultor',
+  corporate_bylaws: 'Estatutos Corporativos',
+  demand_letter: 'Carta de Demanda',
+  employee_severance: 'Acuerdo de Separacion Laboral',
+  employee_stock_option: 'Acuerdo de Opciones sobre Acciones',
+  employment_agreement: 'Contrato de Empleo',
+  joint_venture_agreement: 'Acuerdo de Empresa Conjunta',
+  license_agreement: 'Acuerdo de Licencia',
+  master_service_agreement: 'Acuerdo de Servicios Maestro',
+  non_compete_agreement: 'Acuerdo de No Competencia',
+  non_disclosure_agreement: 'Acuerdo de Confidencialidad',
+  partnership_agreement: 'Acuerdo de Sociedad',
+  power_of_attorney: 'Poder Notarial',
+  settlement_agreement: 'Acuerdo de Conciliacion',
+  shareholder_agreement: 'Acuerdo de Accionistas',
+  terms_of_service: 'Terminos de Servicio',
+  website_hosting_agreement: 'Acuerdo de Hospedaje Web',
+  routine_document_review: 'Revision Rutinaria de Documentos',
+  s_corp_c_corp_formation: 'Formacion S-corp o C-corp',
+  single_member_llc_formation: 'Formacion de LLC de Miembro Unico',
+};
+
 interface Document {
   id: string;
   title: string;
@@ -986,6 +1015,7 @@ interface DocumentFormFieldsProps {
   setFormData: (data: Record<string, string>) => void;
   onBack: () => void;
   onGenerate: () => void;
+  lang: 'en' | 'es';
 }
 
 function DocumentFormFields({
@@ -994,8 +1024,10 @@ function DocumentFormFields({
   formData,
   setFormData,
   onBack,
-  onGenerate
+  onGenerate,
+  lang
 }: DocumentFormFieldsProps) {
+  const en = lang === 'en';
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
   const fieldConfigs = useMemo(() => {
@@ -1045,15 +1077,15 @@ function DocumentFormFields({
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-navy-900">
-            {templates[selectedTemplate].name}
+            {en ? templates[selectedTemplate].name : (templateNameES[selectedTemplate] || templates[selectedTemplate].name)}
           </h3>
           <p className="text-sm text-navy-500 mt-1">
-            Fill in the details below to generate your document
+            {en ? 'Fill in the details below to generate your document' : 'Completa los detalles a continuacion para generar tu documento'}
           </p>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-xs text-navy-500 mb-1">Completion</div>
+            <div className="text-xs text-navy-500 mb-1">{en ? 'Completion' : 'Completado'}</div>
             <div className="flex items-center gap-2">
               <div className="w-24 h-2 bg-navy-200 rounded-full overflow-hidden">
                 <div
@@ -1076,24 +1108,24 @@ function DocumentFormFields({
       </div>
 
       {attemptedSubmit && !validationStatus.allValid && (
-        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3">
+        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3" role="alert">
           <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-medium text-amber-800">Please complete all required fields</p>
+            <p className="font-medium text-amber-800">{en ? 'Please complete all required fields' : 'Por favor completa todos los campos obligatorios'}</p>
             <p className="text-sm text-amber-700 mt-1">
-              {validationStatus.totalRequired - validationStatus.filledCount} required field(s) need your attention
+              {validationStatus.totalRequired - validationStatus.filledCount} {en ? 'required field(s) need your attention' : 'campo(s) obligatorio(s) necesitan tu atencion'}
             </p>
           </div>
         </div>
       )}
 
       {validationStatus.progress === 100 && validationStatus.allValid && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3" role="status">
           <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-medium text-green-800">All fields completed</p>
+            <p className="font-medium text-green-800">{en ? 'All fields completed' : 'Todos los campos completados'}</p>
             <p className="text-sm text-green-700 mt-1">
-              Your document is ready to generate
+              {en ? 'Your document is ready to generate' : 'Tu documento esta listo para generar'}
             </p>
           </div>
         </div>
@@ -1114,14 +1146,14 @@ function DocumentFormFields({
 
       <div className="flex items-center justify-between mt-8 pt-6 border-t border-navy-200">
         <div className="text-sm text-navy-500">
-          <span className="text-red-500">*</span> Required fields
+          <span className="text-red-500">*</span> {en ? 'Required fields' : 'Campos obligatorios'}
         </div>
         <div className="flex gap-3">
           <button
             onClick={onBack}
             className="px-6 py-2.5 border border-navy-300 text-navy-700 rounded-lg font-medium hover:bg-navy-50 transition-colors"
           >
-            Back
+            {en ? 'Back' : 'Volver'}
           </button>
           <button
             onClick={handleGenerate}
@@ -1133,7 +1165,7 @@ function DocumentFormFields({
             }`}
           >
             <Sparkles className="w-5 h-5" />
-            Generate Document
+            {en ? 'Generate Document' : 'Generar Documento'}
           </button>
         </div>
       </div>
@@ -1164,6 +1196,11 @@ export default function Documents() {
   const { isBusiness, isOrganization } = usePersonaRouting();
 
   useEffect(() => {
+    if (!user) {
+      setDocuments([]);
+      setLoading(false);
+      return;
+    }
     loadDocuments();
   }, [user?.id]);
 
@@ -1274,7 +1311,7 @@ Generate the complete document text now.`;
       setDocumentTitle(customDocumentType);
     } catch (error) {
       console.error('Error generating custom document:', error);
-      alert('Failed to generate document. Please try again.');
+      alert(language === 'en' ? 'Failed to generate document. Please try again.' : 'Error al generar el documento. Intente de nuevo.');
     } finally {
       setIsGeneratingCustom(false);
     }
@@ -1294,7 +1331,7 @@ Generate the complete document text now.`;
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      alert('Document downloaded! Sign up to save and manage all your documents online.');
+      alert(language === 'en' ? 'Document downloaded! Sign up to save and manage all your documents online.' : 'Documento descargado! Registrate para guardar y administrar tus documentos en linea.');
       return;
     }
 
@@ -1367,6 +1404,16 @@ Generate the complete document text now.`;
         </p>
       </div>
 
+      {/* Non-dismissible scope boundary — legal information only */}
+      <div className="mb-6 p-4 bg-slate-100 border border-slate-300 rounded-xl flex items-start gap-3" role="region" aria-label={language === 'en' ? 'Legal scope notice' : 'Aviso de alcance legal'}>
+        <AlertTriangle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
+        <p className="text-sm text-slate-700">
+          {language === 'en'
+            ? 'This tool provides legal information and workflow support only — not legal advice. All generated documents are informational drafts requiring review by a licensed attorney before use.'
+            : 'Esta herramienta proporciona solo informacion legal y soporte de flujo de trabajo — no asesoramiento legal. Todos los documentos generados son borradores informativos que requieren revision por un abogado licenciado antes de su uso.'}
+        </p>
+      </div>
+
       {isOrganization && (
         <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
           <Users className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
@@ -1419,7 +1466,7 @@ Generate the complete document text now.`;
                 value={selectedJurisdiction}
                 onChange={(e) => setSelectedJurisdiction(e.target.value)}
                 className="flex-1 px-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                aria-label="Filter by jurisdiction"
+                aria-label={language === 'en' ? 'Filter by jurisdiction' : 'Filtrar por jurisdiccion'}
               >
                 <option value="">{language === 'en' ? 'All Jurisdictions' : 'Todas las Jurisdicciones'}</option>
                 {JURISDICTION_GROUPS.map((group) => (
@@ -1464,7 +1511,7 @@ Generate the complete document text now.`;
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-navy-900 mb-1 truncate">{doc.title}</h3>
-                <p className="text-sm text-navy-500 capitalize">{doc.document_type.replace('_', ' ')}</p>
+                <p className="text-sm text-navy-500 capitalize">{language === 'es' && templateNameES[doc.document_type] ? templateNameES[doc.document_type] : doc.document_type.replace(/_/g, ' ')}</p>
               </div>
             </div>
 
@@ -1565,7 +1612,7 @@ Generate the complete document text now.`;
                         className="p-4 border-2 border-navy-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition-all text-left"
                       >
                         <FileText className="w-8 h-8 text-teal-600 mb-2" />
-                        <h4 className="font-semibold text-navy-900">{template.name}</h4>
+                        <h4 className="font-semibold text-navy-900">{language === 'es' ? (templateNameES[key] || template.name) : template.name}</h4>
                       </button>
                     ))}
                     <button
@@ -1578,7 +1625,7 @@ Generate the complete document text now.`;
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <Wand2 className="w-8 h-8 text-teal-600" />
-                        <span className="text-xs font-medium px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full">AI-Powered</span>
+                        <span className="text-xs font-medium px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full">{language === 'en' ? 'AI-Powered' : 'Con IA'}</span>
                       </div>
                       <h4 className="font-semibold text-navy-900">{language === 'en' ? 'Custom Document' : 'Documento Personalizado'}</h4>
                       <p className="text-sm text-navy-500 mt-1">{language === 'en' ? 'Describe any document type and let AI generate it for you' : 'Describe cualquier tipo de documento y deja que la AI lo genere por ti'}</p>
@@ -1594,7 +1641,7 @@ Generate the complete document text now.`;
                     </div>
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-teal-50 rounded-full">
                       <Wand2 className="w-4 h-4 text-teal-600" />
-                      <span className="text-sm font-medium text-teal-700">AI-Powered</span>
+                      <span className="text-sm font-medium text-teal-700">{language === 'en' ? 'AI-Powered' : 'Con IA'}</span>
                     </div>
                   </div>
 
@@ -1739,6 +1786,7 @@ Generate the complete document text now.`;
                     setFormData({});
                   }}
                   onGenerate={generateDocument}
+                  lang={language === 'es' ? 'es' : 'en'}
                 />
               ) : (
                 <div>
@@ -1784,7 +1832,7 @@ Generate the complete document text now.`;
                           value={documentJurisdiction}
                           onChange={(e) => setDocumentJurisdiction(e.target.value)}
                           className="flex-1 px-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                          aria-label="Select document jurisdiction"
+                          aria-label={language === 'en' ? 'Select document jurisdiction' : 'Seleccionar jurisdiccion del documento'}
                         >
                           <option value="">{language === 'en' ? 'Select Jurisdiction' : 'Seleccionar Jurisdiccion'}</option>
                           {JURISDICTION_GROUPS.map((group) => (
