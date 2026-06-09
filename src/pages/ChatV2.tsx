@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, AlertCircle, Globe, Lock, ArrowLeft } from 'lucide-react';
+import { Send, AlertCircle, Globe, Lock, ArrowLeft, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
@@ -112,6 +112,18 @@ export default function ChatV2() {
                 {en ? 'ES' : 'EN'}
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* Non-dismissible scope boundary */}
+        <div className="max-w-3xl mx-auto w-full px-4 sm:px-6 lg:px-8 mb-4">
+          <div className="p-3 bg-slate-100 border border-slate-300 rounded-lg flex items-start gap-3" role="region" aria-label={en ? 'Legal scope notice' : 'Aviso de alcance legal'}>
+            <AlertTriangle className="w-4 h-4 text-slate-600 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-slate-700">
+              {en
+                ? 'This tool provides legal information only — not legal advice. Do not share sensitive personal information unless you understand who can access it. Always consult a licensed attorney for your specific situation.'
+                : 'Esta herramienta proporciona solo informacion legal — no asesoramiento legal. No compartas informacion personal sensible a menos que entiendas quien puede acceder a ella. Siempre consulta un abogado licenciado para tu situacion especifica.'}
+            </p>
           </div>
         </div>
 

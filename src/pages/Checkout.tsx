@@ -89,11 +89,11 @@ export default function Checkout() {
                 <div className="space-y-4 mb-6 pb-6 border-b border-slate-200">
                   <div className="flex justify-between items-center">
                     <span className="text-slate-700">{en ? 'Professional Plan' : 'Plan Profesional'}</span>
-                    <span className="font-semibold text-slate-900">$29.99/mo</span>
+                    <span className="font-semibold text-slate-900">$29/mo</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-700">{en ? 'Annual Billing (Save 20%)' : 'Facturación Anual (Ahorra 20%)'}</span>
-                    <span className="font-semibold text-green-600">-$72/year</span>
+                    <span className="text-slate-700">{en ? 'Annual Billing (Save 17%)' : 'Facturacion Anual (Ahorra 17%)'}</span>
+                    <span className="font-semibold text-green-600">-$58/year</span>
                   </div>
                 </div>
 
