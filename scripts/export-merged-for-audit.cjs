@@ -16,12 +16,15 @@ const OUTPUT_DIR = path.join(__dirname, 'output');
 
 // Files to audit — add P1/P2 files here as they are merged
 const MERGED_FILES = [
-  // P0 (completed)
+  // P0 (completed + fixes applied)
   'src/pages/ForBusiness.tsx',
   'src/pages/EZReads.tsx',
   'src/pages/Documents.tsx',
+  // P1 (fixes applied)
+  'src/pages/ChatV2.tsx',
+  'src/pages/Ask.tsx',
+  'src/pages/Checkout.tsx',
   // P1 (add as merged)
-  // 'src/pages/ChatV2.tsx',
   // 'src/pages/Dashboard.tsx',
   // 'src/pages/Negotiate.tsx',
   // 'src/pages/Research.tsx',
@@ -32,7 +35,6 @@ const MERGED_FILES = [
   // 'src/pages/TrustCenter.tsx',
   // 'src/pages/Matters.tsx',
   // 'src/pages/Profile.tsx',
-  // 'src/pages/Checkout.tsx',
 ];
 
 // Supporting context files (always included)

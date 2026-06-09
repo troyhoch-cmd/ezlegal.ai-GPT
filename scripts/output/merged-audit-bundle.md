@@ -1,5 +1,5 @@
 # ezLegal.ai Post-Merge Audit Bundle
-# Generated: 2026-06-09T03:46:43.945Z
+# Generated: 2026-06-09T11:58:59.546Z
 # Use with: scripts/gpt-post-merge-audit-prompt.md
 
 ---
@@ -355,6 +355,18 @@ export default function ForBusiness() {
       <Breadcrumbs className="mt-24" />
 
       <main id="main-content" className="pt-4">
+        {/* Scope Boundary - Above the fold */}
+        <div className="bg-amber-50 border-b border-amber-200 py-3">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-sm text-amber-800 text-center font-medium">
+              <Scale className="w-4 h-4 inline-block mr-1.5 -mt-0.5" />
+              {en
+                ? 'ezLegal.ai provides legal information and workflow support — not legal advice. For legal decisions, consult a licensed attorney.'
+                : 'ezLegal.ai proporciona informacion legal y apoyo de flujos de trabajo — no asesoramiento legal. Para decisiones legales, consulte a un abogado licenciado.'}
+            </p>
+          </div>
+        </div>
+
         {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50"></div>
@@ -503,18 +515,6 @@ export default function ForBusiness() {
 
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
         </section>
-
-        {/* Scope Boundary */}
-        <div className="bg-amber-50 border-b border-amber-200 py-3">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p className="text-sm text-amber-800 text-center font-medium">
-              <Scale className="w-4 h-4 inline-block mr-1.5 -mt-0.5" />
-              {en
-                ? 'ezLegal.ai provides legal information and workflow support — not legal advice. For legal decisions, consult a licensed attorney.'
-                : 'ezLegal.ai proporciona informacion legal y apoyo de flujos de trabajo — no asesoramiento legal. Para decisiones legales, consulte a un abogado licenciado.'}
-            </p>
-          </div>
-        </div>
 
         {/* Trust Bar */}
         <section className="py-8 bg-slate-50 border-b border-slate-200">
@@ -1393,7 +1393,7 @@ export default function EZReads() {
                       />
                       <div className="absolute top-4 left-4 flex items-center gap-2">
                         <span className="px-3 py-1 bg-teal-600 text-white text-sm font-semibold rounded-full">
-                          {featuredArticle.category}
+                          {lang === 'es' ? (categories.find(c => c.dbName === featuredArticle.category)?.name || featuredArticle.category) : featuredArticle.category}
                         </span>
                         {featuredArticle.jurisdiction && (
                           <span className="px-3 py-1 bg-navy-700/80 backdrop-blur-sm text-white text-sm font-medium rounded-full flex items-center gap-1">
@@ -1698,6 +1698,7 @@ const templateNameES: Record<string, string> = {
   routine_document_review: 'Revision Rutinaria de Documentos',
   s_corp_c_corp_formation: 'Formacion S-corp o C-corp',
   single_member_llc_formation: 'Formacion de LLC de Miembro Unico',
+  custom: 'Documento Personalizado',
 };
 
 interface Document {
@@ -2887,7 +2888,7 @@ export default function Documents() {
       initialFormData[field] = '';
     });
     setFormData(initialFormData);
-    setDocumentTitle(templateData.name);
+    setDocumentTitle(language === 'es' ? (templateNameES[template] || templateData.name) : templateData.name);
     setGeneratedContent('');
   };
 
@@ -3569,6 +3570,629 @@ Generate the complete document text now.`;
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+```
+
+---
+
+## File: src/pages/ChatV2.tsx
+
+```tsx
+import { useState } from 'react';
+import { Send, AlertCircle, Globe, Lock, ArrowLeft, AlertTriangle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import Navigation from '../components/Navigation';
+import Footer from '../components/Footer';
+import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
+import JurisdictionSelector from '../components/shared/JurisdictionSelector';
+
+interface Message {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+}
+
+export default function ChatV2() {
+  const { language, setLanguage } = useLanguage();
+  const { user } = useAuth();
+  const en = language === 'en';
+  const [jurisdiction, setJurisdiction] = useState('CA');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [showUrgencyWarning, setShowUrgencyWarning] = useState(false);
+
+  const handleSendMessage = () => {
+    if (!inputValue.trim()) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: inputValue,
+      timestamp: new Date(),
+    };
+
+    setMessages([...messages, userMessage]);
+
+    // Simulate AI response
+    setTimeout(() => {
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: en
+          ? 'This is legal information, not legal advice. For specific legal matters, please consult with a licensed attorney in your jurisdiction.'
+          : 'Esta es información legal, no asesoramiento legal. Para asuntos legales específicos, consulte con un abogado licenciado en su jurisdicción.',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, aiMessage]);
+    }, 800);
+
+    setInputValue('');
+  };
+
+  const detectCrisis = (text: string): boolean => {
+    const crisisKeywords = [
+      'emergency',
+      'danger',
+      'urgent',
+      'violence',
+      'abuse',
+      'suicide',
+      'harm',
+      'threat',
+    ];
+    return crisisKeywords.some((keyword) =>
+      text.toLowerCase().includes(keyword)
+    );
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(e.target.value);
+    if (detectCrisis(e.target.value)) {
+      setShowUrgencyWarning(true);
+    } else {
+      setShowUrgencyWarning(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900 flex flex-col">
+      <Navigation />
+
+      <main className="flex-1 flex flex-col pt-20">
+        <div className="max-w-3xl mx-auto w-full px-4 sm:px-6 lg:px-8 mb-6">
+          {user && (
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-1.5 text-sm text-teal-600 hover:text-teal-800 font-medium mb-4 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+              {en ? 'Back to Dashboard' : 'Volver al Panel'}
+            </Link>
+          )}
+          <div className="flex flex-col sm:flex-row items-center gap-4 justify-between">
+            <h1 className="text-2xl font-bold text-slate-900">
+              {en ? 'AI Assistant' : 'Asistente IA'}
+            </h1>
+
+            <div className="flex items-center gap-3">
+              <JurisdictionSelector
+                value={jurisdiction}
+                onChange={setJurisdiction}
+                variant="compact"
+                statesOnly
+              />
+
+              <button
+                onClick={() => setLanguage(en ? 'es' : 'en')}
+                className="flex items-center gap-2 px-3 py-1 text-sm border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+              >
+                <Globe className="w-4 h-4" />
+                {en ? 'ES' : 'EN'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Non-dismissible scope boundary */}
+        <div className="max-w-3xl mx-auto w-full px-4 sm:px-6 lg:px-8 mb-4">
+          <div className="p-3 bg-slate-100 border border-slate-300 rounded-lg flex items-start gap-3" role="region" aria-label={en ? 'Legal scope notice' : 'Aviso de alcance legal'}>
+            <AlertTriangle className="w-4 h-4 text-slate-600 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-slate-700">
+              {en
+                ? 'This tool provides legal information only — not legal advice. Do not share sensitive personal information unless you understand who can access it. Always consult a licensed attorney for your specific situation.'
+                : 'Esta herramienta proporciona solo informacion legal — no asesoramiento legal. No compartas informacion personal sensible a menos que entiendas quien puede acceder a ella. Siempre consulta un abogado licenciado para tu situacion especifica.'}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex-1 max-w-3xl mx-auto w-full px-4 sm:px-6 lg:px-8 mb-6 overflow-y-auto">
+          {messages.length === 0 ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Lock className="w-8 h-8 text-teal-600" />
+                </div>
+                <h2 className="text-lg font-semibold text-slate-900 mb-2">
+                  {en
+                    ? 'Start Your Legal Consultation'
+                    : 'Inicia Tu Consulta Legal'}
+                </h2>
+                <p className="text-slate-600 max-w-md">
+                  {en
+                    ? 'Ask any legal question about your jurisdiction. Remember: this is legal information, not legal advice.'
+                    : 'Haz cualquier pregunta legal sobre tu jurisdicción. Recuerda: esto es información legal, no asesoramiento legal.'}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4 pb-4">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex ${
+                    message.role === 'user' ? 'justify-end' : 'justify-start'
+                  }`}
+                >
+                  <div
+                    className={`max-w-md px-4 py-3 rounded-lg ${
+                      message.role === 'user'
+                        ? 'bg-teal-600 text-white'
+                        : 'bg-slate-100 text-slate-900'
+                    }`}
+                  >
+                    <p className="text-sm">{message.content}</p>
+                    <p
+                      className={`text-xs mt-1 ${
+                        message.role === 'user'
+                          ? 'text-teal-100'
+                          : 'text-slate-600'
+                      }`}
+                    >
+                      {message.timestamp.toLocaleTimeString()}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {showUrgencyWarning && (
+          <div className="max-w-3xl mx-auto w-full px-4 sm:px-6 lg:px-8 mb-4">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-red-800">
+                {en
+                  ? 'If you are in immediate danger, please call 911 or your local emergency number.'
+                  : 'Si estás en peligro inmediato, llama al 911 o a tu número de emergencia local.'}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="max-w-3xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-6">
+          <div className="bg-white border border-slate-300 rounded-lg shadow-sm p-4">
+            <textarea
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder={
+                en
+                  ? 'Ask a legal question...'
+                  : 'Haz una pregunta legal...'
+              }
+              className="w-full resize-none outline-none text-slate-900 placeholder-slate-500"
+              rows={3}
+            />
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-xs text-slate-500">
+                {en
+                  ? 'This is legal information, not legal advice.'
+                  : 'Esta es información legal, no asesoramiento legal.'}
+              </p>
+              <button
+                onClick={handleSendMessage}
+                disabled={!inputValue.trim()}
+                className="flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+              >
+                <Send className="w-4 h-4" />
+                {en ? 'Send' : 'Enviar'}
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
+            <p className="font-medium mb-2">{en ? 'Scope Disclaimer' : 'Aviso de Alcance'}</p>
+            <p>
+              {en
+                ? 'ezLegal.ai provides legal information for educational purposes. This is not legal advice, attorney-client relationship, or legal representation. Always consult a licensed attorney for specific legal matters.'
+                : 'ezLegal.ai proporciona información legal con fines educativos. Esto no es asesoramiento legal, relación abogado-cliente, ni representación legal. Siempre consulta un abogado licenciado para asuntos legales específicos.'}
+            </p>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
+
+```
+
+---
+
+## File: src/pages/Ask.tsx
+
+```tsx
+import { useState } from 'react';
+import { ChevronDown, HelpCircle, AlertTriangle } from 'lucide-react';
+import Navigation from '../components/Navigation';
+import Footer from '../components/Footer';
+import { useLanguage } from '../contexts/LanguageContext';
+
+interface Topic {
+  id: string;
+  name: { en: string; es: string };
+  questions: { en: string; es: string }[];
+}
+
+const TOPICS: Topic[] = [
+  {
+    id: 'housing',
+    name: { en: 'Housing Rights', es: 'Derechos de Vivienda' },
+    questions: [
+      { en: 'Eviction Notice', es: 'Aviso de Desalojo' },
+      { en: 'Tenant Rights', es: 'Derechos del Inquilino' },
+      { en: 'Security Deposit', es: 'Deposito de Seguridad' },
+    ],
+  },
+  {
+    id: 'employment',
+    name: { en: 'Employment', es: 'Empleo' },
+    questions: [
+      { en: 'Wrongful Termination', es: 'Despido Injustificado' },
+      { en: 'Wage Issues', es: 'Problemas de Salario' },
+      { en: 'Discrimination', es: 'Discriminacion' },
+    ],
+  },
+  {
+    id: 'immigration',
+    name: { en: 'Immigration', es: 'Inmigracion' },
+    questions: [
+      { en: 'Visa Applications', es: 'Solicitudes de Visa' },
+      { en: 'Green Card', es: 'Residencia Permanente' },
+      { en: 'Citizenship', es: 'Ciudadania' },
+    ],
+  },
+  {
+    id: 'family',
+    name: { en: 'Family Law', es: 'Derecho Familiar' },
+    questions: [
+      { en: 'Divorce', es: 'Divorcio' },
+      { en: 'Custody', es: 'Custodia' },
+      { en: 'Child Support', es: 'Manutencion' },
+    ],
+  },
+  {
+    id: 'business',
+    name: { en: 'Business Law', es: 'Derecho Empresarial' },
+    questions: [
+      { en: 'Contract Review', es: 'Revision de Contrato' },
+      { en: 'LLC Formation', es: 'Formacion de LLC' },
+      { en: 'Compliance', es: 'Cumplimiento' },
+    ],
+  },
+  {
+    id: 'consumer',
+    name: { en: 'Consumer Rights', es: 'Derechos del Consumidor' },
+    questions: [
+      { en: 'Fraud', es: 'Fraude' },
+      { en: 'Debt', es: 'Deudas' },
+      { en: 'Product Liability', es: 'Responsabilidad del Producto' },
+    ],
+  },
+];
+
+export default function Ask() {
+  const { language } = useLanguage();
+  const en = language === 'en';
+  const lang = language === 'es' ? 'es' : 'en' as const;
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const [userQuestion, setUserQuestion] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const currentTopic = TOPICS.find((t) => t.id === selectedTopic);
+
+  return (
+    <div className="min-h-screen bg-white text-slate-900">
+      <Navigation />
+      <main id="main-content" className="pt-24 pb-16">
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12">
+            <h1 className="text-3xl font-bold text-slate-900 mb-3">
+              {en ? 'Ask a Question' : 'Hacer una Pregunta'}
+            </h1>
+            <p className="text-slate-600">
+              {en
+                ? 'Select a legal category and ask your question.'
+                : 'Selecciona una categoria legal y haz tu pregunta.'}
+            </p>
+          </div>
+
+          {/* Non-dismissible scope boundary */}
+          <div className="mb-8 p-4 bg-slate-100 border border-slate-300 rounded-xl flex items-start gap-3" role="region" aria-label={en ? 'Legal scope notice' : 'Aviso de alcance legal'}>
+            <AlertTriangle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-slate-700">
+              {en
+                ? 'ezLegal.ai provides legal information only — not legal advice. Answers are for educational purposes and do not create an attorney-client relationship. Always consult a licensed attorney for your specific situation.'
+                : 'ezLegal.ai proporciona solo informacion legal — no asesoramiento legal. Las respuestas son con fines educativos y no crean una relacion abogado-cliente. Siempre consulta un abogado licenciado para tu situacion especifica.'}
+            </p>
+          </div>
+
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">
+              {en ? 'Select a Topic' : 'Selecciona un Tema'}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {TOPICS.map((topic) => (
+                <button
+                  key={topic.id}
+                  onClick={() => setSelectedTopic(topic.id)}
+                  className={`p-4 rounded-lg border-2 text-center transition-all ${
+                    selectedTopic === topic.id
+                      ? 'border-teal-600 bg-teal-50'
+                      : 'border-slate-200 bg-white hover:border-slate-300'
+                  }`}
+                >
+                  <span className="font-medium text-sm text-slate-900">
+                    {topic.name[lang]}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {selectedTopic && currentTopic && (
+            <>
+              <div className="mb-8 bg-slate-50 rounded-xl p-6 border border-slate-200">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <HelpCircle className="w-5 h-5 text-teal-600" />
+                  {en ? 'Common Questions' : 'Preguntas Comunes'}
+                </h3>
+                <div className="space-y-2">
+                  {currentTopic.questions.map((q) => (
+                    <button
+                      key={q.en}
+                      onClick={() => setUserQuestion(q[lang])}
+                      className="w-full text-left p-3 bg-white border border-slate-200 rounded-lg hover:border-teal-300 transition-colors"
+                    >
+                      {q[lang]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-8">
+                <label className="block text-lg font-semibold text-slate-900 mb-3">
+                  {en ? 'Your Question' : 'Tu Pregunta'}
+                </label>
+                <textarea
+                  value={userQuestion}
+                  onChange={(e) => setUserQuestion(e.target.value)}
+                  placeholder={en ? 'Ask your legal question...' : 'Haz tu pregunta legal...'}
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 resize-none"
+                  rows={6}
+                />
+              </div>
+
+              <button
+                onClick={() => setSubmitted(true)}
+                disabled={!userQuestion.trim()}
+                className="w-full bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {en ? 'Get Guidance' : 'Obtener Orientacion'}
+              </button>
+
+              {submitted && (
+                <div className="mt-6 bg-green-50 border border-green-200 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-green-900 mb-2">
+                    {en ? 'What happens next' : 'Que sucede ahora'}
+                  </h3>
+                  <ul className="space-y-2 text-sm text-green-800">
+                    <li>{en ? '1. Your question is processed using licensed legal sources.' : '1. Tu pregunta se procesa usando fuentes legales licenciadas.'}</li>
+                    <li>{en ? '2. You will receive legal information (not legal advice) tailored to your jurisdiction.' : '2. Recibiras informacion legal (no asesoramiento) adaptada a tu jurisdiccion.'}</li>
+                    <li>{en ? '3. If your issue needs a lawyer, we will show free/low-cost options.' : '3. Si tu caso necesita un abogado, te mostraremos opciones gratuitas o de bajo costo.'}</li>
+                  </ul>
+                  <p className="mt-3 text-xs text-green-700">
+                    {en
+                      ? 'Remember: this is legal information only. For your specific situation, consult a licensed attorney.'
+                      : 'Recuerda: esto es solo informacion legal. Para tu situacion especifica, consulta un abogado licenciado.'}
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+
+          {!selectedTopic && (
+            <div className="bg-slate-50 rounded-xl p-12 text-center border border-slate-200">
+              <p className="text-slate-600">
+                {en
+                  ? 'Select a topic above to get started.'
+                  : 'Selecciona un tema arriba para comenzar.'}
+              </p>
+            </div>
+          )}
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+```
+
+---
+
+## File: src/pages/Checkout.tsx
+
+```tsx
+import { useState } from 'react';
+import { ShoppingCart, AlertCircle, CheckCircle, ArrowRight } from 'lucide-react';
+import Navigation from '../components/Navigation';
+import Footer from '../components/Footer';
+import { useLanguage } from '../contexts/LanguageContext';
+
+export default function Checkout() {
+  const { language } = useLanguage();
+  const en = language === 'en';
+  const [isBusiness, setIsBusiness] = useState(false);
+  const [isOrganization, setIsOrganization] = useState(false);
+  const [a2jPassed, setA2jPassed] = useState(false);
+  const [acknowledgedScope, setAcknowledgedScope] = useState(false);
+
+  const showA2JScreening = !isBusiness && !isOrganization && !a2jPassed;
+
+  const handleA2JPass = () => {
+    setA2jPassed(true);
+  };
+
+  return (
+    <div className="min-h-screen bg-white text-slate-900">
+      <Navigation />
+      <main id="main-content" className="pt-24 pb-16">
+        <section className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold text-slate-900 mb-8">
+            {en ? 'Checkout' : 'Pagar'}
+          </h1>
+
+          {showA2JScreening ? (
+            <div className="bg-teal-50 border border-teal-300 rounded-xl p-8 mb-8">
+              <div className="flex items-start gap-3 mb-6">
+                <AlertCircle className="w-6 h-6 text-teal-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900 mb-2">
+                    {en ? 'Access to Justice Screening' : 'Evaluación de Acceso a la Justicia'}
+                  </h2>
+                  <p className="text-slate-700">
+                    {en
+                      ? 'We want to make sure you have access to affordable legal help. Please answer a few questions.'
+                      : 'Queremos asegurarnos de que tengas acceso a ayuda legal asequible. Por favor, responde algunas preguntas.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-4 mb-6">
+                <div className="p-4 bg-white border border-slate-200 rounded-lg">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      onChange={(e) => setIsBusiness(e.target.checked)}
+                      className="w-4 h-4 accent-teal-600"
+                    />
+                    <span className="text-slate-700">
+                      {en ? 'I am representing a business' : 'Represento un negocio'}
+                    </span>
+                  </label>
+                </div>
+
+                <div className="p-4 bg-white border border-slate-200 rounded-lg">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      onChange={(e) => setIsOrganization(e.target.checked)}
+                      className="w-4 h-4 accent-teal-600"
+                    />
+                    <span className="text-slate-700">
+                      {en ? 'I represent an organization' : 'Represento una organización'}
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <button
+                onClick={handleA2JPass}
+                className="w-full bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors font-medium"
+              >
+                {en ? 'Continue' : 'Continuar'}
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="bg-white border border-slate-200 rounded-xl p-6 mb-8">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <ShoppingCart className="w-5 h-5 text-teal-600" />
+                  {en ? 'Order Summary' : 'Resumen del Pedido'}
+                </h2>
+
+                <div className="space-y-4 mb-6 pb-6 border-b border-slate-200">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-700">{en ? 'Professional Plan' : 'Plan Profesional'}</span>
+                    <span className="font-semibold text-slate-900">$29/mo</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-700">{en ? 'Annual Billing (Save 17%)' : 'Facturacion Anual (Ahorra 17%)'}</span>
+                    <span className="font-semibold text-green-600">-$58/year</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center text-lg font-bold text-slate-900 mb-6">
+                  <span>{en ? 'Total' : 'Total'}:</span>
+                  <span>$287.88/year</span>
+                </div>
+
+                {/* Stripe Placeholder */}
+                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-6">
+                  <p className="text-sm text-slate-500 text-center">
+                    {en ? 'Stripe payment form will load here' : 'El formulario de pago de Stripe se cargará aquí'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
+                <div className="flex items-start gap-3 mb-4">
+                  <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="font-semibold text-slate-900 mb-2">
+                      {en ? 'Important Notice' : 'Aviso Importante'}
+                    </h3>
+                    <p className="text-sm text-slate-700">
+                      {en
+                        ? 'ezLegal.ai is not a law firm and does not provide legal advice. Always consult with a licensed attorney for legal matters.'
+                        : 'ezLegal.ai no es un despacho de abogados y no proporciona asesoramiento legal. Siempre consulta con un abogado licenciado para asuntos legales.'}
+                    </p>
+                  </div>
+                </div>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={acknowledgedScope}
+                    onChange={(e) => setAcknowledgedScope(e.target.checked)}
+                    className="w-4 h-4 accent-blue-600 mt-1"
+                  />
+                  <span className="text-sm text-slate-700">
+                    {en
+                      ? 'I understand the scope and limitations of this service'
+                      : 'Entiendo el alcance y las limitaciones de este servicio'}
+                  </span>
+                </label>
+              </div>
+
+              <button
+                disabled={!acknowledgedScope}
+                className="w-full flex items-center justify-center gap-2 bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+              >
+                {en ? 'Complete Purchase' : 'Completar Compra'} <ArrowRight className="w-4 h-4" />
+              </button>
+            </>
+          )}
+        </section>
+      </main>
+      <Footer />
     </div>
   );
 }
