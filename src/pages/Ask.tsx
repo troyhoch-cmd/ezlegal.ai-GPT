@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ChevronDown, HelpCircle, AlertTriangle } from 'lucide-react';
+import { HelpCircle, AlertTriangle, AlertCircle, Phone, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -67,15 +68,30 @@ const TOPICS: Topic[] = [
   },
 ];
 
+const CRISIS_KEYWORDS = [
+  'emergency', 'danger', 'violence', 'abuse', 'suicide', 'harm', 'threat',
+  'kill', 'die', 'hurt', 'domestic violence',
+  'emergencia', 'peligro', 'violencia', 'abuso', 'suicidio', 'dano', 'amenaza',
+  'matar', 'morir', 'lastimar', 'violencia domestica',
+];
+
 export default function Ask() {
   const { language } = useLanguage();
-  const en = language === 'en';
   const lang = language === 'es' ? 'es' : 'en' as const;
+  const en = lang === 'en';
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [userQuestion, setUserQuestion] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [showCrisisWarning, setShowCrisisWarning] = useState(false);
 
-  const currentTopic = TOPICS.find((t) => t.id === selectedTopic);
+  const currentTopic = TOPICS.find((t: Topic) => t.id === selectedTopic);
+
+  const handleQuestionChange = (value: string) => {
+    setUserQuestion(value);
+    setShowCrisisWarning(
+      CRISIS_KEYWORDS.some((kw) => value.toLowerCase().includes(kw))
+    );
+  };
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
@@ -108,7 +124,7 @@ export default function Ask() {
               {en ? 'Select a Topic' : 'Selecciona un Tema'}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {TOPICS.map((topic) => (
+              {TOPICS.map((topic: Topic) => (
                 <button
                   key={topic.id}
                   onClick={() => setSelectedTopic(topic.id)}
@@ -134,10 +150,10 @@ export default function Ask() {
                   {en ? 'Common Questions' : 'Preguntas Comunes'}
                 </h3>
                 <div className="space-y-2">
-                  {currentTopic.questions.map((q) => (
+                  {currentTopic.questions.map((q: { en: string; es: string }) => (
                     <button
                       key={q.en}
-                      onClick={() => setUserQuestion(q[lang])}
+                      onClick={() => handleQuestionChange(q[lang])}
                       className="w-full text-left p-3 bg-white border border-slate-200 rounded-lg hover:border-teal-300 transition-colors"
                     >
                       {q[lang]}
@@ -152,35 +168,99 @@ export default function Ask() {
                 </label>
                 <textarea
                   value={userQuestion}
-                  onChange={(e) => setUserQuestion(e.target.value)}
+                  onChange={(e) => handleQuestionChange(e.target.value)}
                   placeholder={en ? 'Ask your legal question...' : 'Haz tu pregunta legal...'}
                   className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 resize-none"
                   rows={6}
                 />
               </div>
 
+              {showCrisisWarning && (
+                <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm text-red-800 space-y-2">
+                      <p className="font-semibold">
+                        {en ? 'If you are in immediate danger:' : 'Si estas en peligro inmediato:'}
+                      </p>
+                      <ul className="space-y-1">
+                        <li className="flex items-center gap-2">
+                          <Phone className="w-3.5 h-3.5 flex-shrink-0" />
+                          {en ? 'Emergency: Call 911' : 'Emergencia: Llama al 911'}
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Phone className="w-3.5 h-3.5 flex-shrink-0" />
+                          {en ? 'Suicide Prevention: 988' : 'Prevencion del Suicidio: 988'}
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Phone className="w-3.5 h-3.5 flex-shrink-0" />
+                          {en ? 'Domestic Violence: 1-800-799-7233' : 'Violencia Domestica: 1-800-799-7233'}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <button
                 onClick={() => setSubmitted(true)}
                 disabled={!userQuestion.trim()}
                 className="w-full bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {en ? 'Get Guidance' : 'Obtener Orientacion'}
+                {en ? 'Submit Question' : 'Enviar Pregunta'}
               </button>
 
               {submitted && (
-                <div className="mt-6 bg-green-50 border border-green-200 rounded-xl p-6">
-                  <h3 className="text-lg font-semibold text-green-900 mb-2">
-                    {en ? 'What happens next' : 'Que sucede ahora'}
-                  </h3>
-                  <ul className="space-y-2 text-sm text-green-800">
-                    <li>{en ? '1. Your question is processed using licensed legal sources.' : '1. Tu pregunta se procesa usando fuentes legales licenciadas.'}</li>
-                    <li>{en ? '2. You will receive legal information (not legal advice) tailored to your jurisdiction.' : '2. Recibiras informacion legal (no asesoramiento) adaptada a tu jurisdiccion.'}</li>
-                    <li>{en ? '3. If your issue needs a lawyer, we will show free/low-cost options.' : '3. Si tu caso necesita un abogado, te mostraremos opciones gratuitas o de bajo costo.'}</li>
-                  </ul>
-                  <p className="mt-3 text-xs text-green-700">
+                <div className="mt-6 bg-teal-50 border border-teal-200 rounded-xl p-6">
+                  <div className="flex items-start gap-3 mb-4">
+                    <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                    <h3 className="text-lg font-semibold text-teal-900">
+                      {en ? 'Question Submitted' : 'Pregunta Enviada'}
+                    </h3>
+                  </div>
+                  <p className="text-sm text-teal-800 mb-4">
                     {en
-                      ? 'Remember: this is legal information only. For your specific situation, consult a licensed attorney.'
-                      : 'Recuerda: esto es solo informacion legal. Para tu situacion especifica, consulta un abogado licenciado.'}
+                      ? 'Your question has been recorded. Here are your next steps:'
+                      : 'Tu pregunta ha sido registrada. Estos son tus proximos pasos:'}
+                  </p>
+                  <ul className="space-y-2 text-sm text-teal-800">
+                    <li className="flex items-start gap-2">
+                      <span className="font-semibold">1.</span>
+                      {en
+                        ? 'Use our AI Assistant for immediate general legal information on this topic.'
+                        : 'Usa nuestro Asistente de IA para informacion legal general inmediata sobre este tema.'}
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="font-semibold">2.</span>
+                      {en
+                        ? 'Browse EZ Reads articles for educational guides related to your question.'
+                        : 'Consulta los articulos de EZ Reads para guias educativas relacionadas con tu pregunta.'}
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="font-semibold">3.</span>
+                      {en
+                        ? 'If you need personalized legal advice, consider consulting with a licensed attorney.'
+                        : 'Si necesitas asesoramiento legal personalizado, considera consultar con un abogado licenciado.'}
+                    </li>
+                  </ul>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <Link
+                      to="/chat"
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 bg-teal-100 px-3 py-1.5 rounded-lg hover:bg-teal-200 transition-colors"
+                    >
+                      {en ? 'Open AI Assistant' : 'Abrir Asistente IA'}
+                    </Link>
+                    <Link
+                      to="/ezreads"
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 bg-teal-100 px-3 py-1.5 rounded-lg hover:bg-teal-200 transition-colors"
+                    >
+                      {en ? 'Browse EZ Reads' : 'Ver EZ Reads'}
+                    </Link>
+                  </div>
+                  <p className="mt-4 text-xs text-teal-700">
+                    {en
+                      ? 'Remember: ezLegal.ai provides legal information only — not legal advice.'
+                      : 'Recuerda: ezLegal.ai proporciona solo informacion legal — no asesoramiento legal.'}
                   </p>
                 </div>
               )}

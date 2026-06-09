@@ -1194,6 +1194,8 @@ export default function Documents() {
   const [isGeneratingCustom, setIsGeneratingCustom] = useState(false);
   const { user } = useAuth();
   const { language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en' as const;
+  const en = lang === 'en';
   const { isBusiness, isOrganization } = usePersonaRouting();
 
   useEffect(() => {

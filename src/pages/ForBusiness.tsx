@@ -276,7 +276,8 @@ const faqs: Record<'en' | 'es', FAQ[]> = {
 
 export default function ForBusiness() {
   const { language } = useLanguage();
-  const en = language === 'en';
+  const lang = language === 'es' ? 'es' : 'en' as const;
+  const en = lang === 'en';
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [activeCitation, setActiveCitation] = useState<number | null>(null);
   const citationTriggerRefs = useRef<Record<number, HTMLButtonElement | null>>({});
@@ -323,7 +324,6 @@ export default function ForBusiness() {
   const ezLegalCost = businessStarterPlan.monthlyPrice! * 12;
   const netSavings = annualSavings - ezLegalCost;
 
-  const lang = language === 'es' ? 'es' : 'en';
   const currentPainPoints = painPoints[lang];
   const currentUseCases = useCases[lang];
   const currentValueProps = valueProps[lang];

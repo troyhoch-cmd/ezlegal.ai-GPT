@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, AlertCircle, Globe, Lock, ArrowLeft, AlertTriangle } from 'lucide-react';
+import { Send, AlertCircle, Globe, Lock, ArrowLeft, AlertTriangle, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
@@ -14,10 +14,23 @@ interface Message {
   timestamp: Date;
 }
 
+const CRISIS_KEYWORDS_EN = [
+  'emergency', 'danger', 'urgent', 'violence', 'abuse',
+  'suicide', 'harm', 'threat', 'kill', 'die', 'hurt',
+  'domestic violence', 'sexual assault',
+];
+
+const CRISIS_KEYWORDS_ES = [
+  'emergencia', 'peligro', 'urgente', 'violencia', 'abuso',
+  'suicidio', 'dano', 'amenaza', 'matar', 'morir', 'lastimar',
+  'violencia domestica', 'agresion sexual',
+];
+
 export default function ChatV2() {
   const { language, setLanguage } = useLanguage();
   const { user } = useAuth();
-  const en = language === 'en';
+  const lang = language === 'es' ? 'es' : 'en' as const;
+  const en = lang === 'en';
   const [jurisdiction, setJurisdiction] = useState('CA');
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -33,16 +46,15 @@ export default function ChatV2() {
       timestamp: new Date(),
     };
 
-    setMessages([...messages, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
 
-    // Simulate AI response
     setTimeout(() => {
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: en
-          ? 'This is legal information, not legal advice. For specific legal matters, please consult with a licensed attorney in your jurisdiction.'
-          : 'Esta es información legal, no asesoramiento legal. Para asuntos legales específicos, consulte con un abogado licenciado en su jurisdicción.',
+          ? 'This is a demo response. The AI legal information service is being configured. For now, please use ezLegal.ai resources or consult a licensed attorney.'
+          : 'Esta es una respuesta de demostración. El servicio de informacion legal con IA se esta configurando. Por ahora, usa los recursos de ezLegal.ai o consulta un abogado licenciado.',
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiMessage]);
@@ -52,28 +64,14 @@ export default function ChatV2() {
   };
 
   const detectCrisis = (text: string): boolean => {
-    const crisisKeywords = [
-      'emergency',
-      'danger',
-      'urgent',
-      'violence',
-      'abuse',
-      'suicide',
-      'harm',
-      'threat',
-    ];
-    return crisisKeywords.some((keyword) =>
-      text.toLowerCase().includes(keyword)
-    );
+    const lowered = text.toLowerCase();
+    return CRISIS_KEYWORDS_EN.some((kw) => lowered.includes(kw))
+      || CRISIS_KEYWORDS_ES.some((kw) => lowered.includes(kw));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
-    if (detectCrisis(e.target.value)) {
-      setShowUrgencyWarning(true);
-    } else {
-      setShowUrgencyWarning(false);
-    }
+    setShowUrgencyWarning(detectCrisis(e.target.value));
   };
 
   return (
@@ -93,7 +91,7 @@ export default function ChatV2() {
           )}
           <div className="flex flex-col sm:flex-row items-center gap-4 justify-between">
             <h1 className="text-2xl font-bold text-slate-900">
-              {en ? 'AI Assistant' : 'Asistente IA'}
+              {en ? 'Legal Information Assistant' : 'Asistente de Informacion Legal'}
             </h1>
 
             <div className="flex items-center gap-3">
@@ -136,19 +134,19 @@ export default function ChatV2() {
                 </div>
                 <h2 className="text-lg font-semibold text-slate-900 mb-2">
                   {en
-                    ? 'Start Your Legal Consultation'
-                    : 'Inicia Tu Consulta Legal'}
+                    ? 'Ask a Legal Information Question'
+                    : 'Haz una Pregunta de Informacion Legal'}
                 </h2>
                 <p className="text-slate-600 max-w-md">
                   {en
-                    ? 'Ask any legal question about your jurisdiction. Remember: this is legal information, not legal advice.'
-                    : 'Haz cualquier pregunta legal sobre tu jurisdicción. Recuerda: esto es información legal, no asesoramiento legal.'}
+                    ? 'Get general legal information about your jurisdiction. This is not legal advice and does not create an attorney-client relationship.'
+                    : 'Obtén informacion legal general sobre tu jurisdiccion. Esto no es asesoramiento legal y no crea una relacion abogado-cliente.'}
                 </p>
               </div>
             </div>
           ) : (
             <div className="space-y-4 pb-4">
-              {messages.map((message) => (
+              {messages.map((message: Message) => (
                 <div
                   key={message.id}
                   className={`flex ${
@@ -183,10 +181,29 @@ export default function ChatV2() {
           <div className="max-w-3xl mx-auto w-full px-4 sm:px-6 lg:px-8 mb-4">
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-red-800">
-                {en
-                  ? 'If you are in immediate danger, please call 911 or your local emergency number.'
-                  : 'Si estás en peligro inmediato, llama al 911 o a tu número de emergencia local.'}
+              <div className="text-sm text-red-800 space-y-2">
+                <p className="font-semibold">
+                  {en ? 'If you are in immediate danger:' : 'Si estas en peligro inmediato:'}
+                </p>
+                <ul className="space-y-1">
+                  <li className="flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 flex-shrink-0" />
+                    {en ? 'Emergency: Call 911' : 'Emergencia: Llama al 911'}
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 flex-shrink-0" />
+                    {en ? 'Suicide Prevention: 988' : 'Prevencion del Suicidio: 988'}
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 flex-shrink-0" />
+                    {en ? 'Domestic Violence: 1-800-799-7233' : 'Violencia Domestica: 1-800-799-7233'}
+                  </li>
+                </ul>
+                <p className="text-xs">
+                  {en
+                    ? 'This tool cannot help with emergencies. Please contact the resources above.'
+                    : 'Esta herramienta no puede ayudar con emergencias. Contacta los recursos anteriores.'}
+                </p>
               </div>
             </div>
           </div>
@@ -199,8 +216,8 @@ export default function ChatV2() {
               onChange={handleInputChange}
               placeholder={
                 en
-                  ? 'Ask a legal question...'
-                  : 'Haz una pregunta legal...'
+                  ? 'Ask a legal information question...'
+                  : 'Haz una pregunta de informacion legal...'
               }
               className="w-full resize-none outline-none text-slate-900 placeholder-slate-500"
               rows={3}
@@ -209,7 +226,7 @@ export default function ChatV2() {
               <p className="text-xs text-slate-500">
                 {en
                   ? 'This is legal information, not legal advice.'
-                  : 'Esta es información legal, no asesoramiento legal.'}
+                  : 'Esta es informacion legal, no asesoramiento legal.'}
               </p>
               <button
                 onClick={handleSendMessage}
@@ -226,8 +243,8 @@ export default function ChatV2() {
             <p className="font-medium mb-2">{en ? 'Scope Disclaimer' : 'Aviso de Alcance'}</p>
             <p>
               {en
-                ? 'ezLegal.ai provides legal information for educational purposes. This is not legal advice, attorney-client relationship, or legal representation. Always consult a licensed attorney for specific legal matters.'
-                : 'ezLegal.ai proporciona información legal con fines educativos. Esto no es asesoramiento legal, relación abogado-cliente, ni representación legal. Siempre consulta un abogado licenciado para asuntos legales específicos.'}
+                ? 'ezLegal.ai provides legal information for educational purposes. This is not legal advice and does not create an attorney-client relationship or legal representation. Always consult a licensed attorney for specific legal matters.'
+                : 'ezLegal.ai proporciona informacion legal con fines educativos. Esto no es asesoramiento legal y no crea una relacion abogado-cliente ni representacion legal. Siempre consulta un abogado licenciado para asuntos legales especificos.'}
             </p>
           </div>
         </div>
