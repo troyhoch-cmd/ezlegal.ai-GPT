@@ -216,6 +216,7 @@ export default function EZReads() {
   const [isArticleLoading, setIsArticleLoading] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+  const [newsletterError, setNewsletterError] = useState(false);
   const { language, t } = useLanguage();
 
   const lang = language === 'es' ? 'es' : 'en' as const;
@@ -746,11 +747,16 @@ export default function EZReads() {
             <p className="text-teal-300 font-medium">{lang === 'es' ? 'Gracias por suscribirte.' : 'Thank you for subscribing.'}</p>
           ) : (
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
                 if (newsletterEmail.includes('@')) {
-                  supabase.from('email_captures').insert({ email: newsletterEmail, source: 'ezreads_newsletter', language: lang }).then(() => {});
-                  setNewsletterSubmitted(true);
+                  setNewsletterError(false);
+                  const { error } = await supabase.from('email_captures').insert({ email: newsletterEmail, source: 'ezreads_newsletter', language: lang });
+                  if (error) {
+                    setNewsletterError(true);
+                  } else {
+                    setNewsletterSubmitted(true);
+                  }
                 }
               }}
               className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
@@ -767,6 +773,9 @@ export default function EZReads() {
                 {t('ezreads.subscribe')}
               </button>
             </form>
+          )}
+          {newsletterError && (
+            <p className="text-red-300 text-sm mt-3">{lang === 'es' ? 'Algo salio mal. Intenta de nuevo.' : 'Something went wrong. Please try again.'}</p>
           )}
           <p className="text-navy-200 text-sm mt-4">{t('ezreads.freeResources')}</p>
         </div>

@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import JurisdictionSelector from '../components/shared/JurisdictionSelector';
+import { normalizeForCrisis } from '../lib/text-utils';
 
 interface Message {
   id: string;
@@ -64,9 +65,9 @@ export default function ChatV2() {
   };
 
   const detectCrisis = (text: string): boolean => {
-    const lowered = text.toLowerCase();
-    return CRISIS_KEYWORDS_EN.some((kw) => lowered.includes(kw))
-      || CRISIS_KEYWORDS_ES.some((kw) => lowered.includes(kw));
+    const normalized = normalizeForCrisis(text);
+    return CRISIS_KEYWORDS_EN.some((kw) => normalized.includes(kw))
+      || CRISIS_KEYWORDS_ES.some((kw) => normalized.includes(kw));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -200,7 +200,7 @@ const valueProps: Record<'en' | 'es', ValueProp[]> = {
     },
     {
       title: 'Proactive Compliance',
-      description: 'Stay ahead of regulatory requirements with built-in compliance monitoring for CCPA, employment law, and more.',
+      description: 'Stay ahead of regulatory requirements with compliance checklists and guidance for CCPA, employment law, and more.',
       benefit: 'Catch issues before they become costly problems',
       icon: 'shield',
     },
@@ -231,7 +231,7 @@ const faqs: Record<'en' | 'es', FAQ[]> = {
   en: [
     {
       question: "How is this different from just using ChatGPT for legal questions?",
-      answer: "ezLegal.ai is purpose-built for legal work with jurisdiction-specific accuracy, attorney-reviewed templates, and compliance tracking. General AI tools lack legal context, can't produce structured legal document drafts, and don't understand state-specific requirements. Our AI is built with legal research methodology and reviewed by practicing attorneys.",
+      answer: "ezLegal.ai is purpose-built for legal work with jurisdiction-aware information, structured templates, and compliance tracking. General AI tools lack legal context, can't produce structured legal document drafts, and don't understand state-specific requirements. Our AI is built with legal research methodology and designed for legal workflows.",
     },
     {
       question: "Do we still need an attorney if we use ezLegal.ai?",
@@ -239,21 +239,21 @@ const faqs: Record<'en' | 'es', FAQ[]> = {
     },
     {
       question: "Is our data secure and confidential?",
-      answer: "Yes. We use TLS 1.3 encryption in transit and AES-256 at rest via our infrastructure provider (Supabase, which is SOC 2 Type II certified). We never use your data to train AI models. Your business information stays private and we're CCPA compliant.",
+      answer: "Yes. We use TLS 1.3 encryption in transit and AES-256 at rest via our infrastructure provider (Supabase, which is SOC 2 Type II certified). We never use your data to train AI models. Your business information stays private and we follow CCPA-aligned data handling practices.",
     },
     {
       question: "How quickly can we get started?",
-      answer: "Most teams are up and running in under 30 minutes. No complex integrations required. For Enterprise plans with custom integrations, typical deployment is 2-4 weeks with dedicated support throughout.",
+      answer: "Most teams are up and running quickly — no complex integrations required. For Enterprise plans with custom integrations, typical deployment is 2-4 weeks with dedicated support throughout.",
     },
     {
       question: "What if we need help with something outside the AI's capabilities?",
-      answer: "Our platform includes warm handoff to our network of vetted attorneys. You can share your conversation history and documents directly, so the attorney has full context. Business plan users get priority attorney matching.",
+      answer: "Our platform includes warm handoff to our network of licensed attorneys. You can share your conversation history and documents directly, so the attorney has full context. Business plan users get priority attorney matching.",
     },
   ],
   es: [
     {
       question: "Como es diferente de usar ChatGPT para preguntas legales?",
-      answer: "ezLegal.ai esta construido especificamente para trabajo legal con precision por jurisdiccion, plantillas revisadas por abogados y seguimiento de cumplimiento. Las herramientas AI generales carecen de contexto legal y no entienden requisitos especificos por estado.",
+      answer: "ezLegal.ai esta construido especificamente para trabajo legal con informacion adaptada por jurisdiccion, plantillas estructuradas y seguimiento de cumplimiento. Las herramientas AI generales carecen de contexto legal y no entienden requisitos especificos por estado.",
     },
     {
       question: "Seguimos necesitando un abogado si usamos ezLegal.ai?",
@@ -261,15 +261,15 @@ const faqs: Record<'en' | 'es', FAQ[]> = {
     },
     {
       question: "Nuestros datos son seguros y confidenciales?",
-      answer: "Si. Usamos cifrado TLS 1.3 en transito y AES-256 en reposo a traves de nuestro proveedor de infraestructura (Supabase, que cuenta con certificacion SOC 2 Tipo II). Nunca usamos tus datos para entrenar modelos AI. Tu informacion comercial permanece privada y cumplimos con CCPA.",
+      answer: "Si. Usamos cifrado TLS 1.3 en transito y AES-256 en reposo a traves de nuestro proveedor de infraestructura (Supabase, que cuenta con certificacion SOC 2 Tipo II). Nunca usamos tus datos para entrenar modelos AI. Tu informacion comercial permanece privada y seguimos practicas de manejo de datos alineadas con CCPA.",
     },
     {
       question: "Que tan rapido podemos empezar?",
-      answer: "La mayoria de equipos estan funcionando en menos de 30 minutos. No se requieren integraciones complejas. Para planes Enterprise con integraciones personalizadas, el despliegue tipico es de 2-4 semanas.",
+      answer: "La mayoria de equipos estan funcionando rapidamente. No se requieren integraciones complejas. Para planes Enterprise con integraciones personalizadas, el despliegue tipico es de 2-4 semanas.",
     },
     {
       question: "Que pasa si necesitamos ayuda fuera de las capacidades del AI?",
-      answer: "Nuestra plataforma incluye transferencia a nuestra red de abogados verificados. Puedes compartir tu historial de conversacion y documentos directamente para que el abogado tenga contexto completo.",
+      answer: "Nuestra plataforma incluye transferencia a nuestra red de abogados licenciados. Puedes compartir tu historial de conversacion y documentos directamente para que el abogado tenga contexto completo.",
     },
   ],
 };
@@ -502,7 +502,7 @@ export default function ForBusiness() {
             <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-16">
               <div className="flex items-center gap-2 text-slate-600">
                 <Shield className="w-5 h-5 text-green-600" />
-                <span className="font-semibold">{en ? 'CCPA Compliant' : 'Cumple CCPA'}</span>
+                <span className="font-semibold">{en ? 'CCPA-Aligned Practices' : 'Practicas Alineadas con CCPA'}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-600" title={en ? 'Encryption provided via our infrastructure provider (Supabase)' : 'Cifrado proporcionado por nuestro proveedor de infraestructura (Supabase)'}>
                 <Lock className="w-5 h-5 text-teal-600" />

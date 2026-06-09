@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
+import { normalizeForCrisis } from '../lib/text-utils';
 
 interface Topic {
   id: string;
@@ -88,8 +89,9 @@ export default function Ask() {
 
   const handleQuestionChange = (value: string) => {
     setUserQuestion(value);
+    const normalized = normalizeForCrisis(value);
     setShowCrisisWarning(
-      CRISIS_KEYWORDS.some((kw) => value.toLowerCase().includes(kw))
+      CRISIS_KEYWORDS.some((kw) => normalized.includes(kw))
     );
   };
 
@@ -220,8 +222,8 @@ export default function Ask() {
                   </div>
                   <p className="text-sm text-teal-800 mb-4">
                     {en
-                      ? 'Your question has been recorded. Here are your next steps:'
-                      : 'Tu pregunta ha sido registrada. Estos son tus proximos pasos:'}
+                      ? 'Your question has been submitted in this session. Here are your next steps:'
+                      : 'Tu pregunta ha sido enviada en esta sesion. Estos son tus proximos pasos:'}
                   </p>
                   <ul className="space-y-2 text-sm text-teal-800">
                     <li className="flex items-start gap-2">

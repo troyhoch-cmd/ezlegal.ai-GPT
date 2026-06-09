@@ -57,8 +57,8 @@ export default function Checkout() {
                   </h2>
                   <p className="text-slate-700">
                     {en
-                      ? 'Help us understand your needs so we can direct you to the right plan.'
-                      : 'Ayudanos a entender tus necesidades para dirigirte al plan adecuado.'}
+                      ? 'Help us understand who you are so we can serve you better.'
+                      : 'Ayudanos a saber quien eres para poder servirte mejor.'}
                   </p>
                 </div>
               </div>
@@ -166,7 +166,7 @@ export default function Checkout() {
               </div>
 
               <button
-                disabled={!acknowledgedScope}
+                disabled
                 className="w-full flex items-center justify-center gap-2 bg-gray-400 text-white px-6 py-3 rounded-lg cursor-not-allowed font-medium"
                 aria-disabled="true"
               >
