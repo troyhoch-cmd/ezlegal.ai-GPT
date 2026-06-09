@@ -1,5 +1,5 @@
 # ezLegal.ai Post-Merge Audit Bundle
-# Generated: 2026-06-09T21:23:34.983Z
+# Generated: 2026-06-09T23:35:47.958Z
 # Use with: scripts/gpt-post-merge-audit-prompt.md
 
 ---
@@ -240,7 +240,7 @@ const valueProps: Record<'en' | 'es', ValueProp[]> = {
     },
     {
       title: 'Cumplimiento Proactivo',
-      description: 'Mantente adelante de requisitos regulatorios con monitoreo de cumplimiento integrado.',
+      description: 'Mantente adelante de requisitos regulatorios con listas de verificacion de cumplimiento y guia para CCPA, ley laboral y mas.',
       benefit: 'Detecta problemas antes de que se vuelvan costosos',
       icon: 'shield',
     },
@@ -299,26 +299,26 @@ export default function ForBusiness() {
   const lang = language === 'es' ? 'es' : 'en' as const;
   const en = lang === 'en';
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
-  const [activeCitation, setActiveCitation] = useState<number | null>(null);
+  const [activeCitationIndex, setActiveCitationIndex] = useState<number | null>(null);
   const citationTriggerRefs = useRef<Record<number, HTMLButtonElement | null>>({});
   const citationPopoverRef = useRef<HTMLDivElement | null>(null);
 
   const closeCitation = useCallback(() => {
-    const prev = activeCitation;
-    setActiveCitation(null);
+    const prev = activeCitationIndex;
+    setActiveCitationIndex(null);
     if (prev !== null) {
       citationTriggerRefs.current[prev]?.focus();
     }
-  }, [activeCitation]);
+  }, [activeCitationIndex]);
 
   useEffect(() => {
-    if (activeCitation === null) return;
+    if (activeCitationIndex === null) return;
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') closeCitation();
     }
     function handleClickOutside(e: MouseEvent) {
       const popover = citationPopoverRef.current;
-      const trigger = activeCitation !== null ? citationTriggerRefs.current[activeCitation] : null;
+      const trigger = activeCitationIndex !== null ? citationTriggerRefs.current[activeCitationIndex] : null;
       if (popover && !popover.contains(e.target as Node) && trigger && !trigger.contains(e.target as Node)) {
         closeCitation();
       }
@@ -329,7 +329,7 @@ export default function ForBusiness() {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [activeCitation, closeCitation]);
+  }, [activeCitationIndex, closeCitation]);
 
   const [calculatorInputs, setCalculatorInputs] = useState({
     contracts: 10,
@@ -417,7 +417,7 @@ export default function ForBusiness() {
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5 text-green-400" />
-                    <span>{en ? 'Setup in 30 minutes' : 'Configuracion en 30 minutos'}</span>
+                    <span>{en ? 'Quick setup' : 'Configuracion rapida'}</span>
                   </div>
                 </div>
               </div>
@@ -528,9 +528,9 @@ export default function ForBusiness() {
                 <Lock className="w-5 h-5 text-teal-600" />
                 <span className="font-semibold">{en ? 'TLS 1.3 + AES-256 Encryption' : 'Cifrado TLS 1.3 + AES-256'}</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-600" title={en ? 'Document templates and legal content reviewed by licensed attorneys' : 'Plantillas y contenido legal revisado por abogados licenciados'}>
+              <div className="flex items-center gap-2 text-slate-600" title={en ? 'Structured templates designed for common business legal workflows' : 'Plantillas estructuradas disenadas para flujos legales empresariales comunes'}>
                 <Award className="w-5 h-5 text-amber-600" />
-                <span className="font-semibold">{en ? 'Attorney-Reviewed Templates' : 'Plantillas Revisadas por Abogados'}</span>
+                <span className="font-semibold">{en ? 'Structured Templates' : 'Plantillas Estructuradas'}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-600">
                 <Users className="w-5 h-5 text-teal-600" />
@@ -571,23 +571,23 @@ export default function ForBusiness() {
                       <p className="text-xs text-slate-500">
                         {point.statLabel}
                         <button
-                          ref={(el) => { citationTriggerRefs.current[point.citationId] = el; }}
-                          onClick={(e) => { e.stopPropagation(); setActiveCitation(activeCitation === point.citationId ? null : point.citationId); }}
+                          ref={(el) => { citationTriggerRefs.current[index] = el; }}
+                          onClick={(e) => { e.stopPropagation(); setActiveCitationIndex(activeCitationIndex === index ? null : index); }}
                           className="inline-flex items-center justify-center w-4 h-4 ml-1 text-[9px] font-bold text-teal-700 bg-teal-100 rounded-full hover:bg-teal-200 transition-colors align-super cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
                           aria-label={`${en ? 'View source' : 'Ver fuente'} ${point.citationId}: ${citations.find(c => c.id === point.citationId)?.source || ''}`}
-                          aria-expanded={activeCitation === point.citationId}
-                          aria-controls={activeCitation === point.citationId ? `citation-popover-${point.citationId}` : undefined}
+                          aria-expanded={activeCitationIndex === index}
+                          aria-controls={activeCitationIndex === index ? `citation-popover-${index}` : undefined}
                         >
                           {point.citationId}
                         </button>
                       </p>
-                      {activeCitation === point.citationId && (() => {
+                      {activeCitationIndex === index && (() => {
                         const cite = citations.find(c => c.id === point.citationId);
                         if (!cite) return null;
                         return (
                           <div
                             ref={citationPopoverRef}
-                            id={`citation-popover-${point.citationId}`}
+                            id={`citation-popover-${index}`}
                             role="dialog"
                             aria-label={en ? `Source: ${cite.source}` : `Fuente: ${cite.source}`}
                             className="absolute left-0 right-0 top-full mt-1 z-20 bg-white border border-slate-200 rounded-lg shadow-lg p-3 text-xs"

@@ -1,4 +1,4 @@
-# GPT-5.5 Pro Final Re-Audit Instruction (Round 4)
+# GPT-5.5 Pro Final Re-Audit Instruction (Round 5)
 
 > Upload this file + `scripts/gpt-post-merge-audit-prompt.md` + `scripts/output/merged-audit-bundle.md`
 > Then paste the prompt at the bottom of this file.
@@ -7,69 +7,48 @@
 
 ## Context: Why This Re-Audit Exists
 
-Your third audit (June 9, 2026) returned a **FIX_THEN_SHIP** verdict with all 6 files at PASS_WITH_NOTES. All identified notes have now been addressed.
+Your fourth audit (June 9, 2026) returned a **FIX_THEN_SHIP** verdict. 5 of 6 files passed (Checkout, Documents, ChatV2, Ask, EZReads). ForBusiness.tsx was the sole FAIL due to three remaining issues that were missed in prior rounds because only the FAQ section was addressed while other UI sections contained the same claims.
 
 ---
 
 ## Fixes Applied (This Round)
 
-### Checkout.tsx: PASS_WITH_NOTES -> Fixed
+### ForBusiness.tsx: FAIL -> Fixed
 
 | Issue | Fix Applied |
 |-------|-------------|
-| Payment button becomes enabled via `disabled={!acknowledgedScope}` | Changed to `disabled` (permanently disabled, unconditionally) |
-| A2J copy promises "direct you to the right plan" but doesn't route | Changed to "Help us understand who you are so we can serve you better" — no routing promise |
+| Trust Bar badge "Attorney-Reviewed Templates" with title "Document templates and legal content reviewed by licensed attorneys" | Changed to "Structured Templates" with title "Structured templates designed for common business legal workflows" (EN+ES) |
+| Hero checkmark "Setup in 30 minutes" / "Configuracion en 30 minutos" | Changed to "Quick setup" / "Configuracion rapida" |
+| Spanish value prop "monitoreo de cumplimiento integrado" (stronger than softened English) | Changed to "listas de verificacion de cumplimiento y guia para CCPA, ley laboral y mas" (matches English) |
+| Citation popover bug: `activeCitation` keyed by `citationId` but citationId 1 reused by multiple pain points | Changed to key by pain-point array index (`activeCitationIndex`) so each card opens its own popover |
 
-### Documents.tsx: PASS_WITH_NOTES -> Fixed
+### All Other Files: Already PASS (No Changes)
 
-| Issue | Fix Applied |
-|-------|-------------|
-| 30+ JSX branches use raw `language === 'en'` instead of `en` boolean | All replaced with `en` / `!en` pattern |
-| Silent Supabase errors in loadDocuments and handleSaveDocument | Added `errorMessage` state + visible error alert for both operations |
-
-### ForBusiness.tsx: PASS_WITH_NOTES -> Fixed
-
-| Issue | Fix Applied |
-|-------|-------------|
-| "jurisdiction-specific accuracy" (unsubstantiated) | Changed to "jurisdiction-aware information" |
-| "attorney-reviewed templates" (no evidence) | Changed to "structured templates" |
-| "reviewed by practicing attorneys" | Changed to "designed for legal workflows" |
-| "CCPA Compliant" badge (no certification) | Changed to "CCPA-Aligned Practices" |
-| "we're CCPA compliant" in FAQ | Changed to "we follow CCPA-aligned data handling practices" |
-| "under 30 minutes" setup claim | Changed to "quickly" |
-| "vetted attorneys" | Changed to "licensed attorneys" |
-| "built-in compliance monitoring" | Changed to "compliance checklists and guidance" |
-
-### ChatV2.tsx: PASS_WITH_NOTES -> Fixed
-
-| Issue | Fix Applied |
-|-------|-------------|
-| Crisis detection doesn't normalize accents | Added `normalizeForCrisis()` utility (Unicode NFD diacritic stripping) — imported from `src/lib/text-utils.ts` |
-| `detectCrisis` uses raw `.toLowerCase()` | Now uses `normalizeForCrisis(text)` which handles accented characters like "dano" -> "dano" |
-
-### Ask.tsx: PASS_WITH_NOTES -> Fixed
-
-| Issue | Fix Applied |
-|-------|-------------|
-| "has been recorded" implies persistence | Changed to "has been submitted in this session" |
-| Crisis detection doesn't normalize accents | Added `normalizeForCrisis()` import and usage in `handleQuestionChange` |
-
-### EZReads.tsx: PASS_WITH_NOTES -> Fixed
-
-| Issue | Fix Applied |
-|-------|-------------|
-| Newsletter insert fire-and-forget `.then(() => {})` | Replaced with async/await + error state. Shows user-facing error message on failure. |
+- Checkout.tsx: PASS (no changes needed)
+- Documents.tsx: PASS (no changes needed)
+- ChatV2.tsx: PASS (no changes needed)
+- Ask.tsx: PASS (no changes needed)
+- EZReads.tsx: PASS (no changes needed)
 
 ---
 
 ## What to Verify in This Audit
 
-1. **Checkout**: Payment button is `disabled` (not conditional). A2J copy makes no routing promise.
-2. **Documents**: No remaining `language === 'en'` in JSX (only in `const lang` definition). Error states visible for Supabase failures.
-3. **ForBusiness**: All previously-flagged claims softened with qualified language. No absolute claims remain.
-4. **ChatV2 & Ask**: Both import and use `normalizeForCrisis()` for accent-insensitive crisis keyword matching.
-5. **EZReads**: Newsletter insert uses async/await with `{ error }` destructuring and shows error UI on failure.
-6. **All 6 files**: lang narrowing pattern `const lang = language === 'es' ? 'es' : 'en'` remains intact.
+1. **ForBusiness Trust Bar**: Must say "Structured Templates" (not "Attorney-Reviewed Templates"). Title must not reference attorneys.
+2. **ForBusiness Hero**: Must say "Quick setup" (not "Setup in 30 minutes" or any time claim).
+3. **ForBusiness Spanish Value Props**: Compliance description must say "listas de verificacion de cumplimiento y guia" (not "monitoreo de cumplimiento integrado").
+4. **ForBusiness Citation Popover**: State is now keyed by pain-point index, not citationId. Each card opens independently.
+5. **All 6 files**: lang narrowing pattern `const lang = language === 'es' ? 'es' : 'en'` remains intact.
+
+---
+
+## Grep Verification (Zero Matches Confirmed)
+
+The following search across ForBusiness.tsx returns ZERO results:
+- "Attorney-Reviewed"
+- "reviewed by" (in attorney/abogado context)
+- "30 minutes" / "30 minutos"
+- "monitoreo de cumplimiento integrado"
 
 ---
 
@@ -84,13 +63,13 @@ All previously-noted issues have been resolved. The expected verdict is **SHIP**
 ```
 Audit the 6 merged files in the attached bundle using the post-merge audit prompt (also attached).
 
-This is a FOURTH-ROUND RE-AUDIT. The previous verdict was FIX_THEN_SHIP with all files at PASS_WITH_NOTES. All notes have now been addressed:
+This is a FIFTH-ROUND RE-AUDIT. The previous verdict was FIX_THEN_SHIP with ForBusiness.tsx as the sole FAIL. All issues have now been fixed:
 
-- Checkout: Payment button is now permanently disabled (`disabled` attribute, no condition). A2J copy changed from "direct you to the right plan" to "serve you better" (no routing promise).
-- Documents: All `language === 'en'` in JSX replaced with `en` boolean. Added `errorMessage` state + visible error alerts for Supabase operations.
-- ForBusiness: All unsubstantiated claims softened — "jurisdiction-aware" not "jurisdiction-specific accuracy", "CCPA-Aligned Practices" not "CCPA Compliant", "licensed attorneys" not "vetted attorneys", "quickly" not "under 30 minutes".
-- ChatV2 & Ask: Both now import `normalizeForCrisis()` from `src/lib/text-utils.ts` which strips Unicode diacritical marks (NFD normalization) before crisis keyword matching.
-- EZReads: Newsletter Supabase insert now uses async/await with error handling and shows a visible error message to the user on failure.
+- ForBusiness Trust Bar: "Attorney-Reviewed Templates" replaced with "Structured Templates". Title changed from "Document templates and legal content reviewed by licensed attorneys" to "Structured templates designed for common business legal workflows".
+- ForBusiness Hero: "Setup in 30 minutes" replaced with "Quick setup" (EN) / "Configuracion rapida" (ES).
+- ForBusiness Spanish Value Props: "monitoreo de cumplimiento integrado" replaced with "listas de verificacion de cumplimiento y guia para CCPA, ley laboral y mas" — now matches the softened English copy.
+- ForBusiness Citation Bug: activeCitation state now keyed by pain-point array index (activeCitationIndex) instead of citationId, so cards sharing citationId 1 open independently.
+- All other 5 files remain unchanged from Round 4 where they all PASSED.
 
 Please:
 1. Verify each previously-noted issue is now resolved
@@ -99,10 +78,12 @@ Please:
 4. Provide the Final Summary with updated verdict
 
 Key verification points:
-- Checkout button must have `disabled` attribute (no condition)
-- Documents must have zero `language === 'en'` in JSX (only in lang definition line)
-- ForBusiness must not contain: "jurisdiction-specific accuracy", "attorney-reviewed", "CCPA compliant", "vetted attorneys", "under 30 minutes"
-- ChatV2 and Ask must import and use `normalizeForCrisis` 
-- EZReads newsletter must use await + error destructuring (no `.then(() => {})`)
+- ForBusiness must NOT contain: "Attorney-Reviewed", "reviewed by licensed attorneys", "Setup in 30 minutes", "30 minutos", "monitoreo de cumplimiento integrado"
+- ForBusiness MUST contain: "Structured Templates", "Quick setup", "Configuracion rapida", "listas de verificacion de cumplimiento"
+- ForBusiness citation state must use `activeCitationIndex` (not `activeCitation` keyed by citationId)
+- Checkout button must have unconditional `disabled` attribute
+- Documents must have zero `language === 'en'` in JSX
+- ChatV2 and Ask must import and use `normalizeForCrisis`
+- EZReads newsletter must use await + error destructuring
 - All files must use lang narrowing: const lang = language === 'es' ? 'es' : 'en'
 ```
