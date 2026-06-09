@@ -335,6 +335,18 @@ export default function ForBusiness() {
       <Breadcrumbs className="mt-24" />
 
       <main id="main-content" className="pt-4">
+        {/* Scope Boundary - Above the fold */}
+        <div className="bg-amber-50 border-b border-amber-200 py-3">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-sm text-amber-800 text-center font-medium">
+              <Scale className="w-4 h-4 inline-block mr-1.5 -mt-0.5" />
+              {en
+                ? 'ezLegal.ai provides legal information and workflow support — not legal advice. For legal decisions, consult a licensed attorney.'
+                : 'ezLegal.ai proporciona informacion legal y apoyo de flujos de trabajo — no asesoramiento legal. Para decisiones legales, consulte a un abogado licenciado.'}
+            </p>
+          </div>
+        </div>
+
         {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50"></div>
@@ -483,18 +495,6 @@ export default function ForBusiness() {
 
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
         </section>
-
-        {/* Scope Boundary */}
-        <div className="bg-amber-50 border-b border-amber-200 py-3">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p className="text-sm text-amber-800 text-center font-medium">
-              <Scale className="w-4 h-4 inline-block mr-1.5 -mt-0.5" />
-              {en
-                ? 'ezLegal.ai provides legal information and workflow support — not legal advice. For legal decisions, consult a licensed attorney.'
-                : 'ezLegal.ai proporciona informacion legal y apoyo de flujos de trabajo — no asesoramiento legal. Para decisiones legales, consulte a un abogado licenciado.'}
-            </p>
-          </div>
-        </div>
 
         {/* Trust Bar */}
         <section className="py-8 bg-slate-50 border-b border-slate-200">

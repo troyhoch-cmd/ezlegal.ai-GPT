@@ -41,6 +41,7 @@ const templateNameES: Record<string, string> = {
   routine_document_review: 'Revision Rutinaria de Documentos',
   s_corp_c_corp_formation: 'Formacion S-corp o C-corp',
   single_member_llc_formation: 'Formacion de LLC de Miembro Unico',
+  custom: 'Documento Personalizado',
 };
 
 interface Document {
@@ -1230,7 +1231,7 @@ export default function Documents() {
       initialFormData[field] = '';
     });
     setFormData(initialFormData);
-    setDocumentTitle(templateData.name);
+    setDocumentTitle(language === 'es' ? (templateNameES[template] || templateData.name) : templateData.name);
     setGeneratedContent('');
   };
 

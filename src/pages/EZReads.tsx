@@ -530,7 +530,7 @@ export default function EZReads() {
                       />
                       <div className="absolute top-4 left-4 flex items-center gap-2">
                         <span className="px-3 py-1 bg-teal-600 text-white text-sm font-semibold rounded-full">
-                          {featuredArticle.category}
+                          {lang === 'es' ? (categories.find(c => c.dbName === featuredArticle.category)?.name || featuredArticle.category) : featuredArticle.category}
                         </span>
                         {featuredArticle.jurisdiction && (
                           <span className="px-3 py-1 bg-navy-700/80 backdrop-blur-sm text-white text-sm font-medium rounded-full flex items-center gap-1">
