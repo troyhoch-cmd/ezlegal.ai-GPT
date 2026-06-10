@@ -365,6 +365,7 @@ function App() {
                   <Route path="/case-predictor/start" element={<CasePredictorStart />} />
                   <Route path="/chatbot-standalone" element={<DeprecatedRouteRedirect to="/chat" oldPath="/chatbot-standalone" />} />
                   <Route path="/chat" element={<ChatV2 />} />
+                  <Route path="/chat/:conversationId" element={<ChatV2 />} />
                   <Route path="/chat-v2" element={<DeprecatedRouteRedirect to="/chat" oldPath="/chat-v2" />} />
                   <Route path="/app" element={<Navigate to="/chat" replace />} />
                   <Route path="/chatbot" element={<DeprecatedRouteRedirect to="/chat" oldPath="/chatbot" />} />
