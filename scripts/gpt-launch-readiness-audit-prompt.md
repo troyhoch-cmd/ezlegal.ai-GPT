@@ -1,240 +1,184 @@
-# GPT-5.5 Pro Launch Readiness Audit
+# GPT-5.5 Pro Launch Readiness Gate -- Full Application Audit (June 2026)
 
-> Upload this prompt alongside `scripts/output/merged-audit-bundle.md` (regenerated after all P0 fixes).
-> Ask: "Run the launch readiness audit using the provided prompt and bundle."
-
----
-
-## PURPOSE
-
-This is a **re-audit + launch gate** evaluation. The previous audit returned a **BLOCK** verdict with 7 banned content instances and 75+ bilingual gaps across three P0 files:
-
-- `src/pages/EZReads.tsx`
-- `src/pages/ForBusiness.tsx`
-- `src/pages/Documents.tsx`
-
-The following remediations have been applied since the BLOCK verdict:
-
-### EZReads.tsx Fixes Applied
-1. Changed outcome-implying title "Win Your Case" to "Prepare Your Case" (EN + ES)
-2. Replaced `new Date().toISOString()` with fixed ISO date strings in `toArticle()`
-3. Added `CategoryConfig` interface; `useCategories()` now derives counts from article data (no hardcoded numbers)
-4. Changed `formatUpdatedDate` signature from `lang: string` to `lang: 'en' | 'es'`
-5. Added proper language narrowing: `const lang = language === 'es' ? 'es' : 'en' as const`
-6. Implemented functional newsletter form with Supabase `email_captures` insert
-
-### ForBusiness.tsx Fixes Applied
-1. Replaced hardcoded `$149 * 12` with dynamic import from `pricing.ts` (Business Starter plan `monthlyPrice`)
-2. Softened hero copy: "handles contracts, compliance" -> "helps your team navigate contracts, compliance questions, and workflows"
-3. Softened pain point: "AI-powered review in minutes, not days" -> "AI-assisted review workflow helps surface key issues faster"
-4. Rephrased FAQ: "Can ezLegal.ai replace our attorney entirely?" -> "Do we still need an attorney if we use ezLegal.ai?"
-5. Added visible non-dismissible scope boundary between hero and trust bar
-6. Softened value prop speed claims ("in hours instead of weeks" -> "identify key clauses and potential issues more quickly")
-7. Added "from" label and "/yr" suffix to ROI calculator output for price transparency
-8. Added tooltip attribution for encryption claims to infrastructure provider (Supabase)
-9. Updated calculator disclaimer to reference plan name and link to pricing page
-10. Softened final CTA copy from "handle" to "navigate"
-11. Both EN and ES versions updated for all changes
-
-### Documents.tsx Fixes Applied
-1. Added non-dismissible legal disclaimer in document preview/save/download area (EN + ES)
-2. Fixed dead Download button with proper `onClick` handler (Blob download)
-3. Added `user?.id` dependency to `useEffect` to reload documents on auth change
-4. Added Edge Function response validation (checks `typeof data.response === 'string'`)
-5. Added env var guard (`SUPABASE_URL` / `SUPABASE_ANON_KEY`) before API calls
-6. Softened AI prompt from "Generate a professional legal document" to "Generate an informational legal draft...for review by a licensed attorney"
-7. Softened page subtitle: "Generate professional legal documents in minutes" -> "Create informational legal drafts for review by a licensed attorney"
-8. Translated 30+ UI strings to Spanish: labels, placeholders, buttons, CTAs, headers, helper text
-9. Softened empty state copy: "Generate your first legal document" -> "Create your first informational legal draft"
+> **How to use:** This is the FINAL gate before production launch. Export the full codebase with `node scripts/export-for-gpt-review.cjs`, upload ALL output files, then paste this prompt. This audit covers front-end, back-end, Edge Functions, and database migrations.
 
 ---
 
-## YOUR TASK
+## Prompt
 
-Perform TWO evaluations:
-
-### Evaluation 1: P0 Re-Audit (Verify Fixes)
-
-Re-run the exact same checklist from the previous audit against the three P0 files. Specifically confirm:
-
-1. **All 7 previously flagged banned content instances are resolved**
-2. **The 75+ bilingual gaps are closed** (or reduced to a documented, acceptable count)
-3. **Hardcoded data issues are fixed** (no `new Date()`, no magic numbers for pricing/counts)
-4. **Type safety issues are resolved** (no `string` where `'en' | 'es'` is expected)
-5. **Dead UI elements are functional** (download button, newsletter form)
-6. **Scope boundaries and disclaimers are present** near AI output and claims
-
-For each previously flagged issue, report: FIXED / PARTIALLY_FIXED / NOT_FIXED / NEW_ISSUE_INTRODUCED
-
-### Evaluation 2: Launch Gate Assessment
-
-Evaluate whether the three files are now **production-ready** by checking:
-
-#### A. Banned Content (Zero Tolerance)
-Scan for ALL instances of:
-- "bank-level security"
-- "join thousands" / "trusted by thousands"
-- "guaranteed outcome" / "guaranteed results"
-- "replaces a lawyer" / "better than a lawyer"
-- "we are a law firm"
-- "attorney-client relationship" (implying we create one)
-- "trained on actual legal precedents"
-- "generate enforceable documents"
-- "generate professional legal documents" (overclaiming)
-- "AI handles [legal task]" (implying autonomous execution)
-- "AI-powered review in minutes" (overclaiming speed)
-- Any fabricated statistics or user counts
-
-#### B. Scope Boundary Compliance
-- Every page that references AI capabilities MUST have a visible, non-dismissible scope boundary stating "legal information / workflow support only, not legal advice"
-- Documents page MUST have disclaimer near generated content
-- ForBusiness page MUST have disclaimer visible without scrolling past the fold
-
-#### C. Bilingual Parity
-- Count remaining hardcoded English-only strings in each file
-- Acceptable threshold: 0 untranslated user-facing strings
-- Template names in Documents.tsx are acceptable in English only IF they are proper nouns (e.g., "501(c)(3)")
-
-#### D. Commerce Model Integrity
-- No hardcoded prices outside of `src/data/pricing.ts`
-- ROI calculator references actual plan data
-- Trial claims match what pricing page offers
-- No "SOC 2 certified" claim attributed directly to ezLegal.ai (it's our infrastructure provider)
-
-#### E. Safety & Ethics
-- No outcome-implying language in legal content pages
-- Crisis resources remain accessible
-- AI-generated content clearly labeled as drafts requiring attorney review
-- No auto-execution of legal actions (every action requires explicit user confirmation)
-
----
-
-## STACK CONTEXT (unchanged)
-
-- **Framework:** Vite 5 + React 18 + TypeScript 5.9 + Tailwind CSS 3.4
-- **Backend:** Supabase (Postgres + Edge Functions + Auth)
-- **i18n:** Custom `LanguageContext` with `{ language, t, setLanguage }` where `type Language = 'en' | 'es' | 'ar'`
-- **Language narrowing:** `const lang = language === 'es' ? 'es' : 'en'` (bilingual data keyed as `Record<'en' | 'es', T>`)
-- **Icons:** lucide-react only
-- **Pricing source of truth:** `src/data/pricing.ts` (PROTECTED, never modified)
-
----
-
-## COMMERCE MODEL TAXONOMY
-
-```typescript
-type CommerceModel = 'free' | 'self_serve_subscription' | 'one_time_addon' | 'partner_custom' | 'grant_or_free_access';
 ```
+You are conducting the FINAL LAUNCH GATE AUDIT of ezLegal.ai before production deployment. This is a comprehensive full-stack audit covering:
+- All consumer-facing React pages
+- All GTM/conversion components
+- All Supabase Edge Functions
+- Database migration patterns (RLS, schema design)
+- Authentication and authorization flows
+- Payment integration (Stripe)
+- AI safety and crisis detection systems
+- Privacy and data governance
 
-Business plans available: `business-starter` ($29/mo), `business-plus` ($79/mo), `business-pro` (custom pricing).
+Your verdict determines whether this application ships to PRODUCTION where it will serve vulnerable populations seeking legal information.
 
----
+## Application Profile
 
-## PROTECTED FILES (must not have been modified)
+| Attribute | Value |
+|-----------|-------|
+| Platform | AI legal information + workflow automation |
+| Users | Consumers, SMBs, law firms, legal aid orgs |
+| Languages | English + Spanish (bilingual parity required) |
+| Backend | Supabase (PostgreSQL + Auth + Edge Functions) |
+| Frontend | React 18 + TypeScript + Vite + Tailwind |
+| Payments | Stripe (checkout sessions + webhooks) |
+| AI | OpenAI GPT via Edge Function proxy |
+| Auth | Email/password (Supabase Auth) |
+| Hosting | Netlify (SPA) |
 
-- `src/data/pricing.ts`
-- `src/components/pricing/PricingCard.tsx`
-- `src/pages/Pricing.tsx`
-- `src/lib/pricingMath.ts`
-- All files under `src/components/pricing/`
+## LAUNCH GATE CRITERIA
 
----
+The application SHIPS if and only if ALL of the following are true:
+
+### Gate 1: Zero UPL Violations
+- [ ] No page claims to provide "legal advice"
+- [ ] No page implies attorney-client relationship
+- [ ] No unverified "attorney-reviewed" claims
+- [ ] No specific outcome guarantees
+- [ ] Every legal content page has scope disclaimer (EN + ES)
+- [ ] Platform consistently self-identifies as "legal information" not "legal advice"
+
+### Gate 2: Bilingual Parity (Civil Rights Obligation)
+- [ ] All consumer-facing pages render in Spanish when language is 'es'
+- [ ] Scope disclaimers exist in both languages
+- [ ] FAQ sections are fully translated
+- [ ] Form validation errors are bilingual
+- [ ] Crisis/emergency content is bilingual
+- [ ] CTAs and navigation are bilingual
+
+### Gate 3: No Dead UI
+- [ ] Every button has a functional handler or is a proper link
+- [ ] Download buttons trigger actual downloads
+- [ ] Copy buttons use clipboard API
+- [ ] No "coming soon" features presented as functional
+- [ ] All internal links resolve to defined routes
+
+### Gate 4: Security Baseline
+- [ ] No secrets in source code
+- [ ] All tables have RLS enabled
+- [ ] RLS policies use auth.uid() for ownership
+- [ ] Edge Functions have CORS headers
+- [ ] Edge Functions validate input
+- [ ] No XSS vectors (dangerouslySetInnerHTML without sanitization)
+- [ ] Auth checks before Supabase mutations
+
+### Gate 5: Crisis Safety
+- [ ] Chat interface detects crisis keywords (EN + ES)
+- [ ] Crisis detection uses normalizeForCrisis for accent-insensitive matching
+- [ ] Emergency escalation card appears with 911 + hotline numbers
+- [ ] Emergency resources page exists and is bilingual
+- [ ] DV content includes safe browsing warnings
+
+### Gate 6: Privacy Compliance
+- [ ] Privacy policy exists and is accessible
+- [ ] Consent mechanisms exist for data collection
+- [ ] Data deletion path referenced
+- [ ] Analytics respect consent preferences
+- [ ] No PII in client-side logs or error messages
+
+### Gate 7: Payment Integrity
+- [ ] Pricing is clearly displayed with terms
+- [ ] Checkout uses Stripe (no custom card handling)
+- [ ] Webhook validates Stripe signature
+- [ ] Free tier limitations are disclosed
+- [ ] Refund/cancellation information accessible
+
+### Gate 8: Accessibility Minimum
+- [ ] Skip-to-content link present
+- [ ] Form inputs have labels
+- [ ] Images have alt text or aria-hidden
+- [ ] Color contrast meets WCAG AA (4.5:1 body, 3:1 large)
+- [ ] Focus management on route changes
+
+## AUDIT APPROACH
+
+Review in this order:
+1. **Core pages** (Home, HowItWorks, Pricing, ForBusiness, ForIndividuals)
+2. **ICP pages** (ForStartups, ForLawFirms, ForInHouse, ForOrganizations)
+3. **Chat/AI** (ChatV2, Ask, CasePredictor, Negotiate)
+4. **Trust/Safety** (AISafety, EmergencyResources, ScopeDisclaimers, PrivacyPolicy)
+5. **Auth/Account** (Login, Signup, Dashboard, Profile, Billing, Checkout)
+6. **GTM Components** (LegalReadinessWizard, FAQSection, ICPSelector, ROICalculator)
+7. **Edge Functions** (openai-chat, stripe-checkout-session, stripe-webhook, outcome-prediction)
+8. **Migrations** (RLS patterns, schema design, security)
 
 ## OUTPUT FORMAT
 
-### Per-File Report
-
+### Per-file output:
 ```json
 {
-  "file": "src/pages/[FileName].tsx",
-  "previous_verdict": "BLOCK",
-  "new_verdict": "SHIP | FIX_THEN_SHIP | BLOCK",
-  "fix_verification": {
-    "total_issues_from_previous_audit": <number>,
-    "fixed": <number>,
-    "partially_fixed": <number>,
-    "not_fixed": <number>,
-    "new_issues_introduced": <number>,
-    "details": [
-      {
-        "original_issue": "<description>",
-        "status": "FIXED | PARTIALLY_FIXED | NOT_FIXED | NEW_ISSUE",
-        "evidence": "<quote or line reference>"
-      }
-    ]
-  },
-  "banned_content": {
-    "count": 0,
-    "violations": []
-  },
-  "bilingual_coverage": {
-    "untranslated_user_facing_strings": 0,
-    "details": []
-  },
-  "scope_boundaries": {
-    "present": true,
-    "non_dismissible": true,
-    "location": "<description>"
-  },
-  "type_safety": {
-    "issues": []
-  },
-  "commerce_model_compliance": {
-    "hardcoded_prices": false,
-    "details": []
-  },
-  "risk_level": "low | medium | high"
+  "file": "path/to/file",
+  "category": "core|icp|chat|trust|auth|gtm|edge|migration",
+  "verdict": "PASS" | "WARN" | "FAIL" | "BLOCK",
+  "gates_affected": ["gate1", "gate2"],
+  "issues": [
+    { "gate": "N", "severity": "BLOCK|HIGH|MEDIUM|LOW", "description": "...", "fix": "..." }
+  ]
 }
 ```
 
-### Final Launch Gate Summary
-
+### Final Gate Assessment:
 ```json
 {
-  "overall_verdict": "SHIP | FIX_THEN_SHIP | BLOCK",
-  "previous_verdict": "BLOCK",
-  "verdict_change_rationale": "<explanation>",
-  "banned_content_count": 0,
-  "bilingual_gap_count": 0,
-  "scope_boundary_compliance": "PASS | PARTIAL | FAIL",
-  "commerce_model_compliance": "PASS | PARTIAL | FAIL",
-  "safety_compliance": "PASS | PARTIAL | FAIL",
-  "remaining_blockers": [],
-  "remaining_advisories": [],
-  "launch_recommendation": "<1-2 sentence recommendation>",
-  "confidence_level": "high | medium | low"
+  "launch_verdict": "SHIP" | "CONDITIONAL_SHIP" | "BLOCK",
+  "gates": {
+    "gate1_upl": "PASS" | "FAIL",
+    "gate2_bilingual": "PASS" | "FAIL",
+    "gate3_dead_ui": "PASS" | "FAIL",
+    "gate4_security": "PASS" | "FAIL",
+    "gate5_crisis": "PASS" | "FAIL",
+    "gate6_privacy": "PASS" | "FAIL",
+    "gate7_payments": "PASS" | "FAIL",
+    "gate8_a11y": "PASS" | "WARN"
+  },
+  "blocking_issues": [],
+  "conditions_for_ship": [],
+  "total_files": N,
+  "pass_rate": "N%",
+  "executive_summary": "2-3 sentence assessment suitable for a product launch decision.",
+  "risk_assessment": "LOW | MEDIUM | HIGH -- overall risk of shipping in current state"
 }
 ```
 
----
+## VERDICT RULES
 
-## SEVERITY CLASSIFICATION
+- **SHIP**: All 8 gates PASS. No BLOCK issues. Fewer than 5 WARN across all files.
+- **CONDITIONAL_SHIP**: All gates PASS except Gate 8 (a11y) which may WARN. Zero BLOCK. Conditions listed.
+- **BLOCK**: Any gate FAILS. Any BLOCK-severity issue present.
 
-- **BLOCKER**: Banned content present, missing mandatory disclaimer, hardcoded pricing, outcome-implying claims, attorney-replacement language
-- **HIGH**: Untranslated user-facing strings (>5 per file), dead UI elements, unvalidated API responses
-- **MEDIUM**: Minor type safety issues, missing tooltip/title attributes, imprecise language that doesn't rise to "banned"
-- **LOW**: Style inconsistencies, optional enhancements, documentation gaps
+## GRADING FAIRNESS RULES
 
-**SHIP threshold:** Zero BLOCKERs, zero HIGH issues. MEDIUM/LOW are acceptable with documentation.
+Do NOT false-flag these as issues:
+1. `Record<'en'|'es', ...>` with ternary rendering IS valid bilingual implementation
+2. Edge Functions deployed via MCP tools (not CLI) is correct for this environment
+3. `<a download>` for media kit assets is functional even if asset files don't exist in dev
+4. Placeholder data in demo/prototype sections clearly marked "Example only" is acceptable
+5. `console.warn` for development diagnostics in non-production code paths is acceptable
+6. Claims attributed to infrastructure providers (Supabase SOC 2, Stripe PCI) are factual
+7. "Target" or "designed to" qualifiers make claims acceptable
+8. Admin-only pages being English-only is acceptable (Gate 2 applies to consumer-facing only)
+9. The `ScopeNotice` component from `shared/AISafetyMicrocopy.tsx` IS a valid scope disclaimer implementation
+10. Amber banner with Scale icon + bilingual "legal information, not legal advice" text IS proper disclaimer
 
----
+## CRITICAL CONTEXT
 
-## THREE-PROJECT DISTINCTION (unchanged)
+This platform will be used by:
+- Single mothers facing eviction who need to understand their rights
+- Immigrants who speak only Spanish trying to understand legal processes
+- Small business owners who cannot afford $500/hr attorneys
+- Legal aid organizations screening 100+ intake requests per day
+- People in crisis (DV, suicidal ideation) who may encounter the chat interface
 
-| Label | Description | Rule |
-|-------|-------------|------|
-| **CURRENT PROJECT** | The active Bolt development project | This is what you are auditing. |
-| **APRIL 28 BASELINE** | GitHub snapshot recovery source | Reference ONLY for merge accuracy. |
-| **LEGACY SITE** | Old production ezLegal.ai website | **NEVER reference. NEVER draw from.** |
+YOUR AUDIT PROTECTS THESE PEOPLE. Be thorough. Be precise. Be fair.
 
----
+## BEGIN
 
-## REMINDER
-
-You are auditing the CURRENT PROJECT only. The goal is to confirm the BLOCK verdict has been resolved and determine whether these three files are now safe to ship to production.
-
-Be thorough but fair: do not invent issues that aren't present. If the fixes successfully address the prior concerns, acknowledge that clearly. If new issues were introduced by the fixes, flag them explicitly.
-
-The standard is: **Would a compliance-aware engineering lead approve this for production deployment at a legal technology company?**
-
-Proceed with the audit.
+Audit the entire application systematically. Do not skip files. Do not give partial verdicts. Apply all 8 gates to every relevant file. Output per-file JSON, then the Final Gate Assessment.
+```

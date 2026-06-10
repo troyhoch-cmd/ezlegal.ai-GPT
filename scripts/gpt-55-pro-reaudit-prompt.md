@@ -1,117 +1,112 @@
-# GPT-5.5 Pro Re-Audit Prompt (Post-Remediation)
+# GPT-5.5 Pro Re-Audit Prompt (Post-Remediation, June 2026)
 
-> **How to use:** Upload the file `scripts/output/restored-pages-audit-bundle.md` to your GPT session, then paste the prompt below.
+> **How to use:** Export the codebase with `node scripts/export-for-gpt-review.cjs`, upload the output files to your GPT session, then paste the prompt below. This prompt is for RE-AUDITING after fixes have been applied.
 
 ---
 
-## Prompt to Paste
+## Prompt
 
 ```
-You are re-auditing the ezLegal.ai platform after a full remediation pass was applied to address 11 BLOCK-level findings from the previous audit. Your job is to verify that each fix was correctly implemented and no new issues were introduced.
+You are re-auditing the ezLegal.ai platform after a comprehensive remediation pass. Your job is to verify that previously-identified issues have been correctly fixed and no regressions were introduced.
 
 ## Context
 
-ezLegal.ai is an AI-powered legal INFORMATION platform (not a law firm) serving consumers and SMBs who cannot afford a lawyer. The platform is bilingual (English/Spanish) and serves vulnerable populations including low-income users, immigrants, and non-English speakers.
+ezLegal.ai is an AI-powered legal INFORMATION platform (not a law firm) serving consumers, SMBs, and organizations who cannot afford traditional legal counsel. The platform is bilingual (English/Spanish) and serves vulnerable populations including low-income users, immigrants, and non-English speakers.
 
-## What Changed Since Last Audit
+## What Changed In This Remediation Pass (June 2026)
 
-The following remediations were applied:
+### 1. Bilingual Parity -- Site-Wide Fix
+The following pages were converted from English-only to full bilingual (EN/ES):
+- **ForStartups.tsx**: Full `Record<'en'|'es', ...>` UI object with translated headings, use cases, pain points, CTAs
+- **ForLawFirms.tsx**: Same pattern with law-firm-specific Spanish translations
+- **ForInHouse.tsx**: Same pattern with in-house legal Spanish translations
+- **ForOrganizations.tsx**: All content arrays (CAPABILITIES, USE_CASES, GOVERNANCE_LINKS) converted to bilingual; all inline section text rendered via language ternary
+- **HowItWorks.tsx**: STEPS array converted to bilingual `{en, es}` structure; scope disclaimer added
+- **MediaKit.tsx**: Dead buttons fixed, scope disclaimer added, all strings bilingual
 
-### 1. Critical Security Fixes
-- Research.tsx: Now uses `supabase.auth.getSession()` to get the user's session token for edge function calls instead of the anon key
-- Matters.tsx: Added `.eq('user_id', user.id)` to the loadMatters query to scope data by user
-- PartnerHub.tsx: Error handling now checks the Supabase response for errors and surfaces them to the user (no longer swallows errors silently)
-- Created `src/lib/safe-url.ts` with `sanitizeHref()` utility for URL validation
+### 2. Dead UI Elements Fixed
+- **MediaKit.tsx**: Dead `<button>` elements replaced with functional `<a download>` links; Copy button now uses `navigator.clipboard.writeText()` with visual feedback (Check icon on success)
 
-### 2. Broken Conversion Paths Fixed
-- Checkout.tsx: Removed hardcoded `disabled` attribute from "Continue to Payment" button
-- IssuePacks.tsx: Safety gate `onConfirm` now routes to `/checkout?plan=${packId}` instead of `/dashboard`
+### 3. Scope Disclaimers Added
+All consumer-facing pages now include an amber-bordered disclaimer banner:
+- "ezLegal.ai provides legal information, not legal advice. We are not a law firm and do not replace licensed attorneys."
+- Available in both EN and ES
+- Uses Scale icon from lucide-react for visual consistency
 
-### 3. Softened Claims
-- Negotiate.tsx: Removed "73%", "2-3x", "15 min", "AmLaw 100" unverified claims; replaced with qualified language ("Research suggests...", "can significantly improve...", "Professional negotiation frameworks")
-- Dashboard.tsx: Replaced fabricated "$X savings" calculation with actual questions-answered count
-- Checkout.tsx: Replaced "TLS 1.3 + AES-256" with "Encrypted checkout"
+### 4. GTM Components Made Bilingual
+- **FAQSection.tsx**: Parallel `FAQ_ITEMS_ES` array for Spanish; renders based on `useLanguage()`
+- **ICPSelector.tsx**: Spanish labels, pain points, outcomes, use cases, and CTAs for all 3 ICPs
+- **LegalReadinessWizard.tsx**: Complete 50+ string bilingual UI record; all wizard steps, validation errors, and result screens rendered in user's language
 
-### 4. Scope Disclaimers Added
-- Dashboard.tsx: Added legal information disclaimer at top of content area
-- Research.tsx: Added AI-generated results disclaimer under the page heading
+### 5. Content Corrections
+- "legal guidance" language replaced with "legal information" throughout (UPL-safer)
+- HowItWorks changed from "guidance journey" to "information journey"
+- MediaKit boilerplate changed from "legal guidance" to "legal information"
 
-### 5. Bilingual Parity
-- ChatV2.tsx: Translated "Now" label and tooltip title attributes
-- Profile.tsx: All error/success messages, photo upload errors, email change guidance now bilingual
-- Research.tsx: "No history" placeholder text now bilingual
-- Matters.tsx: Form placeholders now bilingual
+## Your Re-Audit Checklist
 
-### 6. Crisis Safety (Spanish Keywords + normalizeForCrisis)
-- ContextualCrisisAlert.tsx: Added 20+ Spanish crisis keywords across self_harm, domestic_violence, and homelessness categories
-- `detectCrisisSignal()` now calls `normalizeForCrisis()` internally for accent-insensitive matching
-- ChatV2.tsx already had `normalizeForCrisis` integrated (double-normalization is harmless)
+### A. Bilingual Parity Verification
+For each bilingual page, verify:
+- [ ] `useLanguage()` hook is imported and used
+- [ ] All user-facing headings have ES equivalent
+- [ ] All body text has ES equivalent
+- [ ] CTAs/buttons are translated
+- [ ] Form labels and validation errors are translated
+- [ ] FAQ/accordion content is translated
+- [ ] Scope disclaimer is bilingual
 
-### 7. Code Quality
-- Unused `SUPABASE_ANON_KEY` constant removed from Research.tsx
-- Dashboard savings widget replaced with real metric
+### B. UPL Compliance (Scope Disclaimers)
+- [ ] Every page with legal content has scope disclaimer
+- [ ] Disclaimer says "information" not "advice" or "guidance"
+- [ ] No attorney-client relationship implied
+- [ ] No outcome guarantees
+- [ ] Acceptable qualifiers used ("designed to", "intended to", "may help")
 
-## Your Audit Checklist (apply to EACH page)
+### C. Dead UI Verification
+- [ ] All buttons have functional handlers
+- [ ] Download links point to actual assets or use `download` attribute
+- [ ] Copy functionality uses clipboard API with user feedback
+- [ ] No `<button>` without `onClick` (or `type="submit"` in a form)
 
-### A. Lang Narrowing Pattern
-- Bilingual pages MUST have: `const lang = language === 'es' ? 'es' : 'en';`
-- English-only pages (TrustCenter, ForPartners) are exempt
+### D. Security Regression Check
+- [ ] No new hardcoded secrets introduced
+- [ ] Auth-gated operations still check user before Supabase calls
+- [ ] No `dangerouslySetInnerHTML` without sanitization
+- [ ] Edge Function calls still use proper auth headers
 
-### B. Softened Claims
-- MUST NOT contain: "attorney-reviewed", "reviewed by licensed attorneys", "lawyer-reviewed"
-- MUST NOT contain unverified statistics (73%, 2-3x, specific time claims)
-- MUST NOT imply attorney-client relationship unless explicitly disclaimed
-- Acceptable: "structured templates", "designed for common legal workflows", "research suggests"
+### E. Crisis Safety (Chat Interfaces)
+- [ ] `normalizeForCrisis` still in use for accent-insensitive matching
+- [ ] `detectCrisisSignal` still checks normalized text
+- [ ] Emergency resources still available in both languages
+- [ ] No crisis-related functionality was accidentally removed
 
-### C. Bilingual Parity
-- Every user-facing EN string must have an ES equivalent
-- ES copy must match EN meaning
-- Placeholders and error messages must be bilingual on bilingual pages
-
-### D. Scope Disclaimers
-- Pages offering legal content must include: "legal information, not legal advice"
-- No promise of specific outcomes
-
-### E. normalizeForCrisis (Chat/Crisis detection)
-- `detectCrisisSignal` must normalize text for accent-insensitive matching
-- Spanish crisis keywords must be present in CRISIS_KEYWORDS
-- ChatV2.tsx must import and use normalizeForCrisis
-
-### F. Security
-- No hardcoded API keys or anon keys used for authenticated operations
-- Auth-gated operations must check `user` before Supabase calls
-- Data queries must be scoped by user_id
-- Error states must be surfaced to users (no silent catch blocks)
-- No `dangerouslySetInnerHTML` without sanitization
-
-### G. Conversion Path Integrity
-- Checkout button must NOT be permanently disabled
-- Safety gate confirmation must route to checkout, not dashboard
-- Auth gates must redirect back to the intended page after login
-
-### H. React Best Practices
-- No memory leaks (effects cleaned up)
-- Proper key props on mapped elements
-- TypeScript types properly applied
+### F. Code Quality
+- [ ] No unused imports
+- [ ] TypeScript types properly applied (no `any`)
+- [ ] React keys on mapped elements
+- [ ] Effects have proper cleanup
+- [ ] No prop type mismatches from interface changes
 
 ## Output Format
 
-For EACH of the 11 pages, output:
+For EACH page reviewed, output:
 
 ```json
 {
   "file": "src/pages/PageName.tsx",
-  "verdict": "PASS" | "FAIL" | "WARN",
-  "lang_narrowing": "PASS" | "FAIL" | "EXEMPT",
-  "softened_claims": "PASS" | "FAIL",
+  "verdict": "PASS" | "WARN" | "FAIL" | "BLOCK",
   "bilingual_parity": "PASS" | "FAIL" | "EXEMPT",
-  "scope_disclaimers": "PASS" | "FAIL" | "N/A",
-  "normalize_for_crisis": "PASS" | "FAIL" | "N/A",
-  "security": "PASS" | "FAIL",
-  "conversion_path": "PASS" | "FAIL" | "N/A",
-  "react_quality": "PASS" | "WARN",
-  "issues": ["list of specific issues found"],
-  "recommendations": ["optional improvements that are NOT blockers"]
+  "scope_disclaimer": "PASS" | "FAIL" | "N/A",
+  "dead_ui": "PASS" | "FAIL" | "N/A",
+  "upl_compliance": "PASS" | "FAIL",
+  "security": "PASS" | "FAIL" | "WARN",
+  "crisis_safety": "PASS" | "FAIL" | "N/A",
+  "code_quality": "PASS" | "WARN",
+  "issues": [
+    { "severity": "BLOCK|HIGH|MEDIUM|LOW", "description": "...", "line": null }
+  ],
+  "regression_detected": false,
+  "fix_verified": true
 }
 ```
 
@@ -120,31 +115,35 @@ Then provide a Final Summary:
 ```json
 {
   "overall_verdict": "SHIP" | "FIX_THEN_SHIP" | "BLOCK",
-  "pass_count": N,
-  "fail_count": N,
-  "warn_count": N,
-  "critical_fixes_required": ["list if any -- only genuine blockers"],
-  "improvements_suggested": ["nice-to-haves that do not block shipping"],
-  "summary": "One paragraph assessment"
+  "total_files_reviewed": N,
+  "verdicts": { "PASS": N, "WARN": N, "FAIL": N, "BLOCK": N },
+  "regressions_found": [],
+  "fixes_verified": ["list of confirmed fixes"],
+  "remaining_issues": [
+    { "file": "...", "severity": "...", "issue": "...", "fix": "..." }
+  ],
+  "launch_recommendation": "One paragraph assessment"
 }
 ```
 
 ## Grading Guidance
 
-- **PASS**: The check is satisfied. Minor style preferences or theoretical improvements do NOT warrant FAIL.
-- **WARN**: A non-blocking concern exists (e.g., a placeholder that could be more descriptive). Does NOT count toward BLOCK.
-- **FAIL**: A genuine compliance, security, or functionality defect that must be fixed before shipping.
+- **PASS**: Check satisfied. Minor style preferences do NOT warrant FAIL.
+- **WARN**: Non-blocking concern (e.g., could be more descriptive). Does NOT count toward BLOCK.
+- **FAIL**: Genuine compliance, security, or functionality defect. Must fix before ship.
+- **BLOCK**: Critical issue that represents legal liability, safety risk, or data exposure.
 
-## Important Distinctions
+## Important Distinctions (Do NOT false-flag these)
 
-- Claims properly attributed to infrastructure providers (e.g., "AES-256 via our cloud infrastructure provider") are NOT violations -- they are factual descriptions of the deployment stack.
-- "SOC 2 Type II" attributed to Supabase (the infrastructure provider) is factual, not an unverified claim about ezLegal.
-- "99.9% target uptime" (with "target" qualifier) is acceptable.
-- "24hr response" for email support is a service commitment, not an unverified statistic.
-- A `lang` variable declared but unused (when the page uses `language === 'en'` directly) is a WARN at most, not a FAIL.
-- Placeholders in form inputs (e.g., "John Doe", "+1 (555) 123-4567") are acceptable as universal format examples and do NOT require translation.
+- `Record<'en'|'es', ...>` data structures with inline ternaries ARE valid bilingual patterns
+- Scope disclaimers using `Scale` icon in amber banners ARE proper implementation
+- `<a download>` elements for asset downloads ARE functional (even if assets don't exist yet in dev)
+- `navigator.clipboard.writeText()` IS a proper clipboard implementation
+- ICP content consumed from `gtm-content.ts` in English and translated inline at the component level IS acceptable (does not require modifying the shared content module)
+- The `useLanguage()` hook returning `{ language: string }` where language is 'en' | 'es' is the established pattern
+- Edge Functions deployed via Supabase MCP tools (not CLI) is the correct deployment mechanism
 
 ## Begin
 
-Review all 11 pages systematically. Be fair and precise -- flag real issues, not style preferences. Output one JSON block per file, then the Final Summary.
+Review ALL provided files systematically. Verify each previously-reported fix is correctly implemented. Flag any regressions. Output structured JSON for each file, then the Final Summary. Be fair -- this is a re-audit, not a new audit. Focus on verifying fixes and catching regressions.
 ```
