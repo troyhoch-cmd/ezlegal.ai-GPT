@@ -444,7 +444,7 @@ export default function Dashboard() {
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {entitlements.map((ent) => {
-                const statusInfo = getEntitlementStatusLabel(ent.status);
+                const statusInfo = getEntitlementStatusLabel(ent.status, lang);
                 return (
                   <div key={ent.id} className="border border-navy-200 rounded-lg p-3">
                     <div className="flex items-center justify-between mb-2">
@@ -460,7 +460,7 @@ export default function Dashboard() {
                     )}
                     {ent.expires_at && (
                       <p className="text-xs text-navy-400">
-                        {ent.status === 'active' ? t('dash.expires') : t('dash.expired')}: {new Date(ent.expires_at).toLocaleDateString()}
+                        {ent.status === 'active' ? t('dash.expires') : t('dash.expired')}: {new Date(ent.expires_at).toLocaleDateString(lang === 'es' ? 'es-MX' : 'en-US')}
                       </p>
                     )}
                     {ent.status === 'expired' && (

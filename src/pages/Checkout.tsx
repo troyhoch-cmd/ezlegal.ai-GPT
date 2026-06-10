@@ -189,6 +189,11 @@ export default function Checkout() {
 
       <div className="max-w-5xl mx-auto px-4 py-8">
         <h1 className="sr-only">{lang === 'en' ? 'Secure Checkout' : 'Pago Seguro'}</h1>
+        <div className="mb-6 px-4 py-3 bg-navy-50 border border-navy-200 rounded-xl text-sm text-navy-600">
+          {lang === 'en'
+            ? 'ezLegal.ai provides legal information, not legal advice. Purchasing an Issue Pack does not create an attorney-client relationship.'
+            : 'ezLegal.ai proporciona informacion legal, no asesoramiento legal. Comprar un Paquete no crea una relacion abogado-cliente.'}
+        </div>
         <button
           onClick={() => step === 'review' ? navigate(-1) : setStep('review')}
           className="flex items-center gap-2 text-navy-600 hover:text-navy-900 mb-6 font-medium text-sm"

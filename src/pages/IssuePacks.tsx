@@ -15,6 +15,15 @@ import InlineEmailCapture from '../components/InlineEmailCapture';
 import AttorneyReferralDisclosure from '../components/AttorneyReferralDisclosure';
 import RelatedLinks from '../components/RelatedLinks';
 
+const PACK_COLOR_MAP: Record<string, { iconBg: string; iconText: string }> = {
+  amber: { iconBg: 'bg-amber-50', iconText: 'text-amber-600' },
+  sky: { iconBg: 'bg-sky-50', iconText: 'text-sky-600' },
+  rose: { iconBg: 'bg-rose-50', iconText: 'text-rose-600' },
+  emerald: { iconBg: 'bg-emerald-50', iconText: 'text-emerald-600' },
+  teal: { iconBg: 'bg-teal-50', iconText: 'text-teal-600' },
+  gold: { iconBg: 'bg-gold-50', iconText: 'text-gold-600' },
+};
+
 const PACKS = [
   {
     id: 'immigration',
@@ -192,6 +201,16 @@ export default function IssuePacks() {
           </div>
         </section>
 
+        <section className="py-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="px-4 py-3 bg-navy-50 border border-navy-200 rounded-xl text-sm text-navy-600">
+              {language === 'en'
+                ? 'ezLegal.ai provides legal information, not legal advice. Issue Packs contain structured templates and general guidance. They do not create an attorney-client relationship.'
+                : 'ezLegal.ai proporciona informacion legal, no asesoramiento legal. Los Paquetes contienen plantillas estructuradas y orientacion general. No crean una relacion abogado-cliente.'}
+            </div>
+          </div>
+        </section>
+
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-8">
@@ -211,9 +230,9 @@ export default function IssuePacks() {
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-4">
                           <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
-                            pack.id === 'negotiation' ? 'bg-gold-400' : `bg-${pack.color}-50`
+                            pack.id === 'negotiation' ? 'bg-gold-400' : (PACK_COLOR_MAP[pack.color]?.iconBg || 'bg-navy-50')
                           }`}>
-                            <PackIcon className={`w-7 h-7 ${pack.id === 'negotiation' ? 'text-navy-900' : `text-${pack.color}-600`}`} />
+                            <PackIcon className={`w-7 h-7 ${pack.id === 'negotiation' ? 'text-navy-900' : (PACK_COLOR_MAP[pack.color]?.iconText || 'text-navy-600')}`} />
                           </div>
                           <div>
                             <h3 className={`text-xl font-bold ${pack.id === 'negotiation' ? 'text-white' : 'text-navy-900'}`}>

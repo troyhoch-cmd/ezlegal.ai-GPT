@@ -1,3 +1,4 @@
+import { supabase } from '../lib/supabase';
 import type { Citation } from '../lib/legalbreeze-api';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -211,6 +212,11 @@ class ChatService {
     this.userId = userId;
   }
 
+  private async getAuthToken(): Promise<string> {
+    const { data } = await supabase.auth.getSession();
+    return data.session?.access_token || SUPABASE_ANON_KEY;
+  }
+
   async sendMessage(
     query: string,
     documentContent?: string,
@@ -257,11 +263,13 @@ class ChatService {
         documentAttachments,
       };
 
+      const authToken = await this.getAuthToken();
+
       const response = await fetch(`${SUPABASE_URL}/functions/v1/openai-chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${authToken}`,
         },
         body: JSON.stringify(request),
       });
@@ -368,11 +376,13 @@ class ChatService {
         })),
       };
 
+      const ragToken = await this.getAuthToken();
+
       const response = await fetch(`${SUPABASE_URL}/functions/v1/legalbreeze-rag`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${ragToken}`,
           'X-Tenant-ID': 'ezlegal',
         },
         body: JSON.stringify(ragRequest),

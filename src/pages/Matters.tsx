@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 import {
   Plus, Search, Calendar, AlertCircle, CheckCircle, Clock, Filter,
   FolderOpen, FileText, Users, ChevronRight, Archive,
-  MoreVertical, Download, Scale, MapPin
+  Download, Scale, MapPin
 } from 'lucide-react';
 import { US_STATES } from '../data/jurisdictions';
 
@@ -32,20 +32,20 @@ interface MatterStats {
   on_hold: number;
 }
 
-const PRACTICE_AREAS = [
-  'Family Law',
-  'Criminal Defense',
-  'Immigration',
-  'Employment',
-  'Housing & Tenant Rights',
-  'Consumer Protection',
-  'Small Claims',
-  'Estate Planning',
-  'Business Formation',
-  'Contracts',
-  'Personal Injury',
-  'Civil Rights',
-];
+const PRACTICE_AREAS: Record<string, { en: string; es: string }> = {
+  family_law: { en: 'Family Law', es: 'Derecho Familiar' },
+  criminal_defense: { en: 'Criminal Defense', es: 'Defensa Penal' },
+  immigration: { en: 'Immigration', es: 'Inmigracion' },
+  employment: { en: 'Employment', es: 'Empleo' },
+  housing: { en: 'Housing & Tenant Rights', es: 'Vivienda y Derechos del Inquilino' },
+  consumer: { en: 'Consumer Protection', es: 'Proteccion al Consumidor' },
+  small_claims: { en: 'Small Claims', es: 'Demandas Menores' },
+  estate: { en: 'Estate Planning', es: 'Planificacion Patrimonial' },
+  business: { en: 'Business Formation', es: 'Formacion de Empresas' },
+  contracts: { en: 'Contracts', es: 'Contratos' },
+  personal_injury: { en: 'Personal Injury', es: 'Lesiones Personales' },
+  civil_rights: { en: 'Civil Rights', es: 'Derechos Civiles' },
+};
 
 export default function Matters() {
   const { user } = useAuth();
@@ -184,6 +184,16 @@ export default function Matters() {
       setExporting(false);
       setShowExportModal(false);
     }
+  };
+
+  const getPriorityLabel = (priority: string) => {
+    const labels: Record<string, { en: string; es: string }> = {
+      urgent: { en: 'Urgent', es: 'Urgente' },
+      high: { en: 'High', es: 'Alta' },
+      medium: { en: 'Medium', es: 'Media' },
+      low: { en: 'Low', es: 'Baja' },
+    };
+    return labels[priority]?.[lang] || priority;
   };
 
   const getPriorityColor = (priority: string) => {
@@ -331,8 +341,8 @@ export default function Matters() {
                   className="pl-9 pr-8 py-2.5 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600 appearance-none bg-white text-sm"
                 >
                   <option value="all">{t('matters.allPracticeAreas')}</option>
-                  {PRACTICE_AREAS.map(area => (
-                    <option key={area} value={area}>{area}</option>
+                  {Object.entries(PRACTICE_AREAS).map(([key, names]) => (
+                    <option key={key} value={names.en}>{lang === 'en' ? names.en : names.es}</option>
                   ))}
                 </select>
               </div>
@@ -384,7 +394,7 @@ export default function Matters() {
                             {matter.title}
                           </h3>
                           <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getPriorityColor(matter.priority)}`}>
-                            {matter.priority}
+                            {getPriorityLabel(matter.priority)}
                           </span>
                         </div>
 
@@ -427,9 +437,6 @@ export default function Matters() {
                         >
                           <Download className="w-5 h-5" />
                         </button>
-                        <button className="p-2 text-navy-400 hover:text-navy-600 hover:bg-navy-100 rounded-lg transition-colors">
-                          <MoreVertical className="w-5 h-5" />
-                        </button>
                       </div>
                     </div>
 
@@ -445,7 +452,7 @@ export default function Matters() {
                         </div>
                         <div className="flex items-center gap-1.5">
                           <Calendar className="w-4 h-4" />
-                          <span>{t('matters.updated')} {new Date(matter.updated_at).toLocaleDateString()}</span>
+                          <span>{t('matters.updated')} {new Date(matter.updated_at).toLocaleDateString(lang === 'es' ? 'es-MX' : 'en-US')}</span>
                         </div>
                       </div>
 
@@ -501,8 +508,8 @@ export default function Matters() {
                     className="w-full px-4 py-2.5 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
                   >
                     <option value="">{t('matters.selectPracticeArea')}</option>
-                    {PRACTICE_AREAS.map(area => (
-                      <option key={area} value={area}>{area}</option>
+                    {Object.entries(PRACTICE_AREAS).map(([key, names]) => (
+                      <option key={key} value={names.en}>{lang === 'en' ? names.en : names.es}</option>
                     ))}
                   </select>
                 </div>

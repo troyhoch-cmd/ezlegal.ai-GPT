@@ -40,23 +40,23 @@ interface ParsedResults {
   disclaimer: string;
 }
 
-const categories = [
-  'Contract Law',
-  'Criminal Law',
-  'Family Law',
-  'Corporate Law',
-  'Intellectual Property',
-  'Employment Law',
-  'Real Estate Law',
-  'Tax Law',
-  'Immigration Law',
-  'Personal Injury',
-  'Bankruptcy',
-  'Civil Rights',
-  'Environmental Law',
-  'Healthcare Law',
-  'Securities Law',
-];
+const CATEGORIES: Record<string, { en: string; es: string }> = {
+  contract_law: { en: 'Contract Law', es: 'Derecho Contractual' },
+  criminal_law: { en: 'Criminal Law', es: 'Derecho Penal' },
+  family_law: { en: 'Family Law', es: 'Derecho Familiar' },
+  corporate_law: { en: 'Corporate Law', es: 'Derecho Corporativo' },
+  intellectual_property: { en: 'Intellectual Property', es: 'Propiedad Intelectual' },
+  employment_law: { en: 'Employment Law', es: 'Derecho Laboral' },
+  real_estate_law: { en: 'Real Estate Law', es: 'Derecho Inmobiliario' },
+  tax_law: { en: 'Tax Law', es: 'Derecho Fiscal' },
+  immigration_law: { en: 'Immigration Law', es: 'Derecho Migratorio' },
+  personal_injury: { en: 'Personal Injury', es: 'Lesiones Personales' },
+  bankruptcy: { en: 'Bankruptcy', es: 'Bancarrota' },
+  civil_rights: { en: 'Civil Rights', es: 'Derechos Civiles' },
+  environmental_law: { en: 'Environmental Law', es: 'Derecho Ambiental' },
+  healthcare_law: { en: 'Healthcare Law', es: 'Derecho de Salud' },
+  securities_law: { en: 'Securities Law', es: 'Derecho de Valores' },
+};
 
 const sourceTypes = [
   { id: 'case_law', label: 'Case Law', icon: Scale, description: 'Court decisions and judicial opinions' },
@@ -312,7 +312,7 @@ This research is for informational purposes only and does not constitute legal a
       }
     } catch (error) {
       console.error('Research error:', error);
-      setSearchResults('An error occurred while performing the research. Please try again.');
+      setSearchResults(lang === 'en' ? 'An error occurred while performing the research. Please try again.' : 'Ocurrio un error al realizar la investigacion. Intente de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -475,9 +475,9 @@ This research is for informational purposes only and does not constitute legal a
                     className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                   >
                     <option value="">{t('research.allPracticeAreas')}</option>
-                    {categories.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
+                    {Object.entries(CATEGORIES).map(([key, names]) => (
+                      <option key={key} value={names.en}>
+                        {lang === 'en' ? names.en : names.es}
                       </option>
                     ))}
                   </select>

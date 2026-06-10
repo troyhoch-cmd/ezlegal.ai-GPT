@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { Loader2, Mic, Paperclip, Sparkles, ArrowUp, ChevronDown } from 'lucide-react';
+import { Loader2, Sparkles, ArrowUp, ChevronDown } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import {
@@ -524,20 +524,9 @@ export default function ChatV2() {
                 />
                 {showAdvancedFeatures && (
                   <div className="absolute right-2 bottom-2 flex items-center gap-1">
-                    <button
-                      className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors"
-                      aria-label={en ? 'Attach file' : 'Adjuntar archivo'}
-                      title={en ? 'Attach document' : 'Adjuntar documento'}
-                    >
-                      <Paperclip className="w-4 h-4" />
-                    </button>
-                    <button
-                      className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors"
-                      aria-label={en ? 'Voice input' : 'Entrada de voz'}
-                      title={en ? 'Voice input' : 'Entrada de voz'}
-                    >
-                      <Mic className="w-4 h-4" />
-                    </button>
+                    <span className="text-xs text-slate-400 px-2">
+                      {en ? 'Shift+Enter for new line' : 'Shift+Enter nueva linea'}
+                    </span>
                   </div>
                 )}
               </div>

@@ -119,7 +119,7 @@ export default function Profile() {
       }
     } catch (error) {
       console.error('Error loading profile:', error);
-      setMessage({ type: 'error', text: 'Failed to load profile data' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Failed to load profile data' : 'Error al cargar datos del perfil' });
     } finally {
       setLoading(false);
     }
@@ -216,7 +216,7 @@ export default function Profile() {
     try {
       const { data: session } = await supabase.auth.getSession();
       if (!session?.session?.access_token) {
-        throw new Error('No active session');
+        throw new Error(lang === 'en' ? 'No active session' : 'Sin sesion activa');
       }
 
       const response = await fetch(
@@ -270,7 +270,7 @@ export default function Profile() {
     try {
       const { data: session } = await supabase.auth.getSession();
       if (!session?.session?.access_token) {
-        throw new Error('No active session');
+        throw new Error(lang === 'en' ? 'No active session' : 'Sin sesion activa');
       }
 
       const response = await fetch(
@@ -301,7 +301,7 @@ export default function Profile() {
       } else if (result.status === 'scheduled') {
         setMessage({ type: 'success', text: result.message });
       } else {
-        setMessage({ type: 'success', text: 'Your data has been deleted successfully' });
+        setMessage({ type: 'success', text: lang === 'en' ? 'Your data has been deleted successfully' : 'Tus datos se han eliminado exitosamente' });
       }
 
       setShowDeleteConfirm(false);
@@ -309,7 +309,7 @@ export default function Profile() {
       loadDataRequests();
     } catch (error) {
       console.error('Deletion error:', error);
-      setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to request deletion' });
+      setMessage({ type: 'error', text: error instanceof Error ? error.message : (lang === 'en' ? 'Failed to request deletion' : 'Error al solicitar eliminacion') });
     } finally {
       setDataDeleting(false);
     }
@@ -325,11 +325,11 @@ export default function Profile() {
 
       if (error) throw error;
 
-      setMessage({ type: 'success', text: 'Deletion request cancelled' });
+      setMessage({ type: 'success', text: lang === 'en' ? 'Deletion request cancelled' : 'Solicitud de eliminacion cancelada' });
       loadDataRequests();
     } catch (error) {
       console.error('Cancel error:', error);
-      setMessage({ type: 'error', text: 'Failed to cancel deletion request' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Failed to cancel deletion request' : 'Error al cancelar solicitud de eliminacion' });
     }
   };
 
@@ -840,9 +840,9 @@ export default function Profile() {
                           {deletionRequests.filter(r => ['pending', 'verified', 'scheduled'].includes(r.status)).map((req) => (
                             <div key={req.id} className="mt-2 text-sm text-amber-700">
                               <p>
-                                Status: <span className="capitalize font-medium">{req.status}</span>
+                                {lang === 'en' ? 'Status' : 'Estado'}: <span className="capitalize font-medium">{req.status}</span>
                                 {req.scheduled_for && (
-                                  <> - Scheduled for {new Date(req.scheduled_for).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')}</>
+                                  <> - {lang === 'en' ? 'Scheduled for' : 'Programado para'} {new Date(req.scheduled_for).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')}</>
                                 )}
                               </p>
                               <button
@@ -879,7 +879,7 @@ export default function Profile() {
                         type="text"
                         value={deleteConfirmText}
                         onChange={(e) => setDeleteConfirmText(e.target.value)}
-                        placeholder='Type "DELETE" to confirm'
+                        placeholder={lang === 'en' ? 'Type "DELETE" to confirm' : 'Escribe "DELETE" para confirmar'}
                         className="w-full max-w-xs px-4 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent mb-4"
                       />
                       <div className="flex flex-wrap gap-3">
