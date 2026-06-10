@@ -49,7 +49,8 @@ const PRACTICE_AREAS = [
 
 export default function Matters() {
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
   const [matters, setMatters] = useState<Matter[]>([]);
   const [filteredMatters, setFilteredMatters] = useState<Matter[]>([]);
   const [stats, setStats] = useState<MatterStats>({ total: 0, open: 0, closed: 0, on_hold: 0 });

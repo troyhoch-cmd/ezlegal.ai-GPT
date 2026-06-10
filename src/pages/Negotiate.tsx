@@ -12,6 +12,7 @@ import NegotiationStrategyQuiz from '../components/NegotiationStrategyQuiz';
 
 export default function Negotiate() {
   const { language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
   const { isOrganization, isBusiness } = usePersonaRouting();
   const [showPlanner, setShowPlanner] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);

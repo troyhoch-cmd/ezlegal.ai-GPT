@@ -187,6 +187,7 @@ function getModelColors(color: string) {
 
 export default function PartnerHub() {
   const { language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
   const { user } = useAuth();
   const es = language === 'es';
   const [searchParams] = useSearchParams();

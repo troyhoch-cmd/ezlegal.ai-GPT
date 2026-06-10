@@ -15,6 +15,7 @@ import GuidedChatTour from '../components/GuidedChatTour';
 import AIModelSelector from '../components/AIModelSelector';
 import JurisdictionSelector from '../components/shared/JurisdictionSelector';
 import { supabase } from '../lib/supabase';
+import { normalizeForCrisis } from '../lib/text-utils';
 import { chatService } from '../services/chat-service';
 import type { ChatMessage, ThinkingDetails } from '../services/chat-service';
 import {
@@ -317,7 +318,7 @@ export default function ChatV2() {
     : [];
 
   const hasCrisisSignal = messages.some(
-    (m) => m.role === 'user' && detectCrisisSignal(m.content)
+    (m) => m.role === 'user' && detectCrisisSignal(normalizeForCrisis(m.content))
   );
 
   return (

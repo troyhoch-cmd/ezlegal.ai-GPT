@@ -151,7 +151,7 @@ export default function IssuePacks() {
   const { user } = useAuth();
   const { language } = useLanguage();
   const [safetyGatePack, setSafetyGatePack] = useState<{ id: string; name: string } | null>(null);
-  const lang = language === 'en' ? 'en' : 'es';
+  const lang = language === 'es' ? 'es' : 'en';
 
   const handlePurchase = (pack: typeof PACKS[0]) => {
     if (pack.highRisk) {
@@ -180,8 +180,8 @@ export default function IssuePacks() {
             </h1>
             <p className="text-xl text-navy-100 max-w-3xl mx-auto mb-8">
               {language === 'en'
-                ? 'Each Issue Pack gives you a complete action plan built from attorney-reviewed templates, with document checklists, deadline trackers, and a matched attorney referral for your specific legal situation.'
-                : 'Cada Paquete te da un plan de accion completo basado en plantillas revisadas por abogados, con listas de verificacion, rastreadores de fechas y referencia a abogado.'
+                ? 'Each Issue Pack gives you a complete action plan built from structured templates, with document checklists, deadline trackers, and a matched attorney referral for your specific legal situation.'
+                : 'Cada Paquete te da un plan de accion completo basado en plantillas estructuradas, con listas de verificacion, rastreadores de fechas y referencia a abogado.'
               }
             </p>
             <div className="flex items-center justify-center gap-8 text-sm text-navy-200">
@@ -334,18 +334,18 @@ export default function IssuePacks() {
               <div>
                 <h3 className="font-bold text-navy-900 mb-3 flex items-center gap-2">
                   <Shield className="w-5 h-5 text-teal-600" />
-                  {language === 'en' ? 'What "Attorney-Reviewed Templates" Means' : 'Que Significa "Plantillas Revisadas por Abogados"'}
+                  {language === 'en' ? 'What "Structured Templates" Means' : 'Que Significa "Plantillas Estructuradas"'}
                 </h3>
                 <ul className="space-y-2 text-sm text-navy-600">
                   {(language === 'en' ? [
-                    'Template documents and checklists are reviewed by licensed attorneys for legal accuracy',
+                    'Template documents and checklists are designed for common legal workflows',
                     'Templates are general-purpose, not customized legal advice for your specific case',
-                    'Review is at the template level, not per-user or per-purchase',
+                    'Content is periodically reviewed for accuracy and completeness',
                     'This does not create an attorney-client relationship',
                   ] : [
-                    'Las plantillas son revisadas por abogados licenciados para precision legal',
+                    'Las plantillas estan disenadas para flujos legales comunes',
                     'Las plantillas son de proposito general, no asesoria legal personalizada',
-                    'La revision es a nivel de plantilla, no por usuario o por compra',
+                    'El contenido se revisa periodicamente para precision y completitud',
                     'Esto no crea una relacion abogado-cliente',
                   ]).map((item, i) => (
                     <li key={i} className="flex items-start gap-2">

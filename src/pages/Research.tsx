@@ -80,7 +80,8 @@ export default function Research() {
   const [activeTab, setActiveTab] = useState<'search' | 'history'>('search');
   const [expandedHistoryIds, setExpandedHistoryIds] = useState<Set<string>>(new Set());
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
 
   useEffect(() => {
     loadQueries();

@@ -19,6 +19,7 @@ interface ProfileData {
 export default function Profile() {
   const { user, refreshProfile } = useAuth();
   const { t, language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
