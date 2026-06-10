@@ -1,41 +1,54 @@
 import { Link } from 'react-router-dom';
-import { CheckCircle, MessageSquare, FileText, Users, ArrowRight } from 'lucide-react';
+import { CheckCircle, MessageSquare, FileText, Users, ArrowRight, Scale } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface Step {
   icon: typeof MessageSquare;
-  title: string;
-  description: string;
+  title: { en: string; es: string };
+  description: { en: string; es: string };
 }
 
 const STEPS: Step[] = [
   {
     icon: MessageSquare,
-    title: 'Tell Us Your Situation',
-    description: 'Describe your legal issue and circumstances through guided questions.',
+    title: { en: 'Tell Us Your Situation', es: 'Cuéntenos Su Situación' },
+    description: {
+      en: 'Describe your legal issue and circumstances through guided questions.',
+      es: 'Describa su problema legal y circunstancias a través de preguntas guiadas.',
+    },
   },
   {
     icon: FileText,
-    title: 'Get AI Guidance',
-    description: 'Receive personalized legal information and recommendations.',
+    title: { en: 'Get AI Guidance', es: 'Obtenga Orientación de IA' },
+    description: {
+      en: 'Receive personalized legal information and recommendations.',
+      es: 'Reciba información legal personalizada y recomendaciones.',
+    },
   },
   {
     icon: Users,
-    title: 'Generate Documents',
-    description: 'Create customizable legal documents tailored to your case.',
+    title: { en: 'Generate Documents', es: 'Genere Documentos' },
+    description: {
+      en: 'Create customizable legal documents tailored to your case.',
+      es: 'Cree documentos legales personalizables adaptados a su caso.',
+    },
   },
   {
     icon: CheckCircle,
-    title: 'Connect with Attorney',
-    description: 'Find and connect with a licensed attorney if needed.',
+    title: { en: 'Connect with Attorney', es: 'Conéctese con un Abogado' },
+    description: {
+      en: 'Find and connect with a licensed attorney if needed.',
+      es: 'Encuentre y conéctese con un abogado licenciado si es necesario.',
+    },
   },
 ];
 
 export default function HowItWorks() {
   const { language } = useLanguage();
-  const en = language === 'en';
+  const lang = language === 'es' ? 'es' : 'en' as const;
+  const en = lang === 'en';
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
@@ -48,8 +61,17 @@ export default function HowItWorks() {
             </h1>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
               {en
-                ? 'Four simple steps to get legal guidance and support.'
-                : 'Cuatro pasos simples para obtener orientación y apoyo legal.'}
+                ? 'Four simple steps to get legal information and support.'
+                : 'Cuatro pasos simples para obtener información y apoyo legal.'}
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-amber-300 bg-amber-50 p-4 mb-12 flex items-start gap-3 max-w-3xl mx-auto">
+            <Scale className="w-5 h-5 text-amber-700 mt-0.5 flex-shrink-0" />
+            <p className="text-sm text-amber-800">
+              {en
+                ? 'ezLegal.ai provides legal information, not legal advice. We are not a law firm and do not replace licensed attorneys.'
+                : 'ezLegal.ai proporciona información legal, no asesoramiento legal. No somos un bufete de abogados y no reemplazamos a abogados licenciados.'}
             </p>
           </div>
 
@@ -66,9 +88,9 @@ export default function HowItWorks() {
                       {index + 1}
                     </div>
                     <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                      {step.title}
+                      {step.title[lang]}
                     </h3>
-                    <p className="text-slate-600">{step.description}</p>
+                    <p className="text-slate-600">{step.description[lang]}</p>
                   </div>
                   {index < STEPS.length - 1 && (
                     <div className="hidden lg:block absolute -right-4 top-1/2 transform -translate-y-1/2">
@@ -82,12 +104,12 @@ export default function HowItWorks() {
 
           <div className="bg-teal-50 border border-teal-200 rounded-xl p-12 text-center">
             <h2 className="text-2xl font-bold text-slate-900 mb-3">
-              {en ? 'Ready to Get Started?' : 'Listo para Comenzar?'}
+              {en ? 'Ready to Get Started?' : '¿Listo para Comenzar?'}
             </h2>
             <p className="text-slate-700 mb-8 max-w-2xl mx-auto">
               {en
-                ? 'Start your legal guidance journey today.'
-                : 'Comienza tu viaje de orientación legal hoy.'}
+                ? 'Start your legal information journey today.'
+                : 'Comience su viaje de información legal hoy.'}
             </p>
             <Link
               to="/start"
