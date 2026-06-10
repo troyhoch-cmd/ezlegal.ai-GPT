@@ -105,8 +105,8 @@ export default function Negotiate() {
                 </h1>
                 <p className="text-navy-600">
                   {language === 'en'
-                    ? 'AmLaw 100 tactics, simplified for everyone'
-                    : 'Tacticas de AmLaw 100, simplificadas para todos'
+                    ? 'Professional negotiation frameworks, simplified for everyone'
+                    : 'Marcos de negociacion profesional, simplificados para todos'
                   }
                 </p>
               </div>
@@ -351,12 +351,12 @@ export default function Negotiate() {
                     <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
                       <DollarSign className="w-5 h-5 text-green-400" />
                     </div>
-                    <div className="text-2xl font-bold">73%</div>
+                    <div className="text-2xl font-bold">{language === 'en' ? 'Better outcomes' : 'Mejores resultados'}</div>
                   </div>
                   <p className="text-sm text-white/60">
                     {language === 'en'
-                      ? 'of people who prepare a negotiation strategy get better outcomes than those who wing it (Harvard PON research)'
-                      : 'de las personas que preparan una estrategia de negociacion obtienen mejores resultados que los que improvisan (investigacion Harvard PON)'
+                      ? 'Research suggests that people who prepare a negotiation strategy tend to achieve better outcomes than those who do not (Harvard PON)'
+                      : 'La investigacion sugiere que las personas que preparan una estrategia de negociacion tienden a obtener mejores resultados que los que no (Harvard PON)'
                     }
                   </p>
                 </div>
@@ -366,12 +366,12 @@ export default function Negotiate() {
                     <div className="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center">
                       <Target className="w-5 h-5 text-teal-400" />
                     </div>
-                    <div className="text-2xl font-bold">2-3x</div>
+                    <div className="text-2xl font-bold">{language === 'en' ? 'Stronger position' : 'Posicion mas fuerte'}</div>
                   </div>
                   <p className="text-sm text-white/60">
                     {language === 'en'
-                      ? 'the initial offer - typical improvement from proper anchoring technique (Galinsky & Mussweiler, negotiation research)'
-                      : 'la oferta inicial - mejora tipica de la tecnica de anclaje adecuada (Galinsky & Mussweiler, investigacion de negociacion)'
+                      ? 'Proper anchoring and preparation techniques can significantly improve negotiation results (Galinsky & Mussweiler)'
+                      : 'Las tecnicas adecuadas de anclaje y preparacion pueden mejorar significativamente los resultados de negociacion (Galinsky & Mussweiler)'
                     }
                   </p>
                 </div>
@@ -381,12 +381,12 @@ export default function Negotiate() {
                     <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
                       <Clock className="w-5 h-5 text-amber-400" />
                     </div>
-                    <div className="text-2xl font-bold">15 min</div>
+                    <div className="text-2xl font-bold">{language === 'en' ? 'Quick prep' : 'Preparacion rapida'}</div>
                   </div>
                   <p className="text-sm text-white/60">
                     {language === 'en'
-                      ? 'average time to complete your negotiation strategy - worth hours of better outcomes'
-                      : 'tiempo promedio para completar tu estrategia de negociacion - vale horas de mejores resultados'
+                      ? 'Complete your negotiation strategy in minutes - a small investment for potentially better outcomes'
+                      : 'Completa tu estrategia de negociacion en minutos - una pequena inversion para potencialmente mejores resultados'
                     }
                   </p>
                 </div>
@@ -414,8 +414,8 @@ export default function Negotiate() {
 
           <p className="text-navy-600 mb-8 max-w-2xl mx-auto">
             {language === 'en'
-              ? "Stop going into negotiations unprepared. In 15 minutes, you'll have a complete strategy with scripts, tactics, and numbers."
-              : "Deja de entrar a negociaciones sin preparacion. En 15 minutos, tendras una estrategia completa con guiones, tacticas y numeros."
+              ? "Stop going into negotiations unprepared. Build a complete strategy with scripts, tactics, and numbers."
+              : "Deja de entrar a negociaciones sin preparacion. Construye una estrategia completa con guiones, tacticas y numeros."
             }
           </p>
 

@@ -1,6 +1,6 @@
 # ezLegal.ai -- Restored Pages Audit Bundle
 
-**Generated:** 2026-06-10T00:29:40.994Z
+**Generated:** 2026-06-10T03:30:11.637Z
 
 **Purpose:** GPT-5.5 Pro compliance audit of 11 restored pages after content regression fix + compliance pass.
 
@@ -337,7 +337,7 @@ export default function ChatV2() {
     ? [{
         id: chatService.getSessionId(),
         title: messages[0]?.content.substring(0, 30) + '...',
-        date: 'Now',
+        date: en ? 'Now' : 'Ahora',
       }]
     : [];
 
@@ -551,14 +551,14 @@ export default function ChatV2() {
                     <button
                       className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors"
                       aria-label={en ? 'Attach file' : 'Adjuntar archivo'}
-                      title="Attach document"
+                      title={en ? 'Attach document' : 'Adjuntar documento'}
                     >
                       <Paperclip className="w-4 h-4" />
                     </button>
                     <button
                       className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors"
                       aria-label={en ? 'Voice input' : 'Entrada de voz'}
-                      title="Voice input"
+                      title={en ? 'Voice input' : 'Entrada de voz'}
                     >
                       <Mic className="w-4 h-4" />
                     </button>
@@ -606,7 +606,7 @@ export default function ChatV2() {
 
 ---
 
-## src/pages/Dashboard.tsx (725 lines)
+## src/pages/Dashboard.tsx (730 lines)
 
 ```tsx
 import { useState, useEffect } from 'react';
@@ -887,6 +887,11 @@ export default function Dashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-4 px-4 py-3 bg-navy-50 border border-navy-200 rounded-xl text-sm text-navy-600">
+          {lang === 'en'
+            ? 'ezLegal.ai provides legal information, not legal advice. This does not create an attorney-client relationship.'
+            : 'ezLegal.ai proporciona informacion legal, no asesoramiento legal. Esto no crea una relacion abogado-cliente.'}
+        </div>
         <PostPurchaseActivation />
         <TrialOnboarding />
 
@@ -1160,8 +1165,8 @@ export default function Dashboard() {
                     <DollarSign className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-navy-900">${(stats.chatsThisMonth * 150).toLocaleString()}</p>
-                    <p className="text-sm text-navy-600">{t('dash.estimatedValue')}</p>
+                    <p className="text-2xl font-bold text-navy-900">{stats.chatsThisMonth}</p>
+                    <p className="text-sm text-navy-600">{t('dash.questionsAnswered')}</p>
                   </div>
                 </div>
               </div>
@@ -1338,7 +1343,7 @@ export default function Dashboard() {
 
 ---
 
-## src/pages/Checkout.tsx (402 lines)
+## src/pages/Checkout.tsx (401 lines)
 
 ```tsx
 import { useState } from 'react';
@@ -1609,8 +1614,7 @@ export default function Checkout() {
 
                 <button
                   onClick={() => setStep('payment')}
-                  disabled
-                  className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2"
                 >
                   {lang === 'en' ? 'Continue to Payment' : 'Continuar al Pago'}
                   <ArrowRight className="w-5 h-5" />
@@ -1731,7 +1735,7 @@ export default function Checkout() {
                 </div>
               </div>
               <div className="space-y-2 text-xs text-navy-500">
-                <div className="flex items-center gap-2"><Lock className="w-3 h-3 text-green-600" /> TLS 1.3 + AES-256</div>
+                <div className="flex items-center gap-2"><Lock className="w-3 h-3 text-green-600" /> {lang === 'en' ? 'Encrypted checkout' : 'Pago encriptado'}</div>
                 <div className="flex items-center gap-2"><Shield className="w-3 h-3 text-green-600" /> {lang === 'en' ? '7-day refund guarantee' : 'Garantia de 7 dias'}</div>
                 <div className="flex items-center gap-2"><Zap className="w-3 h-3 text-green-600" /> {lang === 'en' ? 'Instant access' : 'Acceso instantaneo'}</div>
               </div>
@@ -1747,7 +1751,7 @@ export default function Checkout() {
 
 ---
 
-## src/pages/Profile.tsx (948 lines)
+## src/pages/Profile.tsx (949 lines)
 
 ```tsx
 import { useState, useEffect, useRef } from 'react';
@@ -1887,7 +1891,7 @@ export default function Profile() {
       const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
 
       if (emailChanged && !emailValid) {
-        setMessage({ type: 'error', text: 'Please enter a valid email address.' });
+        setMessage({ type: 'error', text: lang === 'en' ? 'Please enter a valid email address.' : 'Por favor ingresa un correo electronico valido.' });
         setSaving(false);
         return;
       }
@@ -1913,10 +1917,10 @@ export default function Profile() {
         if (emailErr) throw emailErr;
         setMessage({
           type: 'success',
-          text: 'Profile saved. Check your new inbox to confirm the email change.',
+          text: lang === 'en' ? 'Profile saved. Check your new inbox to confirm the email change.' : 'Perfil guardado. Revisa tu nueva bandeja para confirmar el cambio de correo.',
         });
       } else {
-        setMessage({ type: 'success', text: 'Profile updated successfully' });
+        setMessage({ type: 'success', text: lang === 'en' ? 'Profile updated successfully' : 'Perfil actualizado exitosamente' });
       }
 
       await refreshProfile();
@@ -1931,12 +1935,12 @@ export default function Profile() {
 
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setMessage({ type: 'error', text: 'Passwords do not match' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Passwords do not match' : 'Las contrasenas no coinciden' });
       return;
     }
 
     if (passwordData.newPassword.length < 6) {
-      setMessage({ type: 'error', text: 'Password must be at least 6 characters' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Password must be at least 6 characters' : 'La contrasena debe tener al menos 6 caracteres' });
       return;
     }
 
@@ -1950,11 +1954,11 @@ export default function Profile() {
 
       if (error) throw error;
 
-      setMessage({ type: 'success', text: 'Password updated successfully' });
+      setMessage({ type: 'success', text: lang === 'en' ? 'Password updated successfully' : 'Contrasena actualizada exitosamente' });
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (error) {
       console.error('Error updating password:', error);
-      setMessage({ type: 'error', text: 'Failed to update password' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Failed to update password' : 'Error al actualizar la contrasena' });
     } finally {
       setSaving(false);
     }
@@ -2004,11 +2008,11 @@ export default function Profile() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      setMessage({ type: 'success', text: 'Your data has been exported successfully' });
+      setMessage({ type: 'success', text: lang === 'en' ? 'Your data has been exported successfully' : 'Tus datos se han exportado exitosamente' });
       loadDataRequests();
     } catch (error) {
       console.error('Export error:', error);
-      setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to export data' });
+      setMessage({ type: 'error', text: error instanceof Error ? error.message : (lang === 'en' ? 'Failed to export data' : 'Error al exportar datos') });
     } finally {
       setDataExporting(false);
     }
@@ -2090,13 +2094,13 @@ export default function Profile() {
     if (!file || !user) return;
 
     if (file.size > 2097152) {
-      setMessage({ type: 'error', text: 'File size must be less than 2MB' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'File size must be less than 2MB' : 'El archivo debe ser menor de 2MB' });
       return;
     }
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
-      setMessage({ type: 'error', text: 'Only JPEG, PNG, WebP, and GIF images are allowed' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Only JPEG, PNG, WebP, and GIF images are allowed' : 'Solo se permiten imagenes JPEG, PNG, WebP y GIF' });
       return;
     }
 
@@ -2130,10 +2134,10 @@ export default function Profile() {
       if (updateError) throw updateError;
 
       await refreshProfile();
-      setMessage({ type: 'success', text: 'Profile photo updated successfully' });
+      setMessage({ type: 'success', text: lang === 'en' ? 'Profile photo updated successfully' : 'Foto de perfil actualizada exitosamente' });
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      setMessage({ type: 'error', text: 'Failed to upload photo' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Failed to upload photo' : 'Error al subir la foto' });
     } finally {
       setUploading(false);
     }
@@ -2244,7 +2248,7 @@ export default function Profile() {
                       onClick={() => avatarInputRef.current?.click()}
                       disabled={uploading}
                       className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-lg border border-navy-200 hover:bg-navy-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      title="Upload photo"
+                      title={lang === 'en' ? 'Upload photo' : 'Subir foto'}
                     >
                       <Camera className="w-4 h-4 text-navy-600" />
                     </button>
@@ -2290,8 +2294,9 @@ export default function Profile() {
                       className="w-full px-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-navy-900"
                     />
                     <p className="mt-1 text-xs text-navy-500">
-                      Changing your email sends a confirmation link to the new address. The change
-                      takes effect after you confirm it.
+                      {lang === 'en'
+                        ? 'Changing your email sends a confirmation link to the new address. The change takes effect after you confirm it.'
+                        : 'Cambiar tu correo envia un enlace de confirmacion a la nueva direccion. El cambio se aplica despues de confirmarlo.'}
                     </p>
                   </div>
 
@@ -2812,8 +2817,8 @@ export default function Negotiate() {
                 </h1>
                 <p className="text-navy-600">
                   {language === 'en'
-                    ? 'AmLaw 100 tactics, simplified for everyone'
-                    : 'Tacticas de AmLaw 100, simplificadas para todos'
+                    ? 'Professional negotiation frameworks, simplified for everyone'
+                    : 'Marcos de negociacion profesional, simplificados para todos'
                   }
                 </p>
               </div>
@@ -3058,12 +3063,12 @@ export default function Negotiate() {
                     <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
                       <DollarSign className="w-5 h-5 text-green-400" />
                     </div>
-                    <div className="text-2xl font-bold">73%</div>
+                    <div className="text-2xl font-bold">{language === 'en' ? 'Better outcomes' : 'Mejores resultados'}</div>
                   </div>
                   <p className="text-sm text-white/60">
                     {language === 'en'
-                      ? 'of people who prepare a negotiation strategy get better outcomes than those who wing it (Harvard PON research)'
-                      : 'de las personas que preparan una estrategia de negociacion obtienen mejores resultados que los que improvisan (investigacion Harvard PON)'
+                      ? 'Research suggests that people who prepare a negotiation strategy tend to achieve better outcomes than those who do not (Harvard PON)'
+                      : 'La investigacion sugiere que las personas que preparan una estrategia de negociacion tienden a obtener mejores resultados que los que no (Harvard PON)'
                     }
                   </p>
                 </div>
@@ -3073,12 +3078,12 @@ export default function Negotiate() {
                     <div className="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center">
                       <Target className="w-5 h-5 text-teal-400" />
                     </div>
-                    <div className="text-2xl font-bold">2-3x</div>
+                    <div className="text-2xl font-bold">{language === 'en' ? 'Stronger position' : 'Posicion mas fuerte'}</div>
                   </div>
                   <p className="text-sm text-white/60">
                     {language === 'en'
-                      ? 'the initial offer - typical improvement from proper anchoring technique (Galinsky & Mussweiler, negotiation research)'
-                      : 'la oferta inicial - mejora tipica de la tecnica de anclaje adecuada (Galinsky & Mussweiler, investigacion de negociacion)'
+                      ? 'Proper anchoring and preparation techniques can significantly improve negotiation results (Galinsky & Mussweiler)'
+                      : 'Las tecnicas adecuadas de anclaje y preparacion pueden mejorar significativamente los resultados de negociacion (Galinsky & Mussweiler)'
                     }
                   </p>
                 </div>
@@ -3088,12 +3093,12 @@ export default function Negotiate() {
                     <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
                       <Clock className="w-5 h-5 text-amber-400" />
                     </div>
-                    <div className="text-2xl font-bold">15 min</div>
+                    <div className="text-2xl font-bold">{language === 'en' ? 'Quick prep' : 'Preparacion rapida'}</div>
                   </div>
                   <p className="text-sm text-white/60">
                     {language === 'en'
-                      ? 'average time to complete your negotiation strategy - worth hours of better outcomes'
-                      : 'tiempo promedio para completar tu estrategia de negociacion - vale horas de mejores resultados'
+                      ? 'Complete your negotiation strategy in minutes - a small investment for potentially better outcomes'
+                      : 'Completa tu estrategia de negociacion en minutos - una pequena inversion para potencialmente mejores resultados'
                     }
                   </p>
                 </div>
@@ -3121,8 +3126,8 @@ export default function Negotiate() {
 
           <p className="text-navy-600 mb-8 max-w-2xl mx-auto">
             {language === 'en'
-              ? "Stop going into negotiations unprepared. In 15 minutes, you'll have a complete strategy with scripts, tactics, and numbers."
-              : "Deja de entrar a negociaciones sin preparacion. En 15 minutos, tendras una estrategia completa con guiones, tacticas y numeros."
+              ? "Stop going into negotiations unprepared. Build a complete strategy with scripts, tactics, and numbers."
+              : "Deja de entrar a negociaciones sin preparacion. Construye una estrategia completa con guiones, tacticas y numeros."
             }
           </p>
 
@@ -3168,7 +3173,7 @@ export default function Negotiate() {
 
 ---
 
-## src/pages/Research.tsx (777 lines)
+## src/pages/Research.tsx (789 lines)
 
 ```tsx
 import { useState, useEffect } from 'react';
@@ -3184,7 +3189,6 @@ import {
 import { JURISDICTION_GROUPS, getJurisdictionName } from '../data/jurisdictions';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 interface ResearchQuery {
   id: string;
@@ -3430,11 +3434,19 @@ Based on this research, provide practical guidance for someone dealing with this
 DISCLAIMER:
 This research is for informational purposes only and does not constitute legal advice. Laws and regulations change frequently. Consult with a licensed attorney in your jurisdiction for advice specific to your situation.`;
 
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+      if (!token) {
+        setSearchResults(lang === 'en' ? 'Please sign in to perform research.' : 'Inicia sesion para investigar.');
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch(`${SUPABASE_URL}/functions/v1/openai-chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           messages: [{ role: 'user', content: prompt }],
@@ -3548,6 +3560,11 @@ This research is for informational purposes only and does not constitute legal a
             <p className="text-navy-600">{t('research.subtitle')}</p>
           </div>
         </div>
+        <p className="mt-3 text-sm text-navy-500">
+          {lang === 'en'
+            ? 'This tool provides legal information, not legal advice. Results are AI-generated and should be verified independently.'
+            : 'Esta herramienta proporciona informacion legal, no asesoramiento legal. Los resultados son generados por IA y deben verificarse de forma independiente.'}
+        </p>
       </div>
 
       <div className="flex gap-2 mb-6">
@@ -3876,7 +3893,7 @@ This research is for informational purposes only and does not constitute legal a
                   <BookOpen className="w-8 h-8 text-navy-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-navy-900 mb-2">{t('research.noHistory')}</h3>
-                <p className="text-navy-600 mb-4">Start researching legal topics to build your history</p>
+                <p className="text-navy-600 mb-4">{lang === 'en' ? 'Start researching legal topics to build your history' : 'Comienza a investigar temas legales para crear tu historial'}</p>
                 <button
                   onClick={() => setActiveTab('search')}
                   className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium"
@@ -3952,7 +3969,7 @@ This research is for informational purposes only and does not constitute legal a
 
 ---
 
-## src/pages/IssuePacks.tsx (448 lines)
+## src/pages/IssuePacks.tsx (449 lines)
 
 ```tsx
 import { useState } from 'react';
@@ -4388,9 +4405,10 @@ export default function IssuePacks() {
           packId={safetyGatePack.id}
           packName={safetyGatePack.name}
           onConfirm={() => {
+            const packId = safetyGatePack.id;
             setSafetyGatePack(null);
-            if (user) navigate('/dashboard');
-            else navigate(`/signup?plan=${safetyGatePack.id}`);
+            if (user) navigate(`/checkout?plan=${packId}`);
+            else navigate(`/signup?plan=${packId}`);
           }}
           onClose={() => setSafetyGatePack(null)}
         />
@@ -4407,7 +4425,7 @@ export default function IssuePacks() {
 
 ---
 
-## src/pages/Matters.tsx (653 lines)
+## src/pages/Matters.tsx (654 lines)
 
 ```tsx
 import { useState, useEffect } from 'react';
@@ -4504,6 +4522,7 @@ export default function Matters() {
         matter_documents(count),
         matter_participants(count)
       `)
+      .eq('user_id', user.id)
       .order('updated_at', { ascending: false });
 
     if (!error && data) {
@@ -4894,7 +4913,7 @@ export default function Matters() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g., Lease Agreement Review, Employment Dispute"
+                  placeholder={lang === 'en' ? 'e.g., Lease Agreement Review, Employment Dispute' : 'ej., Revision de Contrato de Arrendamiento, Disputa Laboral'}
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   className="w-full px-4 py-2.5 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
@@ -4970,7 +4989,7 @@ export default function Matters() {
                 </label>
                 <textarea
                   rows={4}
-                  placeholder="Briefly describe the legal matter..."
+                  placeholder={lang === 'en' ? 'Briefly describe the legal matter...' : 'Describe brevemente el asunto legal...'}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   className="w-full px-4 py-2.5 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
@@ -6924,7 +6943,7 @@ export default function ForPartners() {
 
 ---
 
-## src/pages/PartnerHub.tsx (924 lines)
+## src/pages/PartnerHub.tsx (932 lines)
 
 ```tsx
 import { useState, useEffect } from 'react';
@@ -7135,6 +7154,7 @@ export default function PartnerHub() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   useEffect(() => {
     const ref = searchParams.get('ref');
@@ -7146,8 +7166,9 @@ export default function PartnerHub() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setSubmitError(false);
     try {
-      await supabase.from('partners').insert({
+      const { error } = await supabase.from('partners').insert({
         organization_name: formData.organization_name,
         contact_name: formData.contact_name,
         contact_email: formData.contact_email,
@@ -7170,9 +7191,10 @@ export default function PartnerHub() {
           community_size: formData.community_size,
         },
       });
+      if (error) throw error;
       setSubmitted(true);
     } catch {
-      setSubmitted(true);
+      setSubmitError(true);
     }
     setSubmitting(false);
   };
@@ -7657,6 +7679,11 @@ export default function PartnerHub() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 border border-navy-200 shadow-sm space-y-5">
+                {submitError && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-800">
+                    {es ? 'Hubo un problema al enviar tu solicitud. Por favor intenta de nuevo.' : 'There was a problem submitting your application. Please try again.'}
+                  </div>
+                )}
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-semibold text-navy-800 mb-1">
@@ -7885,13 +7912,14 @@ export type { CrisisSignal } from './ContextualCrisisAlert';
 
 ---
 
-## src/components/cognitive-load/ContextualCrisisAlert.tsx (248 lines)
+## src/components/cognitive-load/ContextualCrisisAlert.tsx (273 lines)
 
 ```tsx
 import { useState, useEffect, useCallback } from 'react';
 import { Phone, Heart, X, ExternalLink, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { normalizeForCrisis } from '../../lib/text-utils';
 
 export type CrisisSignal = 'self_harm' | 'domestic_violence' | 'homelessness' | 'emergency';
 
@@ -7975,6 +8003,13 @@ const CRISIS_KEYWORDS: Record<CrisisSignal, string[]> = {
     'self harm',
     'no reason to live',
     'better off dead',
+    'matarme',
+    'suicidio',
+    'quiero morir',
+    'hacerme dano',
+    'no quiero vivir',
+    'acabar con mi vida',
+    'quitarme la vida',
   ],
   domestic_violence: [
     'domestic violence',
@@ -7986,6 +8021,15 @@ const CRISIS_KEYWORDS: Record<CrisisSignal, string[]> = {
     'protective order',
     'scared of',
     'abuser',
+    'violencia domestica',
+    'relacion abusiva',
+    'me pega',
+    'me golpea',
+    'me lastima',
+    'orden de proteccion',
+    'orden de restriccion',
+    'tengo miedo',
+    'abusador',
   ],
   homelessness: [
     'homeless',
@@ -7996,6 +8040,14 @@ const CRISIS_KEYWORDS: Record<CrisisSignal, string[]> = {
     'on the street',
     'about to lose my home',
     'eviction notice',
+    'sin hogar',
+    'desalojado',
+    'me echaron',
+    'no tengo donde ir',
+    'vivo en mi carro',
+    'en la calle',
+    'aviso de desalojo',
+    'perder mi casa',
   ],
   emergency: [],
 };
@@ -8008,10 +8060,10 @@ interface ContextualCrisisAlertProps {
 }
 
 export function detectCrisisSignal(text: string): CrisisSignal | null {
-  const lowerText = text.toLowerCase();
+  const normalized = normalizeForCrisis(text);
 
   for (const [signal, keywords] of Object.entries(CRISIS_KEYWORDS) as [CrisisSignal, string[]][]) {
-    if (keywords.some((kw) => lowerText.includes(kw))) {
+    if (keywords.some((kw) => normalized.includes(kw))) {
       return signal;
     }
   }

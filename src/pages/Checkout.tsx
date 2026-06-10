@@ -266,8 +266,7 @@ export default function Checkout() {
 
                 <button
                   onClick={() => setStep('payment')}
-                  disabled
-                  className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2"
                 >
                   {lang === 'en' ? 'Continue to Payment' : 'Continuar al Pago'}
                   <ArrowRight className="w-5 h-5" />
@@ -388,7 +387,7 @@ export default function Checkout() {
                 </div>
               </div>
               <div className="space-y-2 text-xs text-navy-500">
-                <div className="flex items-center gap-2"><Lock className="w-3 h-3 text-green-600" /> TLS 1.3 + AES-256</div>
+                <div className="flex items-center gap-2"><Lock className="w-3 h-3 text-green-600" /> {lang === 'en' ? 'Encrypted checkout' : 'Pago encriptado'}</div>
                 <div className="flex items-center gap-2"><Shield className="w-3 h-3 text-green-600" /> {lang === 'en' ? '7-day refund guarantee' : 'Garantia de 7 dias'}</div>
                 <div className="flex items-center gap-2"><Zap className="w-3 h-3 text-green-600" /> {lang === 'en' ? 'Instant access' : 'Acceso instantaneo'}</div>
               </div>

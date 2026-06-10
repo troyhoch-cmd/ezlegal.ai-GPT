@@ -313,7 +313,7 @@ export default function ChatV2() {
     ? [{
         id: chatService.getSessionId(),
         title: messages[0]?.content.substring(0, 30) + '...',
-        date: 'Now',
+        date: en ? 'Now' : 'Ahora',
       }]
     : [];
 
@@ -527,14 +527,14 @@ export default function ChatV2() {
                     <button
                       className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors"
                       aria-label={en ? 'Attach file' : 'Adjuntar archivo'}
-                      title="Attach document"
+                      title={en ? 'Attach document' : 'Adjuntar documento'}
                     >
                       <Paperclip className="w-4 h-4" />
                     </button>
                     <button
                       className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors"
                       aria-label={en ? 'Voice input' : 'Entrada de voz'}
-                      title="Voice input"
+                      title={en ? 'Voice input' : 'Entrada de voz'}
                     >
                       <Mic className="w-4 h-4" />
                     </button>

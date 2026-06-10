@@ -467,6 +467,7 @@ export const translations = {
 
     // Dashboard Purchases
     'dash.purchases': 'Your Purchases & Subscriptions',
+    'dash.questionsAnswered': 'Questions answered this month',
     'dash.expires': 'Expires',
     'dash.expired': 'Expired',
     'dash.renew': 'Renew',
@@ -1255,6 +1256,7 @@ export const translations = {
 
     // Compras del panel
     'dash.purchases': 'Tus compras y suscripciones',
+    'dash.questionsAnswered': 'Preguntas respondidas este mes',
     'dash.expires': 'Vence',
     'dash.expired': 'Vencido',
     'dash.renew': 'Renovar',

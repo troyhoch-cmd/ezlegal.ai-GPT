@@ -206,6 +206,7 @@ export default function PartnerHub() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   useEffect(() => {
     const ref = searchParams.get('ref');
@@ -217,8 +218,9 @@ export default function PartnerHub() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setSubmitError(false);
     try {
-      await supabase.from('partners').insert({
+      const { error } = await supabase.from('partners').insert({
         organization_name: formData.organization_name,
         contact_name: formData.contact_name,
         contact_email: formData.contact_email,
@@ -241,9 +243,10 @@ export default function PartnerHub() {
           community_size: formData.community_size,
         },
       });
+      if (error) throw error;
       setSubmitted(true);
     } catch {
-      setSubmitted(true);
+      setSubmitError(true);
     }
     setSubmitting(false);
   };
@@ -728,6 +731,11 @@ export default function PartnerHub() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 border border-navy-200 shadow-sm space-y-5">
+                {submitError && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-800">
+                    {es ? 'Hubo un problema al enviar tu solicitud. Por favor intenta de nuevo.' : 'There was a problem submitting your application. Please try again.'}
+                  </div>
+                )}
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-semibold text-navy-800 mb-1">

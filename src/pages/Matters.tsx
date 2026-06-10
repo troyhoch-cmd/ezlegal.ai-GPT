@@ -92,6 +92,7 @@ export default function Matters() {
         matter_documents(count),
         matter_participants(count)
       `)
+      .eq('user_id', user.id)
       .order('updated_at', { ascending: false });
 
     if (!error && data) {
@@ -482,7 +483,7 @@ export default function Matters() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g., Lease Agreement Review, Employment Dispute"
+                  placeholder={lang === 'en' ? 'e.g., Lease Agreement Review, Employment Dispute' : 'ej., Revision de Contrato de Arrendamiento, Disputa Laboral'}
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   className="w-full px-4 py-2.5 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
@@ -558,7 +559,7 @@ export default function Matters() {
                 </label>
                 <textarea
                   rows={4}
-                  placeholder="Briefly describe the legal matter..."
+                  placeholder={lang === 'en' ? 'Briefly describe the legal matter...' : 'Describe brevemente el asunto legal...'}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   className="w-full px-4 py-2.5 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600"

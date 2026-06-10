@@ -276,6 +276,11 @@ export default function Dashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-4 px-4 py-3 bg-navy-50 border border-navy-200 rounded-xl text-sm text-navy-600">
+          {lang === 'en'
+            ? 'ezLegal.ai provides legal information, not legal advice. This does not create an attorney-client relationship.'
+            : 'ezLegal.ai proporciona informacion legal, no asesoramiento legal. Esto no crea una relacion abogado-cliente.'}
+        </div>
         <PostPurchaseActivation />
         <TrialOnboarding />
 
@@ -549,8 +554,8 @@ export default function Dashboard() {
                     <DollarSign className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-navy-900">${(stats.chatsThisMonth * 150).toLocaleString()}</p>
-                    <p className="text-sm text-navy-600">{t('dash.estimatedValue')}</p>
+                    <p className="text-2xl font-bold text-navy-900">{stats.chatsThisMonth}</p>
+                    <p className="text-sm text-navy-600">{t('dash.questionsAnswered')}</p>
                   </div>
                 </div>
               </div>

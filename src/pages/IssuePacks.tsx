@@ -431,9 +431,10 @@ export default function IssuePacks() {
           packId={safetyGatePack.id}
           packName={safetyGatePack.name}
           onConfirm={() => {
+            const packId = safetyGatePack.id;
             setSafetyGatePack(null);
-            if (user) navigate('/dashboard');
-            else navigate(`/signup?plan=${safetyGatePack.id}`);
+            if (user) navigate(`/checkout?plan=${packId}`);
+            else navigate(`/signup?plan=${packId}`);
           }}
           onClose={() => setSafetyGatePack(null)}
         />
