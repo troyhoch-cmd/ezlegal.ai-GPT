@@ -23,9 +23,9 @@ const CARDS: Card[] = [
     key: 'individual',
     icon: User,
     titleEn: 'Myself or my family',
-    titleEs: 'Para mi o mi familia',
-    bodyEn: 'Understand your issue and next steps in plain English or Spanish.',
-    bodyEs: 'Entiende tu problema y los próximos pasos en inglés o español simple.',
+    titleEs: 'Para mí o mi familia',
+    bodyEn: 'Free bilingual legal information and urgent-help routing — in plain English or Spanish.',
+    bodyEs: 'Información legal bilingüe gratuita y derivación a ayuda urgente — en inglés o español simple.',
     ctaEn: 'Ask a free question',
     ctaEs: 'Haz una pregunta gratis',
     href: '/chat',
@@ -33,10 +33,10 @@ const CARDS: Card[] = [
   {
     key: 'business',
     icon: Building2,
-    titleEn: 'My business',
-    titleEs: 'Mi negocio',
-    bodyEn: 'Review contracts, employment, and compliance risk before you call counsel.',
-    bodyEs: 'Revisa contratos, empleo y riesgos de cumplimiento antes de llamar a un abogado.',
+    titleEn: 'My small business',
+    titleEs: 'Mi pequeño negocio',
+    bodyEn: 'Understand documents, prepare questions for counsel, and identify next steps.',
+    bodyEs: 'Entiende documentos, prepara preguntas para un abogado e identifica próximos pasos.',
     ctaEn: 'Get business clarity',
     ctaEs: 'Obtén claridad empresarial',
     href: '/pricing?audience=business',
@@ -44,12 +44,12 @@ const CARDS: Card[] = [
   {
     key: 'legal_aid',
     icon: Heart,
-    titleEn: 'My legal-aid organization',
-    titleEs: 'Mi organización de asistencia legal',
-    bodyEn: 'Triage, summarize, and support clients safely with auditable workflows.',
-    bodyEs: 'Filtra, resume y apoya a clientes de forma segura con flujos auditables.',
-    ctaEn: 'Explore legal-aid tools',
-    ctaEs: 'Explora herramientas de asistencia legal',
+    titleEn: 'Legal-aid or pro bono',
+    titleEs: 'Asistencia legal o pro bono',
+    bodyEn: 'Help clients prepare for attorney review. Partner with us to expand access.',
+    bodyEs: 'Ayuda a clientes a prepararse para revisión de un abogado. Asóciate con nosotros.',
+    ctaEn: 'Explore partnership',
+    ctaEs: 'Explora asociación',
     href: '/pricing?audience=legal-aid',
   },
 ];
@@ -78,12 +78,12 @@ export default function HomeAudienceRouting() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-10">
           <h2 className="text-2xl sm:text-3xl font-bold text-navy-900 mb-3">
-            {en ? 'What kind of help do you need?' : 'Qué tipo de ayuda necesitas?'}
+            {en ? 'Who is this for?' : '¿Para quién es esto?'}
           </h2>
           <p className="text-navy-500 text-sm sm:text-base">
             {en
-              ? 'Pick the path that fits you. Each one leads somewhere useful in under a minute.'
-              : 'Elige el camino que te corresponda. Cada uno te lleva a algo útil en menos de un minuto.'}
+              ? 'Choose your path — each leads to useful information in under a minute.'
+              : 'Elige tu camino — cada uno te lleva a información útil en menos de un minuto.'}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">

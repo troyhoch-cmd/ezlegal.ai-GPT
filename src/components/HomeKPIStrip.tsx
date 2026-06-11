@@ -3,6 +3,7 @@ import { Users, Clock, Globe, ShieldCheck, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
+import { getVerifiedClaims } from '../content/trustEvidence';
 
 interface KPI {
   label: { en: string; es: string };
@@ -12,36 +13,33 @@ interface KPI {
   footnoteHref?: string;
 }
 
-const DEFAULT_KPIS: KPI[] = [
-  {
-    label: { en: 'Available', es: 'Disponible' },
-    value: { en: '24/7', es: '24/7' },
-    icon: Clock,
-  },
-  {
-    label: { en: 'Languages', es: 'Idiomas' },
-    value: { en: 'English & Spanish', es: 'Inglés y español' },
-    icon: Globe,
-  },
-  {
-    label: { en: 'Find free help', es: 'Encuentra ayuda' },
-    value: { en: 'Legal-aid links', es: 'Enlaces a ayuda legal' },
-    icon: Users,
-    footnote: 'Find legal-aid and pro bono options in your area.',
-    footnoteHref: '/pro-bono',
-  },
-  {
-    label: { en: 'Privacy controls', es: 'Controles de privacidad' },
-    value: { en: 'Private by default', es: 'Privado por defecto' },
-    icon: ShieldCheck,
-    footnote: 'TLS in transit, encrypted at rest. See Privacy at a glance.',
-    footnoteHref: '/privacy-at-a-glance',
-  },
-];
+const ICON_MAP: Record<string, typeof Users> = {
+  'available-24-7': Clock,
+  'bilingual': Globe,
+  'free-help-links': Users,
+  'privacy-controls': ShieldCheck,
+};
+
+const LABEL_MAP: Record<string, { en: string; es: string }> = {
+  'available-24-7': { en: 'Available', es: 'Disponible' },
+  'bilingual': { en: 'Languages', es: 'Idiomas' },
+  'free-help-links': { en: 'Find free help', es: 'Encuentra ayuda' },
+  'privacy-controls': { en: 'Privacy controls', es: 'Controles de privacidad' },
+};
+
+function buildDefaultKPIs(): KPI[] {
+  return getVerifiedClaims().map((claim) => ({
+    label: LABEL_MAP[claim.id] || { en: claim.id, es: claim.id },
+    value: { en: claim.displayEn, es: claim.displayEs },
+    icon: ICON_MAP[claim.id] || ShieldCheck,
+    footnote: claim.tooltipEn,
+    footnoteHref: claim.href,
+  }));
+}
 
 export default function HomeKPIStrip() {
   const { language } = useLanguage();
-  const [kpis, setKpis] = useState<KPI[]>(DEFAULT_KPIS);
+  const [kpis, setKpis] = useState<KPI[]>(buildDefaultKPIs);
 
   useEffect(() => {
     let cancelled = false;
@@ -56,11 +54,14 @@ export default function HomeKPIStrip() {
       if (typeof partnerCount === 'number' && partnerCount > 0) {
         setKpis((prev) => {
           const next = [...prev];
-          next[2] = {
-            ...next[2],
-            value: { en: `${formatCompact(partnerCount)} partners`, es: `${formatCompact(partnerCount)} socios` },
-            label: { en: 'Legal-aid partners', es: 'Socios de ayuda legal' },
-          };
+          const helpIdx = next.findIndex((k) => k.label.en === 'Find free help');
+          if (helpIdx >= 0) {
+            next[helpIdx] = {
+              ...next[helpIdx],
+              value: { en: `${formatCompact(partnerCount)} partners`, es: `${formatCompact(partnerCount)} socios` },
+              label: { en: 'Legal-aid partners', es: 'Socios de ayuda legal' },
+            };
+          }
           return next;
         });
       }

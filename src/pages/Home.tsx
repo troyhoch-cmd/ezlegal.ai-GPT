@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Shield, MessageSquare, FileText, CheckCircle, Users,
   ArrowRight, ChevronDown, ChevronUp
@@ -10,6 +10,7 @@ import ResumeBanner from '../components/ResumeBanner';
 import HomeKPIStrip from '../components/HomeKPIStrip';
 import CrisisStrip from '../components/CrisisStrip';
 import HomeAudienceRouting from '../components/HomeAudienceRouting';
+import SafeguardsSection from '../components/SafeguardsSection';
 import { recordConsent } from '../lib/consent';
 import { useLanguage } from '../contexts/LanguageContext';
 import { usePersonalization } from '../contexts/PersonalizationContext';
@@ -111,12 +112,6 @@ export default function Home() {
                     : 'Privado. Gratis. Protecciones informadas por abogados.'
                   }
                 </span>
-                <Link
-                  to="/trust-center"
-                  className="underline underline-offset-2 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/40 rounded"
-                >
-                  {language === 'en' ? 'Learn more' : 'Más información'}
-                </Link>
               </p>
             </div>
 
@@ -131,6 +126,9 @@ export default function Home() {
             <ResumeBanner />
             <div className="mt-4">
               <HomeKPIStrip />
+            </div>
+            <div className="mt-4 flex justify-center">
+              <SafeguardsSection />
             </div>
           </div>
         </section>
