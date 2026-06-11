@@ -113,6 +113,10 @@ const Toolkit = lazy(() => import('./pages/Toolkit'));
 const AIModelCard = lazy(() => import('./pages/AIModelCard'));
 const AlgorithmicImpactAssessment = lazy(() => import('./pages/AlgorithmicImpactAssessment'));
 const BiasMonitoring = lazy(() => import('./pages/BiasMonitoring'));
+const EsLanding = lazy(() => import('./pages/gtm/EsLanding'));
+const BusinessLanding = lazy(() => import('./pages/gtm/BusinessLanding'));
+const PartnersLanding = lazy(() => import('./pages/gtm/PartnersLanding'));
+const UrgentHelp = lazy(() => import('./pages/gtm/UrgentHelp'));
 
 function PageLoader() {
   return (
@@ -257,6 +261,10 @@ function App() {
                   <Route path="/media-kit" element={<MediaKit />} />
                   <Route path="/how-reports-are-reviewed" element={<HowReportsAreReviewed />} />
                   <Route path="/espanol" element={<EspanolLanding />} />
+                  <Route path="/es" element={<EsLanding />} />
+                  <Route path="/business" element={<BusinessLanding />} />
+                  <Route path="/partners" element={<PartnersLanding />} />
+                  <Route path="/urgent-help" element={<UrgentHelp />} />
                   <Route path="/accessibility" element={<AccessibilityStatement />} />
                   <Route path="/access" element={<AccessGate />} />
                   <Route path="/negotiate" element={<Negotiate />} />
