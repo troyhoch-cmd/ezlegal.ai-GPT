@@ -25,9 +25,11 @@ import ConsentBanner from './components/ConsentBanner';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import DeprecatedRouteRedirect from './components/DeprecatedRouteRedirect';
 import { installGlobalErrorHandlers } from './lib/error-handler';
+import { captureUTMParams } from './lib/utm';
 
 if (typeof window !== 'undefined') {
   installGlobalErrorHandlers();
+  captureUTMParams();
 }
 
 function PreferenceLoader() {

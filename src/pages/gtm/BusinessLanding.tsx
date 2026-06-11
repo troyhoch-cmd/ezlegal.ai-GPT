@@ -9,6 +9,7 @@ import Footer from '../../components/Footer';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { usePersonalization } from '../../contexts/PersonalizationContext';
 import { supabase } from '../../lib/supabase';
+import { trackCTAClick, getStoredUTM } from '../../lib/utm';
 
 const PAIN_POINTS = [
   {
@@ -54,15 +55,17 @@ export default function BusinessLanding() {
     e.preventDefault();
     if (!email.trim()) return;
     setSubmitting(true);
+    const utm = getStoredUTM();
+    trackCTAClick('biz-lead-capture', '/business');
     try {
       await supabase.from('lead_captures').insert({
         email: email.trim(),
         source: 'business_landing',
         persona: 'smb',
         language,
+        metadata: { ...utm },
       });
     } catch {
-      // Fallback: store locally
       const leads = JSON.parse(localStorage.getItem('ezlegal_leads') || '[]');
       leads.push({ email: email.trim(), source: 'business_landing', ts: Date.now() });
       localStorage.setItem('ezlegal_leads', JSON.stringify(leads));

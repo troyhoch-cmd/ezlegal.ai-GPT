@@ -8,6 +8,8 @@ import Navigation from '../../components/Navigation';
 import Footer from '../../components/Footer';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { usePersonalization } from '../../contexts/PersonalizationContext';
+import { getVariant, HERO_ES_TEST, HERO_ES_COPY } from '../../lib/ab-testing';
+import { trackCTAClick } from '../../lib/utm';
 
 const LEGAL_TOPICS = [
   { icon: Globe, title: 'Inmigración', desc: 'DACA, visas, deportación', query: 'inmigracion' },
@@ -22,6 +24,8 @@ export default function EsLanding() {
   const { setLanguage } = useLanguage();
   const { trackPageVisit } = usePersonalization();
   const navigate = useNavigate();
+  const heroVariant = getVariant(HERO_ES_TEST);
+  const heroCopy = HERO_ES_COPY[heroVariant] || HERO_ES_COPY.control;
 
   useEffect(() => {
     setLanguage('es');
@@ -44,21 +48,21 @@ export default function EsLanding() {
             </div>
 
             <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold mb-5 leading-tight text-white">
-              Ayuda legal que habla tu idioma
+              {heroCopy.title}
             </h1>
 
             <p className="text-lg sm:text-xl text-navy-100 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Haz preguntas legales gratis, entiende tus derechos y encuentra próximos pasos seguros — todo en español. Sin costo, sin tarjeta de crédito, sin juicio.
+              {heroCopy.subtitle}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
               <button
                 type="button"
-                onClick={() => navigate('/ask')}
+                onClick={() => { trackCTAClick(`es-hero-primary-${heroVariant}`, '/ask'); navigate('/ask'); }}
                 data-cta="es-hero-primary"
                 className="group bg-teal-500 hover:bg-teal-400 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900 w-full sm:w-auto justify-center"
               >
-                Haz tu pregunta gratis
+                {heroCopy.cta}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
 

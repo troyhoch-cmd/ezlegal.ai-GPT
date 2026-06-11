@@ -9,6 +9,7 @@ import Footer from '../../components/Footer';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { usePersonalization } from '../../contexts/PersonalizationContext';
 import { supabase } from '../../lib/supabase';
+import { trackCTAClick, getStoredUTM } from '../../lib/utm';
 
 const PARTNER_TYPES = [
   {
@@ -77,13 +78,15 @@ export default function PartnersLanding() {
     e.preventDefault();
     if (!formData.email.trim() || !formData.name.trim()) return;
     setSubmitting(true);
+    const utm = getStoredUTM();
+    trackCTAClick('partner-form-submit', '/partners');
     try {
       await supabase.from('lead_captures').insert({
         email: formData.email.trim(),
         source: 'partner_landing',
         persona: 'partner',
         language,
-        metadata: { name: formData.name, org: formData.org, type: formData.type },
+        metadata: { name: formData.name, org: formData.org, type: formData.type, ...utm },
       });
     } catch {
       const leads = JSON.parse(localStorage.getItem('ezlegal_leads') || '[]');

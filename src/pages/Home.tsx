@@ -16,6 +16,8 @@ import { usePersonalization } from '../contexts/PersonalizationContext';
 import { usePersona } from '../contexts/PersonaContext';
 import { useAuth } from '../contexts/AuthContext';
 import { markHeroVariantSeen } from '../services/ui-preferences-service';
+import { getVariant, HERO_EN_TEST, HERO_EN_COPY } from '../lib/ab-testing';
+import { trackCTAClick } from '../lib/utm';
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -24,6 +26,8 @@ export default function Home() {
   const { setPersona: _setPersona } = usePersona();
   const { user, profile } = useAuth();
   const navigate = useNavigate();
+  const heroVariant = getVariant(HERO_EN_TEST);
+  const heroCopy = HERO_EN_COPY[heroVariant] || HERO_EN_COPY.control;
 
   useEffect(() => {
     trackPageVisit('/');
@@ -49,6 +53,7 @@ export default function Home() {
   const handleStartNow = (e?: React.MouseEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
+    trackCTAClick(`hero-primary-${heroVariant}`, '/start');
     void recordConsent({
       consentType: 'ai_processing',
       source: 'home_primary_cta',
@@ -71,14 +76,14 @@ export default function Home() {
           <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight text-white break-words">
               {language === 'en'
-                ? 'Legal help that speaks your language'
+                ? heroCopy.title
                 : 'Ayuda legal que habla tu idioma'
               }
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl text-navy-100 mb-6 max-w-2xl mx-auto">
               {language === 'en'
-                ? 'Ask legal questions, understand documents, and find safe next steps — in plain English or Spanish. Free to start, no credit card.'
+                ? heroCopy.subtitle
                 : 'Haz preguntas legales, entiende documentos y encuentra próximos pasos seguros — en español o inglés. Gratis para empezar, sin tarjeta de crédito.'
               }
             </p>
@@ -89,9 +94,9 @@ export default function Home() {
                 onClick={(e) => handleStartNow(e)}
                 data-testid="hero-primary-cta"
                 className="group bg-teal-500 hover:bg-teal-400 text-white px-6 sm:px-10 py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900 min-h-[56px] w-full sm:w-auto"
-                aria-label={language === 'en' ? 'Ask a free legal question' : 'Haz una pregunta legal gratis'}
+                aria-label={language === 'en' ? heroCopy.cta : 'Haz una pregunta legal gratis'}
               >
-                {language === 'en' ? 'Ask a free legal question' : 'Haz una pregunta legal gratis'}
+                {language === 'en' ? heroCopy.cta : 'Haz una pregunta legal gratis'}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
               </button>
 
