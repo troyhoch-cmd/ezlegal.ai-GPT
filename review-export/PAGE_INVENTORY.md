@@ -1,0 +1,80 @@
+# Page Component Inventory
+# Total pages: 77
+
+- **AIAssistant** (941 lines) [Supabase, i18n, Auth]
+- **AIGovernance** (641 lines)
+- **AIModelCard** (499 lines) [i18n]
+- **About** (390 lines)
+- **AccessGate** (775 lines) [Supabase, Auth]
+- **AccessibilityStatement** (257 lines)
+- **Admin** (4528 lines) [Supabase, Auth]
+- **AdminAuditLog** (302 lines) [Supabase]
+- **AdminOverview** (185 lines) [Supabase]
+- **AlgorithmicImpactAssessment** (255 lines) [i18n]
+- **Ask** (447 lines) [i18n]
+- **AuthCallback** (80 lines) [Supabase]
+- **BiasMonitoring** (271 lines) [i18n]
+- **Billing** (336 lines) [Supabase, Auth]
+- **CasePredictor** (524 lines) [i18n]
+- **CasePredictorStart** (343 lines) [i18n]
+- **Cases** (411 lines) [Supabase, Auth]
+- **ChannelLanding** (376 lines) [Supabase, i18n]
+- **ChatV2** (838 lines) [Supabase, i18n, Auth]
+- **Chatbot** (2230 lines) [Supabase, i18n, Auth]
+- **Checkout** (442 lines) [Supabase, i18n, Auth]
+- **Clients** (308 lines) [Supabase, i18n, Auth]
+- **CollateralEditor** (903 lines) [Supabase, Auth]
+- **CollateralStudio** (249 lines) [Supabase, Auth]
+- **Contact** (300 lines) [Supabase]
+- **Dashboard** (524 lines) [Supabase, i18n, Auth]
+- **Documents** (2137 lines) [Supabase, i18n, Auth]
+- **EZReads** (926 lines) [Supabase, i18n]
+- **EmergencyResources** (739 lines)
+- **EnterpriseSecurity** (682 lines) [Supabase]
+- **EspanolLanding** (760 lines) [i18n]
+- **FeatureGuide** (279 lines)
+- **Features** (457 lines)
+- **ForBusiness** (772 lines) [i18n]
+- **ForIndividuals** (540 lines) [i18n]
+- **ForOrganizations** (675 lines)
+- **ForPartners** (836 lines)
+- **ForgotPassword** (150 lines) [i18n, Auth]
+- **GrantReporting** (888 lines) [Supabase, Auth]
+- **History** (597 lines) [Supabase, i18n, Auth]
+- **Home** (348 lines) [i18n, Auth]
+- **HowItWorks** (1419 lines) [Supabase]
+- **HowReportsAreReviewed** (348 lines)
+- **ICPTemplateLibrary** (322 lines)
+- **IcpPrototype** (424 lines)
+- **IssuePacks** (805 lines) [Supabase, i18n, Auth]
+- **LSODashboard** (1918 lines)
+- **LawyerProfiles** (386 lines)
+- **LegalSafetyNet** (513 lines) [i18n, Auth]
+- **Login** (253 lines) [i18n, Auth]
+- **Matters** (651 lines) [Supabase, i18n, Auth]
+- **MediaKit** (578 lines) [Supabase, i18n]
+- **Negotiate** (458 lines) [i18n]
+- **NotFound** (56 lines)
+- **PartnerHub** (923 lines) [Supabase, i18n, Auth]
+- **PartnerLanding** (211 lines) [Supabase, i18n]
+- **PersonaIntake** (191 lines) [i18n]
+- **Pricing** (237 lines) [i18n]
+- **PrivacyAtAGlance** (140 lines) [i18n]
+- **PrivacyFAQ** (195 lines) [i18n]
+- **PrivacyPolicy** (493 lines)
+- **ProBonoIntake** (931 lines) [Supabase]
+- **Profile** (947 lines) [Supabase, i18n, Auth]
+- **Research** (776 lines) [Supabase, i18n, Auth]
+- **ResetPassword** (183 lines) [Auth]
+- **SLA** (249 lines)
+- **ScheduleDemo** (471 lines)
+- **ScopeDisclaimers** (799 lines) [Supabase, i18n]
+- **SecurityFAQ** (233 lines)
+- **SharePerspective** (531 lines) [Supabase]
+- **Signup** (422 lines) [i18n, Auth]
+- **SimpleChatbot** (876 lines) [Supabase, i18n, Auth]
+- **SiteReview** (480 lines)
+- **TermsOfService** (638 lines)
+- **Toolkit** (501 lines)
+- **TrustCenter** (1007 lines)
+- **WebsiteIntegration** (1231 lines) [Supabase, Auth]
