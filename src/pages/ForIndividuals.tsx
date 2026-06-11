@@ -18,39 +18,39 @@ import { getAffordabilityMessage } from '../lib/microcopy';
 const PRACTICE_AREAS = [
   {
     icon: Home,
-    name: { en: 'Housing & Tenant Rights', es: 'Vivienda y Derechos del Inquilino' },
-    description: { en: 'Eviction defense, lease disputes, security deposits, habitability issues', es: 'Defensa de desalojo, disputas de arrendamiento, depósitos de seguridad, problemas de habitabilidad' },
-    examples: { en: ['My landlord is trying to evict me', 'How do I get my security deposit back?', 'Can my landlord enter without notice?'], es: ['Mi arrendador intenta desalojarme', '¿Cómo recupero mi depósito?', '¿Puede mi arrendador entrar sin aviso?'] }
+    name: 'Housing & Tenant Rights',
+    description: 'Eviction defense, lease disputes, security deposits, habitability issues',
+    examples: ['My landlord is trying to evict me', 'How do I get my security deposit back?', 'Can my landlord enter without notice?']
   },
   {
     icon: Briefcase,
-    name: { en: 'Employment & Workplace', es: 'Empleo y Trabajo' },
-    description: { en: 'Wrongful termination, discrimination, wage theft, harassment', es: 'Despido injusto, discriminación, robo de salarios, acoso' },
-    examples: { en: ['Was I wrongfully terminated?', 'My employer owes me overtime', 'How do I file a discrimination complaint?'], es: ['¿Fui despedido injustamente?', 'Mi empleador me debe horas extra', '¿Cómo presento una queja de discriminación?'] }
+    name: 'Employment & Workplace',
+    description: 'Wrongful termination, discrimination, wage theft, harassment',
+    examples: ['Was I wrongfully terminated?', 'My employer owes me overtime', 'How do I file a discrimination complaint?']
   },
   {
     icon: Heart,
-    name: { en: 'Family Law', es: 'Derecho Familiar' },
-    description: { en: 'Divorce basics, custody questions, child support, domestic issues', es: 'Divorcio, custodia, pensión alimenticia, problemas domésticos' },
-    examples: { en: ['What are my rights in a divorce?', 'How is child support calculated?', 'What is the custody process?'], es: ['¿Cuáles son mis derechos en un divorcio?', '¿Cómo se calcula la pensión alimenticia?', '¿Cuál es el proceso de custodia?'] }
+    name: 'Family Law',
+    description: 'Divorce basics, custody questions, child support, domestic issues',
+    examples: ['What are my rights in a divorce?', 'How is child support calculated?', 'What is the custody process?']
   },
   {
     icon: Car,
-    name: { en: 'Consumer Protection', es: 'Protección al Consumidor' },
-    description: { en: 'Debt collection, lemon law, scams, credit disputes', es: 'Cobranza de deudas, ley limón, estafas, disputas de crédito' },
-    examples: { en: ['A debt collector is harassing me', 'I bought a defective car', 'How do I dispute a credit error?'], es: ['Un cobrador me está acosando', 'Compré un auto defectuoso', '¿Cómo disputo un error de crédito?'] }
+    name: 'Consumer Protection',
+    description: 'Debt collection, lemon law, scams, credit disputes',
+    examples: ['A debt collector is harassing me', 'I bought a defective car', 'How do I dispute a credit error?']
   },
   {
     icon: FileText,
-    name: { en: 'Contracts & Agreements', es: 'Contratos y Acuerdos' },
-    description: { en: 'Understanding terms, breach of contract, negotiations', es: 'Entender términos, incumplimiento de contrato, negociaciones' },
-    examples: { en: ['Is this contract enforceable?', 'What happens if I break a lease?', 'Can I get out of this agreement?'], es: ['¿Es ejecutable este contrato?', '¿Qué pasa si rompo un arrendamiento?', '¿Puedo salirme de este acuerdo?'] }
+    name: 'Contracts & Agreements',
+    description: 'Understanding terms, breach of contract, negotiations',
+    examples: ['Is this contract enforceable?', 'What happens if I break a lease?', 'Can I get out of this agreement?']
   },
   {
     icon: Scale,
-    name: { en: 'Small Claims & Civil', es: 'Demandas Menores y Civil' },
-    description: { en: 'Filing claims, collecting judgments, court procedures', es: 'Presentar demandas, cobrar sentencias, procedimientos judiciales' },
-    examples: { en: ['How do I sue in small claims court?', 'What can I recover?', 'How do I collect a judgment?'], es: ['¿Cómo demando en tribunal menor?', '¿Qué puedo recuperar?', '¿Cómo cobro una sentencia?'] }
+    name: 'Small Claims & Civil',
+    description: 'Filing claims, collecting judgments, court procedures',
+    examples: ['How do I sue in small claims court?', 'What can I recover?', 'How do I collect a judgment?']
   },
 ];
 
@@ -75,35 +75,29 @@ export default function ForIndividuals() {
                   <span className="text-sm font-semibold">For Individuals</span>
                 </div>
                 <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
-                  {lang === 'en'
-                    ? 'Understand your options before you pay for legal help.'
-                    : 'Entiende tus opciones antes de pagar por ayuda legal.'}
+                  Get Answers to Your
+                  <span className="text-teal-200"> Legal Questions</span> Instantly
                 </h1>
-                <p className="text-xl text-teal-100 mb-4 leading-relaxed">
-                  {lang === 'en'
-                    ? 'Plain-language guidance for your situation. No account required to start. Available in English and Spanish.'
-                    : 'Orientación en lenguaje simple para tu situación. No se requiere cuenta para empezar. Disponible en inglés y español.'}
-                </p>
-                <p className="text-sm text-teal-200 mb-8">
-                  {lang === 'en'
-                    ? 'If you cannot afford a lawyer, we\'ll help you look for free or lower-cost options first.'
-                    : 'Si no puede pagar un abogado, le ayudaremos a buscar opciones gratuitas o de menor costo primero.'}
+                <p className="text-xl text-teal-100 mb-8 leading-relaxed">
+                  Understanding your legal rights shouldn't require expensive consultations
+                  or confusing research. Get clear guidance based on your state's laws, in plain
+                  language - available 24/7.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-8">
                   <Link
-                    to="/start"
+                    to="/chat"
                     className="inline-flex items-center justify-center gap-2 bg-white text-teal-600 px-8 py-4 rounded-lg font-bold hover:bg-teal-50 transition-all shadow-lg text-lg"
                   >
                     <MessageSquare className="w-5 h-5" />
-                    {lang === 'en' ? 'Start with 3 questions' : 'Comienza con 3 preguntas'}
+                    Start Free Chat
                   </Link>
                   <Link
-                    to="/start?lang=es"
+                    to="/signup"
                     className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white px-8 py-4 rounded-lg font-bold hover:bg-teal-400 transition-all border border-teal-400 text-lg"
                   >
-                    <Globe className="w-5 h-5" />
-                    Ayuda en español
+                    Create Free Account
+                    <ArrowRight className="w-5 h-5" />
                   </Link>
                 </div>
 
@@ -168,19 +162,19 @@ export default function ForIndividuals() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
                 <div className="text-4xl font-bold text-teal-600 mb-2">$350</div>
-                <p className="text-navy-600 text-sm">{lang === 'en' ? 'Average hourly lawyer rate' : 'Tarifa promedio por hora de abogado'}</p>
+                <p className="text-navy-600 text-sm">Average hourly lawyer rate</p>
               </div>
               <div>
                 <div className="text-4xl font-bold text-green-600 mb-2">$0</div>
-                <p className="text-navy-600 text-sm">{lang === 'en' ? 'ezLegal.ai unlimited questions' : 'ezLegal.ai preguntas ilimitadas'}</p>
+                <p className="text-navy-600 text-sm">ezLegal.ai™ unlimited questions</p>
               </div>
               <div>
                 <div className="text-4xl font-bold text-teal-600 mb-2">5 sec</div>
-                <p className="text-navy-600 text-sm">{lang === 'en' ? 'Average response time' : 'Tiempo promedio de respuesta'}</p>
+                <p className="text-navy-600 text-sm">Average response time</p>
               </div>
               <div>
                 <div className="text-4xl font-bold text-teal-600 mb-2">24/7</div>
-                <p className="text-navy-600 text-sm">{lang === 'en' ? 'Always available' : 'Siempre disponible'}</p>
+                <p className="text-navy-600 text-sm">Always available</p>
               </div>
             </div>
           </div>
@@ -190,12 +184,11 @@ export default function ForIndividuals() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-navy-900 mb-4">
-                {lang === 'en' ? 'Common Legal Questions We Help With' : 'Preguntas Legales Comunes con las que Ayudamos'}
+                Common Legal Questions We Help With
               </h2>
               <p className="text-lg text-navy-600 max-w-2xl mx-auto">
-                {lang === 'en'
-                  ? 'From everyday issues to complex situations, get clear guidance on the legal matters that affect your life'
-                  : 'Desde problemas cotidianos hasta situaciones complejas, obtén orientación clara sobre los asuntos legales que afectan tu vida'}
+                From everyday issues to complex situations, get clear guidance on the
+                legal matters that affect your life
               </p>
             </div>
 
@@ -215,8 +208,8 @@ export default function ForIndividuals() {
                           <area.icon className="w-6 h-6 text-teal-600" />
                         </div>
                         <div>
-                          <h3 className="font-bold text-navy-900 mb-1">{area.name[lang]}</h3>
-                          <p className="text-sm text-navy-600">{area.description[lang]}</p>
+                          <h3 className="font-bold text-navy-900 mb-1">{area.name}</h3>
+                          <p className="text-sm text-navy-600">{area.description}</p>
                         </div>
                       </div>
                       {expandedArea === index ? (
@@ -231,10 +224,10 @@ export default function ForIndividuals() {
                     <div className="px-6 pb-6 pt-0">
                       <div className="bg-navy-50 rounded-lg p-4">
                         <p className="text-xs font-semibold text-navy-500 uppercase tracking-wide mb-3">
-                          {lang === 'en' ? 'Example Questions' : 'Preguntas de Ejemplo'}
+                          Example Questions
                         </p>
                         <ul className="space-y-2">
-                          {area.examples[lang].map((example, i) => (
+                          {area.examples.map((example, i) => (
                             <li key={i} className="flex items-start gap-2 text-sm text-navy-700">
                               <MessageSquare className="w-4 h-4 text-teal-500 mt-0.5 flex-shrink-0" />
                               <span>"{example}"</span>
@@ -245,7 +238,7 @@ export default function ForIndividuals() {
                           to="/chat"
                           className="mt-4 inline-flex items-center gap-2 text-teal-600 font-semibold text-sm hover:text-teal-700"
                         >
-                          {lang === 'en' ? `Ask about ${area.name.en.toLowerCase()}` : `Preguntar sobre ${area.name.es.toLowerCase()}`}
+                          Ask about {area.name.toLowerCase()}
                           <ArrowRight className="w-4 h-4" />
                         </Link>
                       </div>
@@ -260,11 +253,9 @@ export default function ForIndividuals() {
         <section className="py-16 bg-navy-900 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">{lang === 'en' ? 'How ezLegal.ai Helps You' : 'Cómo ezLegal.ai te Ayuda'}</h2>
+              <h2 className="text-3xl font-bold mb-4">How ezLegal.ai™ Helps You</h2>
               <p className="text-lg text-navy-300 max-w-2xl mx-auto">
-                {lang === 'en'
-                  ? 'Your personal legal front door - understand your situation before deciding next steps'
-                  : 'Tu puerta de entrada legal - entiende tu situación antes de decidir los próximos pasos'}
+                Your personal legal front door - understand your situation before deciding next steps
               </p>
             </div>
 
@@ -274,11 +265,10 @@ export default function ForIndividuals() {
                   <MessageSquare className="w-8 h-8 text-teal-400" />
                 </div>
                 <div className="text-5xl font-bold text-white mb-2">1</div>
-                <h3 className="text-xl font-bold mb-3">{lang === 'en' ? 'Describe Your Situation' : 'Describe tu Situación'}</h3>
+                <h3 className="text-xl font-bold mb-3">Describe Your Situation</h3>
                 <p className="text-navy-300">
-                  {lang === 'en'
-                    ? 'Tell us what\'s happening in your own words. Our AI understands context and asks clarifying questions to fully understand your situation.'
-                    : 'Cuéntanos lo que está pasando en tus propias palabras. Nuestra IA entiende el contexto y hace preguntas aclaratorias para comprender tu situación.'}
+                  Tell us what's happening in your own words. Our AI understands context
+                  and asks clarifying questions to fully understand your situation.
                 </p>
               </div>
 
@@ -287,11 +277,10 @@ export default function ForIndividuals() {
                   <Globe className="w-8 h-8 text-green-400" />
                 </div>
                 <div className="text-5xl font-bold text-white mb-2">2</div>
-                <h3 className="text-xl font-bold mb-3">{lang === 'en' ? 'Get Local Guidance' : 'Obtén Orientación Local'}</h3>
+                <h3 className="text-xl font-bold mb-3">Get Local Guidance</h3>
                 <p className="text-navy-300">
-                  {lang === 'en'
-                    ? 'Receive information tailored to your jurisdiction. Laws vary by location, and our AI knows the differences that matter for your situation.'
-                    : 'Recibe información adaptada a tu jurisdicción. Las leyes varían por ubicación, y nuestra IA conoce las diferencias que importan para tu situación.'}
+                  Receive information tailored to your jurisdiction. Laws vary by location,
+                  and our AI knows the differences that matter for your case.
                 </p>
               </div>
 
@@ -300,11 +289,10 @@ export default function ForIndividuals() {
                   <CheckCircle className="w-8 h-8 text-amber-400" />
                 </div>
                 <div className="text-5xl font-bold text-white mb-2">3</div>
-                <h3 className="text-xl font-bold mb-3">{lang === 'en' ? 'Know Your Options' : 'Conoce tus Opciones'}</h3>
+                <h3 className="text-xl font-bold mb-3">Know Your Options</h3>
                 <p className="text-navy-300">
-                  {lang === 'en'
-                    ? 'Understand your rights, deadlines, and next steps. Generate documents, or connect with a licensed attorney when needed.'
-                    : 'Entiende tus derechos, plazos y próximos pasos. Genera documentos o conéctate con un abogado licenciado cuando sea necesario.'}
+                  Understand your rights, deadlines, and next steps. Generate documents,
+                  or connect with a licensed attorney when needed.
                 </p>
               </div>
             </div>
@@ -315,12 +303,10 @@ export default function ForIndividuals() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-navy-900 mb-4">
-                {lang === 'en' ? 'Designed for Real Legal Challenges' : 'Diseñado para Desafíos Legales Reales'}
+                Designed for Real Legal Challenges
               </h2>
               <p className="text-lg text-navy-600 max-w-2xl mx-auto">
-                {lang === 'en'
-                  ? 'ezLegal.ai is built to help people navigate the legal situations that feel most overwhelming.'
-                  : 'ezLegal.ai está diseñado para ayudar a las personas a navegar las situaciones legales más abrumadoras.'}
+                ezLegal.ai is built to help people navigate the legal situations that feel most overwhelming.
               </p>
             </div>
 
@@ -329,15 +315,14 @@ export default function ForIndividuals() {
                 <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center mb-4">
                   <Home className="w-5 h-5 text-teal-600" />
                 </div>
-                <h3 className="font-bold text-navy-900 mb-2">{lang === 'en' ? 'Housing & Eviction' : 'Vivienda y Desalojo'}</h3>
+                <h3 className="font-bold text-navy-900 mb-2">Housing & Eviction</h3>
                 <p className="text-navy-700 mb-4">
-                  {lang === 'en'
-                    ? 'Facing an eviction notice or landlord dispute? Get instant guidance on your tenant rights, response deadlines, and next steps to protect your home.'
-                    : 'Enfrentando un aviso de desalojo o disputa con el propietario? Obtenga orientación instantánea sobre sus derechos como inquilino, plazos de respuesta y próximos pasos para proteger su hogar.'}
+                  Facing an eviction notice or landlord dispute? Get instant guidance on
+                  your tenant rights, response deadlines, and next steps to protect your home.
                 </p>
                 <div className="flex items-center gap-2 text-sm text-teal-600 font-medium">
                   <CheckCircle className="w-4 h-4" />
-                  <span>{lang === 'en' ? 'Free to ask unlimited questions' : 'Gratis para hacer preguntas ilimitadas'}</span>
+                  <span>Free to ask unlimited questions</span>
                 </div>
               </div>
 
@@ -345,15 +330,14 @@ export default function ForIndividuals() {
                 <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mb-4">
                   <Briefcase className="w-5 h-5 text-green-600" />
                 </div>
-                <h3 className="font-bold text-navy-900 mb-2">{lang === 'en' ? 'Employment & Wages' : 'Empleo y Salarios'}</h3>
+                <h3 className="font-bold text-navy-900 mb-2">Employment & Wages</h3>
                 <p className="text-navy-700 mb-4">
-                  {lang === 'en'
-                    ? 'Dealing with unpaid wages, wrongful termination, or workplace issues? Understand your options and get help drafting demand letters.'
-                    : 'Lidiando con salarios no pagados, despido injusto o problemas laborales? Entienda sus opciones y obtenga ayuda para redactar cartas de demanda.'}
+                  Dealing with unpaid wages, wrongful termination, or workplace issues?
+                  Understand your options and get help drafting demand letters.
                 </p>
                 <div className="flex items-center gap-2 text-sm text-teal-600 font-medium">
                   <CheckCircle className="w-4 h-4" />
-                  <span>{lang === 'en' ? 'Attorney referrals when needed' : 'Referencias a abogados cuando sea necesario'}</span>
+                  <span>Attorney referrals when needed</span>
                 </div>
               </div>
 
@@ -361,15 +345,14 @@ export default function ForIndividuals() {
                 <div className="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center mb-4">
                   <Heart className="w-5 h-5 text-rose-600" />
                 </div>
-                <h3 className="font-bold text-navy-900 mb-2">{lang === 'en' ? 'Family Law' : 'Derecho Familiar'}</h3>
+                <h3 className="font-bold text-navy-900 mb-2">Family Law</h3>
                 <p className="text-navy-700 mb-4">
-                  {lang === 'en'
-                    ? 'Navigating divorce, custody, or support issues? Get clear explanations of the process so you know what to expect at every step.'
-                    : 'Navegando divorcio, custodia o asuntos de manutención? Obtenga explicaciones claras del proceso para saber qué esperar en cada paso.'}
+                  Navigating divorce, custody, or support issues? Get clear explanations
+                  of the process so you know what to expect at every step.
                 </p>
                 <div className="flex items-center gap-2 text-sm text-teal-600 font-medium">
                   <CheckCircle className="w-4 h-4" />
-                  <span>{lang === 'en' ? 'Compassionate, judgment-free help' : 'Ayuda compasiva y sin juicios'}</span>
+                  <span>Compassionate, judgment-free help</span>
                 </div>
               </div>
             </div>
@@ -380,80 +363,80 @@ export default function ForIndividuals() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-navy-900 mb-4">
-                {lang === 'en' ? 'Choose Your Plan' : 'Elige tu Plan'}
+                Choose Your Plan
               </h2>
               <p className="text-lg text-navy-600">
-                {lang === 'en' ? 'Start free, upgrade when you need more' : 'Comienza gratis, mejora cuando necesites más'}
+                Start free, upgrade when you need more
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white rounded-2xl border-2 border-navy-200 p-8">
-                <h3 className="text-xl font-bold text-navy-900 mb-2">{lang === 'en' ? 'Free' : 'Gratis'}</h3>
+                <h3 className="text-xl font-bold text-navy-900 mb-2">Free</h3>
                 <div className="text-4xl font-bold text-navy-900 mb-4">
                   $0
-                  <span className="text-lg text-navy-500 font-normal">/{lang === 'en' ? 'month' : 'mes'}</span>
+                  <span className="text-lg text-navy-500 font-normal">/month</span>
                 </div>
-                <p className="text-navy-600 mb-6">{lang === 'en' ? 'Unlimited questions forever' : 'Preguntas ilimitadas para siempre'}</p>
+                <p className="text-navy-600 mb-6">Unlimited questions forever</p>
                 <ul className="space-y-3 mb-8">
                   <li className="flex items-center gap-3 text-navy-700">
                     <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span>{lang === 'en' ? 'Unlimited free questions' : 'Preguntas gratuitas ilimitadas'}</span>
+                    <span>Unlimited free questions</span>
                   </li>
                   <li className="flex items-center gap-3 text-navy-700">
                     <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span>{lang === 'en' ? 'Basic legal information' : 'Información legal básica'}</span>
+                    <span>Basic legal information</span>
                   </li>
                   <li className="flex items-center gap-3 text-navy-700">
                     <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span>{lang === 'en' ? 'Attorney directory access' : 'Acceso al directorio de abogados'}</span>
+                    <span>Attorney directory access</span>
                   </li>
                 </ul>
                 <Link
                   to="/ask"
                   className="block w-full text-center bg-navy-100 hover:bg-navy-200 text-navy-700 px-6 py-3 rounded-lg font-semibold transition-colors"
                 >
-                  {lang === 'en' ? 'Try Free' : 'Probar Gratis'}
+                  Try Free
                 </Link>
               </div>
 
               <div className="bg-gradient-to-br from-teal-600 to-teal-700 rounded-2xl p-8 text-white relative overflow-hidden">
                 <div className="absolute top-4 right-4 bg-amber-400 text-navy-900 px-3 py-1 rounded-full text-sm font-bold">
-                  {lang === 'en' ? 'PAY AS NEEDED' : 'PAGA SEGÚN NECESITES'}
+                  PAY AS NEEDED
                 </div>
-                <h3 className="text-xl font-bold mb-2">{lang === 'en' ? 'Issue Packs' : 'Paquetes de Problemas'}</h3>
+                <h3 className="text-xl font-bold mb-2">Issue Packs</h3>
                 <div className="text-4xl font-bold mb-4">
                   $29-$49
-                  <span className="text-lg text-teal-200 font-normal"> {lang === 'en' ? 'one-time' : 'único pago'}</span>
+                  <span className="text-lg text-teal-200 font-normal"> one-time</span>
                 </div>
-                <p className="text-teal-100 mb-6">{lang === 'en' ? 'When you need action plans' : 'Cuando necesitas planes de acción'}</p>
+                <p className="text-teal-100 mb-6">When you need action plans</p>
                 <ul className="space-y-3 mb-8">
                   <li className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-300" />
-                    <span>{lang === 'en' ? 'Detailed action plan for your issue' : 'Plan de acción detallado para tu problema'}</span>
+                    <span>Detailed action plan for your issue</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-300" />
-                    <span>{lang === 'en' ? 'Document templates included' : 'Plantillas de documentos incluidas'}</span>
+                    <span>Document templates included</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-300" />
-                    <span>{lang === 'en' ? 'Deadline checklists' : 'Listas de verificación de plazos'}</span>
+                    <span>Deadline checklists</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-300" />
-                    <span>{lang === 'en' ? 'Jurisdiction-specific guidance' : 'Orientación específica por jurisdicción'}</span>
+                    <span>Jurisdiction-specific guidance</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-300" />
-                    <span>{lang === 'en' ? 'Attorney referrals included' : 'Referencias a abogados incluidas'}</span>
+                    <span>Attorney referrals included</span>
                   </li>
                 </ul>
                 <Link
                   to="/pricing"
                   className="block w-full text-center bg-white hover:bg-teal-50 text-teal-600 px-6 py-3 rounded-lg font-bold transition-colors"
                 >
-                  {lang === 'en' ? 'View Issue Packs' : 'Ver Paquetes'}
+                  View Issue Packs
                 </Link>
               </div>
             </div>
@@ -463,7 +446,7 @@ export default function ForIndividuals() {
                 to="/pricing"
                 className="text-teal-600 hover:text-teal-700 font-semibold"
               >
-                {lang === 'en' ? 'View all Issue Packs and pricing options' : 'Ver todos los paquetes y opciones de precios'}
+                View all Issue Packs and pricing options
                 <ArrowRight className="w-4 h-4 inline ml-1" />
               </Link>
             </div>
@@ -474,31 +457,31 @@ export default function ForIndividuals() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-navy-900 mb-4">
-                {lang === 'en' ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
+                Frequently Asked Questions
               </h2>
             </div>
 
             <div className="space-y-4">
               {[
                 {
-                  q: lang === 'en' ? "Is ezLegal.ai a replacement for a lawyer?" : "¿Es ezLegal.ai un reemplazo para un abogado?",
-                  a: lang === 'en' ? "No. We provide legal information to help you understand your situation, but we cannot provide legal advice or represent you. For complex matters, litigation, or when you need someone to act on your behalf, you'll need a licensed attorney. We can help you find one." : "No. Proporcionamos información legal para ayudarle a entender su situación, pero no podemos dar asesoría legal ni representarle. Para asuntos complejos o litigios, necesitará un abogado licenciado. Podemos ayudarle a encontrar uno."
+                  q: "Is ezLegal.ai™ a replacement for a lawyer?",
+                  a: "No. We provide legal information to help you understand your situation, but we cannot provide legal advice or represent you. For complex matters, litigation, or when you need someone to act on your behalf, you'll need a licensed attorney. We can help you find one."
                 },
                 {
-                  q: lang === 'en' ? "How is this different from just Googling my legal question?" : "¿En qué se diferencia de buscar mi pregunta legal en Google?",
-                  a: lang === 'en' ? "Our AI understands context, asks clarifying questions, and provides jurisdiction-specific information. Instead of sifting through generic articles, you get personalized guidance based on your specific situation and location." : "Nuestra IA entiende el contexto, hace preguntas aclaratorias y proporciona información específica de su jurisdicción. En vez de buscar en artículos genéricos, obtiene orientación personalizada basada en su situación y ubicación."
+                  q: "How is this different from just Googling my legal question?",
+                  a: "Our AI understands context, asks clarifying questions, and provides jurisdiction-specific information. Instead of sifting through generic articles, you get personalized guidance based on your specific situation and location."
                 },
                 {
-                  q: lang === 'en' ? "Is my information private?" : "¿Mi información es privada?",
-                  a: lang === 'en' ? "Yes. We use TLS 1.3 + AES-256 encryption and never share or sell your data. Your conversations are not used to train AI models. However, since we're not a law firm, conversations are not protected by attorney-client privilege." : "Sí. Usamos encriptación TLS 1.3 + AES-256 y nunca compartimos ni vendemos sus datos. Sus conversaciones no se usan para entrenar modelos de IA. Sin embargo, como no somos un bufete de abogados, las conversaciones no están protegidas por el privilegio abogado-cliente."
+                  q: "Is my information private?",
+                  a: "Yes. We use TLS 1.3 + AES-256 encryption and never share or sell your data. Your conversations are not used to train AI models. However, since we're not a law firm, conversations are not protected by attorney-client privilege."
                 },
                 {
-                  q: lang === 'en' ? "What if I need an actual attorney?" : "¿Qué pasa si necesito un abogado?",
-                  a: lang === 'en' ? "We'll always tell you when your situation would benefit from professional representation. Our directory includes verified, bar-licensed attorneys you can contact directly." : "Siempre le diremos cuando su situación se beneficiaría de representación profesional. Nuestro directorio incluye abogados verificados que puede contactar directamente."
+                  q: "What if I need an actual attorney?",
+                  a: "We'll always tell you when your situation would benefit from professional representation. Our directory includes verified, bar-licensed attorneys you can contact directly."
                 },
                 {
-                  q: lang === 'en' ? "Can I cancel anytime?" : "¿Puedo cancelar en cualquier momento?",
-                  a: lang === 'en' ? "Yes, cancel anytime with no penalties. If you're not satisfied, we offer a 30-day money-back guarantee." : "Sí, cancele en cualquier momento sin penalidades. Si no está satisfecho, ofrecemos garantía de devolución de 30 días."
+                  q: "Can I cancel anytime?",
+                  a: "Yes, cancel anytime with no penalties. If you're not satisfied, we offer a 30-day money-back guarantee."
                 }
               ].map((faq, i) => (
                 <div key={i} className="bg-white rounded-xl border border-navy-200 overflow-hidden">
@@ -527,12 +510,11 @@ export default function ForIndividuals() {
         <section className="py-16 bg-gradient-to-br from-teal-600 to-teal-700 text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-              {lang === 'en' ? 'Ready to Understand Your Legal Situation?' : '¿Listo para entender su situación legal?'}
+              Ready to Understand Your Legal Situation?
             </h2>
             <p className="text-xl text-teal-100 mb-8 max-w-2xl mx-auto">
-              {lang === 'en'
-                ? 'Stop wondering and start getting answers. Our AI is ready to help you navigate your legal questions right now.'
-                : 'Deje de preguntarse y comience a obtener respuestas. Nuestra IA está lista para ayudarle a navegar sus preguntas legales ahora mismo.'}
+              Stop wondering and start getting answers. Our AI is ready to help you
+              navigate your legal questions right now.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -540,11 +522,11 @@ export default function ForIndividuals() {
                 className="inline-flex items-center justify-center gap-2 bg-white text-teal-600 px-8 py-4 rounded-lg font-bold hover:bg-teal-50 transition-all shadow-lg text-lg"
               >
                 <MessageSquare className="w-5 h-5" />
-                {lang === 'en' ? 'Start Free Chat Now' : 'Iniciar Chat Gratis'}
+                Start Free Chat Now
               </Link>
             </div>
             <p className="text-teal-200 text-sm mt-6">
-              {lang === 'en' ? 'No account required | Answers in seconds | Free questions, always' : 'Sin cuenta requerida | Respuestas en segundos | Preguntas gratis, siempre'}
+              No account required | Answers in seconds | Free questions, always
             </p>
           </div>
         </section>

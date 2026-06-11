@@ -5,12 +5,8 @@ import { supabase } from '../lib/supabase';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import { BusinessLocation, FALLBACK_LOCATION, fetchPrimaryLocation, formatAddressOneLine } from '../lib/local-seo';
-import { useLanguage } from '../contexts/LanguageContext';
-import { trackEvent } from '../services/analytics-service';
 
 export default function Contact() {
-  const { language } = useLanguage();
-  const en = language === 'en';
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -43,7 +39,6 @@ export default function Contact() {
 
       if (submitError) throw submitError;
 
-      trackEvent('support_contacted', { method: 'contact_form' });
       setSubmitSuccess(true);
       setFormData({
         name: '',
@@ -77,24 +72,22 @@ export default function Contact() {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h2 className="text-2xl font-bold text-navy-900 mb-2 text-center">
-              {en ? 'Thank You!' : 'Gracias!'}
-            </h2>
+            <h2 className="text-2xl font-bold text-navy-900 mb-2 text-center">Thank You!</h2>
             <p className="text-navy-600 mb-6 text-center">
-              {en ? "We've received your message and will get back to you within 24 hours." : 'Hemos recibido tu mensaje y te responderemos dentro de 24 horas.'}
+              We've received your message and will get back to you within 24 hours.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setSubmitSuccess(false)}
                 className="flex-1 px-6 py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors"
               >
-                {en ? 'Send Another Message' : 'Enviar Otro Mensaje'}
+                Send Another Message
               </button>
               <Link
                 to="/"
                 className="flex-1 px-6 py-3 border border-navy-200 text-navy-600 rounded-lg font-medium hover:bg-white transition-colors text-center"
               >
-                {en ? 'Back to Home' : 'Volver al Inicio'}
+                Back to Home
               </Link>
             </div>
           </div>
@@ -110,10 +103,10 @@ export default function Contact() {
       <div className="max-w-7xl mx-auto px-4 py-16 pt-32 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h1 className="text-4xl sm:text-5xl font-bold text-navy-900 mb-4">
-            {en ? 'Get in Touch' : 'Contáctanos'}
+            Get in Touch
           </h1>
           <p className="text-xl text-navy-600 max-w-2xl mx-auto">
-            {en ? "Have a question or need assistance? We're here to help you navigate your legal needs." : 'Tienes una pregunta o necesitas ayuda? Estamos aquí para ayudarte con tus necesidades legales.'}
+            Have a question or need assistance? We're here to help you navigate your legal needs.
           </p>
         </div>
 
@@ -285,7 +278,7 @@ export default function Contact() {
                   Questions About Pricing?
                 </h3>
                 <p className="text-navy-600 mb-4">
-                  We believe in transparent pricing. Free unlimited questions for everyone. Issue Packs from $29 when you need action plans. Businesses from $29/month. No hidden fees, ever.
+                  We believe in transparent pricing. Free unlimited questions for everyone. Issue Packs from $29 when you need action plans. Businesses from $99/month. No hidden fees, ever.
                 </p>
                 <Link
                   to="/pricing"

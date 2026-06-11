@@ -121,7 +121,7 @@ export function buildLocalBusinessSchema(
     name: loc.display_name,
     legalName: loc.legal_name,
     description:
-      'AI-powered legal information platform providing access to justice for consumers and small businesses. Not a law firm.',
+      'AI-powered legal guidance platform providing access to justice for consumers and small businesses. Not a law firm.',
     url: siteUrl,
     telephone: loc.phone_e164,
     email: loc.email || undefined,

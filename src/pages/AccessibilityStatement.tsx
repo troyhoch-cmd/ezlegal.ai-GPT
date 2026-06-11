@@ -1,12 +1,8 @@
 import { CheckCircle, Eye, Keyboard, Volume2, ArrowRight, FileText, Mail } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import { useLanguage } from '../contexts/LanguageContext';
 
 export default function AccessibilityStatement() {
-  const { language } = useLanguage();
-  const en = language === 'en';
-
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
@@ -16,15 +12,14 @@ export default function AccessibilityStatement() {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-navy-50 border border-navy-200 px-4 py-2 rounded-full mb-4">
               <Eye className="w-4 h-4 text-teal-600" />
-              <span className="text-navy-700 text-sm font-semibold">{en ? 'Our Commitment' : 'Nuestro Compromiso'}</span>
+              <span className="text-navy-700 text-sm font-semibold">Our Commitment</span>
             </div>
             <h1 className="text-4xl font-bold text-navy-900 mb-4">
-              {en ? 'Accessibility Statement' : 'Declaración de Accesibilidad'}
+              Accessibility Statement
             </h1>
             <p className="text-xl text-navy-600 max-w-3xl mx-auto">
-              {en
-                ? 'ezLegal.ai is committed to ensuring digital accessibility for people with disabilities. We continually improve the user experience for everyone.'
-                : 'ezLegal.ai está comprometido a garantizar la accesibilidad digital para personas con discapacidades. Mejoramos continuamente la experiencia del usuario para todos.'}
+              ezLegal.ai is committed to ensuring digital accessibility for people with disabilities.
+              We continually improve the user experience for everyone.
             </p>
           </div>
 

@@ -65,7 +65,6 @@ export async function exportAssetContentAsPDF(
   asset: PartnerAsset,
   options?: { partnerId?: string; includeQR?: boolean }
 ): Promise<void> {
-  const jsPDF = await getJsPDF();
   const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
   const pageW = 210;
   const margin = 20;
@@ -215,7 +214,6 @@ export async function exportKitAsPDF(
     partnerId?: string;
   }
 ): Promise<void> {
-  const jsPDF = await getJsPDF();
   const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
   const pageW = 210;
   const margin = 20;

@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { FileText, ListChecks, BookOpen, ChevronDown, ChevronUp, ExternalLink, ThumbsUp, HelpCircle, AlertCircle, UserCheck } from 'lucide-react';
+import { FileText, ListChecks, BookOpen, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { trackEvent } from '../../services/analytics-service';
 
 interface Source {
   title: string;
@@ -83,10 +82,7 @@ export default function TabbedResponse({
           return (
             <button
               key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id);
-                if (tab.id === 'sources') trackEvent('source_panel_opened');
-              }}
+              onClick={() => setActiveTab(tab.id)}
               role="tab"
               aria-selected={isActive}
               aria-controls={`panel-${tab.id}`}
@@ -231,22 +227,14 @@ export default function TabbedResponse({
             role="tabpanel"
             id="panel-sources"
             aria-labelledby="tab-sources"
-            data-testid="sources-panel"
             className="animate-in fade-in duration-200"
           >
             {sources.length === 0 ? (
-              <div className="text-center py-6 space-y-2">
-                <p className="text-sm text-slate-600">
-                  {en
-                    ? 'Sources unavailable for this response. Verify with a lawyer, court self-help center, legal-aid organization, or official court website.'
-                    : 'Fuentes no disponibles para esta respuesta. Verifique con un abogado, centro de autoayuda del tribunal, organización de ayuda legal, o sitio web oficial del tribunal.'}
-                </p>
-                <p className="text-xs text-slate-500">
-                  {en
-                    ? 'For jurisdiction-specific citations, try asking about a specific law, deadline, or procedure.'
-                    : 'Para citaciones de su jurisdicción, pregunte sobre una ley, fecha límite o procedimiento específico.'}
-                </p>
-              </div>
+              <p className="text-sm text-slate-500 text-center py-6">
+                {en
+                  ? 'No specific sources available for this response.'
+                  : 'No hay fuentes especificas disponibles para esta respuesta.'}
+              </p>
             ) : (
               <ul className="space-y-2">
                 {sources.map((source, index) => (
@@ -307,68 +295,6 @@ export default function TabbedResponse({
           </div>
         )}
       </div>
-
-      <div className="px-4 py-3 bg-slate-50 border-t border-slate-100 space-y-1">
-        <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-          {en
-            ? 'This is legal information, not legal advice. Using this tool does not create an attorney-client relationship.'
-            : 'Esto es información legal, no asesoría legal. Usar esta herramienta no crea una relación abogado-cliente.'}
-        </p>
-        <p className="text-[11px] text-slate-500 leading-relaxed">
-          {en
-            ? 'Sources shown when available. We recommend having an attorney review any actions before proceeding.'
-            : 'Fuentes mostradas cuando están disponibles. Recomendamos que un abogado revise cualquier acción antes de proceder.'}
-        </p>
-      </div>
-
-      {/* Feedback buttons */}
-      <FeedbackBar />
-    </div>
-  );
-}
-
-function FeedbackBar() {
-  const { language } = useLanguage();
-  const en = language === 'en';
-  const [submitted, setSubmitted] = useState<string | null>(null);
-
-  const feedbackOptions = [
-    { id: 'helpful', icon: ThumbsUp, label: en ? 'This helped' : 'Esto ayudó' },
-    { id: 'confusing', icon: HelpCircle, label: en ? 'Confusing' : 'Confuso' },
-    { id: 'wrong', icon: AlertCircle, label: en ? 'May be wrong' : 'Puede ser incorrecto' },
-    { id: 'human', icon: UserCheck, label: en ? 'Need a human' : 'Necesito una persona' },
-  ];
-
-  if (submitted) {
-    return (
-      <div className="px-4 py-2 bg-teal-50 border-t border-teal-100 text-center">
-        <p className="text-[11px] text-teal-700 font-medium">
-          {en ? 'Thank you for your feedback.' : 'Gracias por su comentario.'}
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="px-4 py-2 border-t border-slate-100 flex flex-wrap items-center gap-1.5">
-      {feedbackOptions.map(({ id, icon: Icon, label }) => (
-        <button
-          key={id}
-          onClick={() => {
-            setSubmitted(id);
-            trackEvent('response_feedback', { type: id });
-            try {
-              const existing = JSON.parse(localStorage.getItem('ezlegal_feedback') || '[]');
-              existing.push({ type: id, timestamp: new Date().toISOString() });
-              localStorage.setItem('ezlegal_feedback', JSON.stringify(existing));
-            } catch { /* ignore */ }
-          }}
-          className="inline-flex items-center gap-1 px-2 py-1 text-[11px] text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors"
-        >
-          <Icon className="w-3 h-3" aria-hidden="true" />
-          {label}
-        </button>
-      ))}
     </div>
   );
 }

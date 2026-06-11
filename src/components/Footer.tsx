@@ -127,7 +127,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-navy-800 text-center text-navy-300 text-sm space-y-3">
           <p>&copy; 2026 ezLegal.ai<sup className="text-[8px]">TM</sup>, a <span className="text-navy-200">Legalbre</span><span className="text-teal-400">ez</span><span className="text-navy-200">e</span><sup className="text-[8px]">TM</sup> company. {t('footer.copyright')}</p>
-          <p className="text-xs max-w-3xl mx-auto text-navy-200" data-testid="legal-disclaimer">
+          <p className="text-xs max-w-3xl mx-auto text-navy-200">
             {t('footer.commitmentText')}
           </p>
           <div className="pt-3 border-t border-navy-800/50">

@@ -2,12 +2,8 @@ import { Shield, FileText, Users, Scale, AlertTriangle, CheckCircle, Brain, Lock
 import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import { useLanguage } from '../contexts/LanguageContext';
 
 export default function TermsOfService() {
-  const { language } = useLanguage();
-  const en = language === 'en';
-
   return (
     <div className="min-h-screen bg-navy-50">
       <Navigation />
@@ -17,18 +13,16 @@ export default function TermsOfService() {
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
               <FileText className="w-4 h-4 text-orange-400" />
-              <span className="text-sm font-semibold">{en ? 'Legal Agreement' : 'Acuerdo Legal'}</span>
+              <span className="text-sm font-semibold">Legal Agreement</span>
             </div>
             <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-              {en ? 'Terms of Service' : 'Términos de Servicio'}
+              Terms of Service
             </h1>
             <p className="text-xl text-navy-200 mb-4">
-              {en
-                ? 'Please read these terms carefully before using ezLegal.ai services. By using our platform, you agree to be bound by these terms.'
-                : 'Lee estos términos cuidadosamente antes de usar los servicios de ezLegal.ai. Al usar nuestra plataforma, aceptas estos términos.'}
+              Please read these terms carefully before using ezLegal.ai services. By using our platform, you agree to be bound by these terms.
             </p>
             <p className="text-navy-300">
-              {en ? 'Last Updated: January 15, 2026 | Effective Date: January 15, 2026' : 'Última actualización: 15 de enero, 2026 | Fecha efectiva: 15 de enero, 2026'}
+              Last Updated: January 15, 2026 | Effective Date: January 15, 2026
             </p>
           </div>
         </div>
@@ -266,8 +260,8 @@ export default function TermsOfService() {
                   <ul className="space-y-3 text-navy-700">
                     <li><strong>Free Tier:</strong> Unlimited AI questions, basic legal guides, attorney directory access</li>
                     <li><strong>Issue Packs ($29-$49 one-time):</strong> Detailed action plans, document templates, deadline checklists</li>
-                    <li><strong>Business Plans (from $29/month):</strong> Team access, branded portal, compliance monitoring</li>
-                    <li><strong>Organization Plans (from $79/month):</strong> For Legal Service Organizations with grant reporting and custom features</li>
+                    <li><strong>Business Plans (from $99/month):</strong> Team access, branded portal, compliance monitoring</li>
+                    <li><strong>Organization Plans (from $199/month):</strong> For Legal Service Organizations with grant reporting and custom features</li>
                   </ul>
                 </div>
 

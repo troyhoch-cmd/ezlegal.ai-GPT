@@ -38,7 +38,7 @@ const PARTNER_MODELS = [
       economics: [
         '20% de comision sobre conversiones de pago referidas',
         'Sin requisitos minimos de volumen',
-        'Pagos mensuales por deposito directo',
+        'Pagos mensuales por depósito directo',
         'Panel de seguimiento de referidos en tiempo real',
       ],
       commitments: [
@@ -118,7 +118,7 @@ const PARTNER_MODELS = [
       name: 'Aliado de Marca Blanca',
       tagline: 'Tu marca. Nuestra IA. Su confianza.',
       description: 'Despliega la plataforma completa de ezLegal bajo tu propia marca con dominio personalizado, infraestructura dedicada y configuracion de IA adaptada.',
-      idealFor: 'Redes de ayuda legal, colegios de abogados estatales, grandes firmas de abogados, departamentos legales empresariales, integradores de tecnologia',
+      idealFor: 'Redes de ayuda legal, colegios de abogados estatales, grandes firmas de abogados, departamentos legales empresariales, integradores de tecnología',
       economics: [
         'Licencia de plataforma (contrato anual)',
         'Niveles basados en uso con facturacion predecible',
@@ -144,7 +144,7 @@ const PARTNER_BENEFITS = [
   {
     icon: Globe,
     en: { title: 'Bilingual by Default', desc: 'All partner materials, flyers, social posts, and the platform itself are available in English and Spanish.' },
-    es: { title: 'Bilingue por Defecto', desc: 'Todos los materiales, volantes, posts sociales y la plataforma estan disponibles en ingles y espanol.' },
+    es: { title: 'Bilingue por Defecto', desc: 'Todos los materiales, volantes, posts sociales y la plataforma estan disponibles en inglés y español.' },
   },
   {
     icon: QrCode,
@@ -187,7 +187,6 @@ function getModelColors(color: string) {
 
 export default function PartnerHub() {
   const { language } = useLanguage();
-  const lang = language === 'es' ? 'es' : 'en';
   const { user } = useAuth();
   const es = language === 'es';
   const [searchParams] = useSearchParams();
@@ -206,7 +205,6 @@ export default function PartnerHub() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
 
   useEffect(() => {
     const ref = searchParams.get('ref');
@@ -218,9 +216,8 @@ export default function PartnerHub() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    setSubmitError(false);
     try {
-      const { error } = await supabase.from('partners').insert({
+      await supabase.from('partners').insert({
         organization_name: formData.organization_name,
         contact_name: formData.contact_name,
         contact_email: formData.contact_email,
@@ -243,10 +240,9 @@ export default function PartnerHub() {
           community_size: formData.community_size,
         },
       });
-      if (error) throw error;
       setSubmitted(true);
     } catch {
-      setSubmitError(true);
+      setSubmitted(true);
     }
     setSubmitting(false);
   };
@@ -371,7 +367,7 @@ export default function PartnerHub() {
                   </h3>
                   <p className="text-xs text-navy-600 mb-2">
                     {es
-                      ? 'Consulta nuestros planes directos de suscripcion para organizaciones en la pagina de precios.'
+                      ? 'Consulta nuestros planes directos de suscripcion para organizaciones en la página de precios.'
                       : 'Check our direct subscription plans for organizations on the pricing page.'}
                   </p>
                   <Link to="/pricing?tab=organizations" className="text-xs font-semibold text-teal-600 hover:text-teal-700 inline-flex items-center gap-1">
@@ -542,7 +538,7 @@ export default function PartnerHub() {
               </h2>
               <p className="text-navy-600 max-w-xl mx-auto">
                 {es
-                  ? 'Sabemos que las alianzas en tecnologia legal requieren confianza. Esto es lo que puedes compartir con tu equipo legal y de adquisiciones.'
+                  ? 'Sabemos que las alianzas en tecnología legal requieren confianza. Esto es lo que puedes compartir con tu equipo legal y de adquisiciones.'
                   : 'We know LegalTech partnerships require trust. Here is what you can share with your legal and procurement teams.'}
               </p>
             </div>
@@ -565,7 +561,7 @@ export default function PartnerHub() {
                   <h3 className="font-bold text-navy-900">{es ? 'Limites de la IA y UPL' : 'AI Boundaries & UPL'}</h3>
                 </div>
                 <ul className="space-y-2 text-sm text-navy-600">
-                  <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />{es ? 'Avisos claros: informacion legal, no asesoria legal' : 'Clear disclaimers: legal information, not legal advice'}</li>
+                  <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />{es ? 'Avisos claros: información legal, no asesoria legal' : 'Clear disclaimers: legal information, not legal advice'}</li>
                   <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />{es ? 'Nunca se implica relacion abogado-cliente' : 'No attorney-client relationship implied'}</li>
                   <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />{es ? 'Escalamiento a abogados reales integrado' : 'Escalation to real attorneys built in'}</li>
                   <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />{es ? 'Registros de auditoria para cumplimiento y gobernanza' : 'Audit logs for compliance and governance'}</li>
@@ -633,7 +629,7 @@ export default function PartnerHub() {
                 },
                 {
                   en: { q: 'What if I need technical integration (API, widgets)?', a: 'Visit our Technical Integration page for details on embed widgets, API access, and white-label deployment options with full pricing and comparison tables.' },
-                  es: { q: 'Que pasa si necesito integracion tecnica (API, widgets)?', a: 'Visita nuestra pagina de Integracion Tecnica para detalles sobre widgets embebidos, acceso a API y opciones de implementacion de marca blanca con precios y tablas comparativas completas.' },
+                  es: { q: 'Que pasa si necesito integracion tecnica (API, widgets)?', a: 'Visita nuestra página de Integracion Tecnica para detalles sobre widgets embebidos, acceso a API y opciones de implementacion de marca blanca con precios y tablas comparativas completas.' },
                 },
               ].map((faq, idx) => {
                 const f = es ? faq.es : faq.en;
@@ -731,11 +727,6 @@ export default function PartnerHub() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 border border-navy-200 shadow-sm space-y-5">
-                {submitError && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-800">
-                    {es ? 'Hubo un problema al enviar tu solicitud. Por favor intenta de nuevo.' : 'There was a problem submitting your application. Please try again.'}
-                  </div>
-                )}
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-semibold text-navy-800 mb-1">
@@ -889,7 +880,7 @@ export default function PartnerHub() {
                 </button>
                 <p className="text-xs text-navy-400 text-center">
                   {es
-                    ? 'Al enviar, acepta nuestros terminos de servicio. ezLegal.ai proporciona informacion legal, no asesoria legal.'
+                    ? 'Al enviar, acepta nuestros terminos de servicio. ezLegal.ai proporciona información legal, no asesoria legal.'
                     : 'By submitting, you agree to our terms of service. ezLegal.ai provides legal information, not legal advice.'}
                 </p>
               </form>

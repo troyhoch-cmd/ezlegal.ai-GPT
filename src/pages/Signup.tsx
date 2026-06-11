@@ -11,7 +11,6 @@ import Footer from '../components/Footer';
 import { translateAuthError } from '../lib/microcopy';
 import { setPendingPlan, readPendingPlan } from '../lib/plan-context';
 import { recordConsent } from '../lib/consent';
-import { trackEvent } from '../services/analytics-service';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -48,7 +47,6 @@ export default function Signup() {
     }
 
     setLoading(true);
-    trackEvent('signup_started', { source: 'signup_page' });
 
     const planParam = searchParams.get('plan');
     if (planParam) setPendingPlan(planParam, 'signup');
@@ -59,7 +57,6 @@ export default function Signup() {
       setError(translateAuthError(error.message, language));
       setLoading(false);
     } else {
-      trackEvent('signup_completed', { source: 'signup_page' });
       void recordConsent({
         consentType: 'privacy_notice',
         source: 'signup_age_gate',

@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { Phone, Heart, X, ExternalLink, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { normalizeForCrisis } from '../../lib/text-utils';
 
 export type CrisisSignal = 'self_harm' | 'domestic_violence' | 'homelessness' | 'emergency';
 
@@ -86,13 +85,6 @@ const CRISIS_KEYWORDS: Record<CrisisSignal, string[]> = {
     'self harm',
     'no reason to live',
     'better off dead',
-    'matarme',
-    'suicidio',
-    'quiero morir',
-    'hacerme dano',
-    'no quiero vivir',
-    'acabar con mi vida',
-    'quitarme la vida',
   ],
   domestic_violence: [
     'domestic violence',
@@ -104,15 +96,6 @@ const CRISIS_KEYWORDS: Record<CrisisSignal, string[]> = {
     'protective order',
     'scared of',
     'abuser',
-    'violencia domestica',
-    'relacion abusiva',
-    'me pega',
-    'me golpea',
-    'me lastima',
-    'orden de proteccion',
-    'orden de restriccion',
-    'tengo miedo',
-    'abusador',
   ],
   homelessness: [
     'homeless',
@@ -123,14 +106,6 @@ const CRISIS_KEYWORDS: Record<CrisisSignal, string[]> = {
     'on the street',
     'about to lose my home',
     'eviction notice',
-    'sin hogar',
-    'desalojado',
-    'me echaron',
-    'no tengo donde ir',
-    'vivo en mi carro',
-    'en la calle',
-    'aviso de desalojo',
-    'perder mi casa',
   ],
   emergency: [],
 };
@@ -143,10 +118,10 @@ interface ContextualCrisisAlertProps {
 }
 
 export function detectCrisisSignal(text: string): CrisisSignal | null {
-  const normalized = normalizeForCrisis(text);
+  const lowerText = text.toLowerCase();
 
   for (const [signal, keywords] of Object.entries(CRISIS_KEYWORDS) as [CrisisSignal, string[]][]) {
-    if (keywords.some((kw) => normalized.includes(kw))) {
+    if (keywords.some((kw) => lowerText.includes(kw))) {
       return signal;
     }
   }

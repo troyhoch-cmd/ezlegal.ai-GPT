@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu as MenuIcon, X, ChevronDown, ChevronRight, Globe, Shield, ShieldCheck, Handshake, MessageSquare, FileText, Users, Building2, Scale, CreditCard, Info, AlertTriangle, BookOpen, Sparkles, User, Search, Home, ShoppingBag } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { Menu as MenuIcon, X, ChevronDown, ChevronRight, Globe, Shield, ShieldCheck, Handshake, MessageSquare, FileText, Users, Building2, Scale, CreditCard, Info, AlertTriangle, BookOpen, Sparkles, User, Search, Home, ShoppingBag, Video as LucideIcon } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useDemo } from '../contexts/DemoContext';
@@ -11,7 +10,6 @@ import ThemeToggle from './ThemeToggle';
 import TrustSafetyReportModal from './TrustSafetyReportModal';
 import MobileBottomNav from './MobileBottomNav';
 import { trackEngagement } from '../services/engagement-service';
-import { trackEvent } from '../services/analytics-service';
 import { fetchNavigation, consolidateNavGroups, NavGroup, NavItem } from '../lib/navigation';
 
 const ICONS: Record<string, LucideIcon> = {
@@ -76,10 +74,8 @@ export default function Navigation() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [drawerOpen]);
 
-  const isHomepage = location.pathname === '/';
   const visibleGroups = groups
     .filter((g) => g.audiences.length === 0 || g.audiences.includes(chrome.persona))
-    .filter((g) => !(isHomepage && g.slug === 'pricing'))
     .map((g) => ({
       ...g,
       items: g.items.filter((item) => item.audiences.length === 0 || item.audiences.includes(chrome.persona)),
@@ -237,17 +233,17 @@ export default function Navigation() {
                 </Link>
               )}
 
-              {/* Prominent EN | ES toggle - visible on all viewports */}
+              {/* Visible EN | ES toggle on all viewports */}
               <button
                 type="button"
-                onClick={() => { const next = language === 'en' ? 'es' : 'en'; setLanguage(next); trackEvent(next === 'es' ? 'language_toggle_es' : 'language_toggle_en', {}); }}
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-bold rounded-full border-2 border-teal-200 bg-teal-50 hover:bg-teal-100 text-teal-800 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
+                onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
+                className="inline-flex items-center gap-1 px-2 py-1.5 text-xs font-bold rounded-md border border-navy-200 bg-navy-50 hover:bg-navy-100 text-navy-700 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
                 aria-label={language === 'en' ? 'Cambiar a Español' : 'Switch to English'}
               >
-                <Globe className="h-4 w-4 text-teal-600" aria-hidden="true" />
-                <span className={language === 'es' ? 'text-teal-400' : 'font-extrabold text-teal-700'}>EN</span>
-                <span className="text-teal-300">|</span>
-                <span className={language === 'en' ? 'text-teal-400' : 'font-extrabold text-teal-700'}>ES</span>
+                <Globe className="h-3.5 w-3.5" aria-hidden="true" />
+                <span className={language === 'es' ? 'text-navy-400' : 'font-extrabold text-teal-600'}>EN</span>
+                <span className="text-navy-300">|</span>
+                <span className={language === 'en' ? 'text-navy-400' : 'font-extrabold text-teal-600'}>ES</span>
               </button>
               <ThemeToggle className="hidden md:block" />
               <Link
@@ -258,26 +254,15 @@ export default function Navigation() {
                 <ShoppingBag className="h-5 w-5" aria-hidden="true" />
               </Link>
               <Link
-                to="/start"
-                onClick={() => { trackEngagement({ featureName: 'nav_start_checkup', engagementType: 'click', metadata: { page: location.pathname } }); }}
+                to="/chat"
                 className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-lg shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
               >
                 <Sparkles className="h-4 w-4" aria-hidden="true" />
-                {language === 'es' ? 'Comenzar revisión gratis de 2 minutos' : 'Start free 2-minute checkup'}
+                {language === 'es' ? 'Hacer una pregunta' : 'Ask a question'}
               </Link>
 
               {user ? (
-                <>
-                  <Link
-                    to="/dashboard"
-                    className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-navy-700 hover:text-teal-700 transition-colors rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-                    aria-current={location.pathname.startsWith('/dashboard') ? 'page' : undefined}
-                  >
-                    <Home className="h-4 w-4" aria-hidden="true" />
-                    {language === 'es' ? 'Panel' : 'Dashboard'}
-                  </Link>
-                  <UserMenu />
-                </>
+                <UserMenu />
               ) : (
                 <Link
                   to="/login"

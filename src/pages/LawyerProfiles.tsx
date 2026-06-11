@@ -240,10 +240,6 @@ export default function LawyerProfiles() {
 
         <AttorneyMatchingDisclosure variant="panel" className="mb-6" />
 
-        <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 mb-6 text-xs text-slate-700 space-y-1">
-          <p><strong>Directory Notice:</strong> Listings are informational only. No attorney pays for placement or priority. Viewing a profile does not create an attorney-client relationship. An attorney-client relationship is only established through direct engagement with a licensed attorney who agrees to represent you.</p>
-        </div>
-
         {filteredLawyers.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl border border-navy-200">
             <div className="w-16 h-16 bg-navy-100 rounded-full flex items-center justify-center mx-auto mb-4">

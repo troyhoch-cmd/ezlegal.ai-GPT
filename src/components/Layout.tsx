@@ -10,8 +10,6 @@ import LocalePicker from './LocalePicker';
 import ThemeToggle from './ThemeToggle';
 import MobileBottomNav from './MobileBottomNav';
 import MobileDrawer from './MobileDrawer';
-import RouteDisclaimerBanner from './RouteDisclaimerBanner';
-import LanguageContinuityGuard from './LanguageContinuityGuard';
 import { useChromePersona } from '../hooks/useChromePersona';
 import { useLayoutPreferences } from '../hooks/useLayoutPreferences';
 import { useBreakpoint } from '../hooks/useBreakpoint';
@@ -105,9 +103,6 @@ export default function Layout() {
               </div>
             </div>
           </header>
-
-          <LanguageContinuityGuard />
-          <RouteDisclaimerBanner />
 
           <main
             id="main-content"

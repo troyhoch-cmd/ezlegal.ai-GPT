@@ -77,21 +77,21 @@ export default function HomeKPIStrip() {
   ).filter((k) => k.value && k.value !== '—');
 
   return (
-    <div className="mx-auto grid max-w-5xl grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-4">
+    <div className="mx-auto grid max-w-5xl grid-cols-2 gap-3 px-4 sm:grid-cols-4">
       {visibleKpis.map((kpi) => {
         const Icon = kpi.icon;
         return (
           <div
             key={kpi.label}
-            className="flex items-start gap-2 sm:gap-3 rounded-xl border border-slate-200 bg-white/80 p-2.5 sm:p-3 backdrop-blur"
+            className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white/80 p-3 backdrop-blur"
           >
-            <span className="inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 flex-shrink-0">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
               <Icon className="h-4 w-4" />
             </span>
-            <div className="min-w-0 flex-1">
-              <div className="text-sm font-semibold text-slate-900 leading-tight">{kpi.value}</div>
-              <div className="text-[11px] sm:text-xs text-slate-600 flex items-center gap-1 leading-tight mt-0.5">
-                <span className="line-clamp-2">{kpi.label}</span>
+            <div className="min-w-0">
+              <div className="text-sm font-semibold text-slate-900 truncate">{kpi.value}</div>
+              <div className="text-xs text-slate-600 flex items-center gap-1">
+                <span className="truncate">{kpi.label}</span>
                 {kpi.footnote && kpi.footnoteHref && (
                   <Link
                     to={kpi.footnoteHref}
