@@ -2,30 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  a[class*="rounded-full"],
-  a[class*="inline-flex"] {
-    text-decoration: none;
-  }
-}
-
 /* Global mobile overflow guard — prevents rogue child widths from creating
    horizontal scroll on Galaxy S21-S23 (360-412px). */
-html {
+html, body {
   overflow-x: hidden;
-}
-body, #root {
-  overflow-x: hidden;
-  max-width: 100%;
-  width: 100%;
-  position: relative;
+  max-width: 100vw;
 }
 img, video, canvas, svg {
   max-width: 100%;
   height: auto;
-}
-section, main, header, footer, nav, aside {
-  max-width: 100%;
 }
 
 /* Theme tokens. data-theme is set on <html> by useTheme / useAccessibilityPreferences. */

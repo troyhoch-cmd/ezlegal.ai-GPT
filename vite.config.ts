@@ -3,10 +3,6 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  test: {
-    include: ['tests/**/*.spec.ts', '!tests/e2e/**', '!tests/a11y.spec.ts', '!tests/launch.smoke.spec.ts', '!tests/ai-legal-safety.spec.ts'],
-    exclude: ['tests/e2e/**'],
-  },
   optimizeDeps: {
     exclude: ['lucide-react'],
   },

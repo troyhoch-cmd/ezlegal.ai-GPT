@@ -11,8 +11,8 @@ export interface LocaleDescriptor {
 }
 
 export const SUPPORTED_LOCALES: LocaleDescriptor[] = [
-  { code: 'es', bcp47: 'es-US', label: 'Spanish', nativeLabel: 'Español', dir: 'ltr', flag: 'MX' },
   { code: 'en', bcp47: 'en-US', label: 'English', nativeLabel: 'English', dir: 'ltr', flag: 'US' },
+  { code: 'es', bcp47: 'es-US', label: 'Spanish', nativeLabel: 'Español', dir: 'ltr', flag: 'MX' },
   { code: 'ar', bcp47: 'ar', label: 'Arabic', nativeLabel: 'العربية', dir: 'rtl', flag: 'SA' },
   { code: 'he', bcp47: 'he-IL', label: 'Hebrew', nativeLabel: 'עברית', dir: 'rtl', flag: 'IL' },
 ];
@@ -22,14 +22,14 @@ export function getLocaleDescriptor(code: Language): LocaleDescriptor {
 }
 
 export function detectBrowserLanguage(): Language {
-  if (typeof navigator === 'undefined') return 'es';
+  if (typeof navigator === 'undefined') return 'en';
   const candidates = [navigator.language, ...(navigator.languages ?? [])].map((l) => l.toLowerCase());
   for (const c of candidates) {
     const primary = c.split('-')[0];
     const match = SUPPORTED_LOCALES.find((l) => l.code === primary);
     if (match) return match.code;
   }
-  return 'es';
+  return 'en';
 }
 
 export function getBrowserTimezone(): string {
@@ -131,10 +131,4 @@ export function applyDirectionToDom(dir: Direction, bcp47: string, lang: Languag
   if (document.body) {
     document.body.dir = resolvedDir;
   }
-}
-
-export type BilingualText = { en: string; es: string };
-
-export function bl(obj: BilingualText, lang: Language): string {
-  return lang === 'es' ? obj.es : obj.en;
 }

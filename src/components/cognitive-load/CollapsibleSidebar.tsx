@@ -20,7 +20,6 @@ import {
   Code2,
   Info,
   ChevronDown,
-  Trash2,
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -137,8 +136,8 @@ export default function CollapsibleSidebar({
   const topNavItems: (NavItem | DropdownSection)[] = [
     {
       id: 'workspace',
-      label: 'Ask a Question',
-      labelEs: 'Hacer una Pregunta',
+      label: 'Workspace',
+      labelEs: 'Espacio de Trabajo',
       icon: MessageSquare,
       href: '/chat',
       description: 'Ask questions and get help',
@@ -146,43 +145,34 @@ export default function CollapsibleSidebar({
     },
     {
       id: 'action-plan',
-      label: 'My Next Steps',
-      labelEs: 'Mis Próximos Pasos',
+      label: 'Action Plan',
+      labelEs: 'Plan de Accion',
       icon: List,
       href: '/dashboard/action-plan',
       description: 'Tasks and next steps',
-      descriptionEs: 'Tareas y próximos pasos',
-    },
-    {
-      id: 'find-help',
-      label: 'Find Legal Help',
-      labelEs: 'Encontrar Ayuda Legal',
-      icon: Users,
-      href: '/find-attorney',
-      description: 'Browse attorneys and legal aid',
-      descriptionEs: 'Busca abogados y ayuda legal',
+      descriptionEs: 'Tareas y proximos pasos',
     },
     {
       id: 'history',
-      label: 'Past Questions',
-      labelEs: 'Preguntas Anteriores',
+      label: 'History',
+      labelEs: 'Historial',
       icon: History,
       href: '/dashboard/history',
-      description: 'Saved summaries and past chats',
-      descriptionEs: 'Resúmenes guardados y chats anteriores',
+      description: 'Past chats',
+      descriptionEs: 'Chats anteriores',
     },
     {
       id: 'tools',
-      label: 'Document Help',
-      labelEs: 'Ayuda con Documentos',
+      label: 'Tools',
+      labelEs: 'Herramientas',
       icon: Wrench,
-      tooltip: 'Upload, review, or draft documents',
-      tooltipEs: 'Sube, revisa o redacta documentos',
+      tooltip: 'Contract review, Clause finder, Summarize',
+      tooltipEs: 'Revisión de contratos, Buscador de cláusulas, Resumen',
       items: [
         {
           id: 'documents',
-          label: 'My Documents',
-          labelEs: 'Mis Documentos',
+          label: 'Documents',
+          labelEs: 'Documentos',
           icon: FileText,
           href: '/dashboard/documents',
           description: 'Your uploads and drafts',
@@ -201,43 +191,43 @@ export default function CollapsibleSidebar({
         },
         {
           id: 'lawyer-match',
-          label: 'Find a Lawyer',
-          labelEs: 'Encontrar Abogado',
+          label: 'AI + Lawyer Match',
+          labelEs: 'IA + Abogado',
           icon: Users,
           href: '/find-attorney',
           badge: 'NEW',
           badgeColor: 'bg-teal-500',
-          description: 'Get matched with legal help',
+          description: 'Find legal help',
           descriptionEs: 'Encuentra ayuda legal',
         },
         {
           id: 'predictor',
-          label: 'Check My Chances',
-          labelEs: 'Ver Mis Probabilidades',
+          label: 'Case Outcome Predictor',
+          labelEs: 'Predictor de Resultados',
           icon: Brain,
           href: '/case-predictor',
           badge: 'READY',
           badgeColor: 'bg-blue-500',
-          description: 'Estimate possible outcomes',
-          descriptionEs: 'Estima resultados posibles',
+          description: 'Know your chances',
+          descriptionEs: 'Conoce tus probabilidades',
         },
         {
           id: 'research',
-          label: 'Research a Topic',
-          labelEs: 'Investigar un Tema',
+          label: 'Research',
+          labelEs: 'Investigacion',
           icon: Search,
           href: '/dashboard/research',
-          description: 'Look up legal topics',
-          descriptionEs: 'Investiga temas legales',
+          description: 'Legal research',
+          descriptionEs: 'Investigacion legal',
         },
         {
           id: 'lawyer-profiles',
-          label: 'Lawyer Directory',
-          labelEs: 'Directorio de Abogados',
+          label: 'Lawyer Profiles',
+          labelEs: 'Perfiles de Abogados',
           icon: Users,
           href: '/dashboard/lawyer-profiles',
-          description: 'Browse attorneys near you',
-          descriptionEs: 'Encuentra abogados cerca',
+          description: 'Find attorneys',
+          descriptionEs: 'Encuentra abogados',
         },
         {
           id: 'widgets',
@@ -252,29 +242,29 @@ export default function CollapsibleSidebar({
     },
     {
       id: 'resources',
-      label: 'Learn More',
-      labelEs: 'Aprender Más',
+      label: 'Resources',
+      labelEs: 'Recursos',
       icon: BookOpen,
-      tooltip: 'Guides, articles, and referrals',
-      tooltipEs: 'Guías, artículos y referencias',
+      tooltip: 'Guides, Templates, Referrals',
+      tooltipEs: 'Guías, Plantillas, Referencias',
       items: [
         {
           id: 'guides',
           label: 'Legal Guides',
-          labelEs: 'Guías Legales',
+          labelEs: 'Guias Legales',
           icon: BookOpen,
           href: '/ezreads',
           description: 'Plain-language articles',
-          descriptionEs: 'Artículos en lenguaje simple',
+          descriptionEs: 'Articulos simples',
         },
         {
           id: 'negotiate',
           label: 'Negotiation Planner',
-          labelEs: 'Planificador de Negociación',
+          labelEs: 'Planificador de Negociacion',
           icon: Scale,
           href: '/negotiate',
-          description: 'Build a strategy',
-          descriptionEs: 'Construye una estrategia',
+          description: 'Build strategies',
+          descriptionEs: 'Construye estrategias',
         },
         {
           id: 'about',
@@ -283,7 +273,7 @@ export default function CollapsibleSidebar({
           icon: Info,
           href: '/about',
           description: 'Our mission',
-          descriptionEs: 'Nuestra misión',
+          descriptionEs: 'Nuestra mision',
         },
       ],
     },
@@ -300,18 +290,9 @@ export default function CollapsibleSidebar({
       descriptionEs: 'Cuenta y facturación',
     },
     {
-      id: 'privacy',
-      label: 'Privacy',
-      labelEs: 'Privacidad',
-      icon: HelpCircle,
-      href: '/privacy-at-a-glance',
-      description: 'How your data is used',
-      descriptionEs: 'Cómo se usan tus datos',
-    },
-    {
       id: 'contact',
-      label: 'Contact Support',
-      labelEs: 'Contactar Soporte',
+      label: 'Contact',
+      labelEs: 'Contacto',
       icon: Phone,
       href: '/contact',
       description: 'Get help or talk to a person',
@@ -549,24 +530,10 @@ export default function CollapsibleSidebar({
 
         {recentChats.length > 0 && (
           <div className="mt-4 px-2 pt-4 border-t border-slate-200">
-            <div className="px-3 mb-2 flex items-center justify-between">
+            <div className="px-3 mb-2">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 {en ? 'Recent' : 'Reciente'}
               </span>
-              {onNewChat && (
-                <button
-                  onClick={() => {
-                    if (window.confirm(en ? 'Delete this conversation? This cannot be undone.' : 'Eliminar esta conversación? No se puede deshacer.')) {
-                      onNewChat();
-                    }
-                  }}
-                  className="p-1 text-slate-400 hover:text-red-500 rounded transition-colors"
-                  aria-label={en ? 'Delete conversation' : 'Eliminar conversación'}
-                  title={en ? 'Delete conversation' : 'Eliminar conversación'}
-                >
-                  <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
-                </button>
-              )}
             </div>
             <div className="space-y-0.5">
               {recentChats.slice(0, 5).map((chat) => (

@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Lock, Key, Database, Server, Eye, ChevronDown, ChevronUp, ExternalLink, ArrowRight } from 'lucide-react';
+import { Shield, Lock, Key, Database, Server, Eye, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import { useLanguage } from '../contexts/LanguageContext';
 
 interface FAQ {
   question: string;
@@ -107,8 +106,6 @@ const securityFAQs: FAQ[] = [
 ];
 
 export default function SecurityFAQ() {
-  const { language } = useLanguage();
-  const en = language === 'en';
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
 
   return (
@@ -119,10 +116,10 @@ export default function SecurityFAQ() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center gap-2 mb-6">
             <Shield className="w-8 h-8 text-teal-400" />
-            <h1 className="text-4xl font-bold">{en ? 'Security FAQ' : 'Preguntas de Seguridad'}</h1>
+            <h1 className="text-4xl font-bold">Security FAQ</h1>
           </div>
           <p className="text-xl text-teal-100 text-center max-w-2xl mx-auto">
-            {en ? 'Common questions about how we protect your data and maintain security' : 'Preguntas frecuentes sobre cómo protegemos tus datos y mantenemos la seguridad'}
+            Common questions about how we protect your data and maintain security
           </p>
         </div>
       </section>

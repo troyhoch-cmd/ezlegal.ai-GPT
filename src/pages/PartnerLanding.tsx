@@ -19,7 +19,6 @@ interface CoBrandedPage {
   cta_link: string;
   content: Array<{ type: string; heading?: string; body?: string; items?: string[] }>;
   language: string;
-  view_count?: number;
 }
 
 interface PartnerInfo {

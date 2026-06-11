@@ -35,7 +35,7 @@ const PRODUCT_DETAILS: Record<string, {
   },
   family: {
     name: { en: 'Family Matters Pack', es: 'Paquete Familiar' },
-    description: { en: 'Divorce, custody, and family court guidance', es: 'Orientacion sobre divorcio, custodia y tribunal familiar' },
+    description: { en: 'Divorce, custody, and family court guidance', es: 'Orientación sobre divorcio, custodia y tribunal familiar' },
     includes: {
       en: ['Self-representation guide', 'Custody templates', 'Support calculator', 'Court prep', 'Attorney referral'],
       es: ['Guia de autorepresentacion', 'Plantillas de custodia', 'Calculadora', 'Preparacion', 'Referencia a abogado'],
@@ -70,7 +70,7 @@ const PRODUCT_DETAILS: Record<string, {
     description: { en: 'Data-informed probability range for your case', es: 'Rango de probabilidad basado en datos para tu caso' },
     includes: {
       en: ['Probability range', 'Key factor analysis', 'Similar case comparisons', 'Recommended next steps'],
-      es: ['Rango de probabilidad', 'Analisis de factores', 'Comparaciones de casos', 'Proximos pasos'],
+      es: ['Rango de probabilidad', 'Analisis de factores', 'Comparaciones de casos', 'Próximos pasos'],
     },
   },
 };
@@ -85,7 +85,7 @@ export default function Checkout() {
   const { user } = useAuth();
   const { language } = useLanguage();
   const { isBusiness, isOrganization } = usePersonaRouting();
-  const lang = language === 'es' ? 'es' : 'en';
+  const lang = language === 'en' ? 'en' : 'es';
 
   const queryPlan = searchParams.get('plan');
   const pending = readPendingPlan();
@@ -105,17 +105,20 @@ export default function Checkout() {
       <div className="min-h-screen bg-navy-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md text-center">
           <h1 className="text-2xl font-bold text-navy-900 mb-4">
-            {lang === 'en' ? 'Sign in to continue' : 'Inicia sesion para continuar'}
+            {language === 'en' ? 'Sign in to continue' : 'Inicia sesion para continuar'}
           </h1>
           <p className="text-navy-600 mb-6">
-            {lang === 'en' ? 'Create a free account to complete your purchase and access your materials.' : 'Crea una cuenta gratis para completar tu compra y acceder a tus materiales.'}
+            {language === 'en' ? 'Create a free account to complete your purchase and access your materials.' : 'Crea una cuenta gratis para completar tu compra y acceder a tus materiales.'}
           </p>
           <Link
             to={`/login?redirect=${encodeURIComponent(`/checkout?plan=${plan}`)}`}
             className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
           >
-            {lang === 'en' ? 'Sign In to Continue' : 'Iniciar Sesion'}
+            {language === 'en' ? 'Sign In to Continue' : 'Iniciar Sesion'}
           </Link>
+          <p className="text-xs text-navy-500 mt-3">
+            {language === 'en' ? 'No credit card required for account creation' : 'No se requiere tarjeta para crear cuenta'}
+          </p>
         </div>
       </div>
     );
@@ -129,7 +132,7 @@ export default function Checkout() {
       const { data: session } = await supabase.auth.getSession();
       const token = session.session?.access_token;
       if (!token) {
-        setErrorMsg(lang === 'en' ? 'Your session expired. Please sign in again.' : 'Sesion expirada. Inicia sesion de nuevo.');
+        setErrorMsg(language === 'en' ? 'Your session expired. Please sign in again.' : 'Sesion expirada. Inicia sesion de nuevo.');
         setProcessing(false);
         return;
       }
@@ -148,7 +151,7 @@ export default function Checkout() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setErrorMsg(data?.error ?? (lang === 'en' ? 'Could not start checkout.' : 'No se pudo iniciar el pago.'));
+        setErrorMsg(data?.error ?? (language === 'en' ? 'Could not start checkout.' : 'No se pudo iniciar el pago.'));
         setProcessing(false);
         return;
       }
@@ -159,7 +162,7 @@ export default function Checkout() {
       }
       clearPendingPlan();
       setWaitlistMsg(
-        lang === 'en'
+        language === 'en'
           ? 'Stripe is being finalized. Your interest is queued and we will email you within one business day.'
           : 'Stripe esta en configuracion. Guardamos tu interes y te contactaremos en un dia habil.',
       );
@@ -181,27 +184,22 @@ export default function Checkout() {
             </Link>
             <div className="flex items-center gap-2 text-sm text-navy-600">
               <Lock className="w-4 h-4 text-green-600" />
-              <span>{lang === 'en' ? 'Secure Checkout' : 'Pago Seguro'}</span>
+              <span>{language === 'en' ? 'Secure Checkout' : 'Pago Seguro'}</span>
             </div>
           </div>
         </div>
       </header>
 
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <h1 className="sr-only">{lang === 'en' ? 'Secure Checkout' : 'Pago Seguro'}</h1>
-        <div className="mb-6 px-4 py-3 bg-navy-50 border border-navy-200 rounded-xl text-sm text-navy-600">
-          {lang === 'en'
-            ? 'ezLegal.ai provides legal information, not legal advice. Purchasing an Issue Pack does not create an attorney-client relationship.'
-            : 'ezLegal.ai proporciona informacion legal, no asesoramiento legal. Comprar un Paquete no crea una relacion abogado-cliente.'}
-        </div>
+        <h1 className="sr-only">{language === 'en' ? 'Secure Checkout' : 'Pago Seguro'}</h1>
         <button
           onClick={() => step === 'review' ? navigate(-1) : setStep('review')}
           className="flex items-center gap-2 text-navy-600 hover:text-navy-900 mb-6 font-medium text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
           {step === 'review'
-            ? (lang === 'en' ? 'Back' : 'Volver')
-            : (lang === 'en' ? 'Back to review' : 'Volver a revision')}
+            ? (language === 'en' ? 'Back' : 'Volver')
+            : (language === 'en' ? 'Back to review' : 'Volver a revision')}
         </button>
 
         <div className="flex items-center gap-2 mb-8">
@@ -215,9 +213,9 @@ export default function Checkout() {
                 {(['review', 'payment', 'confirmation'].indexOf(step) > i) ? <CheckCircle className="w-4 h-4" /> : i + 1}
               </div>
               <span className={`text-sm font-medium ${step === s ? 'text-navy-900' : 'text-navy-500'} hidden sm:block`}>
-                {s === 'review' ? (lang === 'en' ? 'Review' : 'Revision') :
-                 s === 'payment' ? (lang === 'en' ? 'Payment' : 'Pago') :
-                 (lang === 'en' ? 'Confirmation' : 'Confirmacion')}
+                {s === 'review' ? (language === 'en' ? 'Review' : 'Revision') :
+                 s === 'payment' ? (language === 'en' ? 'Payment' : 'Pago') :
+                 (language === 'en' ? 'Confirmation' : 'Confirmacion')}
               </span>
               {i < 2 && <div className="w-8 sm:w-16 h-px bg-navy-200" />}
             </div>
@@ -229,8 +227,9 @@ export default function Checkout() {
             {step === 'review' && product && (
               <div className="bg-white rounded-xl shadow-sm border border-navy-200 p-6 sm:p-8">
                 <h2 className="text-xl font-bold text-navy-900 mb-4">
-                  {lang === 'en' ? 'Order Review' : 'Revision del Pedido'}
+                  {language === 'en' ? 'Order Review' : 'Revision del Pedido'}
                 </h2>
+
                 <div className="bg-navy-50 rounded-xl p-5 mb-6">
                   <h3 className="font-bold text-navy-900 mb-1">{product.name[lang]}</h3>
                   <p className="text-sm text-navy-600 mb-3">{product.description[lang]}</p>
@@ -248,7 +247,7 @@ export default function Checkout() {
                   <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2">
                     <Users className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
                     <p className="text-xs text-amber-700">
-                      {lang === 'en' ? 'Organization plans include multi-seat licensing and grant-eligible invoicing.' : 'Planes de organizacion incluyen licencias multi-usuario.'}
+                      {language === 'en' ? 'Organization plans include multi-seat licensing and grant-eligible invoicing.' : 'Planes de organizacion incluyen licencias multi-usuario.'}
                     </p>
                   </div>
                 )}
@@ -257,7 +256,7 @@ export default function Checkout() {
                   <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
                     <Building2 className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
                     <p className="text-xs text-blue-700">
-                      {lang === 'en' ? 'Business plans include priority support and team sharing.' : 'Planes de negocios incluyen soporte prioritario.'}
+                      {language === 'en' ? 'Business plans include priority support and team sharing.' : 'Planes de negocios incluyen soporte prioritario.'}
                     </p>
                   </div>
                 )}
@@ -265,15 +264,18 @@ export default function Checkout() {
                 <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6">
                   <div className="flex items-center gap-2 text-sm text-green-700">
                     <Shield className="w-4 h-4" />
-                    <span className="font-medium">{lang === 'en' ? '7-day satisfaction guarantee' : 'Garantia de 7 dias'}</span>
+                    <span className="font-medium">{language === 'en' ? '7-day satisfaction guarantee' : 'Garantia de 7 dias'}</span>
                   </div>
+                  <p className="text-xs text-green-600 mt-1 ml-6">
+                    {language === 'en' ? 'Full refund if not satisfied. No questions asked.' : 'Reembolso completo si no estas satisfecho.'}
+                  </p>
                 </div>
 
                 <button
                   onClick={() => setStep('payment')}
                   className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2"
                 >
-                  {lang === 'en' ? 'Continue to Payment' : 'Continuar al Pago'}
+                  {language === 'en' ? 'Continue to Payment' : 'Continuar al Pago'}
                   <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
@@ -283,12 +285,29 @@ export default function Checkout() {
               <div className="bg-white rounded-xl shadow-sm border border-navy-200 p-6 sm:p-8">
                 <div className="text-center mb-6">
                   <CreditCard className="w-10 h-10 text-teal-600 mx-auto mb-3" />
-                  <h2 className="text-xl font-bold text-navy-900">{lang === 'en' ? 'Payment' : 'Pago'}</h2>
+                  <h2 className="text-xl font-bold text-navy-900">{language === 'en' ? 'Payment' : 'Pago'}</h2>
+                </div>
+
+                <div className="bg-navy-50 border border-navy-200 rounded-xl p-5 mb-6">
+                  <div className="flex items-start gap-3">
+                    <Shield className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h3 className="font-semibold text-navy-900 text-sm">{language === 'en' ? 'Payment Security' : 'Seguridad de Pago'}</h3>
+                      <p className="text-xs text-navy-600 mb-2">
+                        {language === 'en' ? 'Your connection is protected with TLS 1.3 encryption. Payment processing via Stripe is in progress.' : 'Tu conexion esta protegida con cifrado TLS 1.3. El procesamiento de pagos via Stripe esta en progreso.'}
+                      </p>
+                      <div className="flex flex-wrap gap-2 text-xs text-navy-500">
+                        <span className="flex items-center gap-1"><CheckCircle className="w-3 h-3 text-green-600" /> TLS 1.3</span>
+                        <span className="flex items-center gap-1"><CheckCircle className="w-3 h-3 text-green-600" /> AES-256</span>
+                        <span className="flex items-center gap-1"><CheckCircle className="w-3 h-3 text-green-600" /> {language === 'en' ? 'Stripe (coming soon)' : 'Stripe (proximamente)'}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="space-y-4 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-navy-700 mb-1">{lang === 'en' ? 'Email for receipt' : 'Email para recibo'}</label>
+                    <label className="block text-sm font-medium text-navy-700 mb-1">{language === 'en' ? 'Email for receipt' : 'Email para recibo'}</label>
                     <input
                       type="email"
                       value={email}
@@ -317,9 +336,9 @@ export default function Checkout() {
                   className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {processing ? (
-                    <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" /> {lang === 'en' ? 'Processing...' : 'Procesando...'}</>
+                    <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" /> {language === 'en' ? 'Processing...' : 'Procesando...'}</>
                   ) : (
-                    <><Lock className="w-4 h-4" /> {lang === 'en' ? `Pay $${price}` : `Pagar $${price}`}</>
+                    <><Lock className="w-4 h-4" /> {language === 'en' ? `Pay $${price}` : `Pagar $${price}`}</>
                   )}
                 </button>
               </div>
@@ -332,23 +351,23 @@ export default function Checkout() {
                     <CheckCircle className="w-8 h-8 text-green-600" />
                   </div>
                   <h2 className="text-2xl font-bold text-navy-900 mb-2">
-                    {lang === 'en' ? 'Purchase Complete!' : 'Compra Completada!'}
+                    {language === 'en' ? 'Purchase Complete!' : 'Compra Completada!'}
                   </h2>
                   <p className="text-navy-600">
-                    {lang === 'en' ? 'Your materials are ready in your dashboard.' : 'Tus materiales estan listos en tu panel.'}
+                    {language === 'en' ? 'Your materials are ready in your dashboard.' : 'Tus materiales estan listos en tu panel.'}
                   </p>
                 </div>
 
                 <div className="bg-navy-50 rounded-xl p-5 mb-6">
                   <h3 className="font-bold text-navy-900 mb-3">
-                    {lang === 'en' ? 'What happens next' : 'Que sigue'}
+                    {language === 'en' ? 'What happens next' : 'Que sigue'}
                   </h3>
                   <div className="space-y-3">
                     {[
-                      { icon: Download, text: lang === 'en' ? 'Download your action plan and templates now' : 'Descarga tu plan de accion y plantillas ahora' },
-                      { icon: FileText, text: lang === 'en' ? 'Fill in templates with your specific details' : 'Completa las plantillas con tus datos' },
-                      { icon: Calendar, text: lang === 'en' ? 'Review your deadline checklist and key dates' : 'Revisa tu lista de fechas limite' },
-                      { icon: Mail, text: lang === 'en' ? 'Receipt sent to ' + email : 'Recibo enviado a ' + email },
+                      { icon: Download, text: language === 'en' ? 'Download your action plan and templates now' : 'Descarga tu plan de accion y plantillas ahora' },
+                      { icon: FileText, text: language === 'en' ? 'Fill in templates with your specific details' : 'Completa las plantillas con tus datos' },
+                      { icon: Calendar, text: language === 'en' ? 'Review your deadline checklist and key dates' : 'Revisa tu lista de fechas limite' },
+                      { icon: Mail, text: language === 'en' ? 'Receipt sent to ' + email : 'Recibo enviado a ' + email },
                     ].map((item, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -360,41 +379,58 @@ export default function Checkout() {
                   </div>
                 </div>
 
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 text-center">
+                  <p className="text-xs text-green-700">
+                    <span className="font-semibold">{language === 'en' ? 'Refund policy:' : 'Politica de reembolso:'}</span>{' '}
+                    {language === 'en' ? '7-day full refund if not satisfied. Contact support@ezlegal.ai' : '7 dias de reembolso completo. Contacta support@ezlegal.ai'}
+                  </p>
+                </div>
+
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link
                     to="/dashboard"
                     className="flex-1 bg-teal-600 hover:bg-teal-500 text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2"
                   >
-                    {lang === 'en' ? 'Go to Dashboard' : 'Ir al Panel'}
+                    {language === 'en' ? 'Go to Dashboard' : 'Ir al Panel'}
                     <ArrowRight className="w-5 h-5" />
                   </Link>
+                  <Link
+                    to="/find-attorney"
+                    className="flex-1 bg-white hover:bg-navy-50 text-navy-700 font-semibold py-4 px-6 rounded-xl transition-all border border-navy-300 flex items-center justify-center gap-2"
+                  >
+                    {language === 'en' ? 'Find an Attorney' : 'Encontrar Abogado'}
+                  </Link>
                 </div>
+
+                <p className="text-center text-xs text-navy-500 mt-4">
+                  {language === 'en' ? 'Need help? Email support@ezlegal.ai' : 'Necesitas ayuda? Email support@ezlegal.ai'}
+                </p>
               </div>
             )}
           </div>
 
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-sm border border-navy-200 p-6 sticky top-6">
-              <h3 className="text-lg font-bold text-navy-900 mb-4">{lang === 'en' ? 'Order Summary' : 'Resumen del Pedido'}</h3>
+              <h3 className="text-lg font-bold text-navy-900 mb-4">{language === 'en' ? 'Order Summary' : 'Resumen del Pedido'}</h3>
               <div className="space-y-3 mb-4">
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="font-semibold text-navy-900 text-sm">{product?.name[lang] || plan}</p>
-                    <p className="text-xs text-navy-500">{lang === 'en' ? 'One-time purchase' : 'Compra unica'}</p>
+                    <p className="text-xs text-navy-500">{language === 'en' ? 'One-time purchase' : 'Compra unica'}</p>
                   </div>
                   <p className="font-bold text-navy-900">${price}</p>
                 </div>
               </div>
               <div className="border-t border-navy-200 pt-3 mb-4">
                 <div className="flex justify-between items-center text-lg font-bold">
-                  <span className="text-navy-900">Total</span>
+                  <span className="text-navy-900">{language === 'en' ? 'Total' : 'Total'}</span>
                   <span className="text-teal-600">${price}</span>
                 </div>
               </div>
               <div className="space-y-2 text-xs text-navy-500">
-                <div className="flex items-center gap-2"><Lock className="w-3 h-3 text-green-600" /> {lang === 'en' ? 'Encrypted checkout' : 'Pago encriptado'}</div>
-                <div className="flex items-center gap-2"><Shield className="w-3 h-3 text-green-600" /> {lang === 'en' ? '7-day refund guarantee' : 'Garantia de 7 dias'}</div>
-                <div className="flex items-center gap-2"><Zap className="w-3 h-3 text-green-600" /> {lang === 'en' ? 'Instant access' : 'Acceso instantaneo'}</div>
+                <div className="flex items-center gap-2"><Lock className="w-3 h-3 text-green-600" /> TLS 1.3 + AES-256</div>
+                <div className="flex items-center gap-2"><Shield className="w-3 h-3 text-green-600" /> {language === 'en' ? '7-day refund guarantee' : 'Garantia de 7 dias'}</div>
+                <div className="flex items-center gap-2"><Zap className="w-3 h-3 text-green-600" /> {language === 'en' ? 'Instant access' : 'Acceso instantaneo'}</div>
               </div>
             </div>
           </div>

@@ -375,7 +375,7 @@ export default function WebsiteIntegration() {
                 </h2>
                 <p className="text-navy-600 mb-6 leading-relaxed">
                   Embed a chat widget, intake form, or legal guide directly on your website. Visitors get instant
-                  legal information while you capture leads and connect users with attorney directories.
+                  legal guidance while you capture leads and connect users with attorneys.
                 </p>
 
                 <div className="space-y-4 mb-8">

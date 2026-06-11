@@ -1,49 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Type, Eye, Link as LinkIcon, ALargeSmall, Settings2, X } from 'lucide-react';
 import { useReadingPreferences } from '../hooks/useReadingPreferences';
 import { useFloatingChrome } from '../contexts/FloatingChromeContext';
 import { useBreakpoint } from '../hooks/useBreakpoint';
-import { trackEvent } from '../services/analytics-service';
 
 export default function ReadingPreferencesToolbar() {
   const { prefs, update } = useReadingPreferences();
   const [open, setOpen] = useState(false);
-  const [pastHero, setPastHero] = useState(false);
   const chrome = useFloatingChrome('reading_toolbar');
   const { isMobile } = useBreakpoint();
-
-  useEffect(() => {
-    if (!isMobile) { setPastHero(true); return; }
-    const hero = document.querySelector('[data-hero-primary-cta]');
-    if (!hero) { setPastHero(true); return; }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setPastHero(!entry.isIntersecting),
-      { threshold: 0 }
-    );
-    observer.observe(hero);
-    return () => observer.disconnect();
-  }, [isMobile]);
 
   const scalePct = Math.round(prefs.font_scale * 100);
 
   if (!chrome.canShow && !open) return null;
-  if (isMobile && !pastHero && !open) return null;
 
   return (
     <>
       <button
         type="button"
-        onClick={() => { const next = !open; setOpen(next); if (next) trackEvent('reading_preferences_open', {}); }}
+        onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls="reading-prefs-panel"
         aria-label="Reading preferences"
         className={`fixed z-40 inline-flex items-center justify-center gap-2 rounded-full bg-navy-900 text-white shadow-lg hover:bg-navy-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:ring-offset-2 ${
           isMobile
-            ? 'right-4 w-11 h-11 p-0'
+            ? 'bottom-20 right-4 w-11 h-11 p-0'
             : 'bottom-4 right-4 px-4 py-2'
         }`}
-        style={{ bottom: isMobile ? 'calc(env(safe-area-inset-bottom, 0px) + 4.5rem)' : undefined }}
+        style={{ bottom: isMobile ? 'calc(env(safe-area-inset-bottom, 0px) + 5rem)' : undefined }}
       >
         <Settings2 className="w-4 h-4" aria-hidden="true" />
         {!isMobile && <span className="text-sm font-medium">Reading</span>}
@@ -54,10 +38,7 @@ export default function ReadingPreferencesToolbar() {
           id="reading-prefs-panel"
           role="dialog"
           aria-labelledby="reading-prefs-title"
-          className={`fixed right-4 z-40 w-80 max-w-[calc(100vw-2rem)] rounded-xl bg-white border border-slate-200 shadow-xl p-4 ${
-            isMobile ? '' : 'bottom-20'
-          }`}
-          style={{ bottom: isMobile ? 'calc(env(safe-area-inset-bottom, 0px) + 8rem)' : undefined }}
+          className="fixed bottom-20 right-4 z-40 w-80 rounded-xl bg-white border border-slate-200 shadow-xl p-4"
         >
           <div className="flex items-start justify-between mb-3">
             <h2 id="reading-prefs-title" className="text-base font-semibold text-navy-900">

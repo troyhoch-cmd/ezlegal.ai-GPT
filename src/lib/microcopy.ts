@@ -156,8 +156,7 @@ export const AUTH_ERROR_COPY: Record<string, { en: string; es: string }> = {
   },
 };
 
-export function translateAuthError(raw: string | undefined | null, lang?: string): string {
-  const language: Language = lang === 'es' ? 'es' : 'en';
+export function translateAuthError(raw: string | undefined | null, language: Language = 'en'): string {
   const msg = (raw ?? '').toLowerCase();
   let key: keyof typeof AUTH_ERROR_COPY = 'auth.generic';
   if (!msg) return AUTH_ERROR_COPY[key][language];

@@ -504,7 +504,7 @@ export async function computeHealthSnapshot(): Promise<HealthSnapshot> {
     supabase.from('safety_vault_items').select('id').eq('user_id', uid).limit(1),
   ]);
 
-  const profile = (profileRes.data || {}) as { preferred_jurisdiction?: string; phone?: string };
+  const profile = profileRes.data || {};
   const matters = (mattersRes.data as Array<{ id: string; status: string; next_step: string }>) || [];
   const deadlines = (deadlinesRes.data as Array<{ due_at: string; completed_at: string | null }>) || [];
   const vault = (vaultRes.data as Array<{ id: string }>) || [];

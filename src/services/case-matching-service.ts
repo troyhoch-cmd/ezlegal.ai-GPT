@@ -35,7 +35,9 @@ export interface MatchResult {
 export interface CaseQueueItem {
   id: string;
   organizationId: string;
+  clientName: string;
   caseType: string;
+  caseDescription: string;
   urgencyLevel: string;
   complexityScore: number;
   matchingStatus: string;
@@ -256,7 +258,7 @@ export async function getCaseQueue(organizationId: string): Promise<{
 }> {
   const { data, error } = await supabase
     .from('case_matching_queue')
-    .select('id, organization_id, case_type, urgency_level, complexity_score, matching_status, assigned_attorney_id, created_at, ai_recommended_practice_areas')
+    .select('*')
     .eq('organization_id', organizationId)
     .order('created_at', { ascending: false });
 
@@ -267,7 +269,9 @@ export async function getCaseQueue(organizationId: string): Promise<{
   const cases: CaseQueueItem[] = (data || []).map((row: Record<string, unknown>) => ({
     id: row.id as string,
     organizationId: row.organization_id as string,
+    clientName: row.client_name as string,
     caseType: row.case_type as string,
+    caseDescription: row.case_description as string,
     urgencyLevel: row.urgency_level as string,
     complexityScore: row.complexity_score as number,
     matchingStatus: row.matching_status as string,
@@ -426,7 +430,6 @@ export async function submitMatchFeedback(
   return { success: true };
 }
 
-// Analytics: returns aggregate counts only. Never includes client names, narratives, phone, email, address, or case facts.
 export async function getMatchingStats(organizationId: string): Promise<{
   success: boolean;
   stats?: {

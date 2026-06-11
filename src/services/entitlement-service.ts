@@ -44,20 +44,20 @@ export async function hasActiveEntitlement(
   return !!data;
 }
 
-export function getEntitlementStatusLabel(status: Entitlement['status'], lang: 'en' | 'es' = 'en'): {
+export function getEntitlementStatusLabel(status: Entitlement['status']): {
   label: string;
   color: string;
 } {
   switch (status) {
     case 'active':
-      return { label: lang === 'en' ? 'Active' : 'Activo', color: 'text-green-700 bg-green-50 border-green-200' };
+      return { label: 'Active', color: 'text-green-700 bg-green-50 border-green-200' };
     case 'pending':
-      return { label: lang === 'en' ? 'Processing' : 'Procesando', color: 'text-amber-700 bg-amber-50 border-amber-200' };
+      return { label: 'Processing', color: 'text-amber-700 bg-amber-50 border-amber-200' };
     case 'expired':
-      return { label: lang === 'en' ? 'Expired' : 'Expirado', color: 'text-slate-700 bg-slate-50 border-slate-200' };
+      return { label: 'Expired', color: 'text-slate-700 bg-slate-50 border-slate-200' };
     case 'refunded':
-      return { label: lang === 'en' ? 'Refunded' : 'Reembolsado', color: 'text-blue-700 bg-blue-50 border-blue-200' };
+      return { label: 'Refunded', color: 'text-blue-700 bg-blue-50 border-blue-200' };
     case 'payment_failed':
-      return { label: lang === 'en' ? 'Payment Failed' : 'Pago Fallido', color: 'text-red-700 bg-red-50 border-red-200' };
+      return { label: 'Payment Failed', color: 'text-red-700 bg-red-50 border-red-200' };
   }
 }

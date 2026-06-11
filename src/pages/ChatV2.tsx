@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
-import { Loader2, Sparkles, ArrowUp, ChevronDown } from 'lucide-react';
+import { Loader2, Mic, Paperclip, Sparkles, ArrowUp, ChevronDown, MessageSquare, FileText, Clock, Search } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage, type Language } from '../contexts/LanguageContext';
 import {
   UnifiedTrustStrip,
   TabbedResponse,
@@ -11,17 +10,24 @@ import {
   ContextualCrisisAlert,
   detectCrisisSignal,
 } from '../components/cognitive-load';
-import GuidedChatTour from '../components/GuidedChatTour';
 import AIModelSelector from '../components/AIModelSelector';
+import AnswerModeSelector, { type AnswerMode } from '../components/AnswerModeSelector';
+import GuidedIssueLauncher from '../components/GuidedIssueLauncher';
+import UrgentSignalCard from '../components/UrgentSignalCard';
+import CrisisStrip from '../components/CrisisStrip';
+import EthicalConversionPanel from '../components/EthicalConversionPanel';
 import JurisdictionSelector from '../components/shared/JurisdictionSelector';
+import UserMenu from '../components/UserMenu';
+import { detectUrgentSignals, type UrgentSignal } from '../lib/urgent-signal-detector';
+import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { normalizeForCrisis } from '../lib/text-utils';
 import { chatService } from '../services/chat-service';
 import type { ChatMessage, ThinkingDetails } from '../services/chat-service';
 import {
   trackMetric,
   trackTimeToFirstAction,
   trackFollowUpClick,
+  trackTabSwitch,
 } from '../lib/ab-test-config';
 
 interface Message {
@@ -53,8 +59,8 @@ interface Message {
 function parseResponseToTabs(content: string): Message['parsed'] {
   const lines = content.split('\n');
   const summary: string[] = [];
-  const actionSteps: NonNullable<Message['parsed']>['actionSteps'] = [];
-  const sources: NonNullable<Message['parsed']>['sources'] = [];
+  const actionSteps: Message['parsed']['actionSteps'] = [];
+  const sources: Message['parsed']['sources'] = [];
 
   let currentSection = 'summary';
   let stepCount = 0;
@@ -109,12 +115,32 @@ function parseResponseToTabs(content: string): Message['parsed'] {
   };
 }
 
+function LanguageToggle() {
+  const { language, setLanguage } = useLanguage();
+  return (
+    <div className="flex items-center bg-slate-100 rounded-lg p-0.5 text-[11px] font-semibold">
+      <button
+        onClick={() => setLanguage('en')}
+        className={`px-2 py-1 rounded-md transition-colors ${language === 'en' ? 'bg-white text-navy-900 shadow-sm' : 'text-navy-500 hover:text-navy-700'}`}
+        aria-label="English"
+      >
+        EN
+      </button>
+      <button
+        onClick={() => setLanguage('es')}
+        className={`px-2 py-1 rounded-md transition-colors ${language === 'es' ? 'bg-white text-navy-900 shadow-sm' : 'text-navy-500 hover:text-navy-700'}`}
+        aria-label="Espanol"
+      >
+        ES
+      </button>
+    </div>
+  );
+}
+
 export default function ChatV2() {
-  const { conversationId } = useParams<{ conversationId?: string }>();
   const { user } = useAuth();
   const { language } = useLanguage();
-  const lang = language === 'es' ? 'es' : 'en';
-  const en = lang === 'en';
+  const en = language === 'en';
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -160,18 +186,16 @@ export default function ChatV2() {
     [user?.id]
   );
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
+  const [answerMode, setAnswerMode] = useState<AnswerMode>('simple');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [pendingUrgentSignals, setPendingUrgentSignals] = useState<UrgentSignal[]>([]);
+  const [pendingMessageContent, setPendingMessageContent] = useState<string | null>(null);
   const [showAllSuggestions, setShowAllSuggestions] = useState(false);
   const [sessionStartTime] = useState(() => Date.now());
   const [hasTrackedFirstAction, setHasTrackedFirstAction] = useState(false);
-  const [showGuidedTour, setShowGuidedTour] = useState(() => {
-    try {
-      const hasSeenTour = localStorage.getItem('ezlegal-chat-tour-completed');
-      return !hasSeenTour;
-    } catch {
-      return false;
-    }
-  });
   const [showAdvancedFeatures, setShowAdvancedFeatures] = useState(false);
+  const [showJurisdictionPicker, setShowJurisdictionPicker] = useState(false);
+  const [previousSession, setPreviousSession] = useState<{ title: string; date: string; id: string } | null>(null);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -181,42 +205,80 @@ export default function ChatV2() {
   }, []);
 
   useEffect(() => {
+    if (!user?.id) return;
+    supabase
+      .from('chat_messages')
+      .select('id, content, created_at')
+      .eq('user_id', user.id)
+      .eq('role', 'user')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) {
+          const d = data as { id: string; content: string; created_at: string };
+          const dateStr = new Date(d.created_at).toLocaleDateString(language === 'es' ? 'es' : 'en-US', {
+            month: 'short', day: 'numeric',
+          });
+          setPreviousSession({
+            id: d.id,
+            title: d.content.substring(0, 60) + (d.content.length > 60 ? '...' : ''),
+            date: dateStr,
+          });
+        }
+      });
+  }, [user?.id, language]);
+
+  useEffect(() => {
+    if (!user?.id) { setIsAdmin(false); return; }
+    supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        setIsAdmin(Boolean((data as { is_admin?: boolean } | null)?.is_admin));
+      });
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    supabase
+      .from('profiles')
+      .select('onboarding_tour_completed_at')
+      .eq('id', user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        const completedAt = (data as { onboarding_tour_completed_at?: string | null } | null)
+          ?.onboarding_tour_completed_at;
+        if (completedAt) {
+          // onboarding tour already completed
+          try {
+            localStorage.setItem('ezlegal-chat-tour-completed', 'true');
+          } catch {
+            // ignore
+          }
+        }
+      });
+  }, [user?.id]);
+
+  useEffect(() => {
     chatService.setConfig({
       jurisdiction,
-      modelOverride: selectedModel || undefined
+      modelOverride: isAdmin && selectedModel ? selectedModel : undefined,
+      answerMode,
     });
     if (user?.id) {
       chatService.setUserId(user.id);
     }
-  }, [user, jurisdiction, selectedModel]);
+  }, [user, jurisdiction, selectedModel, answerMode, isAdmin]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  useEffect(() => {
-    if (conversationId && user?.id) {
-      supabase
-        .from('chat_messages')
-        .select('id, message, role, created_at')
-        .eq('user_id', user.id)
-        .eq('session_id', conversationId)
-        .order('created_at', { ascending: true })
-        .then(({ data }) => {
-          if (data && data.length > 0) {
-            setMessages(data.map(m => ({
-              id: m.id,
-              role: m.role as 'user' | 'assistant',
-              content: m.message,
-              timestamp: new Date(m.created_at),
-            })));
-          }
-        });
-    }
-  }, [conversationId, user?.id]);
-
-  const handleSend = useCallback(async () => {
-    if (!input.trim() || isLoading) return;
+  const dispatchMessage = useCallback(async (content: string) => {
+    if (!content.trim() || isLoading) return;
 
     if (!hasTrackedFirstAction) {
       trackTimeToFirstAction(sessionStartTime);
@@ -229,7 +291,7 @@ export default function ChatV2() {
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: 'user',
-      content: input.trim(),
+      content: content.trim(),
       timestamp: new Date(),
     };
 
@@ -238,7 +300,7 @@ export default function ChatV2() {
     setIsLoading(true);
 
     try {
-      const response: ChatMessage = await chatService.sendMessage(input.trim());
+      const response: ChatMessage = await chatService.sendMessage(content.trim());
 
       const parsed = parseResponseToTabs(response.content);
 
@@ -268,7 +330,31 @@ export default function ChatV2() {
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, en, hasTrackedFirstAction, sessionStartTime, messages.length]);
+  }, [isLoading, hasTrackedFirstAction, sessionStartTime, messages.length, en]);
+
+  const handleSend = useCallback(() => {
+    const trimmed = input.trim();
+    if (!trimmed || isLoading) return;
+    const signals = detectUrgentSignals(trimmed);
+    if (signals.length > 0) {
+      setPendingUrgentSignals(signals);
+      setPendingMessageContent(trimmed);
+      return;
+    }
+    void dispatchMessage(trimmed);
+  }, [input, isLoading, dispatchMessage]);
+
+  const handleUrgentContinue = useCallback(() => {
+    const content = pendingMessageContent;
+    setPendingUrgentSignals([]);
+    setPendingMessageContent(null);
+    if (content) void dispatchMessage(content);
+  }, [pendingMessageContent, dispatchMessage]);
+
+  const handleUrgentDismiss = useCallback(() => {
+    setPendingUrgentSignals([]);
+    setPendingMessageContent(null);
+  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -289,20 +375,6 @@ export default function ChatV2() {
     inputRef.current?.focus();
   };
 
-  const handleTourComplete = () => {
-    try {
-      localStorage.setItem('ezlegal-chat-tour-completed', 'true');
-    } catch { /* ignore */ }
-    setShowGuidedTour(false);
-  };
-
-  const handleTourSkip = () => {
-    try {
-      localStorage.setItem('ezlegal-chat-tour-completed', 'true');
-    } catch { /* ignore */ }
-    setShowGuidedTour(false);
-  };
-
   useEffect(() => {
     if (messages.length > 0 && messages.some(m => m.role === 'assistant')) {
       setShowAdvancedFeatures(true);
@@ -313,18 +385,49 @@ export default function ChatV2() {
     ? [{
         id: chatService.getSessionId(),
         title: messages[0]?.content.substring(0, 30) + '...',
-        date: en ? 'Now' : 'Ahora',
+        date: 'Now',
       }]
     : [];
 
   const hasCrisisSignal = messages.some(
-    (m) => m.role === 'user' && detectCrisisSignal(normalizeForCrisis(m.content))
+    (m) => m.role === 'user' && detectCrisisSignal(m.content)
   );
+
+  const lastAssistantId = [...messages].reverse().find((m) => m.role === 'assistant')?.id;
+
+  function handleConversionAction(action: 'save' | 'checklist' | 'letter' | 'find_legal_help' | 'continue' | 'upgrade') {
+    switch (action) {
+      case 'save':
+        window.location.href = '/dashboard?tab=cases';
+        break;
+      case 'checklist':
+        setInput('Turn this into a numbered checklist I can follow.');
+        inputRef.current?.focus();
+        break;
+      case 'letter':
+        setInput('Draft a letter I can send based on this.');
+        inputRef.current?.focus();
+        break;
+      case 'find_legal_help':
+        window.location.href = '/lawyer-profiles';
+        break;
+      case 'upgrade':
+        window.location.href = '/pricing';
+        break;
+      case 'continue':
+      default:
+        inputRef.current?.focus();
+    }
+  }
 
   return (
     <div className="flex h-screen bg-white">
-      {showGuidedTour && messages.length === 0 && (
-        <GuidedChatTour onComplete={handleTourComplete} onSkip={handleTourSkip} />
+      {pendingUrgentSignals.length > 0 && (
+        <UrgentSignalCard
+          signals={pendingUrgentSignals}
+          onContinue={handleUrgentContinue}
+          onDismiss={handleUrgentDismiss}
+        />
       )}
 
       <CollapsibleSidebar
@@ -344,59 +447,192 @@ export default function ChatV2() {
       />
 
       <main className="flex-1 flex flex-col min-w-0">
-        <UnifiedTrustStrip jurisdiction={jurisdiction} />
-
-        <div className="border-b border-slate-200 bg-white px-4 py-3">
-          <div className="max-w-3xl mx-auto">
-            <JurisdictionSelector
-              id="chat-jurisdiction-picker"
-              variant="compact"
-              value={jurisdiction}
-              onChange={handleJurisdictionChange}
-              label={en ? 'Jurisdiction' : 'Jurisdiccion'}
-              description={
-                en
-                  ? 'Answers are tailored to the law of the state, territory, or federal circuit you pick.'
-                  : 'Las respuestas se adaptan a la ley del estado, territorio o circuito federal que elija.'
-              }
-            />
+        <header
+          role="banner"
+          className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-sm"
+        >
+          <div className="flex items-center justify-between h-14 px-4 sm:px-6 gap-3">
+            <Link
+              to="/"
+              className="flex items-center gap-2 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded"
+              aria-label="ezLegal.ai"
+            >
+              <img
+                src="/red-and-grey-minamali-business-card-2-1-2.svg"
+                alt="ezLegal.ai"
+                width={120}
+                height={36}
+                className="h-8 w-auto"
+              />
+            </Link>
+            <div className="flex items-center gap-2">
+              {/* Language toggle */}
+              <LanguageToggle />
+              {messages.length > 0 && (
+                <AnswerModeSelector value={answerMode} onChange={setAnswerMode} compact />
+              )}
+              <UserMenu />
+            </div>
           </div>
-        </div>
+        </header>
+        <UnifiedTrustStrip
+          jurisdiction={jurisdiction}
+          onChangeJurisdiction={() => setShowJurisdictionPicker(!showJurisdictionPicker)}
+        />
+
+        {/* Jurisdiction selector - expanded when no state, or when user clicks Change */}
+        {(!jurisdiction || showJurisdictionPicker) && (
+          <div className="border-b border-slate-200 bg-white px-4 py-2.5">
+            <div className="max-w-3xl mx-auto">
+              <JurisdictionSelector
+                id="chat-jurisdiction-picker"
+                variant="compact"
+                value={jurisdiction}
+                onChange={(v) => {
+                  handleJurisdictionChange(v);
+                  setShowJurisdictionPicker(false);
+                }}
+                label={en ? 'Jurisdiction' : 'Jurisdiccion'}
+                description={
+                  !jurisdiction
+                    ? (en
+                        ? 'Answers are tailored to the law of the state, territory, or federal circuit you pick.'
+                        : 'Las respuestas se adaptan a la ley del estado, territorio o circuito federal que elija.')
+                    : undefined
+                }
+              />
+            </div>
+          </div>
+        )}
 
         <div className="flex-1 overflow-y-auto">
-          <div className="max-w-3xl mx-auto px-4 py-6">
+          <div className="max-w-3xl mx-auto px-4 py-4">
             {messages.length === 0 ? (
-              <div className="text-center py-16">
-                <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-teal-700 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Sparkles className="w-8 h-8 text-white" />
+              <div className="text-center py-4 sm:py-6">
+                <div className="flex justify-center mb-3">
+                  <CrisisStrip variant="hero" />
                 </div>
-                <h1 className="text-2xl font-bold text-slate-800 mb-2">
-                  {en ? 'How can I help you today?' : 'Como puedo ayudarte hoy?'}
+
+                {previousSession && user && (
+                  <div className="max-w-md mx-auto mb-4 text-left p-3.5 bg-teal-50 border border-teal-200 rounded-xl">
+                    <p className="text-[11px] font-medium text-teal-700 uppercase tracking-wide mb-0.5">
+                      {en
+                        ? `Continue your ${jurisdiction || ''} issue`
+                        : `Continua tu asunto ${jurisdiction ? `de ${jurisdiction}` : ''}`}
+                    </p>
+                    <p className="text-sm font-semibold text-slate-800 truncate">{previousSession.title}</p>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      {en ? `Last updated ${previousSession.date}` : `Actualizado ${previousSession.date}`}
+                    </p>
+                    <div className="flex gap-2 mt-2.5">
+                      <button
+                        onClick={() => inputRef.current?.focus()}
+                        className="px-3 py-1.5 text-xs font-semibold bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                      >
+                        {en ? 'Continue' : 'Continuar'}
+                      </button>
+                      <Link
+                        to="/dashboard/action-plan"
+                        className="px-3 py-1.5 text-xs font-semibold text-teal-700 bg-white border border-teal-300 rounded-lg hover:bg-teal-50 transition-colors"
+                      >
+                        {en ? 'View action plan' : 'Ver plan de accion'}
+                      </Link>
+                    </div>
+                  </div>
+                )}
+
+                <div className="w-11 h-11 bg-gradient-to-br from-teal-500 to-teal-700 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Sparkles className="w-5 h-5 text-white" />
+                </div>
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-1">
+                  {en ? 'What do you need help with?' : 'En que necesitas ayuda?'}
                 </h1>
-                <p className="text-slate-500 max-w-md mx-auto mb-8">
+                <p className="text-xs text-slate-400 max-w-sm mx-auto mb-4">
                   {en
-                    ? `Ask any legal question about ${jurisdiction || 'your state'} law. I provide information, not legal advice.`
-                    : `Haga cualquier pregunta legal sobre la ley de ${jurisdiction || 'su estado'}. Proporciono informacion, no asesoramiento legal.`}
+                    ? 'Legal information, not legal advice.'
+                    : 'Informacion legal, no asesoria legal.'}{' '}
+                  <Link to="/scope-disclaimers" className="underline text-teal-600 hover:text-teal-800">
+                    {en ? 'Learn more' : 'Saber mas'}
+                  </Link>
                 </p>
 
-                <div className="max-w-4xl mx-auto mb-8">
-                  <AIModelSelector
-                    selectedModel={selectedModel}
-                    onModelChange={setSelectedModel}
-                    variant="compact"
-                    label={en ? 'Select AI Model' : 'Seleccionar Modelo de IA'}
-                    showDescription={false}
+                {/* Quick actions */}
+                <div className="max-w-sm mx-auto mb-4 grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => inputRef.current?.focus()}
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 text-slate-700 transition-colors text-left"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
+                    {en ? 'Ask a question' : 'Hacer una pregunta'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setInput(en ? 'I need help understanding a document.' : 'Necesito ayuda para entender un documento.');
+                      inputRef.current?.focus();
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 text-slate-700 transition-colors text-left"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
+                    {en ? 'Upload a document' : 'Subir un documento'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setInput(en ? 'What deadlines should I be aware of for my case?' : 'Que fechas limite debo conocer para mi caso?');
+                      inputRef.current?.focus();
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 text-slate-700 transition-colors text-left"
+                  >
+                    <Clock className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
+                    {en ? 'Review deadlines' : 'Revisar fechas'}
+                  </button>
+                  <Link
+                    to="/lawyer-profiles"
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 text-slate-700 transition-colors text-left"
+                  >
+                    <Search className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
+                    {en ? 'Find legal aid' : 'Encontrar ayuda legal'}
+                  </Link>
+                </div>
+
+                <div className="max-w-sm mx-auto mb-4 flex flex-col items-center gap-1.5">
+                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
+                    {en ? 'Answer style' : 'Estilo de respuesta'}
+                  </span>
+                  <AnswerModeSelector value={answerMode} onChange={setAnswerMode} />
+                </div>
+
+                {isAdmin && (
+                  <div className="max-w-4xl mx-auto mb-8">
+                    <AIModelSelector
+                      selectedModel={selectedModel}
+                      onModelChange={setSelectedModel}
+                      variant="compact"
+                      label={en ? 'Admin: Select AI Model' : 'Admin: Seleccionar Modelo de IA'}
+                      showDescription={false}
+                    />
+                  </div>
+                )}
+
+                <div className="max-w-3xl mx-auto mb-8 text-left">
+                  <GuidedIssueLauncher
+                    audience="all"
+                    onSelect={(card) => {
+                      const seed = card.prompt_seed || '';
+                      setInput(seed);
+                      setTimeout(() => inputRef.current?.focus(), 50);
+                    }}
                   />
                 </div>
 
                 {(() => {
+                  const state = jurisdiction || (en ? 'your state' : 'tu estado');
                   const allSuggestions = [
-                    en ? 'Can my landlord raise rent mid-lease in Arizona?' : 'Puede mi arrendador subir la renta a mitad del contrato en Arizona?',
-                    en ? 'What happens if I miss my court date?' : 'Que pasa si pierdo mi fecha de corte?',
-                    en ? 'How do I get my security deposit back?' : 'Como recupero mi deposito de seguridad?',
-                    en ? 'Can I be fired for taking sick leave?' : 'Me pueden despedir por tomar licencia por enfermedad?',
-                    en ? 'How do I respond to a contract breach notice?' : 'Como respondo a un aviso de incumplimiento de contrato?',
-                    en ? 'What are my options if a customer refuses to pay?' : 'Cuales son mis opciones si un cliente se niega a pagar?',
+                    en ? `Can my landlord raise rent mid-lease in ${state}?` : `¿Puede mi arrendador subir la renta a mitad del contrato en ${state}?`,
+                    en ? `What happens if I miss my court date in ${state}?` : `¿Qué pasa si pierdo mi fecha de corte en ${state}?`,
+                    en ? `How do I get my security deposit back in ${state}?` : `¿Cómo recupero mi depósito de seguridad en ${state}?`,
+                    en ? `Can I be fired for taking sick leave in ${state}?` : `¿Me pueden despedir por tomar licencia por enfermedad en ${state}?`,
+                    en ? 'How do I respond to a contract breach notice?' : '¿Cómo respondo a un aviso de incumplimiento de contrato?',
+                    en ? 'What are my options if a customer refuses to pay?' : '¿Cuáles son mis opciones si un cliente se niega a pagar?',
                   ];
                   const visibleSuggestions = showAllSuggestions ? allSuggestions : allSuggestions.slice(0, 3);
 
@@ -483,6 +719,10 @@ export default function ChatV2() {
                             {message.modelUsed}
                           </p>
                         )}
+
+                        {message.id === lastAssistantId && !isLoading && (
+                          <EthicalConversionPanel onAction={handleConversionAction} />
+                        )}
                       </div>
                     )}
                   </div>
@@ -514,8 +754,8 @@ export default function ChatV2() {
                   onKeyDown={handleKeyDown}
                   placeholder={
                     en
-                      ? 'Ask in plain English, like "Can my landlord raise rent mid-lease in Texas?"'
-                      : 'Pregunta en espanol simple, como "Puede mi arrendador subir la renta a mitad del contrato en Texas?"'
+                      ? `Ask in plain English, like "Can my landlord raise rent mid-lease in ${jurisdiction || 'your state'}?"`
+                      : `Pregunta en español simple, como "¿Puede mi arrendador subir la renta a mitad del contrato en ${jurisdiction || 'tu estado'}?"`
                   }
                   rows={1}
                   className="w-full px-4 py-3 pr-24 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
@@ -524,9 +764,20 @@ export default function ChatV2() {
                 />
                 {showAdvancedFeatures && (
                   <div className="absolute right-2 bottom-2 flex items-center gap-1">
-                    <span className="text-xs text-slate-400 px-2">
-                      {en ? 'Shift+Enter for new line' : 'Shift+Enter nueva linea'}
-                    </span>
+                    <button
+                      className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors"
+                      aria-label={en ? 'Attach file' : 'Adjuntar archivo'}
+                      title="Attach document"
+                    >
+                      <Paperclip className="w-4 h-4" />
+                    </button>
+                    <button
+                      className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-colors"
+                      aria-label={en ? 'Voice input' : 'Entrada de voz'}
+                      title="Voice input"
+                    >
+                      <Mic className="w-4 h-4" />
+                    </button>
                   </div>
                 )}
               </div>
@@ -545,11 +796,29 @@ export default function ChatV2() {
               </button>
             </div>
 
+            <p className="mt-2 text-[11px] text-slate-500 text-center">
+              {en
+                ? "You'll get a plain-language explanation, possible next steps, and trusted resources when available."
+                : 'Recibirás una explicación en lenguaje simple, posibles próximos pasos y recursos de confianza cuando estén disponibles.'}
+            </p>
+
             <div className="flex items-center justify-between mt-3">
               <p className="text-[10px] text-slate-400">
-                {en
-                  ? 'AI provides legal information, not legal advice. Always consult a licensed attorney for specific guidance.'
-                  : 'La IA proporciona informacion legal, no asesoramiento legal. Siempre consulte a un abogado licenciado para orientacion especifica.'}
+                {en ? (
+                  <>
+                    AI provides legal information, not legal advice. Always consult a licensed attorney for specific guidance.{' '}
+                    <Link to="/privacy-at-a-glance" className="underline hover:text-slate-600">
+                      Privacy
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    La IA proporciona información legal, no asesoría legal. Siempre consulta a un abogado licenciado para orientación específica.{' '}
+                    <Link to="/privacy-at-a-glance" className="underline hover:text-slate-600">
+                      Privacidad
+                    </Link>
+                  </>
+                )}
               </p>
 
               <MoreHelpDrawer

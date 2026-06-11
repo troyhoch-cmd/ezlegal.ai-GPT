@@ -2,16 +2,12 @@ import { Shield, Lock, Eye, Database, Trash2, Users, Globe, AlertTriangle, Check
 import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import { useLanguage } from '../contexts/LanguageContext';
 
 export default function PrivacyPolicy() {
-  const { language } = useLanguage();
-  const en = language === 'en';
-
   return (
     <div className="min-h-screen bg-navy-50">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-teal-700 focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">
-        {en ? 'Skip to content' : 'Saltar al contenido'}
+        Skip to content
       </a>
       <Navigation />
 
@@ -20,18 +16,17 @@ export default function PrivacyPolicy() {
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
               <Shield className="w-4 h-4 text-orange-400" />
-              <span className="text-sm font-semibold">{en ? 'Your Privacy Matters' : 'Tu Privacidad Importa'}</span>
+              <span className="text-sm font-semibold">Your Privacy Matters</span>
             </div>
             <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-              {en ? 'Privacy Policy' : 'Política de Privacidad'}
+              Privacy Policy
             </h1>
             <p className="text-xl text-navy-200 mb-4">
-              {en
-                ? <>How we protect your personal information and legal data with{' '}<a href="#security" className="underline underline-offset-2 hover:text-white transition-colors">enterprise-grade security</a> and ethical AI practices.</>
-                : <>Cómo protegemos tu información personal y datos legales con{' '}<a href="#security" className="underline underline-offset-2 hover:text-white transition-colors">seguridad empresarial</a> y prácticas éticas de IA.</>}
+              How we protect your personal information and legal data with{' '}
+              <a href="#security" className="underline underline-offset-2 hover:text-white transition-colors">enterprise-grade security</a> and ethical AI practices.
             </p>
             <p className="text-navy-300">
-              {en ? 'Last Updated: January 15, 2026 | Effective Date: January 15, 2026' : 'Última actualización: 15 de enero, 2026 | Fecha efectiva: 15 de enero, 2026'}
+              Last Updated: January 15, 2026 | Effective Date: January 15, 2026
             </p>
           </div>
         </div>

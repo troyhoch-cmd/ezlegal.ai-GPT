@@ -80,7 +80,7 @@ export default function MobileDrawer({
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         }}
       >
-        {title && (
+        {(title || onClose) && (
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 flex-shrink-0">
             <h2 id={labelledById} className="text-base font-semibold text-slate-900">
               {title ?? ''}

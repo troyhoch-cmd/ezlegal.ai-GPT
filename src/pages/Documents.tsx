@@ -1,48 +1,41 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import usePersonaRouting from '../hooks/usePersonaRouting';
 import { supabase } from '../lib/supabase';
-import { Plus, FileText, Download, Search, Sparkles, X, MapPin, CheckCircle, AlertTriangle, Wand2, Loader2, ScanLine, Building2, Users, Globe } from 'lucide-react';
+import { Plus, FileText, Download, Search, Sparkles, X, MapPin, CheckCircle, AlertTriangle, Wand2, Loader2, ScanLine, Building2, Users, Workflow, Award, Gavel, Scale, Upload } from 'lucide-react';
 import { JURISDICTION_GROUPS, getJurisdictionName } from '../data/jurisdictions';
 import ValidatedFormField from '../components/ValidatedFormField';
 import DocumentOCRProcessor from '../components/DocumentOCRProcessor';
 import AIModelSelector from '../components/AIModelSelector';
+import DocumentIntelligencePanel from '../components/DocumentIntelligencePanel';
 import { getFieldConfig, validateField } from '../lib/document-validation';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-const templateNameES: Record<string, string> = {
-  '501c3_formation': 'Formacion 501(c)(3)',
-  general_partnership_formation: 'Formacion de Sociedad General',
-  llc_dissolution: 'Disolucion de LLC',
-  multiple_member_llc_formation: 'Formacion de LLC Multi-Miembro',
-  asset_sale_purchase: 'Acuerdo de Compraventa de Activos',
-  buy_sell_agreement: 'Acuerdo de Compra-Venta',
-  consultant_agreement: 'Contrato de Consultor',
-  corporate_bylaws: 'Estatutos Corporativos',
-  demand_letter: 'Carta de Demanda',
-  employee_severance: 'Acuerdo de Separacion Laboral',
-  employee_stock_option: 'Acuerdo de Opciones sobre Acciones',
-  employment_agreement: 'Contrato de Empleo',
-  joint_venture_agreement: 'Acuerdo de Empresa Conjunta',
-  license_agreement: 'Acuerdo de Licencia',
-  master_service_agreement: 'Acuerdo de Servicios Maestro',
-  non_compete_agreement: 'Acuerdo de No Competencia',
-  non_disclosure_agreement: 'Acuerdo de Confidencialidad',
-  partnership_agreement: 'Acuerdo de Sociedad',
-  power_of_attorney: 'Poder Notarial',
-  settlement_agreement: 'Acuerdo de Conciliacion',
-  shareholder_agreement: 'Acuerdo de Accionistas',
-  terms_of_service: 'Terminos de Servicio',
-  website_hosting_agreement: 'Acuerdo de Hospedaje Web',
-  routine_document_review: 'Revision Rutinaria de Documentos',
-  s_corp_c_corp_formation: 'Formacion S-corp o C-corp',
-  single_member_llc_formation: 'Formacion de LLC de Miembro Unico',
-  custom: 'Documento Personalizado',
-};
+function stripThinkingDetails(text: string): string {
+  if (!text) return '';
+  let out = text;
+  const endMarker = out.indexOf('---END_THINKING---');
+  if (endMarker !== -1) {
+    out = out.slice(endMarker + '---END_THINKING---'.length);
+  } else if (out.includes('---THINKING_DETAILS---')) {
+    const afterKey = out.lastIndexOf('KEY_ISSUE:');
+    if (afterKey !== -1) {
+      const nl = out.indexOf('\n', afterKey);
+      out = nl !== -1 ? out.slice(nl + 1) : '';
+    } else {
+      out = out.replace(/---THINKING_DETAILS---[\s\S]*/g, '');
+    }
+  }
+  return out
+    .replace(/^\s*LEGAL_AREA:[^\n]*\n?/gm, '')
+    .replace(/^\s*JURISDICTION:[^\n]*\n?/gm, '')
+    .replace(/^\s*KEY_ISSUE:[^\n]*\n?/gm, '')
+    .trim();
+}
 
 interface Document {
   id: string;
@@ -1016,7 +1009,6 @@ interface DocumentFormFieldsProps {
   setFormData: (data: Record<string, string>) => void;
   onBack: () => void;
   onGenerate: () => void;
-  lang: 'en' | 'es';
 }
 
 function DocumentFormFields({
@@ -1025,10 +1017,8 @@ function DocumentFormFields({
   formData,
   setFormData,
   onBack,
-  onGenerate,
-  lang
+  onGenerate
 }: DocumentFormFieldsProps) {
-  const en = lang === 'en';
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
   const fieldConfigs = useMemo(() => {
@@ -1078,15 +1068,15 @@ function DocumentFormFields({
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-navy-900">
-            {en ? templates[selectedTemplate].name : (templateNameES[selectedTemplate] || templates[selectedTemplate].name)}
+            {templates[selectedTemplate].name}
           </h3>
           <p className="text-sm text-navy-500 mt-1">
-            {en ? 'Fill in the details below to generate your document' : 'Completa los detalles a continuacion para generar tu documento'}
+            Fill in the details below to generate your document
           </p>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-xs text-navy-500 mb-1">{en ? 'Completion' : 'Completado'}</div>
+            <div className="text-xs text-navy-500 mb-1">Completion</div>
             <div className="flex items-center gap-2">
               <div className="w-24 h-2 bg-navy-200 rounded-full overflow-hidden">
                 <div
@@ -1109,24 +1099,24 @@ function DocumentFormFields({
       </div>
 
       {attemptedSubmit && !validationStatus.allValid && (
-        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3" role="alert">
+        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-medium text-amber-800">{en ? 'Please complete all required fields' : 'Por favor completa todos los campos obligatorios'}</p>
+            <p className="font-medium text-amber-800">Please complete all required fields</p>
             <p className="text-sm text-amber-700 mt-1">
-              {validationStatus.totalRequired - validationStatus.filledCount} {en ? 'required field(s) need your attention' : 'campo(s) obligatorio(s) necesitan tu atencion'}
+              {validationStatus.totalRequired - validationStatus.filledCount} required field(s) need your attention
             </p>
           </div>
         </div>
       )}
 
       {validationStatus.progress === 100 && validationStatus.allValid && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3" role="status">
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
           <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-medium text-green-800">{en ? 'All fields completed' : 'Todos los campos completados'}</p>
+            <p className="font-medium text-green-800">All fields completed</p>
             <p className="text-sm text-green-700 mt-1">
-              {en ? 'Your document is ready to generate' : 'Tu documento esta listo para generar'}
+              Your document is ready to generate
             </p>
           </div>
         </div>
@@ -1147,14 +1137,14 @@ function DocumentFormFields({
 
       <div className="flex items-center justify-between mt-8 pt-6 border-t border-navy-200">
         <div className="text-sm text-navy-500">
-          <span className="text-red-500">*</span> {en ? 'Required fields' : 'Campos obligatorios'}
+          <span className="text-red-500">*</span> Required fields
         </div>
         <div className="flex gap-3">
           <button
             onClick={onBack}
             className="px-6 py-2.5 border border-navy-300 text-navy-700 rounded-lg font-medium hover:bg-navy-50 transition-colors"
           >
-            {en ? 'Back' : 'Volver'}
+            Back
           </button>
           <button
             onClick={handleGenerate}
@@ -1166,7 +1156,7 @@ function DocumentFormFields({
             }`}
           >
             <Sparkles className="w-5 h-5" />
-            {en ? 'Generate Document' : 'Generar Documento'}
+            Generate Document
           </button>
         </div>
       </div>
@@ -1179,6 +1169,7 @@ export default function Documents() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showOCRScanner, setShowOCRScanner] = useState(false);
+  const [ocrPurpose, setOcrPurpose] = useState<'analyze' | 'draft'>('analyze');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedJurisdiction, setSelectedJurisdiction] = useState('');
   const [documentJurisdiction, setDocumentJurisdiction] = useState('');
@@ -1191,21 +1182,83 @@ export default function Documents() {
   const [customDocumentDescription, setCustomDocumentDescription] = useState('');
   const [customDocumentParties, setCustomDocumentParties] = useState('');
   const [customDocumentDetails, setCustomDocumentDetails] = useState('');
+  const [draftingMode, setDraftingMode] = useState<'quick_form' | 'associate' | 'partner'>('associate');
+  const [draftingPresets, setDraftingPresets] = useState<Array<{
+    mode: 'quick_form' | 'associate' | 'partner';
+    display_name: string;
+    description: string;
+    min_tier: string;
+    default_model: string;
+    max_tokens: number;
+    draft_passes: number;
+    rag_top_k: number;
+    system_prompt: string;
+  }>>([]);
   const [isGeneratingCustom, setIsGeneratingCustom] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [generationStage, setGenerationStage] = useState('');
+  const [analyzingDocument, setAnalyzingDocument] = useState<Document | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showIntelligenceHub, setShowIntelligenceHub] = useState(false);
   const { user } = useAuth();
   const { language } = useLanguage();
-  const lang = language === 'es' ? 'es' : 'en' as const;
-  const en = lang === 'en';
   const { isBusiness, isOrganization } = usePersonaRouting();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   useEffect(() => {
-    if (!user) {
-      setDocuments([]);
-      setLoading(false);
-      return;
-    }
     loadDocuments();
+  }, []);
+
+  useEffect(() => {
+    if (searchParams.get('draft') !== '1') return;
+    const goal = searchParams.get('goal') || '';
+    const step = searchParams.get('step') || '';
+    const detail = searchParams.get('detail') || '';
+    if (!goal && !step) return;
+    setSelectedTemplate('custom');
+    setCustomDocumentType(step || 'Drafted document');
+    setCustomDocumentDescription([goal, detail].filter(Boolean).join(' — '));
+    setCustomDocumentDetails(detail);
+    setDocumentTitle(step || goal);
+    setShowModal(true);
+    searchParams.delete('draft');
+    searchParams.delete('goal');
+    searchParams.delete('step');
+    searchParams.delete('detail');
+    setSearchParams(searchParams, { replace: true });
+  }, [searchParams, setSearchParams]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadPresets() {
+      const { data } = await supabase
+        .from('drafting_mode_presets')
+        .select('mode, display_name, description, min_tier, default_model, max_tokens, draft_passes, rag_top_k, system_prompt')
+        .order('display_order');
+      if (!cancelled && data) {
+        setDraftingPresets(data as typeof draftingPresets);
+      }
+    }
+    loadPresets();
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadAdmin() {
+      if (!user?.id) {
+        setIsAdmin(false);
+        return;
+      }
+      const { data } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (!cancelled) setIsAdmin(Boolean(data?.is_admin));
+    }
+    loadAdmin();
+    return () => { cancelled = true; };
   }, [user?.id]);
 
   const loadDocuments = async () => {
@@ -1222,9 +1275,6 @@ export default function Documents() {
 
     if (!error && data) {
       setDocuments(data);
-      setErrorMessage(null);
-    } else if (error) {
-      setErrorMessage(en ? 'Failed to load documents. Please try again.' : 'Error al cargar documentos. Intente de nuevo.');
     }
     setLoading(false);
   };
@@ -1237,7 +1287,7 @@ export default function Documents() {
       initialFormData[field] = '';
     });
     setFormData(initialFormData);
-    setDocumentTitle(!en ? (templateNameES[template] || templateData.name) : templateData.name);
+    setDocumentTitle(templateData.name);
     setGeneratedContent('');
   };
 
@@ -1253,35 +1303,68 @@ export default function Documents() {
 
   const generateCustomDocument = async () => {
     if (!customDocumentType.trim() || !customDocumentDescription.trim()) return;
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      alert(en ? 'Service configuration error. Please try again later.' : 'Error de configuracion del servicio. Intente de nuevo mas tarde.');
-      return;
-    }
 
     setIsGeneratingCustom(true);
+    setGenerationStage('Preparing drafting brief');
+
+    const preset = draftingPresets.find((p) => p.mode === draftingMode);
+    const effectiveModel = selectedModel || preset?.default_model || undefined;
+    const maxTokens = preset?.max_tokens ?? 8192;
+    const draftPasses = preset?.draft_passes ?? 1;
+    const ragTopK = preset?.rag_top_k ?? 0;
 
     try {
-      const prompt = `Generate an informational legal draft with the following specifications. This draft is for educational/informational purposes and should be reviewed by a licensed attorney before use.
+      let contextDocuments: Array<{ title: string; citation?: string; jurisdiction?: string; excerpt: string; url?: string }> = [];
+
+      if (ragTopK > 0) {
+        setGenerationStage('Retrieving controlling authorities');
+        const retrievalQuery = `${customDocumentType}. ${customDocumentDescription}. ${customDocumentDetails}`.slice(0, 2000);
+        try {
+          const ragRes = await fetch(`${SUPABASE_URL}/functions/v1/legalbreeze-rag`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({
+              query: retrievalQuery,
+              sessionId: crypto.randomUUID(),
+              jurisdiction: documentJurisdiction || 'Arizona',
+              includeCompliance: false,
+            }),
+          });
+          if (ragRes.ok) {
+            const ragData = await ragRes.json();
+            const citations = Array.isArray(ragData.citations) ? ragData.citations : [];
+            contextDocuments = citations.slice(0, ragTopK).map((c: { title?: string; source?: string; jurisdiction?: string; excerpt?: string; url?: string }) => ({
+              title: c.title || c.source || 'Authority',
+              citation: c.source,
+              jurisdiction: c.jurisdiction,
+              excerpt: (c.excerpt || '').slice(0, 2400),
+              url: c.url,
+            }));
+          }
+        } catch (ragErr) {
+          console.warn('RAG retrieval failed, continuing without grounding:', ragErr);
+        }
+      }
+
+      setGenerationStage(
+        draftingMode === 'partner'
+          ? 'Drafting senior-partner document (multi-pass)'
+          : draftingMode === 'associate'
+          ? 'Drafting associate-level document'
+          : 'Generating form'
+      );
+
+      const prompt = `Produce a complete legal document matching the specification below.
 
 DOCUMENT TYPE: ${customDocumentType}
 
-DESCRIPTION/PURPOSE: ${customDocumentDescription}
+DESCRIPTION / PURPOSE: ${customDocumentDescription}
 
-${customDocumentParties ? `PARTIES INVOLVED: ${customDocumentParties}` : ''}
-
-${customDocumentDetails ? `ADDITIONAL DETAILS: ${customDocumentDetails}` : ''}
-
-${documentJurisdiction ? `JURISDICTION: ${documentJurisdiction}` : ''}
-
-Please generate a complete draft document that:
-1. Includes all standard sections appropriate for this type of document
-2. Uses proper legal formatting with numbered articles/sections
-3. Includes signature blocks where appropriate
-4. Uses placeholder text in [BRACKETS] for any specific information that needs to be filled in
-5. Includes standard legal disclaimers and boilerplate language
-6. Is ready for attorney review and customization
-
-Generate the complete document text now.`;
+${customDocumentParties ? `PARTIES INVOLVED: ${customDocumentParties}\n` : ''}${customDocumentDetails ? `ADDITIONAL DETAILS: ${customDocumentDetails}\n` : ''}${documentJurisdiction ? `GOVERNING JURISDICTION: ${documentJurisdiction}\n` : ''}
+Follow the drafting posture defined in your system instructions. Return the execution-ready document text only.`;
 
       const response = await fetch(`${SUPABASE_URL}/functions/v1/openai-chat`, {
         method: 'POST',
@@ -1292,35 +1375,69 @@ Generate the complete document text now.`;
         body: JSON.stringify({
           messages: [{ role: 'user', content: prompt }],
           sessionId: crypto.randomUUID(),
+          userId: user?.id,
           jurisdiction: documentJurisdiction || 'General',
-          modelOverride: selectedModel || undefined,
-          maxTokens: 8192,
+          modelOverride: effectiveModel,
+          maxTokens,
           temperature: 0.2,
+          draftingMode,
+          draftPasses,
+          contextDocuments,
+          systemPromptOverride: preset?.system_prompt,
         }),
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to generate document (status ${response.status})`);
+        throw new Error('Failed to generate document');
       }
 
       const data = await response.json();
-      if (!data || typeof data.response !== 'string' || !data.response.trim()) {
-        throw new Error('Invalid response from document generation service');
-      }
-      let generatedText = data.response;
+      let generatedText = data.response || '';
 
       const followUpStart = generatedText.indexOf('---FOLLOW_UP_QUESTIONS---');
       if (followUpStart !== -1) {
         generatedText = generatedText.substring(0, followUpStart).trim();
       }
+      const thinkingEnd = generatedText.indexOf('---END_THINKING_DETAILS---');
+      if (thinkingEnd !== -1) {
+        generatedText = generatedText.substring(thinkingEnd + '---END_THINKING_DETAILS---'.length).trim();
+      }
 
       setGeneratedContent(generatedText);
       setDocumentTitle(customDocumentType);
+
+      if (user?.id) {
+        await supabase.from('document_generation_requests').insert({
+          user_id: user.id,
+          document_type: customDocumentType,
+          drafting_mode: draftingMode,
+          model_used: data.modelUsed || effectiveModel || '',
+          jurisdiction: documentJurisdiction || '',
+          rag_context_count: data.ragContextCount ?? contextDocuments.length,
+          draft_passes: data.draftPasses ?? draftPasses,
+          tokens_used: data.usage?.totalTokens ?? 0,
+          status: 'success',
+        });
+      }
     } catch (error) {
       console.error('Error generating custom document:', error);
-      alert(en ? 'Failed to generate document. Please try again.' : 'Error al generar el documento. Intente de nuevo.');
+      if (user?.id) {
+        await supabase.from('document_generation_requests').insert({
+          user_id: user.id,
+          document_type: customDocumentType,
+          drafting_mode: draftingMode,
+          model_used: effectiveModel || '',
+          jurisdiction: documentJurisdiction || '',
+          rag_context_count: 0,
+          draft_passes: draftPasses,
+          status: 'error',
+          error_message: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+      alert('Failed to generate document. Please try again.');
     } finally {
       setIsGeneratingCustom(false);
+      setGenerationStage('');
     }
   };
 
@@ -1338,7 +1455,7 @@ Generate the complete document text now.`;
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      alert(en ? 'Document downloaded! Sign up to save and manage all your documents online.' : 'Documento descargado! Registrate para guardar y administrar tus documentos en linea.');
+      alert('Document downloaded! Sign up to save and manage all your documents online.');
       return;
     }
 
@@ -1359,10 +1476,7 @@ Generate the complete document text now.`;
       setGeneratedContent('');
       setDocumentTitle('');
       setDocumentJurisdiction('');
-      setErrorMessage(null);
       loadDocuments();
-    } else {
-      setErrorMessage(en ? 'Failed to save document. Please try again.' : 'Error al guardar el documento. Intente de nuevo.');
     }
   };
 
@@ -1389,8 +1503,8 @@ Generate the complete document text now.`;
             <div className="flex items-center gap-3">
               <Sparkles className="w-6 h-6 text-green-600" />
               <div>
-                <p className="font-semibold text-navy-900">{en ? 'Try Document Generation Free!' : 'Prueba la Generacion de Documentos Gratis!'}</p>
-                <p className="text-sm text-navy-600">{en ? 'Generate documents now, sign up to save them online' : 'Genera documentos ahora, registrate para guardarlos en linea'}</p>
+                <p className="font-semibold text-navy-900">Try Document Generation Free!</p>
+                <p className="text-sm text-navy-600">Generate documents now, sign up to save them online</p>
               </div>
             </div>
             <div className="flex gap-2">
@@ -1398,7 +1512,7 @@ Generate the complete document text now.`;
                 to="/signup"
                 className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all font-semibold shadow-md text-sm"
               >
-                {en ? 'Create Account' : 'Crear Cuenta'}
+                Create Account
               </Link>
             </div>
           </div>
@@ -1407,41 +1521,71 @@ Generate the complete document text now.`;
 
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-navy-900 mb-2">
-          {en ? 'Legal Documents' : 'Documentos Legales'}
+          {language === 'en' ? 'Legal Documents' : 'Documentos Legales'}
         </h1>
         <p className="text-navy-600">
-          {en ? 'Create informational legal drafts for review by a licensed attorney' : 'Crea borradores legales informativos para revision por un abogado licenciado'}
+          {language === 'en' ? 'Generate professional legal documents in minutes' : 'Genera documentos legales profesionales en minutos'}
         </p>
       </div>
 
-      {/* Non-dismissible scope boundary — legal information only */}
-      <div className="mb-6 p-4 bg-slate-100 border border-slate-300 rounded-xl flex items-start gap-3" role="region" aria-label={en ? 'Legal scope notice' : 'Aviso de alcance legal'}>
-        <AlertTriangle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
-        <p className="text-sm text-slate-700">
-          {en
-            ? 'This tool provides legal information and workflow support only — not legal advice. All generated documents are informational drafts requiring review by a licensed attorney before use.'
-            : 'Esta herramienta proporciona solo informacion legal y soporte de flujo de trabajo — no asesoramiento legal. Todos los documentos generados son borradores informativos que requieren revision por un abogado licenciado antes de su uso.'}
-        </p>
-      </div>
-
-      {errorMessage && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3" role="alert">
-          <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-red-700">{errorMessage}</p>
+      <div className="mb-6 rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50 via-white to-white p-5 shadow-sm">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-600 text-white">
+              <Workflow className="h-6 w-6" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-navy-900">
+                {language === 'en' ? 'Document Intelligence Hub' : 'Centro de Inteligencia Documental'}
+              </h2>
+              <p className="mt-0.5 max-w-2xl text-sm text-navy-600">
+                {language === 'en'
+                  ? 'Clause navigation, risk detection, drafting suggestions, intake triage, and multi-step research planning — all in one place.'
+                  : 'Navegacion de clausulas, deteccion de riesgos, sugerencias de redaccion, triaje de admision y planificacion de investigacion.'}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {['Clause navigator', 'Risk detection', 'Clause suggestions', 'Intake triage', 'Research planner'].map((tag) => (
+                  <span key={tag} className="rounded-full border border-teal-200 bg-white px-2 py-0.5 text-[11px] font-medium text-teal-700">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowIntelligenceHub((v) => !v)}
+            className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
+          >
+            <Sparkles className="h-4 w-4" />
+            {showIntelligenceHub
+              ? language === 'en' ? 'Hide' : 'Ocultar'
+              : language === 'en' ? 'Open hub' : 'Abrir'}
+          </button>
         </div>
-      )}
+        {showIntelligenceHub && (
+          <div className="mt-5">
+            <DocumentIntelligencePanel documentId={null} documentContent="" />
+            <p className="mt-3 text-xs text-navy-500">
+              {language === 'en'
+                ? 'To run clause navigation and risk detection on an existing document, click Analyze on any saved document card below.'
+                : 'Para ejecutar navegacion de clausulas y deteccion de riesgos en un documento existente, haga clic en Analizar en cualquier tarjeta guardada.'}
+            </p>
+          </div>
+        )}
+      </div>
 
       {isOrganization && (
         <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
           <Users className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div className="text-sm">
             <p className="font-semibold text-amber-800 mb-1">
-              {en ? 'Organization Mode' : 'Modo Organizacion'}
+              {language === 'en' ? 'Organization Mode' : 'Modo Organizacion'}
             </p>
             <p className="text-amber-700">
-              {en
+              {language === 'en'
                 ? 'Documents generated here are templates requiring attorney review before client distribution. Always verify jurisdiction-specific requirements.'
-                : 'Los documentos generados aqui son plantillas que requieren revision de abogado antes de la distribucion al cliente. Siempre verifique los requisitos jurisdiccionales.'}
+                : 'Los documentos generados aquí son plantillas que requieren revision de abogado antes de la distribucion al cliente. Siempre verifique los requisitos jurisdiccionales.'}
             </p>
           </div>
         </div>
@@ -1452,10 +1596,10 @@ Generate the complete document text now.`;
           <Building2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
           <div className="text-sm">
             <p className="font-semibold text-blue-800 mb-1">
-              {en ? 'Business Templates' : 'Plantillas de Negocios'}
+              {language === 'en' ? 'Business Templates' : 'Plantillas de Negocios'}
             </p>
             <p className="text-blue-700">
-              {en
+              {language === 'en'
                 ? 'Recommended: LLC Formation, Employment Agreements, NDAs, Consultant Agreements, and Master Service Agreements.'
                 : 'Recomendados: Formacion de LLC, Contratos de Empleo, NDAs, Contratos de Consultor y Acuerdos de Servicios.'}
             </p>
@@ -1469,7 +1613,7 @@ Generate the complete document text now.`;
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-navy-400 w-5 h-5" />
             <input
               type="text"
-              placeholder={en ? 'Search documents...' : 'Buscar documentos...'}
+              placeholder={language === 'en' ? 'Search documents...' : 'Buscar documentos...'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
@@ -1483,9 +1627,9 @@ Generate the complete document text now.`;
                 value={selectedJurisdiction}
                 onChange={(e) => setSelectedJurisdiction(e.target.value)}
                 className="flex-1 px-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                aria-label={en ? 'Filter by jurisdiction' : 'Filtrar por jurisdiccion'}
+                aria-label="Filter by jurisdiction"
               >
-                <option value="">{en ? 'All Jurisdictions' : 'Todas las Jurisdicciones'}</option>
+                <option value="">All Jurisdictions</option>
                 {JURISDICTION_GROUPS.map((group) => (
                   <optgroup key={group.label} label={group.label}>
                     {group.options.map((jurisdiction) => (
@@ -1500,18 +1644,37 @@ Generate the complete document text now.`;
           </div>
 
           <button
-            onClick={() => setShowOCRScanner(true)}
+            onClick={() => {
+              setOcrPurpose('analyze');
+              setShowOCRScanner(true);
+            }}
             className="bg-navy-700 hover:bg-navy-800 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap"
           >
-            <ScanLine className="w-5 h-5" />
-            {en ? 'Scan Document' : 'Escanear Documento'}
+            <Upload className="w-5 h-5" />
+            {language === 'en' ? 'Upload to Analyze' : 'Subir para Analizar'}
           </button>
           <button
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              try {
+                const storedGoal = sessionStorage.getItem('ezlegal-research-goal') || '';
+                const storedStepRaw = sessionStorage.getItem('ezlegal-research-draft-step');
+                const storedStep = storedStepRaw ? JSON.parse(storedStepRaw) : null;
+                if (storedGoal || storedStep) {
+                  setSelectedTemplate('custom');
+                  setCustomDocumentType(storedStep?.title || 'Drafted document');
+                  setCustomDocumentDescription(
+                    [storedGoal, storedStep?.detail].filter(Boolean).join(' — ')
+                  );
+                  setCustomDocumentDetails(storedStep?.detail || '');
+                  setDocumentTitle(storedStep?.title || storedGoal);
+                }
+              } catch {}
+              setShowModal(true);
+            }}
             className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap"
           >
             <Plus className="w-5 h-5" />
-            {en ? 'Generate Document' : 'Generar Documento'}
+            {language === 'en' ? 'Generate Document' : 'Generar Documento'}
           </button>
         </div>
       </div>
@@ -1528,12 +1691,12 @@ Generate the complete document text now.`;
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-navy-900 mb-1 truncate">{doc.title}</h3>
-                <p className="text-sm text-navy-500 capitalize">{!en && templateNameES[doc.document_type] ? templateNameES[doc.document_type] : doc.document_type.replace(/_/g, ' ')}</p>
+                <p className="text-sm text-navy-500 capitalize">{doc.document_type.replace('_', ' ')}</p>
               </div>
             </div>
 
             <p className="text-sm text-navy-600 mb-4 line-clamp-3">
-              {doc.content.substring(0, 150)}...
+              {stripThinkingDetails(doc.content).substring(0, 150)}...
             </p>
 
             <div className="flex items-center justify-between text-xs text-navy-500">
@@ -1546,23 +1709,19 @@ Generate the complete document text now.`;
                   </span>
                 )}
               </div>
-              <button
-                onClick={() => {
-                  const blob = new Blob([doc.content], { type: 'text/plain' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = `${doc.title || 'document'}.txt`;
-                  document.body.appendChild(a);
-                  a.click();
-                  document.body.removeChild(a);
-                  URL.revokeObjectURL(url);
-                }}
-                className="text-teal-600 hover:text-teal-700 flex items-center gap-1"
-              >
-                <Download className="w-4 h-4" />
-                {en ? 'Download' : 'Descargar'}
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setAnalyzingDocument(doc)}
+                  className="text-teal-600 hover:text-teal-700 flex items-center gap-1"
+                >
+                  <Workflow className="w-4 h-4" />
+                  {language === 'en' ? 'Analyze' : 'Analizar'}
+                </button>
+                <button className="text-teal-600 hover:text-teal-700 flex items-center gap-1">
+                  <Download className="w-4 h-4" />
+                  {language === 'en' ? 'Download' : 'Descargar'}
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -1574,17 +1733,17 @@ Generate the complete document text now.`;
             <FileText className="w-8 h-8 text-navy-400" />
           </div>
           <h3 className="text-lg font-semibold text-navy-900 mb-2">
-            {en ? 'No documents found' : 'No se encontraron documentos'}
+            {language === 'en' ? 'No documents found' : 'No se encontraron documentos'}
           </h3>
           <p className="text-navy-600 mb-4">
-            {en ? 'Create your first informational legal draft' : 'Crea tu primer borrador legal informativo'}
+            {language === 'en' ? 'Generate your first legal document' : 'Genera tu primer documento legal'}
           </p>
           <button
             onClick={() => setShowModal(true)}
             className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-lg font-medium inline-flex items-center gap-2 transition-colors"
           >
             <Sparkles className="w-5 h-5" />
-            {en ? 'Generate Document' : 'Generar Documento'}
+            {language === 'en' ? 'Generate Document' : 'Generar Documento'}
           </button>
         </div>
       )}
@@ -1594,7 +1753,7 @@ Generate the complete document text now.`;
           <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-navy-200 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-navy-900">
-                {en ? 'Generate Legal Document' : 'Generar Documento Legal'}
+                {language === 'en' ? 'Generate Legal Document' : 'Generar Documento Legal'}
               </h2>
               <button
                 onClick={() => {
@@ -1618,17 +1777,7 @@ Generate the complete document text now.`;
             <div className="p-6">
               {!selectedTemplate ? (
                 <div>
-                  <h3 className="text-lg font-semibold text-navy-900 mb-4">
-                    {en ? 'Choose a Template' : 'Elige una Plantilla'}
-                  </h3>
-                  {!en && (
-                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
-                      <Globe className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
-                      <p className="text-xs text-blue-700">
-                        Los documentos legales se generan en ingles para garantizar la precision juridica. Para uso en espanol, recomendamos la revision y traduccion por un abogado licenciado.
-                      </p>
-                    </div>
-                  )}
+                  <h3 className="text-lg font-semibold text-navy-900 mb-4">Choose a Template</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(templates).map(([key, template]) => (
                       <button
@@ -1637,7 +1786,7 @@ Generate the complete document text now.`;
                         className="p-4 border-2 border-navy-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition-all text-left"
                       >
                         <FileText className="w-8 h-8 text-teal-600 mb-2" />
-                        <h4 className="font-semibold text-navy-900">{!en ? (templateNameES[key] || template.name) : template.name}</h4>
+                        <h4 className="font-semibold text-navy-900">{template.name}</h4>
                       </button>
                     ))}
                     <button
@@ -1650,10 +1799,10 @@ Generate the complete document text now.`;
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <Wand2 className="w-8 h-8 text-teal-600" />
-                        <span className="text-xs font-medium px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full">{en ? 'AI-Powered' : 'Con IA'}</span>
+                        <span className="text-xs font-medium px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full">AI-Powered</span>
                       </div>
-                      <h4 className="font-semibold text-navy-900">{en ? 'Custom Document' : 'Documento Personalizado'}</h4>
-                      <p className="text-sm text-navy-500 mt-1">{en ? 'Describe any document type and let AI generate it for you' : 'Describe cualquier tipo de documento y deja que la AI lo genere por ti'}</p>
+                      <h4 className="font-semibold text-navy-900">Custom Document</h4>
+                      <p className="text-sm text-navy-500 mt-1">Describe any document type and let AI generate it for you</p>
                     </button>
                   </div>
                 </div>
@@ -1661,38 +1810,38 @@ Generate the complete document text now.`;
                 <div>
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h3 className="text-lg font-semibold text-navy-900">{en ? 'Create Custom Document' : 'Crear Documento Personalizado'}</h3>
-                      <p className="text-sm text-navy-500 mt-1">{en ? 'Describe the document you need and AI will generate it' : 'Describe el documento que necesitas y la AI lo generara'}</p>
+                      <h3 className="text-lg font-semibold text-navy-900">Create Custom Document</h3>
+                      <p className="text-sm text-navy-500 mt-1">Describe the document you need and AI will generate it</p>
                     </div>
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-teal-50 rounded-full">
                       <Wand2 className="w-4 h-4 text-teal-600" />
-                      <span className="text-sm font-medium text-teal-700">{en ? 'AI-Powered' : 'Con IA'}</span>
+                      <span className="text-sm font-medium text-teal-700">AI-Powered</span>
                     </div>
                   </div>
 
                   <div className="space-y-5">
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        {en ? 'Document Type' : 'Tipo de Documento'} <span className="text-red-500">*</span>
+                        Document Type <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={customDocumentType}
                         onChange={(e) => setCustomDocumentType(e.target.value)}
-                        placeholder={en ? 'e.g., Independent Contractor Agreement, Cease and Desist Letter, Release of Liability...' : 'ej., Contrato de Contratista Independiente, Carta de Cese y Desista, Liberacion de Responsabilidad...'}
+                        placeholder="e.g., Independent Contractor Agreement, Cease and Desist Letter, Release of Liability..."
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
-                      <p className="text-xs text-navy-500 mt-1">{en ? 'Enter any type of legal document you need' : 'Ingresa cualquier tipo de documento legal que necesites'}</p>
+                      <p className="text-xs text-navy-500 mt-1">Enter any type of legal document you need</p>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        {en ? 'Description & Purpose' : 'Descripcion y Proposito'} <span className="text-red-500">*</span>
+                        Description & Purpose <span className="text-red-500">*</span>
                       </label>
                       <textarea
                         value={customDocumentDescription}
                         onChange={(e) => setCustomDocumentDescription(e.target.value)}
-                        placeholder={en ? 'Describe what this document is for, its purpose, and any specific requirements...' : 'Describe para que es este documento, su proposito y cualquier requisito especifico...'}
+                        placeholder="Describe what this document is for, its purpose, and any specific requirements..."
                         rows={4}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
@@ -1700,25 +1849,25 @@ Generate the complete document text now.`;
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        {en ? 'Parties Involved' : 'Partes Involucradas'}
+                        Parties Involved
                       </label>
                       <input
                         type="text"
                         value={customDocumentParties}
                         onChange={(e) => setCustomDocumentParties(e.target.value)}
-                        placeholder={en ? 'e.g., Company ABC (Employer) and John Doe (Contractor)' : 'ej., Empresa ABC (Empleador) y Juan Perez (Contratista)'}
+                        placeholder="e.g., Company ABC (Employer) and John Doe (Contractor)"
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        {en ? 'Additional Details' : 'Detalles Adicionales'}
+                        Additional Details
                       </label>
                       <textarea
                         value={customDocumentDetails}
                         onChange={(e) => setCustomDocumentDetails(e.target.value)}
-                        placeholder={en ? 'Any specific terms, clauses, dates, amounts, or other details to include...' : 'Cualquier termino, clausula, fecha, monto u otros detalles especificos a incluir...'}
+                        placeholder="Any specific terms, clauses, dates, amounts, or other details to include..."
                         rows={3}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
@@ -1726,14 +1875,14 @@ Generate the complete document text now.`;
 
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        {en ? 'Jurisdiction' : 'Jurisdiccion'}
+                        Jurisdiction
                       </label>
                       <select
                         value={documentJurisdiction}
                         onChange={(e) => setDocumentJurisdiction(e.target.value)}
                         className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       >
-                        <option value="">{en ? 'Select Jurisdiction (optional)' : 'Seleccionar Jurisdiccion (opcional)'}</option>
+                        <option value="">Select Jurisdiction (optional)</option>
                         {JURISDICTION_GROUPS.map((group) => (
                           <optgroup key={group.label} label={group.label}>
                             {group.options.map((jurisdiction) => (
@@ -1744,24 +1893,76 @@ Generate the complete document text now.`;
                           </optgroup>
                         ))}
                       </select>
-                      <p className="text-xs text-navy-500 mt-1">{en ? 'If applicable, select the state whose laws should govern this document' : 'Si aplica, selecciona el estado cuyas leyes deben regir este documento'}</p>
+                      <p className="text-xs text-navy-500 mt-1">If applicable, select the state whose laws should govern this document</p>
                     </div>
                   </div>
 
-                  <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <AIModelSelector
-                      selectedModel={selectedModel}
-                      onModelChange={setSelectedModel}
-                      variant="compact"
-                      label={en ? 'AI Model for Document Generation' : 'Modelo AI para Generacion de Documentos'}
-                      showDescription={false}
-                    />
-                    <p className="text-xs text-navy-500 mt-2">{en ? 'Premium models (GPT-5 series) provide more comprehensive and sophisticated legal documents' : 'Los modelos premium (serie GPT-5) proporcionan documentos legales mas completos y sofisticados'}</p>
+                  <div className="mt-6">
+                    <label className="block text-sm font-semibold text-navy-900 mb-3">
+                      Drafting Posture
+                    </label>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {[
+                        { mode: 'quick_form' as const, icon: FileText, label: 'Quick Form', blurb: 'Clean fillable template. Ready in seconds.', badge: 'Free' },
+                        { mode: 'associate' as const, icon: Scale, label: 'Associate Draft', blurb: 'Mid-level associate quality. Jurisdiction-aware.', badge: 'Free' },
+                        { mode: 'partner' as const, icon: Award, label: 'Senior Partner', blurb: 'Am Law 100 execution-quality. Multi-pass with authority grounding.', badge: 'Premium' },
+                      ].map(({ mode, icon: Icon, label, blurb, badge }) => {
+                        const isSelected = draftingMode === mode;
+                        return (
+                          <button
+                            key={mode}
+                            type="button"
+                            onClick={() => setDraftingMode(mode)}
+                            className={`text-left p-4 rounded-xl border-2 transition-all ${
+                              isSelected
+                                ? 'border-teal-500 bg-teal-50 shadow-md'
+                                : 'border-navy-200 bg-white hover:border-teal-300'
+                            }`}
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className={`p-2 rounded-lg ${isSelected ? 'bg-teal-100 text-teal-700' : 'bg-navy-50 text-navy-600'}`}>
+                                <Icon className="w-5 h-5" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <h4 className="font-bold text-navy-900 text-sm">{label}</h4>
+                                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${badge === 'Premium' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}`}>
+                                    {badge}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-navy-600 mt-1 leading-relaxed">{blurb}</p>
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {draftingMode === 'partner' && (
+                      <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2">
+                        <Gavel className="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
+                        <p className="text-xs text-amber-900">
+                          Senior-partner mode retrieves controlling statutes and case law, drafts in three passes with self-critique, and produces a Drafting Notes appendix citing only verified authorities. Generation may take 30-90 seconds.
+                        </p>
+                      </div>
+                    )}
                   </div>
+
+                  {isAdmin && (
+                    <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                      <AIModelSelector
+                        selectedModel={selectedModel}
+                        onModelChange={setSelectedModel}
+                        variant="compact"
+                        label="AI Model for Document Generation"
+                        showDescription={false}
+                      />
+                      <p className="text-xs text-navy-500 mt-2">Admin only: Premium models (GPT-5 series) provide more comprehensive legal documents</p>
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-between mt-8 pt-6 border-t border-navy-200">
                     <div className="text-sm text-navy-500">
-                      <span className="text-red-500">*</span> {en ? 'Required fields' : 'Campos obligatorios'}
+                      <span className="text-red-500">*</span> Required fields
                     </div>
                     <div className="flex gap-3">
                       <button
@@ -1774,7 +1975,7 @@ Generate the complete document text now.`;
                         }}
                         className="px-6 py-2.5 border border-navy-300 text-navy-700 rounded-lg font-medium hover:bg-navy-50 transition-colors"
                       >
-                        {en ? 'Back' : 'Volver'}
+                        Back
                       </button>
                       <button
                         onClick={generateCustomDocument}
@@ -1788,12 +1989,12 @@ Generate the complete document text now.`;
                         {isGeneratingCustom ? (
                           <>
                             <Loader2 className="w-5 h-5 animate-spin" />
-                            {en ? 'Generating...' : 'Generando...'}
+                            {generationStage || 'Generating...'}
                           </>
                         ) : (
                           <>
                             <Wand2 className="w-5 h-5" />
-                            {en ? 'Generate Document' : 'Generar Documento'}
+                            Generate Document
                           </>
                         )}
                       </button>
@@ -1811,44 +2012,14 @@ Generate the complete document text now.`;
                     setFormData({});
                   }}
                   onGenerate={generateDocument}
-                  lang={lang}
                 />
               ) : (
                 <div>
-                  <h3 className="text-lg font-semibold text-navy-900 mb-4">
-                    {en ? 'Preview & Save' : 'Vista Previa y Guardar'}
-                  </h3>
-
-                  {/* Non-dismissible legal disclaimer */}
-                  <div className="mb-4 p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-lg">
-                    <div className="flex items-start gap-3">
-                      <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                      <div className="text-sm">
-                        <p className="font-semibold text-amber-800">
-                          {en ? 'Important: This is an informational draft only' : 'Importante: Este es solo un borrador informativo'}
-                        </p>
-                        <p className="text-amber-700 mt-1">
-                          {en
-                            ? 'This AI-generated document is not legal advice and may not be suitable for your specific situation. Have a licensed attorney review any document before signing or relying on it.'
-                            : 'Este documento generado por AI no es asesoramiento legal y puede no ser adecuado para su situacion especifica. Haga que un abogado licenciado revise cualquier documento antes de firmarlo o depender de el.'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {!en && (
-                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
-                      <Globe className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
-                      <p className="text-xs text-blue-700">
-                        Los documentos legales se generan en ingles para garantizar la precision juridica. Para uso en espanol, recomendamos la revision y traduccion por un abogado licenciado.
-                      </p>
-                    </div>
-                  )}
-
+                  <h3 className="text-lg font-semibold text-navy-900 mb-4">Preview & Save</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        {en ? 'Document Title' : 'Titulo del Documento'}
+                        Document Title
                       </label>
                       <input
                         type="text"
@@ -1859,7 +2030,7 @@ Generate the complete document text now.`;
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-navy-700 mb-2">
-                        {en ? 'Jurisdiction' : 'Jurisdiccion'}
+                        Jurisdiction
                       </label>
                       <div className="flex items-center gap-2">
                         <MapPin className="text-navy-400 w-5 h-5 flex-shrink-0" />
@@ -1867,9 +2038,9 @@ Generate the complete document text now.`;
                           value={documentJurisdiction}
                           onChange={(e) => setDocumentJurisdiction(e.target.value)}
                           className="flex-1 px-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                          aria-label={en ? 'Select document jurisdiction' : 'Seleccionar jurisdiccion del documento'}
+                          aria-label="Select document jurisdiction"
                         >
-                          <option value="">{en ? 'Select Jurisdiction' : 'Seleccionar Jurisdiccion'}</option>
+                          <option value="">Select Jurisdiction</option>
                           {JURISDICTION_GROUPS.map((group) => (
                             <optgroup key={group.label} label={group.label}>
                               {group.options.map((jurisdiction) => (
@@ -1882,7 +2053,7 @@ Generate the complete document text now.`;
                         </select>
                       </div>
                       <p className="text-xs text-navy-500 mt-1">
-                        {en ? 'Select the jurisdiction this document applies to' : 'Selecciona la jurisdiccion a la que aplica este documento'}
+                        Select the jurisdiction this document applies to
                       </p>
                     </div>
                   </div>
@@ -1896,15 +2067,13 @@ Generate the complete document text now.`;
                       onClick={() => setGeneratedContent('')}
                       className="px-6 py-2 border border-navy-300 text-navy-700 rounded-lg font-medium hover:bg-navy-50"
                     >
-                      {en ? 'Edit' : 'Editar'}
+                      Edit
                     </button>
                     <button
                       onClick={handleSaveDocument}
                       className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium"
                     >
-                      {user
-                        ? (en ? 'Save Document' : 'Guardar Documento')
-                        : (en ? 'Download Document' : 'Descargar Documento')}
+                      {user ? 'Save Document' : 'Download Document'}
                     </button>
                   </div>
                 </div>
@@ -1914,16 +2083,49 @@ Generate the complete document text now.`;
         </div>
       )}
 
+      {analyzingDocument && (
+        <div className="fixed inset-0 bg-navy-900/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm overflow-y-auto">
+          <div className="max-w-4xl w-full my-8">
+            <DocumentIntelligencePanel
+              documentId={analyzingDocument.id}
+              documentContent={analyzingDocument.content}
+              onClose={() => setAnalyzingDocument(null)}
+            />
+          </div>
+        </div>
+      )}
+
       {showOCRScanner && (
         <div className="fixed inset-0 bg-navy-900/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
           <div className="max-w-3xl w-full">
             <DocumentOCRProcessor
               onClose={() => setShowOCRScanner(false)}
-              onTextExtracted={(text) => {
-                setCustomDocumentDescription(text);
+              onTextExtracted={async (text) => {
                 setShowOCRScanner(false);
-                setSelectedTemplate('custom');
-                setShowModal(true);
+                if (ocrPurpose === 'analyze') {
+                  if (!user) return;
+                  const title = `Uploaded document — ${new Date().toLocaleString()}`;
+                  const { data, error } = await supabase
+                    .from('documents')
+                    .insert({
+                      user_id: user.id,
+                      title,
+                      document_type: 'uploaded',
+                      content: text,
+                      template_used: null,
+                      jurisdiction: selectedJurisdiction || null,
+                    })
+                    .select('id, title, document_type, content, template_used, created_at, jurisdiction')
+                    .maybeSingle();
+                  if (!error && data) {
+                    loadDocuments();
+                    setAnalyzingDocument(data as Document);
+                  }
+                } else {
+                  setCustomDocumentDescription(text);
+                  setSelectedTemplate('custom');
+                  setShowModal(true);
+                }
               }}
             />
           </div>
