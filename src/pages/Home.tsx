@@ -71,39 +71,39 @@ export default function Home() {
       <Navigation />
 
       <main id="main-content">
-        <section className="relative overflow-hidden pt-24 pb-12 min-h-[68vh] flex items-center">
+        <section className="relative pt-24 pb-12 min-h-[68vh] flex items-center overflow-x-clip">
           <div className="absolute inset-0 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 pointer-events-none" />
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
 
-          <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight text-white break-words">
+          <div className="relative w-full max-w-4xl mx-auto px-5 sm:px-6 lg:px-8 text-center min-w-0">
+            <h1 className="text-[clamp(1.75rem,7vw,3.75rem)] font-bold mb-4 leading-[1.1] tracking-tight text-white text-balance">
               {heroCopy.title}
             </h1>
 
-            <p className="text-base sm:text-lg md:text-xl text-navy-100 mb-6 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-navy-100 mb-6 max-w-2xl mx-auto leading-relaxed">
               {heroCopy.subtitle}
             </p>
 
-            <div className="flex flex-col items-center justify-center gap-3 mb-4 w-full">
+            <div className="flex flex-col items-center justify-center gap-3 mb-4 w-full min-w-0">
               <button
                 type="button"
                 onClick={(e) => handleStartNow(e)}
                 data-testid="hero-primary-cta"
-                className="group bg-teal-500 hover:bg-teal-400 text-white px-6 sm:px-10 py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900 min-h-[56px] w-full sm:w-auto"
+                className="group bg-teal-700 hover:bg-teal-600 text-white px-6 sm:px-10 py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900 min-h-[56px] w-full sm:w-auto"
                 aria-label={heroCopy.cta}
               >
                 {heroCopy.cta}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform flex-shrink-0" aria-hidden="true" />
               </button>
 
-              <p className="text-xs text-navy-300 mt-1">
+              <p className="text-sm text-white/80 mt-1 max-w-md leading-snug">
                 {language === 'en'
                   ? 'Legal information, not legal advice. We are not a law firm.'
-                  : 'Información legal, no asesoramiento legal. No somos un bufete de abogados.'
+                  : 'Información legal, no asesoría legal. No somos un bufete de abogados.'
                 }
               </p>
 
-              <p className="text-sm text-navy-200 flex flex-wrap items-center justify-center gap-2">
+              <p className="text-sm text-navy-200 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
                 <Shield className="w-4 h-4 text-teal-400 flex-shrink-0" aria-hidden="true" />
                 <span>
                   {language === 'en'
@@ -111,7 +111,6 @@ export default function Home() {
                     : 'Privado. Gratis. Protecciones informadas por abogados.'
                   }
                 </span>
-                <span aria-hidden="true" className="text-navy-500">·</span>
                 <Link
                   to="/trust-center"
                   className="underline underline-offset-2 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/40 rounded"
@@ -121,7 +120,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mt-3 flex justify-center">
+            <div className="mt-3 flex justify-center w-full min-w-0">
               <CrisisStrip variant="inline" />
             </div>
           </div>
@@ -316,35 +315,27 @@ export default function Home() {
 
 
         <section className="py-20 bg-gradient-to-br from-navy-900 to-navy-800 text-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl font-bold mb-6">
+          <div className="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-balance">
               {language === 'en'
                 ? 'Ready to Get Started?'
-                : 'Listo Para Comenzar?'
+                : '¿Listo para comenzar?'
               }
             </h2>
-            <p className="text-xl text-navy-100 mb-10">
+            <p className="text-lg sm:text-xl text-navy-100 mb-10">
               {language === 'en'
-                ? 'Join thousands getting clear answers to their legal questions'
-                : 'Unete a miles obteniendo respuestas claras a sus preguntas legales'
+                ? 'Get clear answers to your legal questions — free and confidential'
+                : 'Obtén respuestas claras a tus preguntas legales — gratis y confidencial'
               }
             </p>
             <button
               type="button"
               onClick={handleStartNow}
-              className="bg-teal-500 hover:bg-teal-400 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900"
+              className="bg-teal-700 hover:bg-teal-600 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900"
             >
-              {language === 'en' ? 'Start Now - It\'s Free' : 'Comenzar Ahora - Es Gratis'}
+              {language === 'en' ? 'Start Now — It\'s Free' : 'Comenzar ahora — es gratis'}
               <ArrowRight className="w-5 h-5" />
             </button>
-            <p className="mt-6 text-navy-200 text-sm">
-              <Link
-                to="/chat"
-                className="hover:text-white transition-colors underline underline-offset-2 focus:outline-none focus:ring-2 focus:ring-teal-300 rounded px-1"
-              >
-                {language === 'en' ? 'Prefer to chat first?' : 'Prefieres chatear primero?'}
-              </Link>
-            </p>
           </div>
         </section>
       </main>
