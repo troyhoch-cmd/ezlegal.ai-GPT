@@ -8,14 +8,12 @@ import usePersonaRouting from '../hooks/usePersonaRouting';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import NegotiationStrategyPlanner from '../components/NegotiationStrategyPlanner';
-import NegotiationStrategyQuiz from '../components/NegotiationStrategyQuiz';
 
 export default function Negotiate() {
   const { language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
   const { isOrganization, isBusiness } = usePersonaRouting();
   const [showPlanner, setShowPlanner] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
-  const [quizResult, setQuizResult] = useState<any>(null);
 
   const features = [
     {
@@ -36,8 +34,8 @@ export default function Negotiate() {
       icon: Sparkles,
       title: language === 'en' ? 'Anchoring Strategy' : 'Estrategia de Anclaje',
       description: language === 'en'
-        ? 'Get AI-recommended opening numbers to maximize your outcome'
-        : 'Obtiene numeros de apertura recomendados por IA para maximizar tu resultado',
+        ? 'Get AI-recommended opening numbers to strengthen your position'
+        : 'Obtiene numeros de apertura recomendados por IA para fortalecer tu posicion',
     },
     {
       icon: MessageSquare,
@@ -49,12 +47,12 @@ export default function Negotiate() {
   ];
 
   const disputeTypes = [
-    { name: language === 'en' ? 'Landlord Disputes' : 'Disputas con Casero', example: 'Security deposit, repairs, lease terms' },
-    { name: language === 'en' ? 'Wage Claims' : 'Reclamos de Salarios', example: 'Unpaid wages, overtime, severance' },
-    { name: language === 'en' ? 'Debt Collection' : 'Cobro de Deudas', example: 'Settlement negotiations, validation' },
-    { name: language === 'en' ? 'Insurance Claims' : 'Reclamaciones de Seguro', example: 'Denied claims, low offers' },
-    { name: language === 'en' ? 'Contract Disputes' : 'Disputas de Contratos', example: 'Breach, non-performance' },
-    { name: language === 'en' ? 'Consumer Issues' : 'Problemas de Consumidor', example: 'Refunds, defective products' },
+    { name: language === 'en' ? 'Landlord Disputes' : 'Disputas con Casero', example: language === 'en' ? 'Security deposit, repairs, lease terms' : 'Deposito de seguridad, reparaciones, terminos de arrendamiento' },
+    { name: language === 'en' ? 'Wage Claims' : 'Reclamos de Salarios', example: language === 'en' ? 'Unpaid wages, overtime, severance' : 'Salarios impagos, horas extra, liquidacion' },
+    { name: language === 'en' ? 'Debt Collection' : 'Cobro de Deudas', example: language === 'en' ? 'Settlement negotiations, validation' : 'Negociaciones de acuerdo, validacion' },
+    { name: language === 'en' ? 'Insurance Claims' : 'Reclamaciones de Seguro', example: language === 'en' ? 'Denied claims, low offers' : 'Reclamaciones denegadas, ofertas bajas' },
+    { name: language === 'en' ? 'Contract Disputes' : 'Disputas de Contratos', example: language === 'en' ? 'Breach, non-performance' : 'Incumplimiento, falta de ejecucion' },
+    { name: language === 'en' ? 'Consumer Issues' : 'Problemas de Consumidor', example: language === 'en' ? 'Refunds, defective products' : 'Reembolsos, productos defectuosos' },
   ];
 
   const tactics = [
@@ -104,8 +102,8 @@ export default function Negotiate() {
                 </h1>
                 <p className="text-navy-600">
                   {language === 'en'
-                    ? 'AmLaw 100 tactics, simplified for everyone'
-                    : 'Tacticas de AmLaw 100, simplificadas para todos'
+                    ? 'Professional negotiation frameworks, simplified for everyone'
+                    : 'Marcos de negociacion profesional, simplificados para todos'
                   }
                 </p>
               </div>
@@ -121,7 +119,7 @@ export default function Negotiate() {
                 <span>
                   {language === 'en'
                     ? 'This tool provides legal information, not legal advice. It does not create an attorney-client relationship. For specific guidance on your situation, '
-                    : 'Esta herramienta proporciona información legal, no asesoramiento legal. No crea una relacion abogado-cliente. Para orientación especifica sobre su situación, '
+                    : 'Esta herramienta proporciona informacion legal, no asesoramiento legal. No crea una relacion abogado-cliente. Para orientacion especifica sobre su situacion, '
                   }
                 </span>
                 <Link to="/find-attorney" className="text-teal-600 hover:text-teal-700 font-medium">
@@ -185,6 +183,14 @@ export default function Negotiate() {
     <div className="min-h-screen bg-white">
       <Navigation />
       <Breadcrumbs className="mt-24" />
+
+      <div className="max-w-5xl mx-auto px-4 mt-4">
+        <div className="px-4 py-3 bg-navy-50 border border-navy-200 rounded-xl text-sm text-navy-600">
+          {language === 'en'
+            ? 'This tool provides legal information, not legal advice. It does not create an attorney-client relationship. For specific guidance, consult an attorney.'
+            : 'Esta herramienta proporciona informacion legal, no asesoramiento legal. No crea una relacion abogado-cliente. Para orientacion especifica, consulte a un abogado.'}
+        </div>
+      </div>
 
       <section className="bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 text-white pt-12 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -258,7 +264,7 @@ export default function Negotiate() {
             <p className="text-navy-600 max-w-2xl mx-auto">
               {language === 'en'
                 ? 'Insurance adjusters, debt collectors, landlords, and employers all use proven negotiation tactics. Now you can too.'
-                : 'Ajustadores de seguros, cobradores de deudas, caseros y empleadores todos usan tacticas de negociacion probadas. Ahora tu también puedes.'
+                : 'Ajustadores de seguros, cobradores de deudas, caseros y empleadores todos usan tacticas de negociacion probadas. Ahora tu tambien puedes.'
               }
             </p>
           </div>
@@ -281,12 +287,12 @@ export default function Negotiate() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-navy-900 mb-4">
-              {language === 'en' ? 'Works for Any Dispute' : 'Funciona para Cualquier Disputa'}
+              {language === 'en' ? 'Common Dispute Types' : 'Tipos Comunes de Disputas'}
             </h2>
             <p className="text-navy-600 max-w-2xl mx-auto">
               {language === 'en'
-                ? 'Our negotiation framework adapts to your specific situation'
-                : 'Nuestro marco de negociacion se adapta a tu situación especifica'
+                ? 'Our negotiation framework covers a wide range of common situations'
+                : 'Nuestro marco de negociacion cubre una amplia gama de situaciones comunes'
               }
             </p>
           </div>
@@ -324,7 +330,7 @@ export default function Negotiate() {
                   <p>
                     {language === 'en'
                       ? "When a debt collector calls, they have scripts. When an insurance adjuster makes an offer, they have guidelines. When a landlord refuses your deposit, they're betting you don't know your rights."
-                      : "Cuando un cobrador de deudas llama, tienen guiones. Cuando un ajustador de seguros hace una oferta, tienen pautas. Cuando un casero rechaza tu depósito, apuestan a que no conoces tus derechos."
+                      : "Cuando un cobrador de deudas llama, tienen guiones. Cuando un ajustador de seguros hace una oferta, tienen pautas. Cuando un casero rechaza tu deposito, apuestan a que no conoces tus derechos."
                     }
                   </p>
                   <p>
@@ -350,12 +356,12 @@ export default function Negotiate() {
                     <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
                       <DollarSign className="w-5 h-5 text-green-400" />
                     </div>
-                    <div className="text-2xl font-bold">73%</div>
+                    <div className="text-2xl font-bold">{language === 'en' ? 'Better outcomes' : 'Mejores resultados'}</div>
                   </div>
                   <p className="text-sm text-white/60">
                     {language === 'en'
-                      ? 'of people who prepare a negotiation strategy get better outcomes than those who wing it (Harvard PON research)'
-                      : 'de las personas que preparan una estrategia de negociacion obtienen mejores resultados que los que improvisan (investigacion Harvard PON)'
+                      ? 'Research suggests that people who prepare a negotiation strategy tend to achieve better outcomes than those who do not (Harvard PON)'
+                      : 'La investigacion sugiere que las personas que preparan una estrategia de negociacion tienden a obtener mejores resultados que los que no (Harvard PON)'
                     }
                   </p>
                 </div>
@@ -365,12 +371,12 @@ export default function Negotiate() {
                     <div className="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center">
                       <Target className="w-5 h-5 text-teal-400" />
                     </div>
-                    <div className="text-2xl font-bold">2-3x</div>
+                    <div className="text-2xl font-bold">{language === 'en' ? 'Stronger position' : 'Posicion mas fuerte'}</div>
                   </div>
                   <p className="text-sm text-white/60">
                     {language === 'en'
-                      ? 'the initial offer - typical improvement from proper anchoring technique (Galinsky & Mussweiler, negotiation research)'
-                      : 'la oferta inicial - mejora tipica de la tecnica de anclaje adecuada (Galinsky & Mussweiler, investigacion de negociacion)'
+                      ? 'Proper anchoring and preparation techniques can significantly improve negotiation results (Galinsky & Mussweiler)'
+                      : 'Las tecnicas adecuadas de anclaje y preparacion pueden mejorar significativamente los resultados de negociacion (Galinsky & Mussweiler)'
                     }
                   </p>
                 </div>
@@ -380,12 +386,12 @@ export default function Negotiate() {
                     <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
                       <Clock className="w-5 h-5 text-amber-400" />
                     </div>
-                    <div className="text-2xl font-bold">15 min</div>
+                    <div className="text-2xl font-bold">{language === 'en' ? 'Quick prep' : 'Preparacion rapida'}</div>
                   </div>
                   <p className="text-sm text-white/60">
                     {language === 'en'
-                      ? 'average time to complete your negotiation strategy - worth hours of better outcomes'
-                      : 'tiempo promedio para completar tu estrategia de negociacion - vale horas de mejores resultados'
+                      ? 'Complete your negotiation strategy in minutes - a small investment for potentially better outcomes'
+                      : 'Completa tu estrategia de negociacion en minutos - una pequena inversion para potencialmente mejores resultados'
                     }
                   </p>
                 </div>
@@ -413,8 +419,8 @@ export default function Negotiate() {
 
           <p className="text-navy-600 mb-8 max-w-2xl mx-auto">
             {language === 'en'
-              ? "Stop going into negotiations unprepared. In 15 minutes, you'll have a complete strategy with scripts, tactics, and numbers."
-              : "Deja de entrar a negociaciones sin preparacion. En 15 minutos, tendras una estrategia completa con guiones, tacticas y numeros."
+              ? "Stop going into negotiations unprepared. Build a complete strategy with scripts, tactics, and numbers."
+              : "Deja de entrar a negociaciones sin preparacion. Construye una estrategia completa con guiones, tacticas y numeros."
             }
           </p>
 

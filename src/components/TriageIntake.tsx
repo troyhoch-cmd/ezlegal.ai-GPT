@@ -96,7 +96,7 @@ export default function TriageIntake({ onComplete, onSkip }: TriageIntakeProps) 
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-navy-200 max-w-lg w-full mx-auto overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-xl border border-navy-200 max-w-lg w-full mx-auto overflow-hidden" data-testid="intake-form">
       <div className="bg-gradient-to-r from-teal-700 to-teal-800 px-5 py-4">
         <h2 className="text-lg font-bold text-white">
           {en ? 'Tell us what\u2019s going on' : 'Dinos que esta pasando'}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
 import RelatedLinks from '../components/RelatedLinks';
@@ -10,6 +10,7 @@ import {
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import CrisisTriageGate from '../components/CrisisTriageGate';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface Resource {
   name: string;
@@ -366,7 +367,7 @@ const evictionTimeline = {
 };
 
 export default function EmergencyResources() {
-  const [language, setLanguage] = useState<'en' | 'es'>('en');
+  const { language, setLanguage } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<string>('domestic-violence');
   const [selectedState, setSelectedState] = useState<string>('ALL');
   const [triageAcknowledged, setTriageAcknowledged] = useState<boolean>(() => {
@@ -378,10 +379,6 @@ export default function EmergencyResources() {
     setTriageAcknowledged(true);
   }, []);
 
-  useEffect(() => {
-    document.documentElement.lang = language;
-    return () => { document.documentElement.lang = 'en'; };
-  }, [language]);
 
   const handleQuickExit = useCallback(() => {
     window.open('https://weather.gov', '_self');
@@ -656,7 +653,7 @@ export default function EmergencyResources() {
           <div className="relative">
             <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-orange-300 -translate-y-1/2" />
             <div className="grid md:grid-cols-5 gap-4">
-              {evictionTimeline[language].map((step, index) => (
+              {(evictionTimeline[language as 'en' | 'es'] || evictionTimeline.en).map((step: { day: string; title: string; description: string }, index: number) => (
                 <div key={index} className="relative bg-white rounded-xl p-5 border border-orange-200 shadow-sm">
                   <div className="hidden md:block absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-orange-500 rounded-full border-4 border-white" />
                   <div className="text-orange-600 font-bold text-sm mb-1">{step.day}</div>

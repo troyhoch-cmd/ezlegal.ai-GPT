@@ -179,7 +179,7 @@ export default function ShareButton({
         )}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-14 h-14 bg-[#25D366] hover:bg-[#1DA851] text-white rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-105 animate-pulse"
+          className="w-14 h-14 bg-[#25D366] hover:bg-[#1DA851] text-white rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-105"
           aria-label={isSpanish ? 'Compartir' : 'Share'}
           title={isSpanish ? 'Compartir con familia' : 'Share with family'}
         >

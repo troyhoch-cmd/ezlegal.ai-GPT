@@ -2,7 +2,7 @@ export function getSiteReviewText(): string {
   return `
 ================================================================================
 ezLegal.ai - COMPLETE PLATFORM REVIEW PACKAGE
-Prepared for External AI Review | February 2026 (Round 6.4.4 Update)
+Prepared for External AI Review | May 2026 (Round 7.0 - Bilingual Hardening)
 ================================================================================
 
 TABLE OF CONTENTS
@@ -153,6 +153,63 @@ PLATFORM SCALE:
 - Pricing accent competition constrained: featured plan badges use teal-600/navy-800 only; no competing gold/orange accents on primary conversion elements (Round 6.4.4)
 - JurisdictionSelector affordance: variant support (default, compact, card) with "Laws vary significantly by state" educational description (Round 6.4.4)
 - Export conversation function on SimpleChatbot with Download icon for full conversation text export (Round 6.4.4)
+- Bilingual hardening pass (Round 7.0): ForIndividuals pricing section, "Designed for Real Legal Challenges" cards, and "Choose Your Plan" CTA fully translated EN/ES
+- LanguageContext graceful degradation: try-catch around Supabase auth calls prevents crashes for unauthenticated users (Round 7.0)
+- PersonaIntake 4-step triage with localStorage save/resume (ezlegal_triage_draft key), DV/immigration safety warnings, bilingual throughout (Round 7.0)
+- /trust route alias to TrustCenter: comprehensive bilingual trust transparency page (Round 7.0)
+- /qa internal QA dashboard: Route Coverage, ICP Coverage, Ethics & Safety, Cognitive Load tabs with overall score (Round 7.0)
+- /demo stakeholder demo page: 3 paths (Spanish individual, SMB owner, Legal aid partner) with bilingual UI (Round 7.0)
+- /demo/legal-aid legal-aid intake prototype: 3-tab (Intake, Summary, Export) with mock case data and referral checklist (Round 7.0)
+- Demo.tsx evaluation criteria: Access to Justice, Ethical AI, Bilingual Parity, Conversion Ethics checklists (Round 7.0)
+- LocalePicker aria-live="polite" and role="status" on language confirmation for screen reader feedback (Round 7.0)
+- Prohibited phrase scan verified: all instances of "legal advice", "attorney-client" appear only in negating disclaimers (Round 7.0)
+- Shared Guided Intake Framework: GuidedIntakeShell, ProgressStepper, SaveAndResumeNotice, PlainLanguageHelp, NextStepConfirmation, EmergencyTriageNotice components (Round 7.1)
+- Ethical AI trust components: ScopeBoundaryCard, AIGovernanceSummary, AccessToJusticeCard, HumanEscalationCard, DataUsePlainLanguage reusable across all landing/intake/checkout flows (Round 7.1)
+- EspanolLanding hardship-aware routing: secondary CTA "Necesito ayuda gratis o de bajo costo" with pro bono/low-cost/free pathway cards (Round 7.1)
+- EspanolLanding language continuity notice: amber banner explaining some pages may show English, language preference persists (Round 7.1)
+- ForBusiness procurement trust strip: links to /trust-center, /enterprise-security, /sla, /ai-governance with pill-style badges (Round 7.1)
+- ForBusiness CTA hierarchy: primary "Start business intake", secondary "Schedule demo", tertiary "View pricing"; "Not sure?" guided questionnaire link (Round 7.1)
+- ForBusiness onboarding cards: 3-step low-jargon flow (tell concern, get guidance, take action) (Round 7.1)
+- ForBusiness plain-language disclaimer: "ezLegal helps organize legal information and generate documents. It does not replace a lawyer." (Round 7.1)
+- ForOrganizations CTA hierarchy: primary "Schedule organization demo", secondary "Create partner intake page", tertiary "Review AI governance" (Round 7.1)
+- ForOrganizations workflow sections: client-facing intake, Spanish-language access, referral/escalation, admin/audit, privacy/consent, reporting (Round 7.1)
+- ForOrganizations implementation note cards: "Human review recommended", "Use with local eligibility rules", "Configure emergency escalation" (Round 7.1)
+- ForOrganizations positioning: "We do not claim to replace lawyers or legal aid staff. Our tools support and augment your team." (Round 7.1)
+- "SOC 2 Type II compliant" claim replaced with "Encrypted data at rest and in transit" on ForOrganizations (Round 7.1)
+- "Bank-grade encryption" replaced with "Encrypted in transit and at rest" on ForBusiness trust strip (Round 7.1)
+- Intake architecture: src/lib/intake/types.ts with ICP, IntakeStep, IntakeRouteDecision, TriageRiskLevel, AffordabilityStatus, HumanEscalationType types (Round 7.2)
+- Intake declarative route config: src/lib/intake/routes.ts with INTAKE_STEPS per ICP, resolveIntakeRoute() routing logic, shouldRecommendAttorneyReview() (Round 7.2)
+- Scope boundaries: src/lib/intake/scopeBoundaries.ts with bilingual can-help/cannot-do/contact-lawyer/emergency text, CHECKOUT_ACKNOWLEDGMENT, LEGAL_AID_CAUTION, DATA_CONSENT_ORG (Round 7.2)
+- Governance evidence status: src/lib/intake/governanceStatus.ts with PolicyStatus ("available"/"not_published"/"coming_soon") for 8 governance items (Round 7.2)
+- GuidedIntakeShell upgraded: accepts icp, onSave, onEscalate, showScopeBoundary props; renders ScopeBoundaryCard when step requires it (Round 7.2)
+- SpanishTriageScreen: 5-step bilingual triage (affordability, deadline, risk, jurisdiction, result) with emergency blocking, pro bono routing, paid-document gating (Round 7.2)
+- BusinessIntakeSegmentation: 5-step SMB flow with need segmentation, attorney-review recommendation triggers, scope acknowledgment checkbox before checkout (Round 7.2)
+- OrganizationPartnerIntake: 5-step partner profile (org type, jurisdictions/areas, capacity/referrals, data consent, confirmation) with full data consent language (Round 7.2)
+- TrustCTABlock reusable component: standard/compact variants linking Trust Center, Privacy, AI Governance, Disclaimers; added to EspanolLanding, ForBusiness, ForOrganizations (Round 7.2)
+- Acceptance checks implemented: scope boundary shown before checkout (requiresScopeBoundary on steps); emergency triage blocks checkout (blockCheckout flag); checkout acknowledgment checkbox required for SMB (Round 7.2)
+- Attorney review recommendation rule: employment_contract, investor_funding, litigation_dispute, government_regulatory, high_value_transaction trigger recommendation card (Round 7.2)
+- SMB analytics stubs: smb_segment_selected, smb_demo_clicked, smb_pricing_clicked, smb_attorney_review_selected, smb_checkout_scope_acknowledged, smb_intake_completed (Round 7.2)
+- Spanish analytics stubs: spanish_triage_started, spanish_free_help_selected, spanish_emergency_triage_shown, spanish_paid_document_selected (Round 7.2)
+- Organization analytics stubs: org_demo_clicked, org_partner_intake_started, org_partner_intake_completed, org_governance_clicked (Round 7.2)
+- No unverifiable claims: all governance items marked "not_published" unless evidence URL exists; no "grant-compliant", "LSC-approved", "SOC 2 compliant" claims on ezLegal itself (Round 7.2)
+- Attorney review infrastructure: src/lib/attorneyReview/ with types (ReviewStatus lifecycle, ReviewAcknowledgment, bilingual acknowledgment texts), pricing (3-tier with urgency multipliers), requests (CRUD via Supabase), analytics (4 event types) (Round 7.3)
+- AttorneyReviewConfirmation component: tier selection, urgency picker, 4 required acknowledgment checkboxes, bilingual, decline option (Round 7.3)
+- Legal-aid matching system: src/lib/legalAid/ with LegalAidOrganization type (VerificationStatus), scoring algorithm in matchLegalAidOrganizations() requiring min 5 points, getEmergencyResources(), hasVerifiedMatch() (Round 7.3)
+- Legal-aid directory: 8 placeholder organizations all status "needs_verification", no fabricated sourceUrls, National DV Hotline (Round 7.3)
+- PartnerDashboard page (/partner-dashboard): overview stats, referral list with accept/decline/conflict actions, settings tab, requires auth (Round 7.3)
+- GovernanceEvidencePanel component: full/compact variants with progress bar, per-policy status badges, links to published policies (Round 7.3)
+- Intake analytics: src/lib/intake/analytics.ts with 14 event types (started, step_completed, completed, abandoned, emergency_detected, scope_boundary_shown, legal_aid_matched, attorney_review_*, consent_recorded, partner_profile_created, referral_routed, resume_attempted) and session timing helpers (Round 7.3)
+- Abandonment recovery: src/lib/intake/recovery.ts with localStorage-based state save/restore, 72-hour expiry, hasRecoveryState() check (Round 7.3)
+- Supabase persistence: src/lib/intake/persistence.ts with 10 functions across 7 tables (spanish_triage_sessions, business_intake_sessions, org_partner_profiles, referral_routing_records, attorney_review_requests, intake_consent_records, intake_audit_events) (Round 7.3)
+- RLS hardening: Supabase migration adds scope_acknowledged_at, assigned_attorney_id to attorney_review_requests; admin read/update policies; assigned attorney read policy; admin referral oversight policy (Round 7.4)
+- Client-side security: src/lib/intake/security.ts with requireAuthenticated(), requirePartnerAccess(), requireReferralOwnership(), requireRequestOwnership() — all fail closed (Round 7.4)
+- Privacy-safe analytics: SanitizedAnalyticsPayload type enforces no PII; sanitizePayload() strips sensitive data before pushing to dataLayer; privacy constraint documented in comments (Round 7.4)
+- Recovery privacy: localStorage stores only ICP, step position, language, and non-sensitive category selections; 72h TTL; RECOVERY_COPY bilingual banners; clearSavedProgress() user control (Round 7.4)
+- Attorney review disclosure hardening: 10-state lifecycle (draft→submitted→pending_conflict_check→accepted_by_attorney→declined→in_review→changes_requested→completed→cancelled→refunded); 6 acknowledgment checkboxes; ATTORNEY_REVIEW_DISCLOSURES with "not included" section; fulfillment metadata (assignedAttorneyId, conflictCheckStatus, requestedTurnaround, completedAt) (Round 7.4)
+- Legal-aid routing hardening: added emergencyExclusion, sourceLabel, disclaimer fields; LEGAL_AID_CAVEATS bilingual (5 caveats); scoring boosted for Spanish priority, free eligibility, verification recency; getNeedsVerificationCount() helper (Round 7.4)
+- LegalAidReferralCard component: shows match reasons, contact info, verification status badge, "what to expect" steps, disclaimer, caveat (Round 7.4)
+- Partner dashboard v2: status filter tabs, referral detail expansion, info_requested action, complete action for accepted referrals, error state, audit trail note, STATUS_LABELS explanations (Round 7.4)
+- Trust Center governance v2: PolicyStatus now "implemented|partial|planned|blocked"; GovernanceCategory (6 categories); 16 evidence items with lastUpdated, owner, userImpact, openGap, nextAction; category-grouped display; bilingual trust statements; no overclaims (Round 7.4)
 
 
 ================================================================================
@@ -2727,6 +2784,11 @@ REVIEW PROTOCOL (diff-based, per Rec 11):
   - DoD checklist must pass before submission
 
 VERSION HISTORY:
+  v2.4 (Round 7.4) - Security/privacy/evidence hardening: Supabase RLS hardened (admin policies, attorney assignment, scope_acknowledged_at). Client-side security helpers (fail-closed). Privacy-safe analytics (SanitizedAnalyticsPayload, no PII). Recovery localStorage privacy (minimal state only). Attorney review 10-state lifecycle + 6 acknowledgments + fulfillment metadata. Legal-aid caveats, disclaimer fields, Spanish priority scoring, LegalAidReferralCard. Partner dashboard v2 (status filters, detail expansion, 5 actions, error state). Governance evidence rewrite: 16 items across 6 categories, implemented/partial/planned/blocked, userImpact, openGap, nextAction. No overclaims.
+  v2.3 (Round 7.3) - Production infrastructure: src/lib/attorneyReview/ (types, pricing, requests, analytics) with 3-tier pricing, ReviewAcknowledgment checklist, status lifecycle. AttorneyReviewConfirmation component with bilingual acknowledgments. Legal-aid matching: src/lib/legalAid/ (types, directory, matching) with scoring algorithm (min 5 points), getEmergencyResources(), hasVerifiedMatch(). PartnerDashboard page at /partner-dashboard with referral management (accept/decline/conflict), stats, profile settings. GovernanceEvidencePanel in Trust Center with progress bar, status badges (published/in-progress/planned), links. Intake analytics: src/lib/intake/analytics.ts with 14 event types and session timing. Abandonment recovery: src/lib/intake/recovery.ts with 72h expiry localStorage state. Supabase persistence layer: src/lib/intake/persistence.ts for 7 tables.
+  v2.2 (Round 7.2) - Governed intake architecture: src/lib/intake/ with types, routes, scopeBoundaries, governanceStatus. SpanishTriageScreen (5-step bilingual), BusinessIntakeSegmentation (checkout guardrails + attorney review triggers), OrganizationPartnerIntake (partner-fit + data consent). TrustCTABlock on all landing pages. Acceptance checks enforced.
+  v2.1 (Round 7.1) - ICP-specific low-cognitive-load UX: shared intake framework (6 components), trust components (5), EspanolLanding hardship routing + language continuity, ForBusiness procurement trust strip + onboarding cards, ForOrganizations workflow sections + implementation notes. Unverifiable claims removed.
+  v2.0 (Round 7.0) - Bilingual hardening pass: full EN/ES parity on ForIndividuals, PersonaIntake save/resume, /trust alias, /qa dashboard, /demo + /demo/legal-aid stakeholder pages, LanguageContext graceful degradation, LocalePicker a11y, prohibited phrase verification.
   v1.1 (Round 6.4.3-6.4.4) - Added: stat-like claims governance to Claims Integrity; doc-level lang + axe-core spot check to Accessibility Baseline; performance claim_type prohibition to Claims Integrity. Round 6.4.4: no structural DoD changes; existing criteria cover all new implementations.
   v1.0 (Round 6.4.2) - Initial publication. 6 criteria, diff-based review protocol.
 

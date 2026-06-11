@@ -109,12 +109,12 @@ export default function IndividualIntake() {
               <Shield className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-white font-medium text-sm">
-                  {language === 'en' ? 'Private by default • Not legal advice' : 'Privado por defecto • No es asesoramiento legal'}
+                  {language === 'en' ? 'Private by default • Legal information, not legal advice' : 'Privado por defecto • Información legal, no asesoría legal'}
                 </p>
                 <p className="text-navy-300 text-xs mt-1">
                   {language === 'en'
-                    ? 'We provide legal information to help you understand your options and next steps.'
-                    : 'Proporcionamos información legal para ayudarte a entender tus opciones y próximos pasos.'}
+                    ? 'We help you understand your options and next steps. No attorney-client relationship is created.'
+                    : 'Te ayudamos a entender tus opciones y próximos pasos. No se crea relación abogado-cliente.'}
                 </p>
               </div>
             </div>

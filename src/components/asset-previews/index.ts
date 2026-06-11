@@ -9,7 +9,8 @@ import {
   EmploymentEN, EmploymentES,
 } from './CommunityFlyerPreviews';
 
-const previewMap: Record<string, () => JSX.Element> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const previewMap: Record<string, (props?: any) => JSX.Element> = {
   'one-pager': OnePagerPreview,
   'tech-guide': TechGuidePreview,
   'brand-guidelines': BrandGuidelinesPreview,

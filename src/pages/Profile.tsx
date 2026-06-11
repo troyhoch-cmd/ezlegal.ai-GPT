@@ -19,6 +19,7 @@ interface ProfileData {
 export default function Profile() {
   const { user, refreshProfile } = useAuth();
   const { t, language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -118,7 +119,7 @@ export default function Profile() {
       }
     } catch (error) {
       console.error('Error loading profile:', error);
-      setMessage({ type: 'error', text: 'Failed to load profile data' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Failed to load profile data' : 'Error al cargar datos del perfil' });
     } finally {
       setLoading(false);
     }
@@ -134,7 +135,7 @@ export default function Profile() {
       const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
 
       if (emailChanged && !emailValid) {
-        setMessage({ type: 'error', text: 'Please enter a valid email address.' });
+        setMessage({ type: 'error', text: lang === 'en' ? 'Please enter a valid email address.' : 'Por favor ingresa un correo electronico valido.' });
         setSaving(false);
         return;
       }
@@ -160,10 +161,10 @@ export default function Profile() {
         if (emailErr) throw emailErr;
         setMessage({
           type: 'success',
-          text: 'Profile saved. Check your new inbox to confirm the email change.',
+          text: lang === 'en' ? 'Profile saved. Check your new inbox to confirm the email change.' : 'Perfil guardado. Revisa tu nueva bandeja para confirmar el cambio de correo.',
         });
       } else {
-        setMessage({ type: 'success', text: 'Profile updated successfully' });
+        setMessage({ type: 'success', text: lang === 'en' ? 'Profile updated successfully' : 'Perfil actualizado exitosamente' });
       }
 
       await refreshProfile();
@@ -178,12 +179,12 @@ export default function Profile() {
 
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setMessage({ type: 'error', text: 'Passwords do not match' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Passwords do not match' : 'Las contrasenas no coinciden' });
       return;
     }
 
     if (passwordData.newPassword.length < 6) {
-      setMessage({ type: 'error', text: 'Password must be at least 6 characters' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Password must be at least 6 characters' : 'La contrasena debe tener al menos 6 caracteres' });
       return;
     }
 
@@ -197,11 +198,11 @@ export default function Profile() {
 
       if (error) throw error;
 
-      setMessage({ type: 'success', text: 'Password updated successfully' });
+      setMessage({ type: 'success', text: lang === 'en' ? 'Password updated successfully' : 'Contrasena actualizada exitosamente' });
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (error) {
       console.error('Error updating password:', error);
-      setMessage({ type: 'error', text: 'Failed to update password' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Failed to update password' : 'Error al actualizar la contrasena' });
     } finally {
       setSaving(false);
     }
@@ -215,7 +216,7 @@ export default function Profile() {
     try {
       const { data: session } = await supabase.auth.getSession();
       if (!session?.session?.access_token) {
-        throw new Error('No active session');
+        throw new Error(lang === 'en' ? 'No active session' : 'Sin sesion activa');
       }
 
       const response = await fetch(
@@ -251,11 +252,11 @@ export default function Profile() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      setMessage({ type: 'success', text: 'Your data has been exported successfully' });
+      setMessage({ type: 'success', text: lang === 'en' ? 'Your data has been exported successfully' : 'Tus datos se han exportado exitosamente' });
       loadDataRequests();
     } catch (error) {
       console.error('Export error:', error);
-      setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to export data' });
+      setMessage({ type: 'error', text: error instanceof Error ? error.message : (lang === 'en' ? 'Failed to export data' : 'Error al exportar datos') });
     } finally {
       setDataExporting(false);
     }
@@ -269,7 +270,7 @@ export default function Profile() {
     try {
       const { data: session } = await supabase.auth.getSession();
       if (!session?.session?.access_token) {
-        throw new Error('No active session');
+        throw new Error(lang === 'en' ? 'No active session' : 'Sin sesion activa');
       }
 
       const response = await fetch(
@@ -300,7 +301,7 @@ export default function Profile() {
       } else if (result.status === 'scheduled') {
         setMessage({ type: 'success', text: result.message });
       } else {
-        setMessage({ type: 'success', text: 'Your data has been deleted successfully' });
+        setMessage({ type: 'success', text: lang === 'en' ? 'Your data has been deleted successfully' : 'Tus datos se han eliminado exitosamente' });
       }
 
       setShowDeleteConfirm(false);
@@ -308,7 +309,7 @@ export default function Profile() {
       loadDataRequests();
     } catch (error) {
       console.error('Deletion error:', error);
-      setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to request deletion' });
+      setMessage({ type: 'error', text: error instanceof Error ? error.message : (lang === 'en' ? 'Failed to request deletion' : 'Error al solicitar eliminacion') });
     } finally {
       setDataDeleting(false);
     }
@@ -324,11 +325,11 @@ export default function Profile() {
 
       if (error) throw error;
 
-      setMessage({ type: 'success', text: 'Deletion request cancelled' });
+      setMessage({ type: 'success', text: lang === 'en' ? 'Deletion request cancelled' : 'Solicitud de eliminacion cancelada' });
       loadDataRequests();
     } catch (error) {
       console.error('Cancel error:', error);
-      setMessage({ type: 'error', text: 'Failed to cancel deletion request' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Failed to cancel deletion request' : 'Error al cancelar solicitud de eliminacion' });
     }
   };
 
@@ -337,13 +338,13 @@ export default function Profile() {
     if (!file || !user) return;
 
     if (file.size > 2097152) {
-      setMessage({ type: 'error', text: 'File size must be less than 2MB' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'File size must be less than 2MB' : 'El archivo debe ser menor de 2MB' });
       return;
     }
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
-      setMessage({ type: 'error', text: 'Only JPEG, PNG, WebP, and GIF images are allowed' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Only JPEG, PNG, WebP, and GIF images are allowed' : 'Solo se permiten imagenes JPEG, PNG, WebP y GIF' });
       return;
     }
 
@@ -377,10 +378,10 @@ export default function Profile() {
       if (updateError) throw updateError;
 
       await refreshProfile();
-      setMessage({ type: 'success', text: 'Profile photo updated successfully' });
+      setMessage({ type: 'success', text: lang === 'en' ? 'Profile photo updated successfully' : 'Foto de perfil actualizada exitosamente' });
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      setMessage({ type: 'error', text: 'Failed to upload photo' });
+      setMessage({ type: 'error', text: lang === 'en' ? 'Failed to upload photo' : 'Error al subir la foto' });
     } finally {
       setUploading(false);
     }
@@ -491,7 +492,7 @@ export default function Profile() {
                       onClick={() => avatarInputRef.current?.click()}
                       disabled={uploading}
                       className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-lg border border-navy-200 hover:bg-navy-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      title="Upload photo"
+                      title={lang === 'en' ? 'Upload photo' : 'Subir foto'}
                     >
                       <Camera className="w-4 h-4 text-navy-600" />
                     </button>
@@ -537,8 +538,9 @@ export default function Profile() {
                       className="w-full px-4 py-2 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent text-navy-900"
                     />
                     <p className="mt-1 text-xs text-navy-500">
-                      Changing your email sends a confirmation link to the new address. The change
-                      takes effect after you confirm it.
+                      {lang === 'en'
+                        ? 'Changing your email sends a confirmation link to the new address. The change takes effect after you confirm it.'
+                        : 'Cambiar tu correo envia un enlace de confirmacion a la nueva direccion. El cambio se aplica despues de confirmarlo.'}
                     </p>
                   </div>
 
@@ -838,9 +840,9 @@ export default function Profile() {
                           {deletionRequests.filter(r => ['pending', 'verified', 'scheduled'].includes(r.status)).map((req) => (
                             <div key={req.id} className="mt-2 text-sm text-amber-700">
                               <p>
-                                Status: <span className="capitalize font-medium">{req.status}</span>
+                                {lang === 'en' ? 'Status' : 'Estado'}: <span className="capitalize font-medium">{req.status}</span>
                                 {req.scheduled_for && (
-                                  <> - Scheduled for {new Date(req.scheduled_for).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')}</>
+                                  <> - {lang === 'en' ? 'Scheduled for' : 'Programado para'} {new Date(req.scheduled_for).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')}</>
                                 )}
                               </p>
                               <button
@@ -877,7 +879,7 @@ export default function Profile() {
                         type="text"
                         value={deleteConfirmText}
                         onChange={(e) => setDeleteConfirmText(e.target.value)}
-                        placeholder='Type "DELETE" to confirm'
+                        placeholder={lang === 'en' ? 'Type "DELETE" to confirm' : 'Escribe "DELETE" para confirmar'}
                         className="w-full max-w-xs px-4 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent mb-4"
                       />
                       <div className="flex flex-wrap gap-3">

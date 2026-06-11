@@ -11,7 +11,6 @@ import {
 import { JURISDICTION_GROUPS, getJurisdictionName } from '../data/jurisdictions';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 interface ResearchQuery {
   id: string;
@@ -41,23 +40,23 @@ interface ParsedResults {
   disclaimer: string;
 }
 
-const categories = [
-  'Contract Law',
-  'Criminal Law',
-  'Family Law',
-  'Corporate Law',
-  'Intellectual Property',
-  'Employment Law',
-  'Real Estate Law',
-  'Tax Law',
-  'Immigration Law',
-  'Personal Injury',
-  'Bankruptcy',
-  'Civil Rights',
-  'Environmental Law',
-  'Healthcare Law',
-  'Securities Law',
-];
+const CATEGORIES: Record<string, { en: string; es: string }> = {
+  contract_law: { en: 'Contract Law', es: 'Derecho Contractual' },
+  criminal_law: { en: 'Criminal Law', es: 'Derecho Penal' },
+  family_law: { en: 'Family Law', es: 'Derecho Familiar' },
+  corporate_law: { en: 'Corporate Law', es: 'Derecho Corporativo' },
+  intellectual_property: { en: 'Intellectual Property', es: 'Propiedad Intelectual' },
+  employment_law: { en: 'Employment Law', es: 'Derecho Laboral' },
+  real_estate_law: { en: 'Real Estate Law', es: 'Derecho Inmobiliario' },
+  tax_law: { en: 'Tax Law', es: 'Derecho Fiscal' },
+  immigration_law: { en: 'Immigration Law', es: 'Derecho Migratorio' },
+  personal_injury: { en: 'Personal Injury', es: 'Lesiones Personales' },
+  bankruptcy: { en: 'Bankruptcy', es: 'Bancarrota' },
+  civil_rights: { en: 'Civil Rights', es: 'Derechos Civiles' },
+  environmental_law: { en: 'Environmental Law', es: 'Derecho Ambiental' },
+  healthcare_law: { en: 'Healthcare Law', es: 'Derecho de Salud' },
+  securities_law: { en: 'Securities Law', es: 'Derecho de Valores' },
+};
 
 const sourceTypes = [
   { id: 'case_law', label: 'Case Law', icon: Scale, description: 'Court decisions and judicial opinions' },
@@ -80,7 +79,8 @@ export default function Research() {
   const [activeTab, setActiveTab] = useState<'search' | 'history'>('search');
   const [expandedHistoryIds, setExpandedHistoryIds] = useState<Set<string>>(new Set());
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
 
   useEffect(() => {
     loadQueries();
@@ -256,11 +256,19 @@ Based on this research, provide practical guidance for someone dealing with this
 DISCLAIMER:
 This research is for informational purposes only and does not constitute legal advice. Laws and regulations change frequently. Consult with a licensed attorney in your jurisdiction for advice specific to your situation.`;
 
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+      if (!token) {
+        setSearchResults(lang === 'en' ? 'Please sign in to perform research.' : 'Inicia sesion para investigar.');
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch(`${SUPABASE_URL}/functions/v1/openai-chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           messages: [{ role: 'user', content: prompt }],
@@ -304,7 +312,7 @@ This research is for informational purposes only and does not constitute legal a
       }
     } catch (error) {
       console.error('Research error:', error);
-      setSearchResults('An error occurred while performing the research. Please try again.');
+      setSearchResults(lang === 'en' ? 'An error occurred while performing the research. Please try again.' : 'Ocurrio un error al realizar la investigacion. Intente de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -374,6 +382,11 @@ This research is for informational purposes only and does not constitute legal a
             <p className="text-navy-600">{t('research.subtitle')}</p>
           </div>
         </div>
+        <p className="mt-3 text-sm text-navy-500">
+          {lang === 'en'
+            ? 'This tool provides legal information, not legal advice. Results are AI-generated and should be verified independently.'
+            : 'Esta herramienta proporciona informacion legal, no asesoramiento legal. Los resultados son generados por IA y deben verificarse de forma independiente.'}
+        </p>
       </div>
 
       <div className="flex gap-2 mb-6">
@@ -462,9 +475,9 @@ This research is for informational purposes only and does not constitute legal a
                     className="w-full px-4 py-3 border border-navy-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                   >
                     <option value="">{t('research.allPracticeAreas')}</option>
-                    {categories.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
+                    {Object.entries(CATEGORIES).map(([key, names]) => (
+                      <option key={key} value={names.en}>
+                        {lang === 'en' ? names.en : names.es}
                       </option>
                     ))}
                   </select>
@@ -702,7 +715,7 @@ This research is for informational purposes only and does not constitute legal a
                   <BookOpen className="w-8 h-8 text-navy-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-navy-900 mb-2">{t('research.noHistory')}</h3>
-                <p className="text-navy-600 mb-4">Start researching legal topics to build your history</p>
+                <p className="text-navy-600 mb-4">{lang === 'en' ? 'Start researching legal topics to build your history' : 'Comienza a investigar temas legales para crear tu historial'}</p>
                 <button
                   onClick={() => setActiveTab('search')}
                   className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium"

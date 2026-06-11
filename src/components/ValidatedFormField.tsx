@@ -186,6 +186,7 @@ export default function ValidatedFormField({
       {showError && (
         <p
           id={errorId}
+          data-testid="field-error"
           className="text-xs text-red-600 flex items-center gap-1 mt-1"
           role="alert"
         >

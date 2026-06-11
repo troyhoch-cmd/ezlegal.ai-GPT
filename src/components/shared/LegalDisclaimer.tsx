@@ -1,10 +1,10 @@
-import { Info, AlertTriangle, Lock, UserX, Trash2 } from 'lucide-react';
+import { Info, AlertTriangle, Lock, UserX, Trash2, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { getDisclosure } from '../../lib/legal-disclosures';
 import type { DisclosureKey } from '../../lib/legal-disclosures';
 
-type Variant = 'banner' | 'inline' | 'card' | 'footer';
+type Variant = 'banner' | 'inline' | 'card' | 'footer' | 'document';
 
 interface LegalDisclaimerProps {
   variant?: Variant;
@@ -101,6 +101,37 @@ export default function LegalDisclaimer({
           <Link to="/privacy" className="text-teal-600 hover:underline">
             {en ? 'Data retention & deletion' : 'Retencion y eliminacion de datos'}
           </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === 'document') {
+    return (
+      <div className={`bg-amber-50 border border-amber-200 rounded-lg p-4 ${className}`}>
+        <div className="flex items-start gap-3">
+          <FileText className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <h4 className="font-semibold text-amber-900 text-sm mb-1">
+              {en ? 'Document Generation Disclaimer' : 'Aviso de Generacion de Documentos'}
+            </h4>
+            <ul className="text-xs text-amber-800 space-y-1">
+              <li>{en ? 'This is a draft for informational purposes only — not legal advice.' : 'Este es un borrador solo con fines informativos — no es asesoría legal.'}</li>
+              <li>{en ? 'No attorney-client relationship is created.' : 'No se crea una relación abogado-cliente.'}</li>
+              <li>{en ? 'Attorney review is recommended before signing or relying on this document.' : 'Se recomienda revision de un abogado antes de firmar o depender de este documento.'}</li>
+              <li>{en ? 'Citations and statute references require independent verification.' : 'Las citas y referencias a estatutos requieren verificación independiente.'}</li>
+            </ul>
+            {showLinks && (
+              <div className="flex flex-wrap items-center gap-3 mt-2">
+                <Link to="/find-attorney" className="text-xs text-amber-700 hover:underline font-medium">
+                  {en ? 'Find an attorney' : 'Encontrar un abogado'}
+                </Link>
+                <Link to="/scope-disclaimers" className="text-xs text-amber-700 hover:underline font-medium">
+                  {en ? 'Full disclaimers' : 'Descargos completos'}
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );

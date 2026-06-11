@@ -1,3 +1,4 @@
+import { supabase } from '../lib/supabase';
 import type { Citation } from '../lib/legalbreeze-api';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -90,12 +91,32 @@ const DEFAULT_CONFIG: ChatServiceConfig = {
   includeCompliance: true,
 };
 
-function parseThinkingDetails(response: string): { content: string; thinking: ThinkingDetails | null } {
-  const thinkingStartMarker = '---THINKING_DETAILS---';
-  const thinkingEndMarker = '---END_THINKING_DETAILS---';
+type FallbackType = 'network_fallback' | 'api_fallback';
 
-  const startIdx = response.indexOf(thinkingStartMarker);
-  const endIdx = response.indexOf(thinkingEndMarker);
+function isLikelyNetworkError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error ?? '');
+  return /TypeError|fetch|network|failed to fetch|load failed|abort|ECONNRESET|ENOTFOUND|ETIMEDOUT/i.test(message);
+}
+
+export type AnswerBasis = ThinkingDetails;
+
+function parseThinkingDetails(response: string): { content: string; thinking: ThinkingDetails | null } {
+  const basisStart = '---ANSWER_BASIS---';
+  const basisEnd = '---END_ANSWER_BASIS---';
+  const legacyStart = '---THINKING_DETAILS---';
+  const legacyEnd = '---END_THINKING_DETAILS---';
+
+  let thinkingStartMarker = basisStart;
+  let thinkingEndMarker = basisEnd;
+  let startIdx = response.indexOf(basisStart);
+  let endIdx = response.indexOf(basisEnd);
+
+  if (startIdx === -1 || endIdx === -1) {
+    thinkingStartMarker = legacyStart;
+    thinkingEndMarker = legacyEnd;
+    startIdx = response.indexOf(legacyStart);
+    endIdx = response.indexOf(legacyEnd);
+  }
 
   if (startIdx === -1 || endIdx === -1) {
     return { content: response, thinking: null };
@@ -191,6 +212,11 @@ class ChatService {
     this.userId = userId;
   }
 
+  private async getAuthToken(): Promise<string> {
+    const { data } = await supabase.auth.getSession();
+    return data.session?.access_token || SUPABASE_ANON_KEY;
+  }
+
   async sendMessage(
     query: string,
     documentContent?: string,
@@ -237,11 +263,13 @@ class ChatService {
         documentAttachments,
       };
 
+      const authToken = await this.getAuthToken();
+
       const response = await fetch(`${SUPABASE_URL}/functions/v1/openai-chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${authToken}`,
         },
         body: JSON.stringify(request),
       });
@@ -312,17 +340,23 @@ class ChatService {
         usage: data.usage,
       };
     } catch (error) {
-      console.error('OpenAI chat error:', error);
+      const fallbackType: FallbackType = isLikelyNetworkError(error)
+        ? 'network_fallback'
+        : 'api_fallback';
 
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      const errorContent = `**Connection Error**\n\nUnable to reach the AI service: ${errorMessage}\n\nPlease check your internet connection and try again. If the problem persists, our team has been notified.`;
+      console.error('OpenAI chat error; using local fallback', { fallbackType, error });
+      this.conversationHistory.pop();
 
-      this.conversationHistory.push({ role: 'assistant', content: errorContent });
-      return {
-        role: 'assistant',
-        content: errorContent,
-        modelUsed: 'System Message',
-      };
+      try {
+        const localResponse = await this.generateLocalResponse(_query);
+        localResponse.modelUsed = `Local (${fallbackType})`;
+        return localResponse;
+      } catch (fallbackError) {
+        console.error('Local fallback also failed', fallbackError);
+        const content = 'I\'m having trouble reaching the AI service right now. Please try again shortly. This is general information only and not legal advice.';
+        this.conversationHistory.push({ role: 'assistant', content });
+        return { role: 'assistant', content, modelUsed: `Fallback (${fallbackType})` };
+      }
     }
   }
 
@@ -342,11 +376,13 @@ class ChatService {
         })),
       };
 
+      const ragToken = await this.getAuthToken();
+
       const response = await fetch(`${SUPABASE_URL}/functions/v1/legalbreeze-rag`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${ragToken}`,
           'X-Tenant-ID': 'ezlegal',
         },
         body: JSON.stringify(ragRequest),
@@ -417,7 +453,7 @@ Under Arizona Revised Statutes § 23-351 through § 23-361:
 - **Voluntary resignation**: Wages due by the next regular payday
 - **Laid off employees**: Within 7 working days or next regular payday
 
-**Step-by-Step Guidance**
+**Potential Steps to Discuss with Counsel**
 If you believe your employer violated the Prompt Pay Act:
 
 1. **Document Everything**: Keep records of hours worked, pay stubs, pay dates, and any communications
@@ -434,14 +470,14 @@ If you believe your employer violated the Prompt Pay Act:
 - **Statute of Limitations**: 1 year for wage claims under A.R.S. § 23-355
 - **Federal Claims (FLSA)**: 2 years (or 3 years for willful violations)
 
-**When to Seek Professional Help**
+**When Professional Legal Help May Be Warranted**
 Consider consulting an attorney if:
 - The amount owed exceeds $5,000
 - Your employer disputes the wages owed
 - You were misclassified as an independent contractor
 - You believe multiple employees are affected (potential class action)
 
-*This information is for educational purposes and does not constitute legal advice. For specific guidance on your situation, consult with a licensed Arizona attorney.*`,
+*This is legal information for educational purposes — not legal advice. No attorney-client relationship is created. Have an attorney review your specific situation before taking action.*`,
 
       eviction: `### Arizona Eviction Laws - A.R.S. Title 33, Chapter 10
 
@@ -457,7 +493,7 @@ Arizona evictions are governed by the Arizona Residential Landlord and Tenant Ac
 - **Immediate Notice**: For material health/safety violations, illegal activity
 - **30-Day Notice**: For month-to-month tenancies without cause
 
-**Step-by-Step Eviction Defense**
+**Potential Eviction Defense Steps (Review with an Attorney)**
 1. **Verify Notice**: Confirm proper notice was served correctly
 2. **Respond in Writing**: Document any disputes with the landlord's claims
 3. **Appear in Court**: ALWAYS attend the eviction hearing - failure to appear results in default judgment
@@ -475,7 +511,7 @@ Arizona evictions are governed by the Arizona Residential Landlord and Tenant Ac
 - Protection from "self-help" evictions (changing locks, removing belongings)
 - Right to assert counterclaims for landlord violations
 
-*This information is for educational purposes. Complex eviction situations benefit from professional legal representation.*`,
+*This is legal information, not legal advice. No attorney-client relationship is created. Complex eviction situations benefit from professional legal representation.*`,
 
       landlord: `### Arizona Landlord-Tenant Law - A.R.S. Title 33, Chapter 10
 
@@ -508,7 +544,7 @@ Arizona's Residential Landlord and Tenant Act provides comprehensive protections
 - Pest-free conditions
 - Structurally sound premises
 
-*For specific disputes, document everything and consider consulting with a tenant rights organization or attorney.*`,
+*This is legal information, not legal advice. For specific disputes, consider consulting with a tenant rights organization or attorney before taking action.*`,
 
       divorce: `### Arizona Divorce Law - A.R.S. Title 25
 
@@ -545,7 +581,7 @@ Arizona is a "no-fault" divorce state, meaning neither spouse needs to prove wro
 - Waiting period: 60 days minimum
 - Default judgment: If spouse doesn't respond in 20 days
 
-*Divorce involves significant financial and family consequences. Legal representation is strongly recommended.*`,
+*This is legal information, not legal advice. Divorce involves significant financial and family consequences — an attorney can review your specific circumstances.*`,
 
       custody: `### Arizona Child Custody (Legal Decision-Making) - A.R.S. § 25-401 et seq.
 
@@ -580,7 +616,7 @@ Arizona uses "legal decision-making" (custody) and "parenting time" (visitation)
 - 45-day written notice required before moving 100+ miles
 - Other parent can object; court hearing required
 
-*Custody disputes can be emotionally charged. Consider mediation before litigation. Complex cases benefit from legal representation.*`,
+*This is legal information, not legal advice. Custody matters are complex — consider consulting with a family law attorney to review your specific situation.*`,
 
       employment: `### Arizona Employment Law
 
@@ -607,12 +643,12 @@ Arizona is an "at-will" employment state, meaning employers can terminate employ
 3. Obtain "right to sue" letter before filing lawsuit
 4. File lawsuit within 90 days of receiving letter
 
-**Wrongful Termination:**
-- Document everything (emails, performance reviews, witnesses)
-- File unemployment claim immediately
-- Consult employment attorney before signing severance
+**Wrongful Termination — Risk Areas to Review:**
+- Consider documenting everything (emails, performance reviews, witnesses)
+- Filing an unemployment claim promptly is generally advisable
+- Suggested question for counsel: review any severance agreement before signing
 
-*Employment law is complex. If you believe your rights were violated, consult with an employment attorney - many offer free consultations.*`,
+*This is legal information, not legal advice. If you believe your rights were violated, an employment attorney can review your specific circumstances — many offer free consultations.*`,
 
       contract: `### Arizona Contract Law
 
@@ -651,7 +687,7 @@ Written contract required for:
 - Breach of warranty
 - Misrepresentation
 
-*Contract disputes often involve significant amounts. Document all communications and consider legal review before signing important agreements.*`,
+*This is legal information, not legal advice. Contract disputes often involve significant amounts — have an attorney review agreements and communications before taking action.*`,
 
       business: `### Starting a Business in Arizona
 
@@ -689,7 +725,7 @@ Arizona is a business-friendly state with straightforward registration processes
 - Business license: Varies by city ($50-$500)
 - Operating Agreement preparation: $500-$1,500 if using attorney
 
-*Business formation has long-term legal and tax implications. Consider consulting with a business attorney and CPA.*`,
+*This is legal information, not legal advice. Business formation has long-term legal and tax implications — consider consulting with a business attorney and CPA before finalizing decisions.*`,
 
       default: `### Legal Information Request
 
@@ -721,7 +757,7 @@ For the most helpful response, please include:
 - "Summarize the Arizona Prompt Pay Act"
 
 **Important Disclaimer**
-This information is for educational purposes and does not constitute legal advice. For advice specific to your situation, consult with a licensed Arizona attorney.
+This is legal information for educational purposes — not legal advice. No attorney-client relationship is created. For guidance specific to your situation, consult with a licensed attorney.
 
 *Please rephrase your question with more specific details, and I'll provide a comprehensive, citation-backed response.*`,
     };

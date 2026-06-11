@@ -169,7 +169,7 @@ interface LSOGovernanceDisclosuresProps {
 
 export default function LSOGovernanceDisclosures({ embedded = false }: LSOGovernanceDisclosuresProps) {
   const { language } = useLanguage();
-  const s = t[language] || t.en;
+  const s = t[language as 'en' | 'es'] || t.en;
 
   const content = (
     <div className="space-y-4">
@@ -200,7 +200,7 @@ export default function LSOGovernanceDisclosures({ embedded = false }: LSOGovern
       <CollapsibleSection title={s.dataTitle} subtitle={s.dataSubtitle} icon={Database}>
         <div className="mt-4">
           <div className="divide-y divide-navy-100">
-            {s.dataItems.map((item, i) => (
+            {s.dataItems.map((item: { label: string; value: string }, i: number) => (
               <div key={i} className="flex items-start gap-3 py-3 text-sm">
                 <span className="font-semibold text-navy-800 min-w-[180px] flex-shrink-0">{item.label}</span>
                 <span className="text-navy-600">{item.value}</span>
@@ -212,7 +212,7 @@ export default function LSOGovernanceDisclosures({ embedded = false }: LSOGovern
 
       <CollapsibleSection title={s.safetyTitle} subtitle={s.safetySubtitle} icon={Shield}>
         <div className="mt-4 grid sm:grid-cols-2 gap-3">
-          {s.safetyItems.map((item, i) => {
+          {s.safetyItems.map((item: { icon: React.ElementType; label: string; desc: string }, i: number) => {
             const Icon = item.icon;
             return (
               <div key={i} className="bg-navy-50 rounded-lg p-4">
@@ -229,7 +229,7 @@ export default function LSOGovernanceDisclosures({ embedded = false }: LSOGovern
 
       <CollapsibleSection title={s.auditTitle} subtitle={s.auditSubtitle} icon={Eye}>
         <div className="mt-4 space-y-2">
-          {s.auditItems.map((item, i) => (
+          {s.auditItems.map((item: string, i: number) => (
             <div key={i} className="flex items-start gap-3 text-sm">
               <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
               <span className="text-navy-700">{item}</span>
@@ -250,7 +250,7 @@ export default function LSOGovernanceDisclosures({ embedded = false }: LSOGovern
                 </tr>
               </thead>
               <tbody className="divide-y divide-navy-100">
-                {s.complianceItems.map((item, i) => (
+                {s.complianceItems.map((item: { standard: string; status: string; note: string }, i: number) => (
                   <tr key={i}>
                     <td className="py-2.5 px-3 font-medium text-navy-900">{item.standard}</td>
                     <td className="py-2.5 px-3">

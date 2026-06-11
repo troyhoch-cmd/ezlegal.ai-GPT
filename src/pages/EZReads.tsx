@@ -51,62 +51,50 @@ const FALLBACK_ARTICLES_EN = [
   {
     slug: 'tenant-protection-laws',
     title: 'Understanding Your Rights: A Complete Guide to Tenant Protection Laws',
-    excerpt:
-      'Learn about your rights as a tenant, from security deposits to eviction protection. This comprehensive guide breaks down complex housing laws into plain English.',
+    excerpt: 'Learn about your rights as a tenant, from security deposits to eviction protection. This comprehensive guide breaks down complex housing laws into plain English.',
     category: 'Housing Law',
     read_time: '12 min read',
-    image_url:
-      'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     slug: 'security-deposit-rights',
     title: 'Security Deposits: What Landlords Can and Cannot Deduct',
-    excerpt:
-      'Understand the rules around security deposits, including legal limits, what can be deducted, and how to get your full deposit back when you move out.',
+    excerpt: 'Understand the rules around security deposits, including legal limits, what can be deducted, and how to get your full deposit back when you move out.',
     category: 'Housing Law',
     read_time: '8 min read',
-    image_url:
-      'https://images.pexels.com/photos/4386431/pexels-photo-4386431.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/4386431/pexels-photo-4386431.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     slug: 'eviction-process-guide',
     title: 'Eviction Process Explained: Know Your Rights and Timeline',
-    excerpt:
-      'A step-by-step guide to the eviction process, including required notices, court procedures, and how to respond if you receive an eviction notice.',
+    excerpt: 'A step-by-step guide to the eviction process, including required notices, court procedures, and how to respond if you receive an eviction notice.',
     category: 'Housing Law',
     read_time: '15 min read',
-    image_url:
-      'https://images.pexels.com/photos/7578901/pexels-photo-7578901.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/7578901/pexels-photo-7578901.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     slug: 'small-claims-court-guide',
-    title: 'Small Claims Court: How to File and Win Your Case',
-    excerpt:
-      'A step-by-step guide to navigating small claims court without an attorney. Learn what cases qualify, how to file, and tips for presenting your case.',
+    title: 'Small Claims Court: How to File and Prepare Your Case',
+    excerpt: 'A step-by-step guide to navigating small claims court without an attorney. Learn what cases qualify, how to file, and tips for presenting your case.',
     category: 'Civil Law',
     read_time: '8 min read',
-    image_url:
-      'https://images.pexels.com/photos/6077123/pexels-photo-6077123.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/6077123/pexels-photo-6077123.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     slug: 'employment-rights-guide',
     title: 'Employment Rights Every Worker Should Know',
-    excerpt:
-      'From minimum wage to workplace discrimination, understand your fundamental rights as an employee and when to take action.',
+    excerpt: 'From minimum wage to workplace discrimination, understand your fundamental rights as an employee and when to take action.',
     category: 'Employment Law',
     read_time: '10 min read',
-    image_url:
-      'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     slug: 'creating-will-guide',
     title: 'Creating a Will Without a Lawyer: What You Need to Know',
-    excerpt:
-      'Essential information about estate planning for individuals and families. Learn what makes a will legally valid and common mistakes to avoid.',
+    excerpt: 'Essential information about estate planning for individuals and families. Learn what makes a will legally valid and common mistakes to avoid.',
     category: 'Estate Planning',
     read_time: '15 min read',
-    image_url:
-      'https://images.pexels.com/photos/4057663/pexels-photo-4057663.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/4057663/pexels-photo-4057663.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
 ];
 
@@ -114,126 +102,54 @@ const FALLBACK_ARTICLES_ES = [
   {
     slug: 'leyes-proteccion-inquilinos',
     title: 'Entendiendo Tus Derechos: Guia Completa de Leyes de Proteccion al Inquilino',
-    excerpt:
-      'Aprende sobre tus derechos como inquilino, desde depositos de seguridad hasta proteccion contra desalojos. Esta guia explica las leyes de vivienda en lenguaje simple.',
-    category: 'Derecho de Vivienda',
+    excerpt: 'Aprende sobre tus derechos como inquilino, desde depositos de seguridad hasta proteccion contra desalojos.',
+    category: 'Housing Law',
     read_time: '12 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
-    slug: 'derechos-depósito-seguridad',
+    slug: 'derechos-deposito-seguridad',
     title: 'Depositos de Seguridad: Que Puede y No Puede Descontar Tu Arrendador',
-    excerpt:
-      'Entiende las reglas sobre depositos de seguridad, incluyendo limites legales, que se puede descontar y como recuperar tu depósito completo cuando te mudas.',
-    category: 'Derecho de Vivienda',
+    excerpt: 'Entiende las reglas sobre depositos de seguridad, incluyendo limites legales y como recuperar tu deposito.',
+    category: 'Housing Law',
     read_time: '8 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/4386431/pexels-photo-4386431.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/4386431/pexels-photo-4386431.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     slug: 'guia-proceso-desalojo',
     title: 'Proceso de Desalojo Explicado: Conoce Tus Derechos y Plazos',
-    excerpt:
-      'Una guia paso a paso del proceso de desalojo, incluyendo avisos requeridos, procedimientos judiciales y como responder si recibes un aviso de desalojo.',
-    category: 'Derecho de Vivienda',
+    excerpt: 'Una guia paso a paso del proceso de desalojo, incluyendo avisos requeridos y como responder.',
+    category: 'Housing Law',
     read_time: '15 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/7578901/pexels-photo-7578901.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/7578901/pexels-photo-7578901.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     slug: 'guia-reclamos-menores',
-    title: 'Tribunal de Reclamos Menores: Como Presentar y Ganar Tu Caso',
-    excerpt:
-      'Guia paso a paso para navegar el tribunal de reclamos menores sin abogado. Aprende que casos califican, como presentar y consejos para tu caso.',
-    category: 'Derecho Civil',
+    title: 'Tribunal de Reclamos Menores: Como Presentar y Preparar Tu Caso',
+    excerpt: 'Guia paso a paso para navegar el tribunal de reclamos menores sin abogado.',
+    category: 'Civil Law',
     read_time: '8 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/6077123/pexels-photo-6077123.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/6077123/pexels-photo-6077123.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     slug: 'derechos-laborales-guia',
     title: 'Derechos Laborales que Todo Trabajador Debe Conocer',
-    excerpt:
-      'Desde el salario minimo hasta la discriminacion laboral, entiende tus derechos fundamentales como empleado y cuando tomar accion.',
-    category: 'Derecho Laboral',
+    excerpt: 'Desde el salario minimo hasta la discriminacion laboral, entiende tus derechos fundamentales.',
+    category: 'Employment Law',
     read_time: '10 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     slug: 'crear-testamento-guia',
     title: 'Crear un Testamento Sin Abogado: Lo Que Necesitas Saber',
-    excerpt:
-      'Información esencial sobre planificacion patrimonial para individuos y familias. Aprende que hace un testamento legalmente valido y errores comunes a evitar.',
-    category: 'Testamentos y Sucesiones',
+    excerpt: 'Informacion esencial sobre planificacion patrimonial para individuos y familias.',
+    category: 'Wills & Probate',
     read_time: '15 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/4057663/pexels-photo-4057663.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    slug: 'horas-extra-no-pagadas',
-    title: 'Horas Extra No Pagadas: Como Reclamar Lo Que Te Deben',
-    excerpt:
-      'Aprende como identificar si tu empleador te debe horas extra, los pasos para presentar una queja, y los plazos legales para reclamar salarios no pagados.',
-    category: 'Derecho Laboral',
-    read_time: '9 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    slug: 'proteccion-contra-cobradores',
-    title: 'Proteccion Contra Cobradores de Deudas: Tus Derechos Bajo la Ley',
-    excerpt:
-      'Los cobradores de deudas tienen reglas que deben seguir. Conoce que pueden y no pueden hacer, como detener llamadas de acoso, y cuando disputar una deuda.',
-    category: 'Proteccion al Consumidor',
-    read_time: '10 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/4386476/pexels-photo-4386476.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    slug: 'estafas-comunes-como-protegerte',
-    title: 'Estafas Comunes y Como Protegerte: Guia del Consumidor',
-    excerpt:
-      'Identifica las estafas mas comunes que afectan a los consumidores, aprende a reconocer senales de alerta y conoce tus opciones legales si fuiste victima.',
-    category: 'Proteccion al Consumidor',
-    read_time: '11 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/5699456/pexels-photo-5699456.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    slug: 'guia-divorcio-basica',
-    title: 'Guia Basica de Divorcio: Proceso, Costos y Tus Derechos',
-    excerpt:
-      'Todo lo que necesitas saber sobre el proceso de divorcio, desde como presentar los documentos hasta la division de bienes y custodia de hijos.',
-    category: 'Derecho Familiar',
-    read_time: '14 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/4098232/pexels-photo-4098232.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    slug: 'custodia-de-hijos-derechos',
-    title: 'Custodia de Hijos: Entiende Tus Derechos y Opciones',
-    excerpt:
-      'Aprende sobre los diferentes tipos de custodia, como los tribunales toman decisiones, y que factores consideran para determinar el mejor interes del menor.',
-    category: 'Derecho Familiar',
-    read_time: '12 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/1683975/pexels-photo-1683975.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    slug: 'disputas-entre-vecinos',
-    title: 'Disputas Entre Vecinos: Soluciones Legales y Practicas',
-    excerpt:
-      'Desde ruido excesivo hasta limites de propiedad, aprende como resolver disputas con vecinos legalmente y cuando es necesario involucrar a las autoridades.',
-    category: 'Derecho Civil',
-    read_time: '8 min de lectura',
-    image_url:
-      'https://images.pexels.com/photos/2079234/pexels-photo-2079234.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image_url: 'https://images.pexels.com/photos/4057663/pexels-photo-4057663.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
 ];
 
-function formatUpdatedDate(dateStr: string, lang: string): string {
+function formatUpdatedDate(dateStr: string, lang: 'en' | 'es'): string {
   const date = new Date(dateStr);
   const now = new Date();
   const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
@@ -249,34 +165,44 @@ function formatUpdatedDate(dateStr: string, lang: string): string {
   return `Updated ${date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`;
 }
 
-function toArticle(
-  a: (typeof FALLBACK_ARTICLES_EN)[number],
-  i: number
-): Article {
+function toArticle(a: (typeof FALLBACK_ARTICLES_EN)[number], i: number): Article {
   return {
     ...a,
     id: `fallback-${i}`,
     content: '',
     is_featured: i === 0,
     author_name: 'EZLegal.ai',
-    published_at: new Date().toISOString(),
+    published_at: '2026-04-15T00:00:00.000Z',
     jurisdiction: null,
     review_status: 'editorial_review',
     sources: null,
-    updated_at: new Date().toISOString(),
-    last_reviewed_at: null,
+    updated_at: '2026-05-20T00:00:00.000Z',
+    last_reviewed_at: '2026-05-20T00:00:00.000Z',
   };
 }
 
-function useCategories(t: (key: string) => string) {
-  return useMemo(() => [
-    { name: t('ezreads.category.housingLaw'), icon: Home, count: 14, examples: t('ezreads.category.housingExamples'), dbName: 'Housing Law' },
-    { name: t('ezreads.category.employmentLaw'), icon: Users, count: 18, examples: t('ezreads.category.employmentExamples'), dbName: 'Employment Law' },
-    { name: t('ezreads.category.consumerProtection'), icon: Shield, count: 15, examples: t('ezreads.category.consumerExamples'), dbName: 'Consumer Protection' },
-    { name: t('ezreads.category.familyLaw'), icon: FileText, count: 12, examples: t('ezreads.category.familyExamples'), dbName: 'Family Law' },
-    { name: t('ezreads.category.willsProbate'), icon: BookOpen, count: 8, examples: t('ezreads.category.willsExamples'), dbName: 'Wills & Probate' },
-    { name: t('ezreads.category.civilLaw'), icon: Scale, count: 14, examples: t('ezreads.category.civilExamples'), dbName: 'Civil Law' },
-  ], [t]);
+interface CategoryConfig {
+  name: string;
+  icon: typeof Home;
+  count: number;
+  examples: string;
+  dbName: string;
+}
+
+function useCategories(t: (key: string) => string, articles: Article[]): CategoryConfig[] {
+  return useMemo(() => {
+    const countByCategory = (dbName: string): number =>
+      articles.filter((a: Article) => a.category === dbName).length || 0;
+
+    return [
+      { name: t('ezreads.category.housingLaw'), icon: Home, count: countByCategory('Housing Law'), examples: t('ezreads.category.housingExamples'), dbName: 'Housing Law' },
+      { name: t('ezreads.category.employmentLaw'), icon: Users, count: countByCategory('Employment Law'), examples: t('ezreads.category.employmentExamples'), dbName: 'Employment Law' },
+      { name: t('ezreads.category.consumerProtection'), icon: Shield, count: countByCategory('Consumer Protection'), examples: t('ezreads.category.consumerExamples'), dbName: 'Consumer Protection' },
+      { name: t('ezreads.category.familyLaw'), icon: FileText, count: countByCategory('Family Law'), examples: t('ezreads.category.familyExamples'), dbName: 'Family Law' },
+      { name: t('ezreads.category.willsProbate'), icon: BookOpen, count: countByCategory('Wills & Probate'), examples: t('ezreads.category.willsExamples'), dbName: 'Wills & Probate' },
+      { name: t('ezreads.category.civilLaw'), icon: Scale, count: countByCategory('Civil Law'), examples: t('ezreads.category.civilExamples'), dbName: 'Civil Law' },
+    ];
+  }, [t, articles]);
 }
 
 export default function EZReads() {
@@ -288,9 +214,13 @@ export default function EZReads() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isArticleLoading, setIsArticleLoading] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+  const [newsletterError, setNewsletterError] = useState(false);
   const { language, t } = useLanguage();
 
-  const categories = useCategories(t);
+  const lang = language === 'es' ? 'es' : 'en' as const;
+  const categories = useCategories(t, articles);
   const fallbackArticles = language === 'es' ? FALLBACK_ARTICLES_ES : FALLBACK_ARTICLES_EN;
   const dateLocale = language === 'es' ? 'es-ES' : 'en-US';
 
@@ -324,9 +254,7 @@ export default function EZReads() {
         query = query.eq('category', dbCategory);
       }
       if (selectedJurisdiction) {
-        query = query.or(
-          `jurisdiction.eq.${selectedJurisdiction},jurisdiction.is.null`
-        );
+        query = query.or(`jurisdiction.eq.${selectedJurisdiction},jurisdiction.is.null`);
       }
 
       const { data, error } = await query;
@@ -406,57 +334,29 @@ export default function EZReads() {
 
   function generatePlaceholderContent(title: string, excerpt: string): string {
     if (language === 'es') {
-      return `
-        <p class="text-lg font-medium text-navy-800 mb-6">${excerpt}</p>
-        <h2>Resumen</h2>
-        <p>Esta guia explica ${title.toLowerCase()} en pasos cortos. Conocer tus derechos te ayuda a tomar buenas decisiones.</p>
-        <h2>Puntos Clave</h2>
-        <ul>
-          <li>Conoce tus derechos bajo las leyes federales y estatales aplicables</li>
-          <li>Documenta todo por escrito cuando sea posible</li>
-          <li>Busca asistencia legal si crees que tus derechos han sido violados</li>
-          <li>Los plazos pueden aplicar - actua rapidamente para preservar tus opciones</li>
-        </ul>
-        <h2>Que Debes Hacer</h2>
-        <p>Si te encuentras en una situación relacionada con este tema, considera los siguientes pasos:</p>
-        <ol>
-          <li>Reune todos los documentos y comunicaciones relevantes</li>
-          <li>Investiga las leyes especificas que aplican en tu jurisdicción</li>
-          <li>Considera consultar con un profesional legal para asesoramiento personalizado</li>
-          <li>Mantene registros detallados de cualquier interaccion o incidente</li>
-        </ol>
-        <blockquote>
-          <strong>Importante:</strong> Esto es información general, no consejo legal. Cada caso es distinto y las leyes cambian segun el lugar. Habla con un abogado para tu caso.
-        </blockquote>
-        <h2>Recursos Adicionales</h2>
-        <p>Para información mas detallada sobre este tema, puedes usar nuestro asistente legal de IA para obtener respuestas a preguntas especificas sobre tu situación.</p>
-      `;
+      return `<p class="text-lg font-medium text-navy-800 mb-6">${excerpt}</p>
+<h2>Resumen</h2>
+<p>Esta guia explica ${title.toLowerCase()} en pasos cortos. Conocer tus derechos te ayuda a tomar buenas decisiones.</p>
+<h2>Puntos Clave</h2>
+<ul>
+<li>Conoce tus derechos bajo las leyes federales y estatales aplicables</li>
+<li>Documenta todo por escrito cuando sea posible</li>
+<li>Busca asistencia legal si crees que tus derechos han sido violados</li>
+<li>Los plazos pueden aplicar - actua rapidamente para preservar tus opciones</li>
+</ul>
+<blockquote><strong>Importante:</strong> Esto es informacion general, no consejo legal. Cada caso es distinto y las leyes cambian segun el lugar. Habla con un abogado para tu caso.</blockquote>`;
     }
-    return `
-      <p class="text-lg font-medium text-navy-800 mb-6">${excerpt}</p>
-      <h2>Overview</h2>
-      <p>This article provides comprehensive information about ${title.toLowerCase()}. Understanding your legal rights is essential for protecting yourself and making informed decisions.</p>
-      <h2>Key Points</h2>
-      <ul>
-        <li>Know your rights under applicable federal and state laws</li>
-        <li>Document everything in writing whenever possible</li>
-        <li>Seek legal assistance if you believe your rights have been violated</li>
-        <li>Time limits may apply - act promptly to preserve your options</li>
-      </ul>
-      <h2>What You Should Do</h2>
-      <p>If you find yourself in a situation related to this topic, consider the following steps:</p>
-      <ol>
-        <li>Gather all relevant documents and communications</li>
-        <li>Research the specific laws that apply in your jurisdiction</li>
-        <li>Consider consulting with a legal professional for personalized advice</li>
-        <li>Keep detailed records of any interactions or incidents</li>
-      </ol>
-      <blockquote>
-        <strong>Important:</strong> This article provides general legal information, not legal advice. Every situation is unique, and laws vary by jurisdiction. For guidance specific to your circumstances, consult with a qualified attorney.
-      </blockquote>
-      <h2>Additional Resources</h2>
-      <p>For more detailed information on this topic, you can use our AI legal assistant to get answers to specific questions about your situation.</p>
-    `;
+    return `<p class="text-lg font-medium text-navy-800 mb-6">${excerpt}</p>
+<h2>Overview</h2>
+<p>This article provides comprehensive information about ${title.toLowerCase()}. Understanding your legal rights is essential for making informed decisions.</p>
+<h2>Key Points</h2>
+<ul>
+<li>Know your rights under applicable federal and state laws</li>
+<li>Document everything in writing whenever possible</li>
+<li>Seek legal assistance if you believe your rights have been violated</li>
+<li>Time limits may apply - act promptly to preserve your options</li>
+</ul>
+<blockquote><strong>Important:</strong> This article provides general legal information, not legal advice. Every situation is unique. For guidance specific to your circumstances, consult with a qualified attorney.</blockquote>`;
   }
 
   function handleSearch(query: string, category?: string) {
@@ -518,9 +418,7 @@ export default function EZReads() {
                 >
                   <option value="">{t('ezreads.allStates')}</option>
                   {US_STATES.map((state) => (
-                    <option key={state.code} value={state.code}>
-                      {state.name}
-                    </option>
+                    <option key={state.code} value={state.code}>{state.name}</option>
                   ))}
                 </select>
                 <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-navy-400 pointer-events-none" />
@@ -541,52 +439,28 @@ export default function EZReads() {
             {categories.map((category) => (
               <button
                 key={category.name}
-                onClick={() =>
-                  setSelectedCategory(
-                    selectedCategory === category.name ? null : category.name
-                  )
-                }
+                onClick={() => setSelectedCategory(selectedCategory === category.name ? null : category.name)}
                 className={`flex flex-col items-center gap-2 p-4 border rounded-xl transition-all group ${
                   selectedCategory === category.name
                     ? 'bg-teal-600 border-teal-600'
                     : 'bg-navy-50 hover:bg-teal-50 border-navy-200 hover:border-teal-300'
                 }`}
               >
-                <div
-                  className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors ${
-                    selectedCategory === category.name
-                      ? 'bg-teal-500'
-                      : 'bg-teal-50 group-hover:bg-teal-600'
-                  }`}
-                >
-                  <category.icon
-                    className={`w-6 h-6 transition-colors ${
-                      selectedCategory === category.name
-                        ? 'text-white'
-                        : 'text-teal-600 group-hover:text-white'
-                    }`}
-                  />
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors ${
+                  selectedCategory === category.name ? 'bg-teal-500' : 'bg-teal-50 group-hover:bg-teal-600'
+                }`}>
+                  <category.icon className={`w-6 h-6 transition-colors ${
+                    selectedCategory === category.name ? 'text-white' : 'text-teal-600 group-hover:text-white'
+                  }`} />
                 </div>
                 <div className="text-center">
-                  <div
-                    className={`font-semibold text-sm ${
-                      selectedCategory === category.name ? 'text-white' : 'text-navy-900'
-                    }`}
-                  >
+                  <div className={`font-semibold text-sm ${selectedCategory === category.name ? 'text-white' : 'text-navy-900'}`}>
                     {category.name}
                   </div>
-                  <div
-                    className={`text-xs mt-0.5 ${
-                      selectedCategory === category.name ? 'text-teal-200' : 'text-navy-500'
-                    }`}
-                  >
+                  <div className={`text-xs mt-0.5 ${selectedCategory === category.name ? 'text-teal-200' : 'text-navy-500'}`}>
                     {category.count} {language === 'es' ? 'articulos' : 'articles'}
                   </div>
-                  <div
-                    className={`text-xs mt-1 leading-tight ${
-                      selectedCategory === category.name ? 'text-teal-100' : 'text-navy-400'
-                    }`}
-                  >
+                  <div className={`text-xs mt-1 leading-tight ${selectedCategory === category.name ? 'text-teal-100' : 'text-navy-400'}`}>
                     {category.examples}
                   </div>
                 </div>
@@ -619,10 +493,7 @@ export default function EZReads() {
                     : (language === 'es' ? 'articulos' : 'articles')})
                 </span>
               </p>
-              <button
-                onClick={handleSearchClear}
-                className="text-sm text-teal-600 hover:text-teal-700 font-medium"
-              >
+              <button onClick={handleSearchClear} className="text-sm text-teal-600 hover:text-teal-700 font-medium">
                 {t('ezreads.clearSearch')}
               </button>
             </div>
@@ -660,7 +531,7 @@ export default function EZReads() {
                       />
                       <div className="absolute top-4 left-4 flex items-center gap-2">
                         <span className="px-3 py-1 bg-teal-600 text-white text-sm font-semibold rounded-full">
-                          {featuredArticle.category}
+                          {lang === 'es' ? (categories.find(c => c.dbName === featuredArticle.category)?.name || featuredArticle.category) : featuredArticle.category}
                         </span>
                         {featuredArticle.jurisdiction && (
                           <span className="px-3 py-1 bg-navy-700/80 backdrop-blur-sm text-white text-sm font-medium rounded-full flex items-center gap-1">
@@ -678,11 +549,7 @@ export default function EZReads() {
                         </div>
                         <span className="text-navy-300">|</span>
                         <span>
-                          {new Date(featuredArticle.published_at).toLocaleDateString(dateLocale, {
-                            month: 'long',
-                            day: 'numeric',
-                            year: 'numeric',
-                          })}
+                          {new Date(featuredArticle.published_at).toLocaleDateString(dateLocale, { month: 'long', day: 'numeric', year: 'numeric' })}
                         </span>
                         {featuredArticle.review_status === 'attorney_reviewed' && (
                           <>
@@ -703,12 +570,8 @@ export default function EZReads() {
                           </>
                         )}
                       </div>
-                      <h3 className="text-3xl font-bold text-navy-900 mb-4 leading-tight">
-                        {featuredArticle.title}
-                      </h3>
-                      <p className="text-lg text-navy-600 mb-4 leading-relaxed">
-                        {featuredArticle.excerpt}
-                      </p>
+                      <h3 className="text-3xl font-bold text-navy-900 mb-4 leading-tight">{featuredArticle.title}</h3>
+                      <p className="text-lg text-navy-600 mb-4 leading-relaxed">{featuredArticle.excerpt}</p>
                       {!featuredArticle.jurisdiction && (
                         <p className="text-xs text-navy-400 mb-4 flex items-center gap-1">
                           <MapPin className="w-3 h-3" />
@@ -734,7 +597,7 @@ export default function EZReads() {
               <div className="mb-12">
                 <h2 className="text-3xl font-bold text-navy-900 mb-2">
                   {selectedCategory
-                    ? `${selectedCategory}`
+                    ? selectedCategory
                     : searchQuery
                       ? t('ezreads.searchResults')
                       : t('ezreads.recentArticles')}
@@ -753,9 +616,7 @@ export default function EZReads() {
                   <BookOpen className="w-16 h-16 mx-auto text-navy-300 mb-4" />
                   <h3 className="text-xl font-semibold text-navy-900 mb-2">{t('ezreads.noArticles')}</h3>
                   <p className="text-navy-600 mb-6">
-                    {searchQuery
-                      ? t('ezreads.noArticlesSearch')
-                      : t('ezreads.noArticlesCategory')}
+                    {searchQuery ? t('ezreads.noArticlesSearch') : t('ezreads.noArticlesCategory')}
                   </p>
                   {hasActiveFilters && (
                     <button
@@ -768,116 +629,106 @@ export default function EZReads() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {(selectedCategory || searchQuery ? filteredArticles : regularArticles).map(
-                    (article) => (
-                      <article
-                        key={article.id}
-                        className="bg-white border border-navy-200 rounded-xl overflow-hidden hover:shadow-xl transition-all group"
-                      >
-                        <div className="relative h-48 overflow-hidden">
-                          <img
-                            src={getArticleImage(article.image_url, article.category)}
-                            alt={article.title}
-                            loading="lazy"
-                            onError={onArticleImageError(article.category)}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                          <div className="absolute top-3 left-3 flex items-center gap-2">
-                            <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-teal-600 text-xs font-semibold rounded-full">
-                              {article.category}
+                  {(selectedCategory || searchQuery ? filteredArticles : regularArticles).map((article) => (
+                    <article
+                      key={article.id}
+                      className="bg-white border border-navy-200 rounded-xl overflow-hidden hover:shadow-xl transition-all group"
+                    >
+                      <div className="relative h-48 overflow-hidden">
+                        <img
+                          src={getArticleImage(article.image_url, article.category)}
+                          alt={article.title}
+                          loading="lazy"
+                          onError={onArticleImageError(article.category)}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-3 left-3 flex items-center gap-2">
+                          <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-teal-600 text-xs font-semibold rounded-full">
+                            {lang === 'es' ? (categories.find(c => c.dbName === article.category)?.name || article.category) : article.category}
+                          </span>
+                          {article.jurisdiction && (
+                            <span className="px-2 py-1 bg-navy-800/80 backdrop-blur-sm text-white text-xs font-medium rounded-full flex items-center gap-1">
+                              <MapPin className="w-3 h-3" />
+                              {getJurisdictionName(article.jurisdiction)}
                             </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="p-6">
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-navy-500 mb-3">
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {article.read_time}
+                          </div>
+                          {article.review_status === 'attorney_reviewed' && (
+                            <>
+                              <span className="text-navy-300">|</span>
+                              <span className="inline-flex items-center gap-1 text-emerald-600 font-medium">
+                                <ShieldCheck className="w-3 h-3" />
+                                {t('ezreads.attorneyReviewed')}
+                              </span>
+                            </>
+                          )}
+                          {article.review_status === 'official_sources' && (
+                            <>
+                              <span className="text-navy-300">|</span>
+                              <span className="inline-flex items-center gap-1 text-teal-600 font-medium">
+                                <Landmark className="w-3 h-3" />
+                                {t('ezreads.officialSources')}
+                              </span>
+                            </>
+                          )}
+                        </div>
+                        <details className="mb-3 text-xs text-navy-500">
+                          <summary className="cursor-pointer select-none text-navy-500 hover:text-navy-700 list-none inline-flex items-center gap-1">
+                            <span className="underline-offset-2 hover:underline">
+                              {language === 'es' ? 'Detalles' : 'Details'}
+                            </span>
+                          </summary>
+                          <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <span>
+                              {language === 'es' ? 'Publicado ' : 'Published '}
+                              {new Date(article.published_at).toLocaleDateString(dateLocale, { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </span>
+                            {article.updated_at !== article.published_at && (
+                              <>
+                                <span className="text-navy-300">|</span>
+                                <span>{formatUpdatedDate(article.updated_at, lang)}</span>
+                              </>
+                            )}
                             {article.jurisdiction && (
-                              <span className="px-2 py-1 bg-navy-800/80 backdrop-blur-sm text-white text-xs font-medium rounded-full flex items-center gap-1">
-                                <MapPin className="w-3 h-3" />
-                                {getJurisdictionName(article.jurisdiction)}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="p-6">
-                          <div className="flex flex-wrap items-center gap-2 text-xs text-navy-500 mb-3">
-                            <div className="flex items-center gap-1">
-                              <Clock className="w-3 h-3" />
-                              {article.read_time}
-                            </div>
-                            {article.review_status === 'attorney_reviewed' && (
                               <>
                                 <span className="text-navy-300">|</span>
-                                <span className="inline-flex items-center gap-1 text-emerald-600 font-medium">
-                                  <ShieldCheck className="w-3 h-3" />
-                                  {t('ezreads.attorneyReviewed')}
-                                </span>
-                              </>
-                            )}
-                            {article.review_status === 'official_sources' && (
-                              <>
-                                <span className="text-navy-300">|</span>
-                                <span className="inline-flex items-center gap-1 text-teal-600 font-medium">
-                                  <Landmark className="w-3 h-3" />
-                                  {t('ezreads.officialSources')}
+                                <span className="inline-flex items-center gap-1">
+                                  <MapPin className="w-3 h-3" />
+                                  {getJurisdictionName(article.jurisdiction)}
                                 </span>
                               </>
                             )}
                           </div>
-                          <details className="mb-3 text-xs text-navy-500">
-                            <summary className="cursor-pointer select-none text-navy-500 hover:text-navy-700 list-none inline-flex items-center gap-1">
-                              <span className="underline-offset-2 hover:underline">
-                                {language === 'es' ? 'Detalles' : 'Details'}
-                              </span>
-                            </summary>
-                            <div className="mt-2 flex flex-wrap items-center gap-2">
-                              <span>
-                                {language === 'es' ? 'Publicado ' : 'Published '}
-                                {new Date(article.published_at).toLocaleDateString(dateLocale, {
-                                  month: 'short',
-                                  day: 'numeric',
-                                  year: 'numeric',
-                                })}
-                              </span>
-                              {article.updated_at !== article.published_at && (
-                                <>
-                                  <span className="text-navy-300">|</span>
-                                  <span>{formatUpdatedDate(article.updated_at, language)}</span>
-                                </>
-                              )}
-                              {article.jurisdiction && (
-                                <>
-                                  <span className="text-navy-300">|</span>
-                                  <span className="inline-flex items-center gap-1">
-                                    <MapPin className="w-3 h-3" />
-                                    {getJurisdictionName(article.jurisdiction)}
-                                  </span>
-                                </>
-                              )}
-                            </div>
-                          </details>
-                          <h3 className="text-xl font-bold text-navy-900 mb-3 leading-tight group-hover:text-teal-600 transition-colors">
-                            {article.title}
-                          </h3>
-                          <p className="text-navy-600 mb-4 leading-relaxed text-sm">
-                            {article.excerpt}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                              <button
-                                onClick={() => openArticle(article.slug)}
-                                className="inline-flex items-center gap-2 text-teal-600 font-semibold text-sm group-hover:gap-3 transition-all"
-                              >
-                                {t('ezreads.readMore')}
-                                <ArrowRight className="w-4 h-4" />
-                              </button>
-                            </div>
-                            <ShareButton
-                              variant="compact"
-                              context="article"
-                              title={article.title}
-                              url={`${window.location.origin}/ezreads#${article.slug}`}
-                            />
-                          </div>
+                        </details>
+                        <h3 className="text-xl font-bold text-navy-900 mb-3 leading-tight group-hover:text-teal-600 transition-colors">
+                          {article.title}
+                        </h3>
+                        <p className="text-navy-600 mb-4 leading-relaxed text-sm">{article.excerpt}</p>
+                        <div className="flex items-center justify-between">
+                          <button
+                            onClick={() => openArticle(article.slug)}
+                            className="inline-flex items-center gap-2 text-teal-600 font-semibold text-sm group-hover:gap-3 transition-all"
+                          >
+                            {t('ezreads.readMore')}
+                            <ArrowRight className="w-4 h-4" />
+                          </button>
+                          <ShareButton
+                            variant="compact"
+                            context="article"
+                            title={article.title}
+                            url={`${window.location.origin}/ezreads#${article.slug}`}
+                          />
                         </div>
-                      </article>
-                    )
-                  )}
+                      </div>
+                    </article>
+                  ))}
                 </div>
               )}
             </div>
@@ -892,19 +743,41 @@ export default function EZReads() {
           <p className="text-xl text-navy-100 mb-8 max-w-2xl mx-auto">
             {t('ezreads.stayInformedDesc')}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder={t('ezreads.enterEmail')}
-              className="flex-1 px-4 py-3 rounded-lg text-navy-900 placeholder:text-navy-400 focus:outline-none focus:ring-2 focus:ring-teal-300"
-            />
-            <button className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors whitespace-nowrap">
-              {t('ezreads.subscribe')}
-            </button>
-          </div>
-          <p className="text-navy-200 text-sm mt-4">
-            {t('ezreads.freeResources')}
-          </p>
+          {newsletterSubmitted ? (
+            <p className="text-teal-300 font-medium">{lang === 'es' ? 'Gracias por suscribirte.' : 'Thank you for subscribing.'}</p>
+          ) : (
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (newsletterEmail.includes('@')) {
+                  setNewsletterError(false);
+                  const { error } = await supabase.from('email_captures').insert({ email: newsletterEmail, source: 'ezreads_newsletter', language: lang });
+                  if (error) {
+                    setNewsletterError(true);
+                  } else {
+                    setNewsletterSubmitted(true);
+                  }
+                }
+              }}
+              className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
+            >
+              <input
+                type="email"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                placeholder={t('ezreads.enterEmail')}
+                required
+                className="flex-1 px-4 py-3 rounded-lg text-navy-900 placeholder:text-navy-400 focus:outline-none focus:ring-2 focus:ring-teal-300"
+              />
+              <button type="submit" className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors whitespace-nowrap">
+                {t('ezreads.subscribe')}
+              </button>
+            </form>
+          )}
+          {newsletterError && (
+            <p className="text-red-300 text-sm mt-3">{lang === 'es' ? 'Algo salio mal. Intenta de nuevo.' : 'Something went wrong. Please try again.'}</p>
+          )}
+          <p className="text-navy-200 text-sm mt-4">{t('ezreads.freeResources')}</p>
         </div>
       </section>
 
@@ -914,10 +787,7 @@ export default function EZReads() {
       <ArticleModal
         article={selectedArticle}
         isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setSelectedArticle(null);
-        }}
+        onClose={() => { setIsModalOpen(false); setSelectedArticle(null); }}
         isLoading={isArticleLoading}
       />
     </div>

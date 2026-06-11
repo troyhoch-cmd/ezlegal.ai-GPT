@@ -9,6 +9,7 @@ import Footer from '../components/Footer';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { setPendingPlan } from '../lib/plan-context';
+import { trackEvent } from '../services/analytics-service';
 
 interface Plan {
   id: string;
@@ -84,8 +85,10 @@ export default function Billing() {
 
   useEffect(() => {
     const status = searchParams.get('status');
-    if (status === 'success') setActionNotice('Payment received. Your plan will activate within a few seconds.');
-    else if (status === 'cancel') setActionError('Checkout was cancelled. No charge was made.');
+    if (status === 'success') {
+      trackEvent('payment_completed', { source: 'billing_redirect' });
+      setActionNotice('Payment received. Your plan will activate within a few seconds.');
+    } else if (status === 'cancel') setActionError('Checkout was cancelled. No charge was made.');
   }, [searchParams]);
 
   async function startCheckout(planId: string) {

@@ -26,7 +26,17 @@ export default function AlgorithmicImpactAssessment() {
                 ? 'Evaluacion publica del impacto de nuestro sistema de IA en poblaciones vulnerables, siguiendo las pautas de la LSC, NIST AI RMF y el EU AI Act.'
                 : 'Public assessment of our AI system\'s impact on vulnerable populations, following LSC guidelines, NIST AI RMF, and EU AI Act requirements.'}
             </p>
-            <p className="text-sm text-navy-500 mt-3">Assessment Date: Q2 2026 | Next Review: Q3 2026</p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-teal-50 text-teal-700 rounded-full border border-teal-200">
+                <FileText className="h-3 w-3" />
+                Version 1.3
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-navy-50 text-navy-700 rounded-full border border-navy-200">
+                <Globe className="h-3 w-3" />
+                Assessment: Q2 2026
+              </span>
+              <span className="text-sm text-navy-400">Next Review: Q3 2026</span>
+            </div>
           </header>
 
           <section className="mb-12">

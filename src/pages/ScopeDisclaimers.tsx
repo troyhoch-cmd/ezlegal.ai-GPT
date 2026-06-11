@@ -790,6 +790,60 @@ export default function ScopeDisclaimers() {
             </div>
           </div>
         </section>
+
+        <section className="py-12 px-4 bg-white">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-2xl font-bold text-navy-900 mb-4 flex items-center gap-2">
+              <MapPin className="w-6 h-6 text-teal-600" />
+              {en ? 'UPL Jurisdictional Review Matrix' : 'Matriz de Revisión Jurisdiccional UPL'}
+            </h2>
+            <p className="text-sm text-navy-600 mb-6 max-w-3xl">
+              {en
+                ? 'The definition of "practice of law" varies by jurisdiction. This matrix documents our compliance posture per state. ezLegal.ai provides legal information only and does not engage in the practice of law in any jurisdiction.'
+                : 'La definición de "práctica legal" varía según la jurisdicción. Esta matriz documenta nuestra postura de cumplimiento por estado. ezLegal.ai proporciona solo información legal y no ejerce la abogacía en ninguna jurisdicción.'}
+            </p>
+            <div className="overflow-x-auto border border-navy-200 rounded-xl">
+              <table className="w-full text-sm">
+                <thead className="bg-navy-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold text-navy-800">{en ? 'State' : 'Estado'}</th>
+                    <th className="px-4 py-3 text-left font-semibold text-navy-800">{en ? 'Scope Limitation' : 'Limitación de Alcance'}</th>
+                    <th className="px-4 py-3 text-left font-semibold text-navy-800">{en ? 'Document Gen Boundaries' : 'Límites de Gen. de Docs'}</th>
+                    <th className="px-4 py-3 text-left font-semibold text-navy-800">{en ? 'Prohibited Outputs' : 'Salidas Prohibidas'}</th>
+                    <th className="px-4 py-3 text-center font-semibold text-navy-800">{en ? 'Status' : 'Estado'}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-navy-100">
+                  {[
+                    { state: 'Arizona', scope: 'Information only; no case-specific legal advice', docs: 'Templates only; no completed filings', prohibited: 'Court representation, legal opinions, strategy advice', status: 'reviewed' },
+                    { state: 'California', scope: 'General legal information; jurisdiction-gated', docs: 'Informational templates; user completes all fields', prohibited: 'Specific legal recommendations, outcome guarantees', status: 'reviewed' },
+                    { state: 'Texas', scope: 'Educational legal content; no attorney-client relationship', docs: 'Form references only; links to official court forms', prohibited: 'Legal advice, fiduciary duties, privileged communications', status: 'reviewed' },
+                    { state: 'Florida', scope: 'Legal information and self-help resources', docs: 'Template generation with mandatory disclaimers', prohibited: 'Case assessment, litigation strategy, settlement advice', status: 'reviewed' },
+                    { state: 'New York', scope: 'General information; clear "not legal advice" boundaries', docs: 'Educational templates; no practice-specific documents', prohibited: 'Attorney-client relationship creation, court filings', status: 'reviewed' },
+                    { state: 'Federal', scope: 'Nationwide legal information on federal law', docs: 'Federal form references; links to official sources', prohibited: 'Jurisdiction-specific advice without state context', status: 'reviewed' },
+                  ].map((row) => (
+                    <tr key={row.state} className="hover:bg-navy-50/50">
+                      <td className="px-4 py-3 font-medium text-navy-900">{row.state}</td>
+                      <td className="px-4 py-3 text-navy-600">{row.scope}</td>
+                      <td className="px-4 py-3 text-navy-600">{row.docs}</td>
+                      <td className="px-4 py-3 text-navy-600">{row.prohibited}</td>
+                      <td className="px-4 py-3 text-center">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-teal-50 text-teal-700 rounded-full border border-teal-200">
+                          <CheckCircle className="w-3 h-3" /> {en ? 'Reviewed' : 'Revisado'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-xs text-navy-500 mt-4">
+              {en
+                ? 'UPL definitions vary by jurisdiction per ABA Model Rule 5.5. This matrix is reviewed quarterly by licensed counsel. Last review: Q2 2026.'
+                : 'Las definiciones de UPL varían por jurisdicción según la Regla Modelo 5.5 de la ABA. Esta matriz es revisada trimestralmente por abogados licenciados. Última revisión: Q2 2026.'}
+            </p>
+          </div>
+        </section>
       </main>
 
       <Footer />

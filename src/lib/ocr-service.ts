@@ -21,7 +21,7 @@ export async function performOCR(
     imageData,
     'eng',
     {
-      logger: (m) => {
+      logger: (m: { status?: string; progress?: number }) => {
         if (onProgress && m.status && typeof m.progress === 'number') {
           onProgress({
             status: m.status,
@@ -55,7 +55,7 @@ export async function performOCROnMultipleImages(
       dataUrl,
       'eng',
       {
-        logger: (m) => {
+        logger: (m: { status?: string; progress?: number }) => {
           if (onProgress && m.status && typeof m.progress === 'number') {
             onProgress(
               { status: m.status, progress: Math.round(m.progress * 100) },

@@ -122,7 +122,7 @@ export default function Login() {
                   onClick={() => handleOAuthLogin('google')}
                   disabled={oauthLoading !== null}
                   className="w-full bg-white hover:bg-navy-50 text-navy-800 font-medium py-3 px-4 rounded-lg border border-navy-300 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-                  aria-label="Continue with Google"
+                  aria-label={language === 'en' ? 'Continue with Google' : 'Continuar con Google'}
                 >
                   {oauthLoading === 'google' ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -134,7 +134,7 @@ export default function Login() {
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                     </svg>
                   )}
-                  Continue with Google
+                  {language === 'en' ? 'Continue with Google' : 'Continuar con Google'}
                 </button>
 
                 <button
@@ -142,7 +142,7 @@ export default function Login() {
                   onClick={() => handleOAuthLogin('azure')}
                   disabled={oauthLoading !== null}
                   className="w-full bg-white hover:bg-navy-50 text-navy-800 font-medium py-3 px-4 rounded-lg border border-navy-300 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-                  aria-label="Continue with Microsoft"
+                  aria-label={language === 'en' ? 'Continue with Microsoft' : 'Continuar con Microsoft'}
                 >
                   {oauthLoading === 'azure' ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -154,7 +154,7 @@ export default function Login() {
                       <path fill="#ffba08" d="M12 12h10v10H12z" />
                     </svg>
                   )}
-                  Continue with Microsoft
+                  {language === 'en' ? 'Continue with Microsoft' : 'Continuar con Microsoft'}
                 </button>
               </div>
 
@@ -163,7 +163,7 @@ export default function Login() {
                   <div className="w-full border-t border-navy-200"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-navy-500">or continue with email</span>
+                  <span className="px-4 bg-white text-navy-500">{language === 'en' ? 'or continue with email' : 'o continuar con correo'}</span>
                 </div>
               </div>
 

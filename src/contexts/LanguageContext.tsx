@@ -18,6 +18,7 @@ import {
   selectPlural,
 } from '../lib/i18n';
 import { supabase } from '../lib/supabase';
+import { trackEvent, setAnalyticsLanguage } from '../services/analytics-service';
 
 type TranslateFn = (key: string, vars?: Record<string, string | number>) => string;
 
@@ -77,24 +78,26 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
     (async () => {
-      const { data: auth } = await supabase.auth.getUser();
-      const user = auth?.user;
-      if (!user || !active) return;
-      const { data } = await supabase
-        .from('accessibility_preferences')
-        .select('locale, timezone')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      if (!active || !data) return;
-      if (data.locale) {
-        const code = data.locale.split('-')[0] as Language;
-        const match = SUPPORTED_LOCALES.find((l) => l.code === code);
-        if (match) {
-          setLanguageState(match.code);
-          setLocaleState(data.locale);
+      try {
+        const { data: auth } = await supabase.auth.getUser();
+        const user = auth?.user;
+        if (!user || !active) return;
+        const { data } = await supabase
+          .from('accessibility_preferences')
+          .select('locale, timezone')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (!active || !data) return;
+        if (data.locale) {
+          const code = data.locale.split('-')[0] as Language;
+          const match = SUPPORTED_LOCALES.find((l) => l.code === code);
+          if (match) {
+            setLanguageState(match.code);
+            setLocaleState(data.locale);
+          }
         }
-      }
-      if (data.timezone) setTimezone(data.timezone);
+        if (data.timezone) setTimezone(data.timezone);
+      } catch { /* gracefully handle unauthenticated or network errors */ }
     })();
     return () => {
       active = false;
@@ -102,20 +105,24 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const persist = useCallback(async (patch: { locale?: string; timezone?: string }) => {
-    const { data: auth } = await supabase.auth.getUser();
-    const user = auth?.user;
-    if (!user) return;
-    await supabase
-      .from('accessibility_preferences')
-      .upsert(
-        { user_id: user.id, ...patch, updated_at: new Date().toISOString() },
-        { onConflict: 'user_id' },
-      );
+    try {
+      const { data: auth } = await supabase.auth.getUser();
+      const user = auth?.user;
+      if (!user) return;
+      await supabase
+        .from('accessibility_preferences')
+        .upsert(
+          { user_id: user.id, ...patch, updated_at: new Date().toISOString() },
+          { onConflict: 'user_id' },
+        );
+    } catch { /* gracefully handle unauthenticated or network errors */ }
   }, []);
 
   const setLanguage = useCallback(
     (lang: Language) => {
       setLanguageState(lang);
+      setAnalyticsLanguage(lang);
+      trackEvent('language_selected', { language: lang });
       const bcp47 = getLocaleDescriptor(lang).bcp47;
       setLocaleState(bcp47);
       void persist({ locale: bcp47 });

@@ -20,7 +20,7 @@ const ACTION_COPY: Record<string, { en: string; es: string; route: string }> = {
   review_deadlines: { en: 'Review and reschedule deadlines', es: 'Revisa y reprograma fechas limite', route: '/safety-net#deadlines' },
   update_emergency_contact: { en: 'Update your emergency contact', es: 'Actualiza tu contacto de emergencia', route: '/profile' },
   update_address: { en: 'Update your address', es: 'Actualiza tu direccion', route: '/profile' },
-  request_attorney_handoff: { en: 'Request an attorney handoff', es: 'Solicita conexion con un abogado', route: '/lawyer-profiles' },
+  request_attorney_handoff: { en: 'Request an attorney handoff', es: 'Solicita conexion con un abogado', route: '/find-attorney' },
 };
 
 const INITIAL: CheckupAnswers = {

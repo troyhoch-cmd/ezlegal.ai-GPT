@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { User, Building2, Heart, ArrowRight } from 'lucide-react';
+import { User, Building2, Heart, Globe, Briefcase, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { trackEvent } from '../services/analytics-service';
 
-type Audience = 'individual' | 'business' | 'legal_aid';
+type Audience = 'individual' | 'spanish' | 'legal_aid' | 'business' | 'attorney';
 
 interface Card {
   key: Audience;
@@ -22,35 +23,57 @@ const CARDS: Card[] = [
   {
     key: 'individual',
     icon: User,
-    titleEn: 'Myself or my family',
-    titleEs: 'Para mi o mi familia',
-    bodyEn: 'Understand your issue and next steps in plain English or Spanish.',
-    bodyEs: 'Entiende tu problema y los próximos pasos en inglés o español simple.',
-    ctaEn: 'Ask a free question',
-    ctaEs: 'Haz una pregunta gratis',
+    titleEn: 'Legal help made understandable',
+    titleEs: 'Ayuda legal comprensible',
+    bodyEn: 'Get plain-English help with eviction, debt, work, family safety, immigration, benefits, and more.',
+    bodyEs: 'Recibe ayuda clara sobre desalojo, deudas, trabajo, seguridad familiar, inmigración, beneficios y más.',
+    ctaEn: 'Start with a question',
+    ctaEs: 'Comienza con una pregunta',
     href: '/chat',
   },
   {
-    key: 'business',
-    icon: Building2,
-    titleEn: 'My business',
-    titleEs: 'Mi negocio',
-    bodyEn: 'Review contracts, employment, and compliance risk before you call counsel.',
-    bodyEs: 'Revisa contratos, empleo y riesgos de cumplimiento antes de llamar a un abogado.',
-    ctaEn: 'Get business clarity',
-    ctaEs: 'Obtén claridad empresarial',
-    href: '/pricing?audience=business',
+    key: 'spanish',
+    icon: Globe,
+    titleEn: 'Ayuda legal en español',
+    titleEs: 'Ayuda legal en español',
+    bodyEn: 'Ayuda legal clara y segura para entender su problema y saber cómo empezar.',
+    bodyEs: 'Ayuda legal clara y segura para entender su problema y saber cómo empezar.',
+    ctaEn: 'Hacer una pregunta en español',
+    ctaEs: 'Hacer una pregunta en español',
+    href: '/es/chat',
   },
   {
     key: 'legal_aid',
     icon: Heart,
-    titleEn: 'My legal-aid organization',
-    titleEs: 'Mi organización de asistencia legal',
-    bodyEn: 'Triage, summarize, and support clients safely with auditable workflows.',
-    bodyEs: 'Filtra, resume y apoya a clientes de forma segura con flujos auditables.',
-    ctaEn: 'Explore legal-aid tools',
-    ctaEs: 'Explora herramientas de asistencia legal',
-    href: '/pricing?audience=legal-aid',
+    titleEn: 'Reduce intake burden',
+    titleEs: 'Reduzca la carga de admisión',
+    bodyEn: 'Help people understand their issue, gather the right facts, and route them to the right next step.',
+    bodyEs: 'Ayude a las personas a entender su problema, reunir los datos correctos y avanzar al siguiente paso.',
+    ctaEn: 'Explore organization tools',
+    ctaEs: 'Explora herramientas para organizaciones',
+    href: '/for-organizations',
+  },
+  {
+    key: 'business',
+    icon: Building2,
+    titleEn: 'A safe first step for employee legal issues',
+    titleEs: 'Un primer paso seguro para problemas legales de empleados',
+    bodyEn: 'Give employees practical guidance for everyday legal problems before they escalate.',
+    bodyEs: 'Ofrece a los empleados orientación práctica antes de que los problemas legales escalen.',
+    ctaEn: 'Explore employee support',
+    ctaEs: 'Explore apoyo para empleados',
+    href: '/for-business',
+  },
+  {
+    key: 'attorney',
+    icon: Briefcase,
+    titleEn: 'Better-prepared potential clients',
+    titleEs: 'Clientes potenciales mejor preparados',
+    bodyEn: 'Receive issue summaries with jurisdiction context, facts gathered, and urgency signals.',
+    bodyEs: 'Reciba resúmenes con contexto jurisdiccional, hechos reunidos y señales de urgencia.',
+    ctaEn: 'Join attorney network',
+    ctaEs: 'Únase a la red de abogados',
+    href: '/for-partners',
   },
 ];
 
@@ -61,6 +84,7 @@ export default function HomeAudienceRouting() {
   const { user } = useAuth();
 
   const handleSelect = async (card: Card) => {
+    trackEvent('icp_card_clicked', { icp: card.key, href: card.href });
     try {
       await supabase.from('persona_intake_sessions').insert({
         user_id: user?.id ?? null,
@@ -86,7 +110,7 @@ export default function HomeAudienceRouting() {
               : 'Elige el camino que te corresponda. Cada uno te lleva a algo útil en menos de un minuto.'}
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-5">
           {CARDS.map((card) => {
             const Icon = card.icon;
             return (

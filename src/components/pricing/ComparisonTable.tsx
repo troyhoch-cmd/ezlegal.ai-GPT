@@ -7,7 +7,7 @@ interface Props {
 }
 
 const PLAN_COLS = [
-  { id: 'free', en: 'Free', es: 'Gratis' },
+  { id: 'justice_free', en: 'Free', es: 'Gratis' },
   { id: 'everyday-plus', en: 'Everyday Plus', es: 'Diario Plus' },
   { id: 'family', en: 'Family', es: 'Familia' },
 ];

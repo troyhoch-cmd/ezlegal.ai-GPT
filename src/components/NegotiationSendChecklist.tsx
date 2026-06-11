@@ -123,7 +123,7 @@ interface NegotiationSendChecklistProps {
 
 export default function NegotiationSendChecklist({ jurisdiction }: NegotiationSendChecklistProps) {
   const { language } = useLanguage();
-  const s = t[language] || t.en;
+  const s = t[language as 'en' | 'es'] || t.en;
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [expanded, setExpanded] = useState(true);
 

@@ -19,6 +19,7 @@ export default function CasePredictor() {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const [sampleExpanded, setSampleExpanded] = useState(false);
+  const [acknowledged, setAcknowledged] = useState(false);
 
   const startPrediction = () => {
     navigate('/case-predictor/start');
@@ -26,11 +27,50 @@ export default function CasePredictor() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navigation />
-      <VerifiableTrustStrip className="mt-[73px]" />
-      <Breadcrumbs />
+      {!acknowledged && (
+        <div className="fixed inset-0 bg-teal-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <h2 className="text-2xl font-bold text-navy-900 mb-4">
+              {language === 'en'
+                ? 'Important: This is a statistical estimate, not a legal prediction'
+                : 'Importante: Esto es un estimado estadístico, no una predicción legal'}
+            </h2>
+            <p className="text-navy-600 text-sm mb-6 leading-relaxed">
+              {language === 'en'
+                ? 'This tool uses public data to estimate scenario likelihood ranges. It does NOT predict what will happen in YOUR case. Results are not legal advice.'
+                : 'Esta herramienta utiliza datos públicos para estimar rangos de probabilidad de escenarios. NO predice lo que sucederá en TU caso. Los resultados no son asesoramiento legal.'}
+            </p>
+            <label className="flex items-start gap-3 mb-6">
+              <input
+                type="checkbox"
+                checked={acknowledged}
+                onChange={(e) => setAcknowledged(e.target.checked)}
+                className="mt-1 w-5 h-5 rounded border-navy-300 text-teal-600 cursor-pointer"
+              />
+              <span className="text-sm text-navy-700">
+                {language === 'en'
+                  ? 'I understand this is a statistical estimate, not a prediction of my case outcome'
+                  : 'Entiendo que esto es un estimado estadístico, no una predicción de mi resultado del caso'}
+              </span>
+            </label>
+            <button
+              onClick={() => setAcknowledged(true)}
+              disabled={!acknowledged}
+              className="w-full bg-teal-600 hover:bg-teal-500 disabled:bg-gray-300 text-white font-bold py-3 rounded-lg transition-colors"
+            >
+              {language === 'en' ? 'Continue' : 'Continuar'}
+            </button>
+          </div>
+        </div>
+      )}
 
-      <main id="main-content" className="pt-4">
+      {acknowledged && (
+        <>
+          <Navigation />
+          <VerifiableTrustStrip className="mt-[73px]" />
+          <Breadcrumbs />
+
+          <main id="main-content" className="pt-4">
         <section className="bg-gradient-to-br from-teal-800 to-teal-900 py-10 sm:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -41,14 +81,14 @@ export default function CasePredictor() {
                 </div>
                 <h1 className="text-3xl sm:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
                   {language === 'en'
-                    ? 'Should You Fight Your Case?'
-                    : 'Debes Pelear Tu Caso?'
+                    ? 'Understand Your Legal Scenario'
+                    : 'Entiende Tu Escenario Legal'
                   }
                 </h1>
                 <p className="text-base sm:text-xl text-teal-100 mb-6 sm:mb-8 leading-relaxed">
                   {language === 'en'
-                    ? 'See how likely you are to win in 2\u20133 minutes. Built for renters, workers, and small businesses \u2014 not lawyers.'
-                    : 'Ve que tan probable es que ganes en 2\u20133 minutos. Hecho para inquilinos, trabajadores y pequeños negocios.'
+                    ? 'Get a statistical scenario estimate in 2\u20133 minutes. Built for renters, workers, and small businesses \u2014 not lawyers.'
+                    : 'Obtén un estimado estadístico en 2\u20133 minutos. Hecho para inquilinos, trabajadores y pequeños negocios.'
                   }
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mb-4">
@@ -78,13 +118,13 @@ export default function CasePredictor() {
                 <div className="space-y-4">
                   <div className="bg-white/10 rounded-xl p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-teal-200 text-xs sm:text-sm font-medium">{language === 'en' ? 'Likely outcome' : 'Resultado probable'}</span>
+                      <span className="text-teal-200 text-xs sm:text-sm font-medium">{language === 'en' ? 'Scenario estimate' : 'Estimado del escenario'}</span>
                       <span className="text-2xl font-bold text-green-400 font-serif">65-78%</span>
                     </div>
                     <div className="h-3 bg-white/10 rounded-full overflow-hidden relative">
                       <div className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full" style={{ width: '72%' }} />
                     </div>
-                    <p className="text-teal-100 text-xs mt-2">{language === 'en' ? 'Chance of winning an eviction defense' : 'Probabilidad de ganar una defensa'}</p>
+                    <p className="text-teal-100 text-xs mt-2">{language === 'en' ? 'Estimated favorable outcome range' : 'Rango estimado de resultado favorable'}</p>
                   </div>
 
                   <button
@@ -132,6 +172,49 @@ export default function CasePredictor() {
                     </p>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 bg-gradient-to-br from-amber-50 to-white border-y border-amber-200">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 className="text-lg font-bold text-navy-900 mb-4 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-600" />
+              {language === 'en' ? 'Validation Status' : 'Estado de Validación'}
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-amber-200">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">
+                  <Lock className="w-3 h-3" />
+                  {language === 'en' ? 'BLOCKED' : 'BLOQUEADO'}
+                </span>
+                <span className="text-sm text-navy-700">
+                  {language === 'en'
+                    ? 'Prospective accuracy study'
+                    : 'Estudio de precisión prospectiva'}
+                </span>
+                <span className="text-xs text-navy-500 ml-auto">
+                  {language === 'en'
+                    ? 'Awaiting 500+ case outcomes'
+                    : 'Esperando 500+ resultados de casos'}
+                </span>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-amber-200">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">
+                  <Lock className="w-3 h-3" />
+                  {language === 'en' ? 'BLOCKED' : 'BLOQUEADO'}
+                </span>
+                <span className="text-sm text-navy-700">
+                  {language === 'en'
+                    ? 'Judicial outcome correlation'
+                    : 'Correlación de resultado judicial'}
+                </span>
+                <span className="text-xs text-navy-500 ml-auto">
+                  {language === 'en'
+                    ? 'IRB approval pending'
+                    : 'Aprobación de IRB pendiente'}
+                </span>
               </div>
             </div>
           </div>
@@ -518,6 +601,8 @@ export default function CasePredictor() {
 
       <RelatedLinks />
       <Footer />
+        </>
+      )}
     </div>
   );
 }

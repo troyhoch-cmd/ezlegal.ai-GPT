@@ -2,7 +2,9 @@ import { AlertTriangle, Phone, X } from 'lucide-react';
 import { CATEGORY_COPY, type UrgentSignal } from '../lib/urgent-signal-detector';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 interface Props {
   signals: UrgentSignal[];
@@ -12,6 +14,8 @@ interface Props {
 
 export default function UrgentSignalCard({ signals, onContinue, onDismiss }: Props) {
   const { user } = useAuth();
+  const { language } = useLanguage();
+  const en = language === 'en';
   const logged = useRef(false);
   const primary = signals[0];
   const copy = primary ? CATEGORY_COPY[primary.category] : null;
@@ -57,29 +61,32 @@ export default function UrgentSignalCard({ signals, onContinue, onDismiss }: Pro
         </div>
         <div className="space-y-3 p-5">
           <p className="text-sm text-slate-700">
-            I can still give you general legal information, but this situation may need a human right away.
+            {en
+              ? 'I can still give you general legal information, but this situation may need a human right away.'
+              : 'Puedo darte información legal general, pero esta situación puede necesitar a una persona de inmediato.'}
           </p>
           {isCritical && (
             <a
               href="tel:911"
               className="flex items-center justify-center gap-2 rounded-lg bg-rose-600 px-4 py-2.5 font-medium text-white hover:bg-rose-700"
             >
-              <Phone className="h-4 w-4" /> If you are in immediate danger, call 911
+              <Phone className="h-4 w-4" />
+              {en ? 'If you are in immediate danger, call 911' : 'Si está en peligro inmediato, llame al 911'}
             </a>
           )}
           <div className="grid gap-2 sm:grid-cols-2">
-            <a
-              href="/emergency-resources"
-              className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-center text-sm font-medium text-slate-800 hover:border-emerald-400 hover:text-emerald-700"
+            <Link
+              to="/emergency-resources"
+              className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-center text-sm font-medium text-slate-800 hover:border-emerald-400 hover:text-emerald-700 no-underline"
             >
-              See emergency resources
-            </a>
-            <a
-              href="/lawyer-profiles"
-              className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-center text-sm font-medium text-slate-800 hover:border-emerald-400 hover:text-emerald-700"
+              {en ? 'See emergency resources' : 'Ver recursos de emergencia'}
+            </Link>
+            <Link
+              to="/find-attorney"
+              className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-center text-sm font-medium text-slate-800 hover:border-emerald-400 hover:text-emerald-700 no-underline"
             >
-              Find a local legal aid office
-            </a>
+              {en ? 'Find legal aid' : 'Encontrar ayuda legal'}
+            </Link>
           </div>
           <div className="flex items-center justify-end gap-2 pt-2">
             <button
@@ -87,14 +94,14 @@ export default function UrgentSignalCard({ signals, onContinue, onDismiss }: Pro
               onClick={onDismiss}
               className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
             >
-              Cancel
+              {en ? 'Cancel' : 'Cancelar'}
             </button>
             <button
               type="button"
               onClick={onContinue}
               className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
             >
-              Continue with general info
+              {en ? 'Continue with general info' : 'Continuar con información general'}
             </button>
           </div>
         </div>

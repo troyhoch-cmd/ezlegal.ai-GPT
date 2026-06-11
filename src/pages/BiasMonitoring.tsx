@@ -26,9 +26,16 @@ export default function BiasMonitoring() {
                 ? 'Resultados publicos y transparentes de nuestras pruebas continuas de sesgo e imparcialidad. Actualizados trimestralmente.'
                 : 'Public, transparent results from our continuous bias and fairness testing. Updated quarterly.'}
             </p>
-            <div className="mt-4 flex items-center gap-2 text-sm text-navy-500">
-              <Calendar className="h-4 w-4" />
-              <span>Last Assessment: April 2026 | Next Assessment: July 2026</span>
+            <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-navy-500">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-teal-50 text-teal-700 rounded-full border border-teal-200">
+                <Calendar className="h-3 w-3" />
+                Last Assessment: April 2026
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-navy-50 text-navy-700 rounded-full border border-navy-200">
+                <Shield className="h-3 w-3" />
+                Version 2.1
+              </span>
+              <span className="text-navy-400">Next Assessment: July 2026</span>
             </div>
           </header>
 

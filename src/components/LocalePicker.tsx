@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Globe, Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import type { Language } from '../lib/i18n';
@@ -11,7 +11,15 @@ interface LocalePickerProps {
 export default function LocalePicker({ className = '', align = 'right' }: LocalePickerProps) {
   const { language, setLanguage, supportedLocales, dir } = useLanguage();
   const [open, setOpen] = useState(false);
+  const [saved, setSaved] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const handleSelect = useCallback((code: string) => {
+    setLanguage(code as Language);
+    setOpen(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }, [setLanguage]);
 
   useEffect(() => {
     if (!open) return;
@@ -39,7 +47,8 @@ export default function LocalePicker({ className = '', align = 'right' }: Locale
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={`Language: ${current.label}`}
+        aria-label={language === 'es' ? 'Cambiar idioma' : 'Switch language'}
+        data-testid="language-toggle"
         className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[var(--surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 transition-colors text-sm"
       >
         <Globe className="w-4 h-4" aria-hidden="true" />
@@ -47,6 +56,11 @@ export default function LocalePicker({ className = '', align = 'right' }: Locale
           {current.nativeLabel}
         </span>
       </button>
+      {saved && (
+        <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-medium text-teal-700 whitespace-nowrap bg-teal-50 px-2 py-0.5 rounded border border-teal-200 shadow-sm z-50" role="status" aria-live="polite">
+          {language === 'es' ? 'Idioma guardado' : 'Language saved'}
+        </span>
+      )}
       {open && (
         <ul
           role="listbox"
@@ -61,10 +75,7 @@ export default function LocalePicker({ className = '', align = 'right' }: Locale
                   type="button"
                   role="option"
                   aria-selected={selected}
-                  onClick={() => {
-                    setLanguage(loc.code as Language);
-                    setOpen(false);
-                  }}
+                  onClick={() => handleSelect(loc.code)}
                   dir={loc.dir}
                   className={`flex items-center justify-between w-full gap-2 px-3 py-2 text-sm text-start transition-colors focus:outline-none focus:bg-[var(--surface-muted)] ${
                     selected

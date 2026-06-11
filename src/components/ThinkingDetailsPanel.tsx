@@ -30,11 +30,22 @@ export function parseThinkingFromResponse(response: string): {
   content: string;
   thinking: ThinkingDetails | null;
 } {
-  const thinkingStartMarker = '---THINKING_DETAILS---';
-  const thinkingEndMarker = '---END_THINKING_DETAILS---';
+  const basisStart = '---ANSWER_BASIS---';
+  const basisEnd = '---END_ANSWER_BASIS---';
+  const legacyStart = '---THINKING_DETAILS---';
+  const legacyEnd = '---END_THINKING_DETAILS---';
 
-  const startIdx = response.indexOf(thinkingStartMarker);
-  const endIdx = response.indexOf(thinkingEndMarker);
+  let thinkingStartMarker = basisStart;
+  let thinkingEndMarker = basisEnd;
+  let startIdx = response.indexOf(basisStart);
+  let endIdx = response.indexOf(basisEnd);
+
+  if (startIdx === -1 || endIdx === -1) {
+    thinkingStartMarker = legacyStart;
+    thinkingEndMarker = legacyEnd;
+    startIdx = response.indexOf(legacyStart);
+    endIdx = response.indexOf(legacyEnd);
+  }
 
   if (startIdx === -1 || endIdx === -1) {
     return { content: response, thinking: null };
@@ -140,7 +151,7 @@ export default function ThinkingDetailsPanel({
             <Brain className="w-4 h-4 text-white" />
           </div>
           <div className="text-left">
-            <p className="text-sm font-semibold text-slate-900">AI Reasoning Process</p>
+            <p className="text-sm font-semibold text-slate-900">Answer Basis</p>
             {thinking && (
               <p className="text-xs text-slate-500">
                 {thinking.legalArea} | {thinking.jurisdiction}
