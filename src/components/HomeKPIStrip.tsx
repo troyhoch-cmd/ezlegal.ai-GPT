@@ -1,97 +1,94 @@
 import { useEffect, useState } from 'react';
-import { Users, MessageSquare, MapPin, ShieldCheck, Info } from 'lucide-react';
+import { Users, Clock, MapPin, ShieldCheck, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface KPI {
-  label: string;
-  value: string;
+  label: { en: string; es: string };
+  value: { en: string; es: string };
   icon: typeof Users;
   footnote?: string;
   footnoteHref?: string;
 }
 
+const DEFAULT_KPIS: KPI[] = [
+  {
+    label: { en: 'Available', es: 'Disponible' },
+    value: { en: '24/7', es: '24/7' },
+    icon: Clock,
+  },
+  {
+    label: { en: 'Jurisdictions covered', es: 'Jurisdicciones' },
+    value: { en: '50 states', es: '50 estados' },
+    icon: MapPin,
+    footnote: 'State-aware legal information and routing. Not legal advice and not available in every jurisdiction.',
+    footnoteHref: '/scope-disclaimers',
+  },
+  {
+    label: { en: 'Free & low-cost help', es: 'Ayuda gratis' },
+    value: { en: 'Legal-aid friendly', es: 'Compatible con ayuda legal' },
+    icon: Users,
+    footnote: 'Find legal-aid and pro bono options in your area.',
+    footnoteHref: '/pro-bono',
+  },
+  {
+    label: { en: 'Private by default', es: 'Privado por defecto' },
+    value: { en: 'Encrypted', es: 'Cifrado' },
+    icon: ShieldCheck,
+    footnote: 'TLS in transit, encrypted at rest. See Privacy at a glance.',
+    footnoteHref: '/privacy-at-a-glance',
+  },
+];
+
 export default function HomeKPIStrip() {
-  const [kpis, setKpis] = useState<KPI[]>([
-    { label: 'Questions answered', value: '—', icon: MessageSquare },
-    {
-      label: 'Jurisdictions covered',
-      value: '50 states',
-      icon: MapPin,
-      footnote:
-        'State-aware legal information and routing. Not legal advice and not available in every jurisdiction.',
-      footnoteHref: '/scope-disclaimers',
-    },
-    { label: 'Free and low-cost help', value: 'Legal-aid friendly', icon: Users, footnote: 'Find legal-aid and pro bono options in your area.', footnoteHref: '/pro-bono' },
-    {
-      label: 'Private by default',
-      value: 'Encrypted',
-      icon: ShieldCheck,
-      footnote: 'TLS in transit, encrypted at rest. See Privacy at a glance.',
-      footnoteHref: '/privacy-at-a-glance',
-    },
-  ]);
+  const { language } = useLanguage();
+  const [kpis, setKpis] = useState<KPI[]>(DEFAULT_KPIS);
 
   useEffect(() => {
     let cancelled = false;
     async function load() {
-      const [{ data: counters }, { count: msgCount }, { count: partnerCount }] = await Promise.all([
-        supabase.from('home_kpi_counters').select('key, value_numeric, value_label'),
-        supabase.from('chat_messages').select('*', { count: 'exact', head: true }),
-        supabase
-          .from('lawyer_profiles')
-          .select('*', { count: 'exact', head: true })
-          .eq('accepts_pro_bono', true),
-      ]);
+      const { count: partnerCount } = await supabase
+        .from('lawyer_profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('accepts_pro_bono', true);
 
       if (cancelled) return;
 
-      const counterMap = new Map<string, { value_numeric: number; value_label: string }>();
-      (counters ?? []).forEach((c: { key: string; value_numeric: number; value_label: string }) => {
-        counterMap.set(c.key, { value_numeric: Number(c.value_numeric) || 0, value_label: c.value_label });
-      });
-
-      const questionsBaseline = counterMap.get('questions_answered')?.value_numeric ?? 0;
-      const liveQuestions = typeof msgCount === 'number' && msgCount > 0 ? msgCount : 0;
-      const questionsTotal = Math.max(questionsBaseline, liveQuestions);
-
-      setKpis((prev) => {
-        const next = [...prev];
-        if (questionsTotal > 0) {
-          next[0] = { ...next[0], value: formatCompact(questionsTotal) };
-        }
-        if (typeof partnerCount === 'number' && partnerCount > 0) {
-          next[2] = { ...next[2], value: `${formatCompact(partnerCount)} partners`, label: 'Legal-aid partners' };
-        }
-        return next;
-      });
+      if (typeof partnerCount === 'number' && partnerCount > 0) {
+        setKpis((prev) => {
+          const next = [...prev];
+          next[2] = {
+            ...next[2],
+            value: { en: `${formatCompact(partnerCount)} partners`, es: `${formatCompact(partnerCount)} socios` },
+            label: { en: 'Legal-aid partners', es: 'Socios de ayuda legal' },
+          };
+          return next;
+        });
+      }
     }
     load();
     return () => { cancelled = true; };
   }, []);
 
-  const visibleKpis = kpis.map((k) =>
-    k.value === '—' && k.label === 'Questions answered'
-      ? { ...k, value: '340' }
-      : k
-  ).filter((k) => k.value && k.value !== '—');
+  const lang = language === 'es' ? 'es' : 'en';
 
   return (
     <div className="mx-auto grid max-w-5xl grid-cols-2 gap-3 px-4 sm:grid-cols-4">
-      {visibleKpis.map((kpi) => {
+      {kpis.map((kpi) => {
         const Icon = kpi.icon;
         return (
           <div
-            key={kpi.label}
+            key={kpi.label.en}
             className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white/80 p-3 backdrop-blur"
           >
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-teal-50 text-teal-600">
               <Icon className="h-4 w-4" />
             </span>
             <div className="min-w-0">
-              <div className="text-sm font-semibold text-slate-900 truncate">{kpi.value}</div>
+              <div className="text-sm font-semibold text-slate-900 truncate">{kpi.value[lang]}</div>
               <div className="text-xs text-slate-600 flex items-center gap-1">
-                <span className="truncate">{kpi.label}</span>
+                <span className="truncate">{kpi.label[lang]}</span>
                 {kpi.footnote && kpi.footnoteHref && (
                   <Link
                     to={kpi.footnoteHref}

@@ -25,21 +25,21 @@ export default function CrisisStrip({ variant = 'hero' }: Props) {
   const cta = CTAS[language] ?? CTAS.en;
 
   const base =
-    'inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-medium rounded-full tap-highlight-none max-w-full';
+    'inline-flex items-center justify-center gap-2 text-sm font-medium rounded-full tap-highlight-none max-w-full min-h-[44px]';
   const styles =
     variant === 'hero'
-      ? 'bg-red-50 text-red-900 border border-red-200 px-3 sm:px-4 py-2 hover:bg-red-100'
-      : 'bg-white/10 text-white border border-white/30 px-3 sm:px-4 py-2 hover:bg-white/20';
+      ? 'bg-red-50 text-red-900 border border-red-200 px-4 py-2.5 hover:bg-red-100'
+      : 'bg-rose-600/90 text-white border border-rose-400/60 px-4 py-2.5 hover:bg-rose-500 shadow-sm';
 
   return (
     <Link
       to="/emergency-resources"
-      className={`${base} ${styles} focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 transition-colors`}
+      className={`${base} ${styles} focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-navy-900 transition-colors`}
       aria-label={`${label} ${cta}`}
     >
       <AlertTriangle className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
       <bdi className="truncate min-w-0" style={{ unicodeBidi: 'isolate' }}>{label}</bdi>
-      <bdi className="font-semibold underline underline-offset-2 whitespace-nowrap hidden sm:inline" style={{ unicodeBidi: 'isolate' }}>{cta}</bdi>
+      <bdi className="font-semibold underline underline-offset-2 whitespace-nowrap" style={{ unicodeBidi: 'isolate' }}>{cta}</bdi>
       <ArrowRight className="h-4 w-4 flex-shrink-0 rtl-mirror" aria-hidden="true" />
     </Link>
   );

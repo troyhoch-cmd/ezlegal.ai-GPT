@@ -16,7 +16,7 @@ import { usePersonalization } from '../contexts/PersonalizationContext';
 import { usePersona } from '../contexts/PersonaContext';
 import { useAuth } from '../contexts/AuthContext';
 import { markHeroVariantSeen } from '../services/ui-preferences-service';
-import { getVariant, HERO_EN_TEST, HERO_EN_COPY } from '../lib/ab-testing';
+import { getVariant, HERO_EN_TEST, HERO_EN_COPY, HERO_ES_TEST, HERO_ES_COPY } from '../lib/ab-testing';
 import { trackCTAClick } from '../lib/utm';
 
 export default function Home() {
@@ -26,8 +26,10 @@ export default function Home() {
   const { setPersona: _setPersona } = usePersona();
   const { user, profile } = useAuth();
   const navigate = useNavigate();
-  const heroVariant = getVariant(HERO_EN_TEST);
-  const heroCopy = HERO_EN_COPY[heroVariant] || HERO_EN_COPY.control;
+  const heroVariant = language === 'es' ? getVariant(HERO_ES_TEST) : getVariant(HERO_EN_TEST);
+  const heroCopy = language === 'es'
+    ? (HERO_ES_COPY[heroVariant] || HERO_ES_COPY.control)
+    : (HERO_EN_COPY[heroVariant] || HERO_EN_COPY.control);
 
   useEffect(() => {
     trackPageVisit('/');
@@ -75,17 +77,11 @@ export default function Home() {
 
           <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight text-white break-words">
-              {language === 'en'
-                ? heroCopy.title
-                : 'Ayuda legal que habla tu idioma'
-              }
+              {heroCopy.title}
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl text-navy-100 mb-6 max-w-2xl mx-auto">
-              {language === 'en'
-                ? heroCopy.subtitle
-                : 'Haz preguntas legales, entiende documentos y encuentra próximos pasos seguros — en español o inglés. Gratis para empezar, sin tarjeta de crédito.'
-              }
+              {heroCopy.subtitle}
             </p>
 
             <div className="flex flex-col items-center justify-center gap-3 mb-4 w-full">
@@ -94,13 +90,20 @@ export default function Home() {
                 onClick={(e) => handleStartNow(e)}
                 data-testid="hero-primary-cta"
                 className="group bg-teal-500 hover:bg-teal-400 text-white px-6 sm:px-10 py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900 min-h-[56px] w-full sm:w-auto"
-                aria-label={language === 'en' ? heroCopy.cta : 'Haz una pregunta legal gratis'}
+                aria-label={heroCopy.cta}
               >
-                {language === 'en' ? heroCopy.cta : 'Haz una pregunta legal gratis'}
+                {heroCopy.cta}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
               </button>
 
-              <p className="text-sm text-navy-200 flex items-center gap-2">
+              <p className="text-xs text-navy-300 mt-1">
+                {language === 'en'
+                  ? 'Legal information, not legal advice. We are not a law firm.'
+                  : 'Información legal, no asesoramiento legal. No somos un bufete de abogados.'
+                }
+              </p>
+
+              <p className="text-sm text-navy-200 flex flex-wrap items-center justify-center gap-2">
                 <Shield className="w-4 h-4 text-teal-400 flex-shrink-0" aria-hidden="true" />
                 <span>
                   {language === 'en'
@@ -118,7 +121,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mt-2 flex justify-center">
+            <div className="mt-3 flex justify-center">
               <CrisisStrip variant="inline" />
             </div>
           </div>
