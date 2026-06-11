@@ -1,9 +1,11 @@
-# ezLegal.ai Route Manifest (v869 Baseline)
-# Generated: 2026-06-11T02:34:27.024Z
-# Total routes: 92
+# ezLegal.ai Route Manifest
+Generated: 2026-06-11T03:42:59.543Z
+Total literal routes found: 92
+
+> Note: This regex-based manifest captures literal <Route path="..."> declarations in src/App.tsx. Dynamic route constants may require manual review.
 
 | Path | Component | Type |
-|------|-----------|------|
+|---|---|---|
 | * | Admin | Public |
 | * | NotFound | Public |
 | / | Home | Public |

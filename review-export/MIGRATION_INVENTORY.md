@@ -1,5 +1,6 @@
 # Database Migration Inventory
-# Total migrations: 178
+Generated: 2026-06-11T03:42:59.605Z
+Total migrations: 178
 
 - 20251221031329_create_user_profiles.sql
 - 20251221035224_add_admin_role_to_profiles.sql

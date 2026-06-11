@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <script>
+      (function () {
+        try {
+          var lang = localStorage.getItem('ezlegal-language') || 'en';
+          var rtl = lang === 'ar' || lang === 'he';
+          var root = document.documentElement;
+          root.lang = lang;
+          root.dir = rtl ? 'rtl' : 'ltr';
+          root.dataset.dir = root.dir;
+        } catch (e) {
+          document.documentElement.dir = 'ltr';
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="mask-icon" href="/icons/icon-monochrome.svg" color="#0d9488" />
+    <link rel="apple-touch-icon" href="/icons/icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0d9488" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="application-name" content="ezLegal" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="ezLegal" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-TileColor" content="#0d9488" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <title>ezLegal.ai - AI Legal Assistant</title>
+    <meta name="description" content="AI-powered legal information and self-help tools. Get instant answers to legal questions 24/7, then connect with licensed attorneys when you need them. Starting free." />
+    <link rel="canonical" href="https://ezlegal.ai/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ezLegal.ai" />
+    <meta property="og:url" content="https://ezlegal.ai/" />
+    <meta property="og:title" content="ezLegal.ai - AI Legal Assistant" />
+    <meta property="og:description" content="AI-powered legal information and self-help tools. Get instant answers 24/7, then connect with licensed attorneys when you need them." />
+    <meta property="og:image" content="https://ezlegal.ai/icons/icon.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ezLegal.ai - AI Legal Assistant" />
+    <meta name="twitter:description" content="AI-powered legal information and self-help tools. Starting free." />
+    <meta name="twitter:image" content="https://ezlegal.ai/icons/icon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <meta name="geo.region" content="US-AZ" />
+    <meta name="geo.placename" content="Tucson" />
+    <meta name="geo.position" content="32.221743;-110.969749" />
+    <meta name="ICBM" content="32.221743, -110.969749" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ezLegal.ai",
+      "url": "https://ezlegal.ai",
+      "inLanguage": ["en-US", "es-US"],
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://ezlegal.ai/ask?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
