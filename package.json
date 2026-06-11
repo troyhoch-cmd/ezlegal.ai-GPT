@@ -20,7 +20,8 @@
     "conformance:ci": "npm run conformance:check && npm run conformance:report",
     "audit:headings": "node scripts/audit-headings.cjs",
     "audit:readability": "node scripts/audit-readability.cjs",
-    "audit:images": "node scripts/audit-images.cjs"
+    "audit:images": "node scripts/audit-images.cjs",
+    "export:gpt-review": "node scripts/export-for-gpt-review.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
