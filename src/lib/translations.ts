@@ -165,7 +165,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.adminDashboard': 'Admin Dashboard',
 
     // Hero Section
-    'hero.badge': 'Unlímited Free Questions - No Signup Required',
+    'hero.badge': 'Unlimited Free Questions - Free to Start',
     'hero.title1': 'You Deserve Legal Answers',
     'hero.title2': 'On Your Schedule, On Your Terms',
     'hero.subtitle': 'ezLegal.ai provides fast, ethical legal information and self-help support through an AI assistant. Get instant answers 24/7, then connect with licensed attorneys when you need them. We work alongside the legal profession to expand access to justice.',
@@ -236,7 +236,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'features.directory.desc': 'Browse Arizona attorneys by practice area, location, and client ratings. Filter by specialty, see profiles, read reviews, contact directly. No middleman fees.',
     'features.research.title': 'Legal Research Database',
     'features.research.quote': '"I needed to understand the law myself."',
-    'features.research.desc': 'Search contract law, employment rights, intellectual property by category. Get summaries of statutes, case law, and legal principles. Research now, no signup needed.',
+    'features.research.desc': 'Search contract law, employment rights, intellectual property by category. Get summaries of statutes, case law, and legal principles. Free to start.',
     'features.cases.title': 'Case & Deadline Manager',
     'features.cases.quote': '"I had 3 legal matters and couldn\'t keep track."',
     'features.cases.desc': 'Organize multiple cases, set deadline reminders, track progress. Store case documents, notes, and contact info. Requires account to save your data.',
@@ -292,7 +292,7 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // CTA
     'cta.title': 'Ready to Understand Your Legal Options?',
-    'cta.subtitle': 'Ask unlimited questions free and get answers in minutes, not days.',
+    'cta.subtitle': 'Ask unlimited questions free — available 24/7 in English or Spanish.',
     'cta.questions': 'Questions?',
     'cta.contactUs': 'Contact us',
     'cta.anytime': 'anytime.',
@@ -1136,7 +1136,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'ai.clientRated': 'Client-Rated',
     'ai.clientRatedDesc': 'Real reviews from real cases',
     'ai.browseAttorneys': 'Browse Attorneys Now',
-    'ai.noObligation': 'No obligation - No credit card required - Response in minutes',
+    'ai.noObligation': 'No obligation - No credit card required - Available 24/7',
     'ai.talkToAttorney': 'Ready to talk to a real attorney? Scroll down to see verified',
     'ai.viewAttorneys': 'View Attorneys',
     'ai.attorneys': 'Attorneys',
@@ -1184,7 +1184,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.adminDashboard': 'Panel de Administrador',
 
     // Hero Section
-    'hero.badge': 'Preguntas Ilimitadas Gratis - Sin Registro',
+    'hero.badge': 'Preguntas Ilimitadas Gratis - Gratis para Comenzar',
     'hero.title1': 'Mereces Respuestas Legales',
     'hero.title2': 'En Tu Horario, En Tus Términos',
     'hero.subtitle': 'ezLegal.ai proporciona información legal rápida, ética y precisa a través de un asistente legal con IA. Obtén respuestas instantáneas 24/7, luego conecta con abogados licenciados cuando los necesites. Trabajamos junto a la profesión legal para expandir el acceso a la justicia.',

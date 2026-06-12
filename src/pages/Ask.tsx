@@ -210,7 +210,7 @@ export default function Ask() {
 
   const subtitle = topicConfig
     ? topicConfig[lang].subtitle
-    : (language === 'en' ? "Ask anything. Get a clear answer in plain language. Free, no signup required." : "Pregunta lo que sea. Obtén una respuesta clara. Gratis, sin registro.");
+    : (language === 'en' ? "Ask anything. Get a clear answer in plain language. Free to start." : "Pregunta lo que sea. Obtén una respuesta clara. Gratis para comenzar.");
 
   const placeholder = topicConfig
     ? topicConfig[lang].placeholder

@@ -454,7 +454,7 @@ export default function ProBonoIntake() {
               </div>
               <div>
                 <div className="font-semibold text-navy-900 text-sm">{language === 'en' ? 'Free Questions' : 'Preguntas Gratis'}</div>
-                <div className="text-xs text-navy-600">{language === 'en' ? 'Unlimited, no signup' : 'Ilimitadas, sin registro'}</div>
+                <div className="text-xs text-navy-600">{language === 'en' ? 'Unlimited, free to start' : 'Ilimitadas, gratis para comenzar'}</div>
               </div>
             </Link>
             <Link

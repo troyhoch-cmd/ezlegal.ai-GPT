@@ -111,7 +111,7 @@ export default function Negotiate() {
               </div>
               <div className="flex items-center gap-2 text-sm text-navy-500">
                 <Shield className="w-4 h-4" />
-                <span>{language === 'en' ? 'Your data stays private' : 'Tus datos permanecen privados'}</span>
+                <span>{language === 'en' ? 'See our privacy approach' : 'Conoce nuestro enfoque de privacidad'}</span>
               </div>
             </div>
 

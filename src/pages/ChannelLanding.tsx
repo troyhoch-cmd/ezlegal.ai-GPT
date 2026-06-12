@@ -200,7 +200,7 @@ export default function ChannelLanding() {
                   {[
                     { icon: Shield, en: 'Confidential', es: 'Confidencial' },
                     { icon: Clock, en: 'Available 24/7', es: 'Disponible 24/7' },
-                    { icon: Lock, en: 'No Signup Needed', es: 'Sin Registro' },
+                    { icon: Lock, en: 'Free to Start', es: 'Gratis para Comenzar' },
                   ].map(item => (
                     <div key={item.en} className="flex items-center gap-2 text-sm text-navy-600">
                       <item.icon className="w-4 h-4 text-teal-600 flex-shrink-0" />

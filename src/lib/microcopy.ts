@@ -74,9 +74,9 @@ export const AFFORDABILITY_MESSAGES = {
 };
 
 export const TRUST_SIGNALS = {
-  SECURE: { en: 'Private & secure', es: 'Privado y seguro' },
+  SECURE: { en: 'See our privacy approach', es: 'Conoce nuestro enfoque de privacidad' },
   AVAILABLE_24_7: { en: 'Available 24/7', es: 'Disponible 24/7' },
-  NO_SIGNUP: { en: 'No signup required', es: 'Sin registro' },
+  NO_SIGNUP: { en: 'Free to start', es: 'Gratis para comenzar' },
   CONFIDENTIAL: { en: 'Confidential', es: 'Confidencial' },
   FREE_TO_USE: { en: 'Free to use', es: 'Gratis' },
   REAL_CITATIONS: { en: 'Real legal citations', es: 'Citas legales reales' },
