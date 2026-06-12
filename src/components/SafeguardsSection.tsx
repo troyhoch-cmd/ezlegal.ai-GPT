@@ -17,7 +17,7 @@ const SAFEGUARDS: Safeguard[] = [
     titleEn: 'Legal information, not advice',
     titleEs: 'Información legal, no asesoría',
     bodyEn: 'ezLegal.ai provides general legal information. We are not a law firm and do not provide legal advice or representation.',
-    bodyEs: 'ezLegal.ai proporciona información legal general. No somos un bufete de abogados y no brindamos asesoría ni representación legal.',
+    bodyEs: 'ezLegal.ai proporciona información legal general. No somos una firma de abogados y no brindamos asesoría ni representación legal.',
   },
   {
     icon: AlertTriangle,

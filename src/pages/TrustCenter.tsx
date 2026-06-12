@@ -387,7 +387,7 @@ export default function TrustCenter() {
               </h2>
               <p className="text-navy-600">
                 {lang === 'es'
-                  ? 'Nuestros compromisos, limitaciones y lo que aun estamos documentando'
+                  ? 'Nuestros compromisos, limitaciones y lo que aún estamos documentando'
                   : 'Our commitments, limitations, and what we are still documenting'}
               </p>
             </div>
@@ -418,7 +418,7 @@ export default function TrustCenter() {
                     </p>
                     {section.evidenceStatus === 'needs-evidence' && (
                       <span className="inline-block mt-2 text-xs font-medium text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
-                        {lang === 'es' ? 'Pendiente de verificacion' : 'Pending verification'}
+                        {lang === 'es' ? 'Pendiente de verificación' : 'Pending verification'}
                       </span>
                     )}
                     {section.lastReviewedDate && section.evidenceStatus === 'verified' && (

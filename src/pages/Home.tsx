@@ -101,7 +101,7 @@ export default function Home() {
               <p className="text-sm text-white/80 mt-1 max-w-md leading-snug">
                 {language === 'en'
                   ? 'Legal information, not legal advice. We are not a law firm.'
-                  : 'Información legal, no asesoría legal. No somos un bufete de abogados.'
+                  : 'Información legal, no asesoría legal. No somos una firma de abogados.'
                 }
               </p>
 
@@ -258,34 +258,34 @@ export default function Home() {
             <div className="space-y-3">
               {[
                 {
-                  q: language === 'en' ? "Is ezLegal.ai a replacement for a lawyer?" : "Es ezLegal.ai un reemplazo para un abogado?",
+                  q: language === 'en' ? "Is ezLegal.ai a replacement for a lawyer?" : "¿Es ezLegal.ai un reemplazo para un abogado?",
                   a: language === 'en'
                     ? "No. We provide legal information to help you understand your situation — not legal advice. For complex matters or court representation, we connect you with licensed attorneys through our referral network."
-                    : "No. Proporcionamos información legal para ayudarte a entender tu situación — no asesoramiento legal. Para asuntos complejos, te conectamos con abogados a través de nuestra red de referencias."
+                    : "No. Proporcionamos información legal para ayudarte a entender tu situación — no asesoría legal. Para asuntos complejos, te conectamos con abogados a través de nuestra red de referencias."
                 },
                 {
-                  q: language === 'en' ? "Is my information private?" : "Es mi información privada?",
+                  q: language === 'en' ? "Is my information private?" : "¿Es mi información privada?",
                   a: language === 'en'
                     ? "We encrypt your conversations in transit and at rest and never use them to train AI models. We follow California privacy law (CCPA). Note: because we are not a law firm, attorney-client privilege does not apply to these conversations. See our Privacy Policy for details."
                     : "Ciframos tus conversaciones en tránsito y en reposo y nunca las usamos para entrenar modelos de IA. Cumplimos con la ley de privacidad de California (CCPA). Nota: como no somos un bufete de abogados, el privilegio abogado-cliente no aplica."
                 },
                 {
-                  q: language === 'en' ? "Is it really free?" : "Es realmente gratis?",
+                  q: language === 'en' ? "Is it really free?" : "¿Es realmente gratis?",
                   a: language === 'en'
                     ? "Yes. Basic legal Q&A is completely free with no credit card required. You only pay if you choose optional premium features like detailed action plans or document templates."
-                    : "Si. Las preguntas legales basicas son completamente gratis. Solo pagas si eliges caracteristicas premium opcionales."
+                    : "Sí. Las preguntas legales básicas son completamente gratis. Solo pagas si eliges características premium opcionales."
                 },
                 {
-                  q: language === 'en' ? "What makes ezLegal.ai ethical?" : "Que hace a ezLegal.ai etico?",
+                  q: language === 'en' ? "What makes ezLegal.ai ethical?" : "¿Qué hace a ezLegal.ai ético?",
                   a: language === 'en'
                     ? "We are transparent about what our AI can and cannot do. We tell you clearly when you need a lawyer. We never replace a lawyer's judgment. We maintain strict privacy standards and monitor every AI response for quality and safety."
-                    : "Somos transparentes sobre lo que nuestra IA puede y no puede hacer. Te decimos claramente cuando necesitas un abogado. Nunca reemplazamos el juicio de un abogado. Mantenemos estandares estrictos de privacidad."
+                    : "Somos transparentes sobre lo que nuestra IA puede y no puede hacer. Te decimos claramente cuando necesitas un abogado. Nunca reemplazamos el juicio de un abogado. Mantenemos estándares estrictos de privacidad."
                 },
                 {
-                  q: language === 'en' ? "How accurate is the legal information?" : "Que tan precisa es la información legal?",
+                  q: language === 'en' ? "How accurate is the legal information?" : "¿Qué tan precisa es la información legal?",
                   a: language === 'en'
                     ? "We train our AI on official legal sources, and legal professionals review it regularly. However, laws vary by state and change often. We provide general information — for advice about your specific case, consult a licensed attorney."
-                    : "Entrenamos nuestra IA con fuentes legales oficiales, y profesionales legales la revisan regularmente. Sin embargo, las leyes varian segun el estado. Para consejo sobre tu caso especifico, consulta a un abogado con licencia."
+                    : "Entrenamos nuestra IA con fuentes legales oficiales, y profesionales legales la revisan regularmente. Sin embargo, las leyes varían según el estado. Para información sobre tu caso específico, consulta a un abogado con licencia."
                 },
               ].map((faq, i) => (
                 <div key={i} className="border border-navy-200 rounded-xl overflow-hidden">
@@ -338,7 +338,7 @@ export default function Home() {
             <p className="text-sm text-white/80 mt-4 max-w-md mx-auto leading-snug">
               {language === 'en'
                 ? 'Legal information, not legal advice. We are not a law firm.'
-                : 'Información legal, no asesoría legal. No somos un bufete de abogados.'
+                : 'Información legal, no asesoría legal. No somos una firma de abogados.'
               }
             </p>
           </div>
