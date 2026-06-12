@@ -21,7 +21,9 @@
     "audit:headings": "node scripts/audit-headings.cjs",
     "audit:readability": "node scripts/audit-readability.cjs",
     "audit:images": "node scripts/audit-images.cjs",
-    "export:gpt-review": "node scripts/export-for-gpt-review.cjs"
+    "export:gpt-review": "node scripts/export-for-gpt-review.cjs",
+    "test:responsive": "npx playwright test tests/e2e/home-responsive.spec.ts",
+    "test:responsive:ui": "npx playwright test tests/e2e/home-responsive.spec.ts --ui"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -41,6 +43,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
+    "@playwright/test": "^1.60.0",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",

@@ -85,10 +85,10 @@ export default function SafeguardsSection() {
                     <Icon className="h-4 w-4" aria-hidden="true" />
                   </span>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-navy-900 leading-tight">
+                    <p className="text-sm font-semibold text-navy-900 leading-tight break-words">
                       {en ? item.titleEn : item.titleEs}
                     </p>
-                    <p className="text-xs text-navy-600 leading-relaxed mt-1">
+                    <p className="text-xs text-navy-600 leading-relaxed mt-1 break-words">
                       {en ? item.bodyEn : item.bodyEs}
                     </p>
                   </div>

@@ -69,16 +69,16 @@ export default function Home() {
 
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       <Navigation />
 
-      <main id="main-content">
+      <main id="main-content" className="pb-[calc(5rem+env(safe-area-inset-bottom,0px))] lg:pb-0">
         <section className="relative pt-24 pb-12 min-h-[68vh] flex items-center overflow-x-clip">
           <div className="absolute inset-0 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 pointer-events-none" />
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
 
           <div className="relative w-full max-w-4xl mx-auto px-5 sm:px-6 lg:px-8 text-center min-w-0">
-            <h1 className="text-[clamp(1.75rem,7vw,3.75rem)] font-bold mb-4 leading-[1.1] tracking-tight text-white text-balance">
+            <h1 className="text-[clamp(1.75rem,7vw,3.75rem)] font-bold mb-4 leading-[1.1] tracking-tight text-white text-balance break-words">
               {heroCopy.title}
             </h1>
 
@@ -164,12 +164,12 @@ export default function Home() {
               ].map(({ Icon, en, es }) => (
                 <div
                   key={en}
-                  className="flex flex-col items-center text-center rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
+                  className="flex flex-col items-center text-center rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm min-w-0"
                 >
                   <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-teal-50 text-teal-600 mb-3">
                     <Icon className="w-5 h-5" aria-hidden="true" />
                   </span>
-                  <span className="text-xs sm:text-sm font-semibold text-navy-900 leading-snug">
+                  <span className="text-xs sm:text-sm font-semibold text-navy-900 leading-snug break-words">
                     {language === 'en' ? en : es}
                   </span>
                 </div>

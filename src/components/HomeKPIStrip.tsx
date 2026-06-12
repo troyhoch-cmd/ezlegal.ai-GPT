@@ -89,7 +89,7 @@ export default function HomeKPIStrip() {
               <Icon className="h-4 w-4" />
             </span>
             <div className="min-w-0 flex-1">
-              <div className="text-sm font-semibold text-slate-900 leading-tight">{kpi.value[lang]}</div>
+              <div className="text-sm font-semibold text-slate-900 leading-tight break-words">{kpi.value[lang]}</div>
               <div className="text-xs text-slate-600 flex items-center gap-1 mt-0.5">
                 <span className="leading-tight">{kpi.label[lang]}</span>
                 {kpi.footnote && kpi.footnoteHref && (
