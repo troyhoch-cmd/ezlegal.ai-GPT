@@ -88,11 +88,11 @@ export default function EsLanding() {
           <div className="max-w-5xl mx-auto px-4 flex flex-wrap items-center justify-center gap-6 text-sm text-navy-600">
             <span className="flex items-center gap-2">
               <Lock className="w-4 h-4 text-teal-600" />
-              Cifrado de nivel bancario
+              Cifrado en tránsito y en reposo
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-teal-600" />
-              Privado por defecto
+              Ver nuestro enfoque de privacidad
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-teal-600" />

@@ -16,8 +16,8 @@ export default function PrivacyFAQ() {
         ? 'Is my information secure?'
         : 'Mi información está segura?',
       answer: language === 'en'
-        ? 'Yes. We use bank-level encryption (TLS 1.3 in transit, AES-256 at rest). Your data is stored in secure data centers with multiple layers of security. We never sell your information to third parties.'
-        : 'Sí. Usamos cifrado de nivel bancario (TLS 1.3 en tránsito, AES-256 en reposo). Tus datos se almacenan en centros de datos seguros. Nunca vendemos tu información.'
+        ? 'Yes. We use TLS 1.3 encryption in transit and AES-256 encryption at rest. Your data is stored in secure data centers. We never sell your information to third parties.'
+        : 'Sí. Usamos cifrado TLS 1.3 en tránsito y AES-256 en reposo. Tus datos se almacenan en centros de datos seguros. Nunca vendemos tu información.'
     },
     {
       icon: Eye,

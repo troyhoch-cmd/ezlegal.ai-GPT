@@ -63,12 +63,12 @@ const CHANNEL_CONFIG: Record<string, {
   sms: {
     en: {
       headline: 'Someone Shared Free Legal Help With You',
-      subheadline: 'Ask any legal question and get clear, cited answers in minutes. No signup required.',
+      subheadline: 'Ask any legal question and get clear, cited answers. Free to start, available 24/7.',
       cta: 'Start Your Free Question',
     },
     es: {
       headline: 'Alguien te Compartio Ayuda Legal Gratis',
-      subheadline: 'Haz cualquier pregunta legal y recibe respuestas claras con citas en minutos. Sin necesidad de registrarte.',
+      subheadline: 'Haz cualquier pregunta legal y recibe respuestas claras con citas. Gratis para comenzar, disponible 24/7.',
       cta: 'Haz tu Pregunta Gratis',
     },
     color: '#64748b',
@@ -356,8 +356,8 @@ export default function ChannelLanding() {
             </h2>
             <p className="text-teal-100 mb-8 text-lg">
               {es
-                ? 'Preguntas ilimitadas gratis. Sin tarjeta de crédito. Sin registro.'
-                : 'Unlimited free questions. No credit card. No signup required.'}
+                ? 'Gratis para comenzar. Sin tarjeta de crédito. Disponible 24/7.'
+                : 'Free to start. No credit card. Available 24/7.'}
             </p>
             <Link
               to="/chat"

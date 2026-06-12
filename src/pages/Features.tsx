@@ -443,8 +443,8 @@ export default function Features() {
             <ArrowRight className="w-5 h-5" aria-hidden="true" />
           </Link>
           <p className="text-white/80 text-sm mt-6 flex items-center justify-center gap-4 flex-wrap">
-            <span>Unlimited questions free</span>
-            <span>No signup required</span>
+            <span>Free to start</span>
+            <span>Available 24/7</span>
             <span>Issue Packs from $29 when needed</span>
           </p>
         </div>

@@ -428,8 +428,8 @@ export default function Negotiate() {
 
           <p className="text-sm text-navy-500 mt-4">
             {language === 'en'
-              ? 'No signup required. Your data stays private.'
-              : 'Sin registro requerido. Tus datos permanecen privados.'
+              ? 'Free to start. See our privacy approach.'
+              : 'Gratis para comenzar. Conoce nuestro enfoque de privacidad.'
             }
           </p>
 

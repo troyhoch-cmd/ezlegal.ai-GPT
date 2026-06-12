@@ -63,7 +63,7 @@ export default function CasePredictor() {
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-teal-100">
                   <div className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-gold-300" /> {language === 'en' ? '2\u20133 min' : '2\u20133 min'}</div>
                   <div className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-gold-300" /> {language === 'en' ? '1st prediction free' : '1ra gratis'}</div>
-                  <div className="flex items-center gap-1.5"><Shield className="w-4 h-4 text-gold-300" /> {language === 'en' ? 'Private & secure' : 'Privado'}</div>
+                  <div className="flex items-center gap-1.5"><Shield className="w-4 h-4 text-gold-300" /> {language === 'en' ? 'Legal info, not advice' : 'Información, no asesoría'}</div>
                 </div>
               </div>
 

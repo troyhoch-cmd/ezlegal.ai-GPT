@@ -303,11 +303,11 @@ export default function Ask() {
               <div className="flex items-center gap-4 text-sm text-navy-500">
                 <span className="flex items-center gap-1.5">
                   <Shield className="w-4 h-4 text-green-600" />
-                  {language === 'en' ? 'Private & secure' : 'Privado y seguro'}
+                  {language === 'en' ? 'Legal information, not advice' : 'Información legal, no asesoría'}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-teal-600" />
-                  {language === 'en' ? 'Answer in ~30 seconds' : 'Respuesta en ~30 segundos'}
+                  {language === 'en' ? '24/7 availability' : 'Disponible 24/7'}
                 </span>
               </div>
               <button

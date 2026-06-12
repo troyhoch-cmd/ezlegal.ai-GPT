@@ -92,13 +92,13 @@ function getRecommendation(answers: string[]): Recommendation {
     return {
       title: { en: 'Free AI Legal Answers', es: 'Respuestas Legales IA Gratis' },
       description: {
-        en: 'Ask unlimited legal questions for free. No signup required. Get cited answers in plain language, available 24/7.',
-        es: 'Haz preguntas legales ilimitadas gratis. Sin registro. Recibe respuestas con fuentes en lenguaje simple, 24/7.',
+        en: 'Ask legal questions for free. Get cited answers in plain language, available 24/7 in English or Spanish.',
+        es: 'Haz preguntas legales gratis. Recibe respuestas con fuentes en lenguaje simple, disponible 24/7 en inglés o español.',
       },
       cta: { en: 'Ask My Question Free', es: 'Hacer Mi Pregunta Gratis' },
       link: '/ask',
       price: 'Free',
-      badge: { en: 'No signup needed', es: 'Sin registro' },
+      badge: { en: 'Free to start', es: 'Gratis para comenzar' },
     };
   }
 

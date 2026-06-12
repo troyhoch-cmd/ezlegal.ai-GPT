@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Shield, MessageSquare, FileText, CheckCircle, Users,
   ArrowRight, ChevronDown, ChevronUp
@@ -19,6 +19,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { markHeroVariantSeen } from '../services/ui-preferences-service';
 import { getVariant, HERO_EN_TEST, HERO_EN_COPY, HERO_ES_TEST, HERO_ES_COPY } from '../lib/ab-testing';
 import { trackCTAClick } from '../lib/utm';
+import { renderClaimOrFallback } from '../content/trustEvidence';
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -106,12 +107,12 @@ export default function Home() {
 
               <p className="text-sm text-navy-200 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
                 <Shield className="w-4 h-4 text-teal-400 flex-shrink-0" aria-hidden="true" />
-                <span>
-                  {language === 'en'
-                    ? 'Private. Free. Attorney-informed safeguards.'
-                    : 'Privado. Gratis. Protecciones informadas por abogados.'
-                  }
-                </span>
+                <Link
+                  to="/trust-center"
+                  className="underline underline-offset-2 hover:text-white transition-colors"
+                >
+                  {renderClaimOrFallback('attorney-informed', language === 'es' ? 'es' : 'en')}
+                </Link>
               </p>
             </div>
 
@@ -265,8 +266,8 @@ export default function Home() {
                 {
                   q: language === 'en' ? "Is my information private?" : "Es mi información privada?",
                   a: language === 'en'
-                    ? "Yes. We encrypt your conversations with bank-level security and never use them to train AI models. We follow California privacy law (CCPA). Note: because we are not a law firm, attorney-client privilege does not apply to these conversations."
-                    : "Si. Ciframos tus conversaciones con seguridad de nivel bancario y nunca las usamos para entrenar modelos de IA. Cumplimos con la ley de privacidad de California (CCPA)."
+                    ? "We encrypt your conversations in transit and at rest and never use them to train AI models. We follow California privacy law (CCPA). Note: because we are not a law firm, attorney-client privilege does not apply to these conversations. See our Privacy Policy for details."
+                    : "Ciframos tus conversaciones en tránsito y en reposo y nunca las usamos para entrenar modelos de IA. Cumplimos con la ley de privacidad de California (CCPA). Nota: como no somos un bufete de abogados, el privilegio abogado-cliente no aplica."
                 },
                 {
                   q: language === 'en' ? "Is it really free?" : "Es realmente gratis?",
@@ -322,8 +323,8 @@ export default function Home() {
             </h2>
             <p className="text-lg sm:text-xl text-navy-100 mb-10">
               {language === 'en'
-                ? 'Get clear answers to your legal questions — free and confidential'
-                : 'Obtén respuestas claras a tus preguntas legales — gratis y confidencial'
+                ? 'Legal information in English or Spanish — free to start'
+                : 'Información legal en inglés o español — gratis para comenzar'
               }
             </p>
             <button
@@ -331,9 +332,15 @@ export default function Home() {
               onClick={handleStartNow}
               className="bg-teal-700 hover:bg-teal-600 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900"
             >
-              {language === 'en' ? 'Start Now — It\'s Free' : 'Comenzar ahora — es gratis'}
+              {language === 'en' ? 'Start with a free question' : 'Empieza con una pregunta gratis'}
               <ArrowRight className="w-5 h-5" />
             </button>
+            <p className="text-sm text-white/80 mt-4 max-w-md mx-auto leading-snug">
+              {language === 'en'
+                ? 'Legal information, not legal advice. We are not a law firm.'
+                : 'Información legal, no asesoría legal. No somos un bufete de abogados.'
+              }
+            </p>
           </div>
         </section>
       </main>

@@ -80,8 +80,8 @@ export const HERO_EN_COPY: Record<string, { title: string; subtitle: string; cta
     cta: 'Ask a free legal question',
   },
   variant_a: {
-    title: 'Get answers to your legal questions in minutes',
-    subtitle: 'AI-powered legal information — free, private, and available 24/7. No signup required. In English or Spanish.',
+    title: 'Start with legal information in English or Spanish',
+    subtitle: 'AI-powered legal information — free to start and available 24/7. Understand your rights and find next steps.',
     cta: 'Start with a free question',
   },
 };
@@ -89,12 +89,12 @@ export const HERO_EN_COPY: Record<string, { title: string; subtitle: string; cta
 export const HERO_ES_COPY: Record<string, { title: string; subtitle: string; cta: string }> = {
   control: {
     title: 'Ayuda legal que habla tu idioma',
-    subtitle: 'Haz preguntas legales gratis, entiende tus derechos y encuentra próximos pasos seguros — todo en español. Sin costo, sin tarjeta de crédito, sin juicio.',
+    subtitle: 'Haz preguntas legales, entiende tus derechos y encuentra próximos pasos seguros — en español o inglés. Gratis para comenzar, sin tarjeta de crédito.',
     cta: 'Haz tu pregunta gratis',
   },
   variant_a: {
-    title: 'Respuestas legales en minutos — gratis y en español',
-    subtitle: 'Información legal con IA — gratuita, privada y disponible 24/7. Sin registro. Confidencial.',
+    title: 'Información legal en español o inglés — gratis para comenzar',
+    subtitle: 'Información legal con IA — gratuita para comenzar y disponible 24/7. Entiende tus derechos y encuentra próximos pasos.',
     cta: 'Empieza con una pregunta gratis',
   },
 };

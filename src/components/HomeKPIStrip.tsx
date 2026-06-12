@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Users, Clock, Globe, ShieldCheck, Info } from 'lucide-react';
+import { Users, Clock, Globe, Heart, AlertTriangle, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -17,21 +17,25 @@ const ICON_MAP: Record<string, typeof Users> = {
   'available-24-7': Clock,
   'bilingual': Globe,
   'free-help-links': Users,
-  'privacy-controls': ShieldCheck,
+  'free-question': Heart,
+  'urgent-help-routing': AlertTriangle,
 };
 
 const LABEL_MAP: Record<string, { en: string; es: string }> = {
   'available-24-7': { en: 'Available', es: 'Disponible' },
   'bilingual': { en: 'Languages', es: 'Idiomas' },
   'free-help-links': { en: 'Find free help', es: 'Encuentra ayuda' },
-  'privacy-controls': { en: 'Privacy controls', es: 'Controles de privacidad' },
+  'free-question': { en: 'Pricing', es: 'Precio' },
+  'urgent-help-routing': { en: 'Safety', es: 'Seguridad' },
 };
 
+const MAX_KPIS = 4;
+
 function buildDefaultKPIs(): KPI[] {
-  return getVerifiedClaims().map((claim) => ({
+  return getVerifiedClaims().slice(0, MAX_KPIS).map((claim) => ({
     label: LABEL_MAP[claim.id] || { en: claim.id, es: claim.id },
     value: { en: claim.displayEn, es: claim.displayEs },
-    icon: ICON_MAP[claim.id] || ShieldCheck,
+    icon: ICON_MAP[claim.id] || Clock,
     footnote: claim.tooltipEn,
     footnoteHref: claim.href,
   }));
@@ -73,7 +77,7 @@ export default function HomeKPIStrip() {
   const lang = language === 'es' ? 'es' : 'en';
 
   return (
-    <div className="mx-auto grid max-w-5xl grid-cols-1 xs:grid-cols-2 gap-3 px-0 sm:grid-cols-4">
+    <div className="mx-auto grid max-w-5xl grid-cols-2 gap-3 px-0 sm:grid-cols-4">
       {kpis.map((kpi) => {
         const Icon = kpi.icon;
         return (
