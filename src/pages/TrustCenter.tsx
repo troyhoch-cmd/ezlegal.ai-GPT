@@ -6,13 +6,16 @@ import {
   Shield, Lock, FileText, AlertCircle, Eye, Database, Server,
   CheckCircle, Clock, Trash2, Download, MessageSquare,
   ExternalLink, HelpCircle, Flag, Users, Brain, ShieldCheck,
-  Fingerprint, Building2, Layers, Key, Globe, Ban, Network
+  Fingerprint, Building2, Layers, Key, Globe, Ban, Network,
+  AlertTriangle
 } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import TrustSafetyReportModal from '../components/TrustSafetyReportModal';
 import TrustFAQ from '../components/TrustFAQ';
 import SafeUseChecklist from '../components/SafeUseChecklist';
+import { useLanguage } from '../contexts/LanguageContext';
+import { GOVERNANCE_SECTIONS, renderSectionContent } from '../content/aiGovernance';
 
 function generatePDF(title: string, content: string) {
   const htmlContent = `
@@ -216,6 +219,8 @@ const pdfContents = {
 
 export default function TrustCenter() {
   const [showReportModal, setShowReportModal] = useState(false);
+  const { language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
 
   const handleDownloadPDF = (type: keyof typeof pdfContents) => {
     const pdf = pdfContents[type];
@@ -369,6 +374,66 @@ export default function TrustCenter() {
 
       <TrustFAQ />
       <SafeUseChecklist />
+
+      <section id="ai-governance" className="py-16 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
+              <ShieldCheck className="w-6 h-6 text-teal-600" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-navy-900">
+                {lang === 'es' ? 'Gobernanza y Transparencia de IA' : 'AI Governance & Transparency'}
+              </h2>
+              <p className="text-navy-600">
+                {lang === 'es'
+                  ? 'Nuestros compromisos, limitaciones y lo que aun estamos documentando'
+                  : 'Our commitments, limitations, and what we are still documenting'}
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {GOVERNANCE_SECTIONS.map((section) => (
+              <div
+                key={section.id}
+                className={`rounded-xl border p-5 ${
+                  section.evidenceStatus === 'verified'
+                    ? 'bg-white border-slate-200'
+                    : 'bg-amber-50 border-amber-200'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  {section.evidenceStatus === 'verified' ? (
+                    <CheckCircle className="w-5 h-5 text-teal-600 mt-0.5 flex-shrink-0" />
+                  ) : (
+                    <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                  )}
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-navy-900 text-sm sm:text-base">
+                      {lang === 'es' ? section.titleEs : section.titleEn}
+                    </h3>
+                    <p className="text-sm text-navy-700 mt-1.5 leading-relaxed">
+                      {renderSectionContent(section, lang)}
+                    </p>
+                    {section.evidenceStatus === 'needs-evidence' && (
+                      <span className="inline-block mt-2 text-xs font-medium text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
+                        {lang === 'es' ? 'Pendiente de verificacion' : 'Pending verification'}
+                      </span>
+                    )}
+                    {section.lastReviewedDate && section.evidenceStatus === 'verified' && (
+                      <p className="text-xs text-navy-500 mt-2">
+                        {lang === 'es' ? 'Revisado:' : 'Reviewed:'} {section.lastReviewedDate}
+                        {section.reviewerRole && ` — ${section.reviewerRole}`}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section id="privacy" className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
