@@ -1,0 +1,2028 @@
+
+================================================================================
+FILE: src/components/intake/IndividualIntake.tsx
+================================================================================
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Home, Users, Briefcase, FileWarning, Globe, Shield, ArrowRight, ArrowLeft, AlertCircle, Clock } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { trackEngagement, trackFunnelEvent } from '../../services/engagement-service';
+
+type Category = 'housing' | 'family' | 'employment' | 'debt' | 'immigration' | 'criminal';
+type Urgency = 'immediate' | 'upcoming' | 'planning';
+
+const CATEGORIES = [
+  { id: 'housing' as Category, icon: Home, color: 'sky', enLabel: 'Housing / Landlord', esLabel: 'Vivienda / Arrendador' },
+  { id: 'family' as Category, icon: Users, color: 'rose', enLabel: 'Family Law', esLabel: 'Derecho Familiar' },
+  { id: 'employment' as Category, icon: Briefcase, color: 'emerald', enLabel: 'Employment / Workplace', esLabel: 'Empleo / Trabajo' },
+  { id: 'debt' as Category, icon: FileWarning, color: 'teal', enLabel: 'Debt / Collections', esLabel: 'Deudas / Cobros' },
+  { id: 'immigration' as Category, icon: Globe, color: 'amber', enLabel: 'Immigration', esLabel: 'Inmigración' },
+  { id: 'criminal' as Category, icon: Shield, color: 'slate', enLabel: 'Criminal / Traffic', esLabel: 'Penal / Tránsito' },
+];
+
+const URGENCY_OPTIONS = [
+  { id: 'immediate' as Urgency, enLabel: 'Urgent (happening now or within days)', esLabel: 'Urgente (sucediendo ahora o en días)', color: 'red' },
+  { id: 'upcoming' as Urgency, enLabel: 'Soon (within weeks)', esLabel: 'Pronto (en semanas)', color: 'amber' },
+  { id: 'planning' as Urgency, enLabel: 'Planning ahead', esLabel: 'Planificando', color: 'green' },
+];
+
+export default function IndividualIntake() {
+  const [step, setStep] = useState<'category' | 'urgency' | 'details'>('category');
+  const [category, setCategory] = useState<Category | null>(null);
+  const [urgency, setUrgency] = useState<Urgency | null>(null);
+  const navigate = useNavigate();
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    trackEngagement({
+      featureName: 'persona_intake_step',
+      engagementType: 'view',
+      metadata: { persona: 'individual', step }
+    });
+  }, [step]);
+
+  const handleCategorySelect = (cat: Category) => {
+    setCategory(cat);
+    trackEngagement({
+      featureName: 'persona_intake_step',
+      engagementType: 'complete',
+      metadata: { persona: 'individual', step: 'category', selection: cat }
+    });
+    setStep('urgency');
+  };
+
+  const handleUrgencySelect = (urg: Urgency) => {
+    setUrgency(urg);
+    trackEngagement({
+      featureName: 'persona_intake_step',
+      engagementType: 'complete',
+      metadata: { persona: 'individual', step: 'urgency', selection: urg }
+    });
+    setStep('details');
+  };
+
+  const handleContinue = () => {
+    trackFunnelEvent('persona_intake_completed', {
+      persona: 'individual',
+      category,
+      urgency
+    });
+    try {
+      sessionStorage.setItem('ez_intake_data', JSON.stringify({
+        persona: 'individual',
+        category,
+        urgency,
+        timestamp: new Date().toISOString()
+      }));
+    } catch {
+      // sessionStorage disabled
+    }
+    navigate(`/ask/${category}`);
+  };
+
+  const handleBack = () => {
+    if (step === 'urgency') {
+      setStep('category');
+      setUrgency(null);
+    } else if (step === 'details') {
+      setStep('urgency');
+    }
+  };
+
+  if (step === 'category') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-navy-900 via-navy-800 to-navy-900 py-12 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <Clock className="w-4 h-4" />
+              {language === 'en' ? 'Step 1 of 3' : 'Paso 1 de 3'}
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              {language === 'en' ? 'What type of legal issue do you have?' : '¿Qué tipo de problema legal tienes?'}
+            </h2>
+            <p className="text-navy-200 text-lg">
+              {language === 'en'
+                ? 'Choose the category that best matches your situation'
+                : 'Elige la categoría que mejor se ajuste a tu situación'}
+            </p>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 mb-8">
+            <div className="flex items-start gap-3">
+              <Shield className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-white font-medium text-sm">
+                  {language === 'en' ? 'Private by default • Not legal advice' : 'Privado por defecto • No es asesoramiento legal'}
+                </p>
+                <p className="text-navy-300 text-xs mt-1">
+                  {language === 'en'
+                    ? 'We provide legal information to help you understand your options and next steps.'
+                    : 'Proporcionamos información legal para ayudarte a entender tus opciones y próximos pasos.'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => handleCategorySelect(cat.id)}
+                className="bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-teal-500/50 rounded-2xl p-6 text-left transition-all group"
+              >
+                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-${cat.color}-500/20 mb-4 group-hover:scale-110 transition-transform`}>
+                  <cat.icon className={`w-6 h-6 text-${cat.color}-400`} />
+                </div>
+                <h3 className="text-white font-bold text-lg mb-1">
+                  {language === 'en' ? cat.enLabel : cat.esLabel}
+                </h3>
+                <ArrowRight className="w-5 h-5 text-navy-400 group-hover:text-teal-400 transition-colors" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 'urgency') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-navy-900 via-navy-800 to-navy-900 py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <Clock className="w-4 h-4" />
+              {language === 'en' ? 'Step 2 of 3' : 'Paso 2 de 3'}
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              {language === 'en' ? 'How urgent is this issue?' : '¿Qué tan urgente es este problema?'}
+            </h2>
+            <p className="text-navy-200 text-lg">
+              {language === 'en'
+                ? 'This helps us prioritize what information you need first'
+                : 'Esto nos ayuda a priorizar qué información necesitas primero'}
+            </p>
+          </div>
+
+          <div className="space-y-4 mb-8">
+            {URGENCY_OPTIONS.map((opt) => (
+              <button
+                key={opt.id}
+                onClick={() => handleUrgencySelect(opt.id)}
+                className={`w-full bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-${opt.color}-500/50 rounded-2xl p-6 text-left transition-all group`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-3 h-3 rounded-full bg-${opt.color}-500`}></div>
+                    <span className="text-white font-semibold text-lg">
+                      {language === 'en' ? opt.enLabel : opt.esLabel}
+                    </span>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-navy-400 group-hover:text-teal-400 transition-colors" />
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 text-navy-300 hover:text-white transition-colors mx-auto"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {language === 'en' ? 'Back to categories' : 'Volver a categorías'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 'details') {
+    const selectedCategory = CATEGORIES.find(c => c.id === category);
+    const selectedUrgency = URGENCY_OPTIONS.find(u => u.id === urgency);
+
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-navy-900 via-navy-800 to-navy-900 py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <Clock className="w-4 h-4" />
+              {language === 'en' ? 'Step 3 of 3' : 'Paso 3 de 3'}
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              {language === 'en' ? 'Great, we understand your situation' : 'Perfecto, entendemos tu situación'}
+            </h2>
+            <p className="text-navy-200 text-lg">
+              {language === 'en'
+                ? 'Ready to get specific answers to your questions'
+                : 'Listo para obtener respuestas específicas a tus preguntas'}
+            </p>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <AlertCircle className="w-5 h-5 text-teal-400" />
+              <h3 className="text-white font-semibold">
+                {language === 'en' ? 'Your situation summary:' : 'Resumen de tu situación:'}
+              </h3>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                {selectedCategory && <selectedCategory.icon className={`w-5 h-5 text-${selectedCategory.color}-400`} />}
+                <span className="text-navy-100">
+                  {language === 'en' ? selectedCategory?.enLabel : selectedCategory?.esLabel}
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className={`w-3 h-3 rounded-full bg-${selectedUrgency?.color}-500`}></div>
+                <span className="text-navy-100">
+                  {language === 'en' ? selectedUrgency?.enLabel : selectedUrgency?.esLabel}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={handleContinue}
+            className="w-full bg-teal-600 hover:bg-teal-500 text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl mb-4"
+          >
+            {language === 'en' ? 'Continue to Questions' : 'Continuar a Preguntas'}
+          </button>
+
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 text-navy-300 hover:text-white transition-colors mx-auto"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {language === 'en' ? 'Back' : 'Atrás'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+
+================================================================================
+FILE: src/components/intake/LegalAidIntake.tsx
+================================================================================
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Users, Layers, User, UserCheck, ArrowRight, ArrowLeft, Clock, Shield, Scale } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { trackEngagement, trackFunnelEvent } from '../../services/engagement-service';
+
+type WorkflowMode = 'individual-client' | 'bulk-triage' | 'self-help-support' | 'staff-assisted';
+type Scale = 'low' | 'medium' | 'high' | 'very-high';
+
+const WORKFLOW_MODES = [
+  {
+    id: 'individual-client' as WorkflowMode,
+    icon: User,
+    color: 'teal',
+    enLabel: 'Individual Client Intake',
+    esLabel: 'Ingreso de Cliente Individual',
+    enDesc: 'One-on-one intake for a single client matter',
+    esDesc: 'Ingreso individual para un caso de un solo cliente'
+  },
+  {
+    id: 'bulk-triage' as WorkflowMode,
+    icon: Layers,
+    color: 'blue',
+    enLabel: 'Group / Bulk Triage',
+    esLabel: 'Clasificación Grupal / Masiva',
+    enDesc: 'Process multiple clients or intake forms at once',
+    esDesc: 'Procesar múltiples clientes o formularios de ingreso a la vez'
+  },
+  {
+    id: 'self-help-support' as WorkflowMode,
+    icon: Users,
+    color: 'amber',
+    enLabel: 'Self-Help / Clinic Support',
+    esLabel: 'Apoyo de Autoayuda / Clínica',
+    enDesc: 'Tools for walk-in clinics or self-help centers',
+    esDesc: 'Herramientas para clínicas sin cita o centros de autoayuda'
+  },
+  {
+    id: 'staff-assisted' as WorkflowMode,
+    icon: UserCheck,
+    color: 'emerald',
+    enLabel: 'Staff-Assisted Workflow',
+    esLabel: 'Flujo Asistido por Personal',
+    enDesc: 'Intake with staff oversight and review',
+    esDesc: 'Ingreso con supervisión y revisión del personal'
+  },
+];
+
+const SCALE_OPTIONS = [
+  {
+    id: 'low' as Scale,
+    enLabel: '1-10 matters per week',
+    esLabel: '1-10 casos por semana',
+    color: 'green'
+  },
+  {
+    id: 'medium' as Scale,
+    enLabel: '10-50 matters per week',
+    esLabel: '10-50 casos por semana',
+    color: 'blue'
+  },
+  {
+    id: 'high' as Scale,
+    enLabel: '50-100 matters per week',
+    esLabel: '50-100 casos por semana',
+    color: 'amber'
+  },
+  {
+    id: 'very-high' as Scale,
+    enLabel: '100+ matters per week',
+    esLabel: '100+ casos por semana',
+    color: 'red'
+  },
+];
+
+export default function LegalAidIntake() {
+  const [step, setStep] = useState<'workflow' | 'scale' | 'summary'>('workflow');
+  const [workflowMode, setWorkflowMode] = useState<WorkflowMode | null>(null);
+  const [scale, setScale] = useState<Scale | null>(null);
+  const navigate = useNavigate();
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    trackEngagement({
+      featureName: 'persona_intake_step',
+      engagementType: 'view',
+      metadata: { persona: 'legal-aid', step }
+    });
+  }, [step]);
+
+  const handleWorkflowSelect = (mode: WorkflowMode) => {
+    setWorkflowMode(mode);
+    trackEngagement({
+      featureName: 'persona_intake_step',
+      engagementType: 'complete',
+      metadata: { persona: 'legal-aid', step: 'workflow', selection: mode }
+    });
+    setStep('scale');
+  };
+
+  const handleScaleSelect = (scaleValue: Scale) => {
+    setScale(scaleValue);
+    trackEngagement({
+      featureName: 'persona_intake_step',
+      engagementType: 'complete',
+      metadata: { persona: 'legal-aid', step: 'scale', selection: scaleValue }
+    });
+    setStep('summary');
+  };
+
+  const handleContinue = () => {
+    trackFunnelEvent('persona_intake_completed', {
+      persona: 'legal-aid',
+      workflowMode,
+      scale
+    });
+    try {
+      sessionStorage.setItem('ez_intake_data', JSON.stringify({
+        persona: 'legal-aid',
+        workflowMode,
+        scale,
+        timestamp: new Date().toISOString()
+      }));
+    } catch {
+      // sessionStorage disabled
+    }
+
+    if (workflowMode === 'individual-client') {
+      navigate('/pro-bono-intake');
+    } else {
+      navigate('/partner-hub');
+    }
+  };
+
+  const handleBack = () => {
+    if (step === 'scale') {
+      setStep('workflow');
+      setScale(null);
+    } else if (step === 'summary') {
+      setStep('scale');
+    }
+  };
+
+  if (step === 'workflow') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-navy-900 via-navy-800 to-navy-900 py-12 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <Clock className="w-4 h-4" />
+              {language === 'en' ? 'Step 1 of 3' : 'Paso 1 de 3'}
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              {language === 'en' ? 'Select your workflow mode' : 'Selecciona tu modo de flujo de trabajo'}
+            </h2>
+            <p className="text-navy-200 text-lg">
+              {language === 'en'
+                ? 'Choose the workflow that best fits how you serve clients'
+                : 'Elige el flujo de trabajo que mejor se adapte a cómo sirves a los clientes'}
+            </p>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 mb-8">
+            <div className="flex items-start gap-3">
+              <Shield className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-white font-medium text-sm">
+                  {language === 'en'
+                    ? 'Designed for ethical access to justice • Compliant with LSO guidelines'
+                    : 'Diseñado para acceso ético a la justicia • Cumple con las pautas de LSO'}
+                </p>
+                <p className="text-navy-300 text-xs mt-1">
+                  {language === 'en'
+                    ? 'Built specifically for legal aid organizations, pro bono programs, and access to justice initiatives.'
+                    : 'Construido específicamente para organizaciones de asistencia legal, programas pro bono e iniciativas de acceso a la justicia.'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            {WORKFLOW_MODES.map((mode) => (
+              <button
+                key={mode.id}
+                onClick={() => handleWorkflowSelect(mode.id)}
+                className="bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-emerald-500/50 rounded-2xl p-6 text-left transition-all group"
+              >
+                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-${mode.color}-500/20 mb-4 group-hover:scale-110 transition-transform`}>
+                  <mode.icon className={`w-6 h-6 text-${mode.color}-400`} />
+                </div>
+                <h3 className="text-white font-bold text-lg mb-2">
+                  {language === 'en' ? mode.enLabel : mode.esLabel}
+                </h3>
+                <p className="text-navy-300 text-sm mb-3">
+                  {language === 'en' ? mode.enDesc : mode.esDesc}
+                </p>
+                <ArrowRight className="w-5 h-5 text-navy-400 group-hover:text-emerald-400 transition-colors" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 'scale') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-navy-900 via-navy-800 to-navy-900 py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <Clock className="w-4 h-4" />
+              {language === 'en' ? 'Step 2 of 3' : 'Paso 2 de 3'}
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              {language === 'en' ? 'What is your typical volume?' : '¿Cuál es tu volumen típico?'}
+            </h2>
+            <p className="text-navy-200 text-lg">
+              {language === 'en'
+                ? 'This helps us optimize the workflow for your organization'
+                : 'Esto nos ayuda a optimizar el flujo de trabajo para tu organización'}
+            </p>
+          </div>
+
+          <div className="space-y-4 mb-8">
+            {SCALE_OPTIONS.map((opt) => (
+              <button
+                key={opt.id}
+                onClick={() => handleScaleSelect(opt.id)}
+                className={`w-full bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-${opt.color}-500/50 rounded-2xl p-6 text-left transition-all group`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-3 h-3 rounded-full bg-${opt.color}-500`}></div>
+                    <span className="text-white font-semibold text-lg">
+                      {language === 'en' ? opt.enLabel : opt.esLabel}
+                    </span>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-navy-400 group-hover:text-emerald-400 transition-colors" />
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 text-navy-300 hover:text-white transition-colors mx-auto"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {language === 'en' ? 'Back to workflow modes' : 'Volver a modos de flujo de trabajo'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 'summary') {
+    const selectedWorkflow = WORKFLOW_MODES.find(w => w.id === workflowMode);
+    const selectedScale = SCALE_OPTIONS.find(s => s.id === scale);
+
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-navy-900 via-navy-800 to-navy-900 py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <Clock className="w-4 h-4" />
+              {language === 'en' ? 'Step 3 of 3' : 'Paso 3 de 3'}
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              {language === 'en' ? 'Workflow configured' : 'Flujo de trabajo configurado'}
+            </h2>
+            <p className="text-navy-200 text-lg">
+              {language === 'en'
+                ? 'Ready to start processing client matters efficiently'
+                : 'Listo para empezar a procesar casos de clientes eficientemente'}
+            </p>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Scale className="w-5 h-5 text-emerald-400" />
+              <h3 className="text-white font-semibold">
+                {language === 'en' ? 'Your configuration:' : 'Tu configuración:'}
+              </h3>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                {selectedWorkflow && <selectedWorkflow.icon className={`w-5 h-5 text-${selectedWorkflow.color}-400`} />}
+                <span className="text-navy-100">
+                  {language === 'en' ? selectedWorkflow?.enLabel : selectedWorkflow?.esLabel}
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className={`w-3 h-3 rounded-full bg-${selectedScale?.color}-500`}></div>
+                <span className="text-navy-100">
+                  {language === 'en' ? selectedScale?.enLabel : selectedScale?.esLabel}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 mb-6">
+            <div className="flex items-start gap-3">
+              <Shield className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-emerald-200 font-medium text-sm mb-1">
+                  {language === 'en' ? 'Access to justice focused' : 'Enfocado en acceso a la justicia'}
+                </p>
+                <p className="text-emerald-300/80 text-xs">
+                  {language === 'en'
+                    ? 'All outputs include oversight flags, ethical disclosures, and are designed for attorney review.'
+                    : 'Todas las salidas incluyen marcadores de supervisión, divulgaciones éticas y están diseñadas para revisión de abogados.'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={handleContinue}
+            className="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl mb-4"
+          >
+            {language === 'en'
+              ? (workflowMode === 'individual-client' ? 'Start Client Intake' : 'Go to Partner Hub')
+              : (workflowMode === 'individual-client' ? 'Iniciar Ingreso de Cliente' : 'Ir al Centro de Socios')}
+          </button>
+
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 text-navy-300 hover:text-white transition-colors mx-auto"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {language === 'en' ? 'Back' : 'Atrás'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+
+================================================================================
+FILE: src/components/pricing/ComparisonTable.tsx
+================================================================================
+import { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { comparisonFeatures, comparisonData } from '../../data/pricing';
+
+interface Props {
+  language: 'en' | 'es';
+}
+
+const PLAN_COLS = [
+  { id: 'free', en: 'Free', es: 'Gratis' },
+  { id: 'everyday-plus', en: 'Everyday Plus', es: 'Diario Plus' },
+  { id: 'family', en: 'Family', es: 'Familia' },
+];
+
+export default function ComparisonTable({ language }: Props) {
+  const l = language === 'es' ? 'es' : 'en';
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <section className="py-12 bg-white">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="w-full flex items-center justify-between gap-3 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
+          aria-expanded={expanded}
+        >
+          <span className="font-semibold text-navy-900 text-sm sm:text-base">
+            {l === 'es' ? 'Comparar planes' : 'Compare plans'}
+          </span>
+          {expanded ? (
+            <ChevronUp className="w-5 h-5 text-navy-500" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-navy-500" />
+          )}
+        </button>
+
+        {expanded && (
+          <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  <th className="text-left p-3 font-semibold text-navy-700 min-w-[140px]">
+                    {l === 'es' ? 'Caracteristica' : 'Feature'}
+                  </th>
+                  {PLAN_COLS.map((col) => (
+                    <th key={col.id} className="text-center p-3 font-semibold text-navy-700 min-w-[100px]">
+                      {col[l]}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonFeatures.map((feat, i) => (
+                  <tr
+                    key={feat.key}
+                    className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}
+                  >
+                    <td className="p-3 text-navy-700 font-medium">{feat[l]}</td>
+                    {PLAN_COLS.map((col) => {
+                      const val = comparisonData[col.id]?.[feat.key]?.[l] ?? '--';
+                      return (
+                        <td key={col.id} className="text-center p-3 text-navy-600">
+                          {val === 'Yes' || val === 'Si' ? (
+                            <span className="inline-block w-5 h-5 rounded-full bg-teal-100 text-teal-700 text-xs font-bold leading-5">&#10003;</span>
+                          ) : val === '--' ? (
+                            <span className="text-navy-300">--</span>
+                          ) : (
+                            val
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+
+================================================================================
+FILE: src/components/pricing/HelpMeChoose.tsx
+================================================================================
+import { useState } from 'react';
+import { ArrowRight, AlertTriangle, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { trackEngagement } from '../../services/engagement-service';
+
+interface Props {
+  language: 'en' | 'es';
+  onClose: () => void;
+}
+
+type Step = 1 | 2 | 3 | 'result';
+
+interface WizardState {
+  who: 'individual' | 'business' | 'org' | null;
+  need: 'question' | 'document' | 'nextsteps' | 'findhelp' | null;
+  urgent: boolean | null;
+}
+
+export default function HelpMeChoose({ language, onClose }: Props) {
+  const l = language === 'es' ? 'es' : 'en';
+  const [step, setStep] = useState<Step>(1);
+  const [state, setState] = useState<WizardState>({ who: null, need: null, urgent: null });
+
+  const advance = (updates: Partial<WizardState>, nextStep: Step) => {
+    const newState = { ...state, ...updates };
+    setState(newState);
+    setStep(nextStep);
+    if (nextStep === 'result') {
+      trackEngagement({
+        featureName: 'pricing_help_me_choose_completed',
+        engagementType: 'complete',
+        metadata: newState,
+      });
+    }
+  };
+
+  const getRecommendation = () => {
+    if (state.who === 'org') return { plan: 'Verified Legal Aid', href: '/pro-bono', tab: 'legal-aid' };
+    if (state.who === 'business') return { plan: 'Business Starter', href: '/signup?plan=business-starter', tab: 'business' };
+    if (state.need === 'findhelp') return { plan: 'Free', href: '/chat', tab: 'individuals' };
+    if (state.need === 'document' || state.need === 'nextsteps') return { plan: 'Everyday Plus', href: '/chat?plan=everyday-plus', tab: 'individuals' };
+    return { plan: 'Free', href: '/chat', tab: 'individuals' };
+  };
+
+  const copy = {
+    title: { en: 'Help me choose', es: 'Ayudame a elegir' },
+    step1: { en: 'Who is this for?', es: 'Para quien es esto?' },
+    step2: { en: 'What do you need most?', es: 'Que necesitas mas?' },
+    step3: { en: 'Is this urgent?', es: 'Es urgente?' },
+    urgentWarning: {
+      en: 'If you have a safety issue or imminent deadline, get urgent help first:',
+      es: 'Si tienes un problema de seguridad o fecha limite inminente, obtén ayuda urgente primero:',
+    },
+    urgentLink: { en: 'Urgent help resources', es: 'Recursos de ayuda urgente' },
+    recommendation: { en: 'We recommend:', es: 'Te recomendamos:' },
+    getStarted: { en: 'Get started', es: 'Comenzar' },
+  };
+
+  const options1 = [
+    { value: 'individual' as const, en: 'Myself or my family', es: 'Para mi o mi familia' },
+    { value: 'business' as const, en: 'My business or team', es: 'Mi negocio o equipo' },
+    { value: 'org' as const, en: 'My organization / legal aid', es: 'Mi organizacion / ayuda legal' },
+  ];
+
+  const options2 = [
+    { value: 'question' as const, en: 'Ask a question', es: 'Hacer una pregunta' },
+    { value: 'document' as const, en: 'Understand a document', es: 'Entender un documento' },
+    { value: 'nextsteps' as const, en: 'Prepare next steps', es: 'Preparar proximos pasos' },
+    { value: 'findhelp' as const, en: 'Find help', es: 'Encontrar ayuda' },
+  ];
+
+  const options3 = [
+    { value: true, en: 'Yes, I may have a deadline or safety issue', es: 'Si, puede que tenga una fecha limite o problema de seguridad' },
+    { value: false, en: 'No, I\'m planning ahead', es: 'No, estoy planificando con anticipacion' },
+  ];
+
+  return (
+    <div className="relative bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-lg max-w-lg mx-auto">
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 p-1.5 text-navy-400 hover:text-navy-700 transition-colors rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+        aria-label={l === 'es' ? 'Cerrar' : 'Close'}
+      >
+        <X className="w-5 h-5" />
+      </button>
+
+      <h3 className="text-lg font-bold text-navy-900 mb-5">{copy.title[l]}</h3>
+
+      {step === 1 && (
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-navy-700 mb-3">{copy.step1[l]}</p>
+          {options1.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => advance({ who: opt.value }, 2)}
+              className="w-full text-left px-4 py-3 rounded-xl border border-slate-200 hover:border-teal-400 hover:bg-teal-50 text-sm font-medium text-navy-800 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
+            >
+              {opt[l]}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {step === 2 && (
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-navy-700 mb-3">{copy.step2[l]}</p>
+          {options2.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => advance({ need: opt.value }, 3)}
+              className="w-full text-left px-4 py-3 rounded-xl border border-slate-200 hover:border-teal-400 hover:bg-teal-50 text-sm font-medium text-navy-800 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
+            >
+              {opt[l]}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {step === 3 && (
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-navy-700 mb-3">{copy.step3[l]}</p>
+          {options3.map((opt) => (
+            <button
+              key={String(opt.value)}
+              onClick={() => advance({ urgent: opt.value }, 'result')}
+              className="w-full text-left px-4 py-3 rounded-xl border border-slate-200 hover:border-teal-400 hover:bg-teal-50 text-sm font-medium text-navy-800 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
+            >
+              {opt[l]}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {step === 'result' && (
+        <div className="space-y-4">
+          {state.urgent && (
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200">
+              <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <div>
+                <p className="text-sm font-medium text-amber-900">{copy.urgentWarning[l]}</p>
+                <Link
+                  to="/emergency-resources"
+                  className="inline-flex items-center gap-1 mt-2 text-sm font-semibold text-amber-700 hover:text-amber-900 underline underline-offset-2"
+                >
+                  {copy.urgentLink[l]}
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          )}
+
+          <div className="p-4 rounded-xl bg-teal-50 border border-teal-200">
+            <p className="text-xs font-medium text-teal-700 uppercase tracking-wide mb-1">{copy.recommendation[l]}</p>
+            <p className="text-lg font-bold text-navy-900">{getRecommendation().plan}</p>
+            <Link
+              to={getRecommendation().href}
+              className="inline-flex items-center gap-2 mt-3 px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+            >
+              {copy.getStarted[l]}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+================================================================================
+FILE: src/components/pricing/MarketplaceSection.tsx
+================================================================================
+import { Handshake, Shield, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { trackEngagement } from '../../services/engagement-service';
+
+interface Props {
+  language: 'en' | 'es';
+}
+
+export default function MarketplaceSection({ language }: Props) {
+  const l = language === 'es' ? 'es' : 'en';
+
+  const handleLearnMore = () => {
+    trackEngagement({
+      featureName: 'marketplace_referral_learn_more_clicked',
+      engagementType: 'click',
+      metadata: {},
+    });
+  };
+
+  const copy = {
+    heading: {
+      en: 'Professional help when you need it',
+      es: 'Ayuda profesional cuando la necesites',
+    },
+    description: {
+      en: 'ezLegal.ai helps you prepare, organize, and understand your situation. When appropriate, we connect you to legal aid, pro bono services, low-cost lawyers, or vetted professional services.',
+      es: 'ezLegal.ai te ayuda a prepararte, organizarte y entender tu situacion. Cuando es apropiado, te conectamos con ayuda legal, servicios pro bono, abogados de bajo costo, o servicios profesionales verificados.',
+    },
+    models: {
+      en: [
+        'Free legal-aid referrals are never pay-to-rank',
+        'Foundations and employers can sponsor community access',
+        'Banks, fintechs, and HR platforms can offer this as a member benefit',
+        'Small-business partners can bundle legal navigation tools',
+        'Funders and agencies can sponsor triage for communities',
+      ],
+      es: [
+        'Las referencias gratuitas de ayuda legal nunca son de pago por posicion',
+        'Fundaciones y empleadores pueden patrocinar acceso comunitario',
+        'Bancos, fintechs y plataformas de RRHH pueden ofrecerlo como beneficio',
+        'Socios de pequenos negocios pueden combinar herramientas legales',
+        'Financiadores y agencias pueden patrocinar triaje comunitario',
+      ],
+    },
+    disclosure: {
+      en: 'Free and urgent-help resources are never ranked by who pays us. Paid professional referrals, if available, are clearly labeled and must meet our suitability and ethics standards.',
+      es: 'Los recursos gratuitos y de ayuda urgente nunca se clasifican por quien nos paga. Las referencias profesionales de pago, si estan disponibles, estan claramente etiquetadas y deben cumplir nuestros estandares de idoneidad y etica.',
+    },
+    learnMore: { en: 'Partner with us', es: 'Asociate con nosotros' },
+  };
+
+  return (
+    <section className="py-16 bg-slate-50 border-t border-slate-200">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <div className="flex items-start gap-4 mb-6">
+          <div className="p-3 bg-teal-100 rounded-xl flex-shrink-0">
+            <Handshake className="w-6 h-6 text-teal-700" aria-hidden="true" />
+          </div>
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-navy-900">{copy.heading[l]}</h2>
+            <p className="mt-2 text-sm text-navy-600 leading-relaxed max-w-2xl">{copy.description[l]}</p>
+          </div>
+        </div>
+
+        <ul className="space-y-2 mb-6 ml-14" role="list">
+          {copy.models[l].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm text-navy-700">
+              <span className="w-1.5 h-1.5 mt-2 rounded-full bg-teal-500 flex-shrink-0" aria-hidden="true" />
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <div className="ml-14 flex items-start gap-3 p-4 bg-white border border-slate-200 rounded-xl">
+          <Shield className="w-4 h-4 text-navy-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+          <p className="text-xs text-navy-600 leading-relaxed">{copy.disclosure[l]}</p>
+        </div>
+
+        <div className="ml-14 mt-4">
+          <Link
+            to="/for-partners"
+            onClick={handleLearnMore}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-teal-700 hover:text-teal-900 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 rounded"
+          >
+            {copy.learnMore[l]}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+================================================================================
+FILE: src/components/pricing/PricingCard.tsx
+================================================================================
+import { useState } from 'react';
+import { CheckCircle, ArrowRight, ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import type { PricingPlan } from '../../data/pricing';
+import { trackEngagement } from '../../services/engagement-service';
+
+interface Props {
+  plan: PricingPlan;
+  language: 'en' | 'es';
+}
+
+const MAX_VISIBLE_FEATURES = 4;
+
+export default function PricingCard({ plan, language }: Props) {
+  const l = language === 'es' ? 'es' : 'en';
+  const [expanded, setExpanded] = useState(false);
+  const features = plan.features[l];
+  const hasMore = features.length > MAX_VISIBLE_FEATURES;
+  const visibleFeatures = expanded ? features : features.slice(0, MAX_VISIBLE_FEATURES);
+
+  const handleCTAClick = () => {
+    trackEngagement({
+      featureName: 'pricing_plan_cta_clicked',
+      engagementType: 'click',
+      metadata: { planId: plan.id, audience: plan.audience },
+    });
+  };
+
+  const badgeText = plan.badge?.[l] || (plan.recommended ? (l === 'es' ? 'Recomendado' : 'Recommended') : null);
+
+  return (
+    <article
+      className={`relative flex flex-col rounded-2xl border p-5 sm:p-6 transition-shadow hover:shadow-lg ${
+        plan.recommended
+          ? 'border-teal-500 ring-2 ring-teal-500/20 shadow-md'
+          : plan.badge
+          ? 'border-teal-300 shadow-sm'
+          : 'border-slate-200 shadow-sm'
+      } bg-white`}
+    >
+      {badgeText && (
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white bg-teal-600 rounded-full shadow-sm whitespace-nowrap">
+          {badgeText}
+        </span>
+      )}
+
+      <header className="mb-3">
+        <h3 className="text-base font-bold text-navy-900">{plan.name[l]}</h3>
+        <div className="mt-1.5 flex items-baseline gap-1.5">
+          <span className="text-2xl font-extrabold text-navy-900">{plan.price[l]}</span>
+          {plan.priceNote && (
+            <span className="text-xs text-navy-500">{plan.priceNote[l]}</span>
+          )}
+          {!plan.isFinalPrice && (
+            <span className="ml-1 text-[10px] text-amber-600 font-medium">
+              {l === 'es' ? 'precio piloto' : 'pilot pricing'}
+            </span>
+          )}
+        </div>
+        <p className="mt-1.5 text-sm text-navy-600 leading-snug">{plan.description[l]}</p>
+      </header>
+
+      <ul className="flex-1 space-y-2 mb-4" role="list">
+        {visibleFeatures.map((feature) => (
+          <li key={feature} className="flex items-start gap-2 text-sm text-navy-700">
+            <CheckCircle className="w-3.5 h-3.5 text-teal-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <span className="leading-snug">{feature}</span>
+          </li>
+        ))}
+      </ul>
+
+      {hasMore && !expanded && (
+        <button
+          onClick={() => setExpanded(true)}
+          className="flex items-center gap-1 text-xs text-teal-600 hover:text-teal-800 font-medium mb-4 transition-colors"
+        >
+          <ChevronDown className="w-3.5 h-3.5" />
+          {l === 'es' ? 'Ver todas las funciones' : 'See all features'}
+        </button>
+      )}
+
+      <footer className="mt-auto space-y-1.5">
+        <Link
+          to={plan.ctaHref}
+          onClick={handleCTAClick}
+          className={`flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl font-semibold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+            plan.recommended
+              ? 'bg-teal-600 hover:bg-teal-700 text-white focus:ring-teal-500 shadow-sm'
+              : plan.id === 'free'
+              ? 'bg-navy-900 hover:bg-navy-800 text-white focus:ring-navy-500'
+              : 'bg-white hover:bg-slate-50 text-navy-900 border border-navy-300 focus:ring-teal-500'
+          }`}
+        >
+          {plan.ctaLabel[l]}
+          <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+        </Link>
+        {plan.ethicalNote && (
+          <p className="text-center text-[11px] text-navy-400">{plan.ethicalNote[l]}</p>
+        )}
+      </footer>
+    </article>
+  );
+}
+
+
+================================================================================
+FILE: src/components/pricing/PricingFAQ.tsx
+================================================================================
+import { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { pricingFAQ } from '../../data/pricing';
+import { trackEngagement } from '../../services/engagement-service';
+
+interface Props {
+  language: 'en' | 'es';
+}
+
+export default function PricingFAQ({ language }: Props) {
+  const l = language === 'es' ? 'es' : 'en';
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggle = (i: number) => {
+    const next = openIndex === i ? null : i;
+    setOpenIndex(next);
+    if (next !== null) {
+      trackEngagement({
+        featureName: 'pricing_faq_opened',
+        engagementType: 'click',
+        metadata: { question: pricingFAQ[i].q.en },
+      });
+    }
+  };
+
+  return (
+    <section className="py-16 bg-white">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <h2 className="text-2xl sm:text-3xl font-bold text-navy-900 text-center mb-8">
+          {l === 'es' ? 'Preguntas frecuentes' : 'Frequently asked questions'}
+        </h2>
+        <div className="space-y-3">
+          {pricingFAQ.map((faq, i) => (
+            <div key={i} className="border border-slate-200 rounded-xl overflow-hidden">
+              <button
+                onClick={() => toggle(i)}
+                className="w-full flex items-center justify-between gap-3 p-5 text-left bg-white hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500"
+                aria-expanded={openIndex === i}
+              >
+                <span className="font-semibold text-navy-900 text-sm sm:text-base">{faq.q[l]}</span>
+                {openIndex === i ? (
+                  <ChevronUp className="w-5 h-5 text-teal-600 flex-shrink-0" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-navy-400 flex-shrink-0" />
+                )}
+              </button>
+              {openIndex === i && (
+                <div className="px-5 pb-5 bg-slate-50 border-t border-slate-200">
+                  <p className="text-sm text-navy-600 leading-relaxed pt-4">{faq.a[l]}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+================================================================================
+FILE: src/components/shared/AcknowledgmentChecklist.tsx
+================================================================================
+import { useLanguage } from '../../contexts/LanguageContext';
+import { getDisclosure } from '../../lib/legal-disclosures';
+import type { DisclosureKey } from '../../lib/legal-disclosures';
+
+interface AcknowledgmentChecklistProps {
+  items: DisclosureKey[];
+  checkedItems: boolean[];
+  onChange: (index: number, checked: boolean) => void;
+  label?: string;
+}
+
+export default function AcknowledgmentChecklist({
+  items,
+  checkedItems,
+  onChange,
+  label,
+}: AcknowledgmentChecklistProps) {
+  const { language } = useLanguage();
+  const en = language === 'en';
+
+  return (
+    <div>
+      <p className="text-sm font-bold text-slate-800 mb-3">
+        {label || (en ? 'I understand and acknowledge:' : 'Entiendo y reconozco:')}
+      </p>
+      <div className="space-y-2.5">
+        {items.map((key, i) => (
+          <label key={key} className="flex items-start gap-3 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={checkedItems[i] || false}
+              onChange={(e) => onChange(i, e.target.checked)}
+              className="mt-0.5 w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"
+            />
+            <span className="text-sm text-slate-700 group-hover:text-slate-900">
+              {getDisclosure(key, language)}
+            </span>
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+================================================================================
+FILE: src/components/shared/AttorneyServiceDisclosure.tsx
+================================================================================
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Scale, ChevronDown, ChevronUp, Shield, AlertTriangle } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { getDisclosure } from '../../lib/legal-disclosures';
+
+interface AttorneyServiceDisclosureProps {
+  variant?: 'inline' | 'expandable' | 'compact';
+  context?: 'directory' | 'matching' | 'issue-pack' | 'case-predictor' | 'dashboard' | 'general';
+}
+
+const CONTEXT_NOTE: Record<string, Record<string, string>> = {
+  'issue-pack': {
+    en: 'Issue Packs include informational attorney referrals. Referrals are not endorsements and do not guarantee representation.',
+    es: 'Los Paquetes incluyen referencias informativas de abogados. No son recomendaciones ni garantizan representacion.',
+  },
+  'case-predictor': {
+    en: 'Case Predictor provides statistical estimates, not attorney advice. Consult a licensed attorney before acting on predictions.',
+    es: 'El Predictor de Casos proporciona estimaciones estadisticas, no consejo de abogado. Consulte un abogado antes de actuar.',
+  },
+  dashboard: {
+    en: 'Attorney connections shown here are informational. Confirm engagement terms directly with any attorney.',
+    es: 'Las conexiones con abogados son informativas. Confirme terminos directamente con cualquier abogado.',
+  },
+  directory: {
+    en: 'This directory is for informational purposes. Listings are not endorsements by ezLegal.ai.',
+    es: 'Este directorio es informativo. Los listados no son recomendaciones de ezLegal.ai.',
+  },
+  matching: {
+    en: 'Matches are based on practice area, jurisdiction, and availability. No attorney pays for placement.',
+    es: 'Los emparejamientos se basan en area de practica, jurisdicción y disponibilidad. Ningun abogado paga por aparecer.',
+  },
+  general: { en: '', es: '' },
+};
+
+export default function AttorneyServiceDisclosure({
+  variant = 'inline',
+  context = 'general',
+}: AttorneyServiceDisclosureProps) {
+  const { language } = useLanguage();
+  const en = language === 'en';
+  const [expanded, setExpanded] = useState(false);
+
+  const scopeText = getDisclosure('attorneyServiceScope', language);
+  const noRelText = getDisclosure('attorneyNoRelationship', language);
+  const feesText = getDisclosure('attorneyFeesSeparate', language);
+  const geoText = getDisclosure('attorneyGeographicLimits', language);
+
+  if (variant === 'compact') {
+    return (
+      <div className="flex items-start gap-2 text-xs text-navy-500">
+        <Scale className="w-3 h-3 mt-0.5 flex-shrink-0" aria-hidden="true" />
+        <span>
+          {noRelText}{' '}
+          <Link to="/scope-disclaimers" className="underline text-teal-600 hover:text-teal-700">
+            {en ? 'Full disclosures' : 'Divulgaciones completas'}
+          </Link>
+        </span>
+      </div>
+    );
+  }
+
+  if (variant === 'expandable') {
+    return (
+      <div className="border border-navy-200 rounded-xl overflow-hidden">
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-navy-50 hover:bg-navy-100 transition-colors text-left"
+          aria-expanded={expanded}
+        >
+          <div className="flex items-center gap-2">
+            <Shield className="w-4 h-4 text-navy-500" aria-hidden="true" />
+            <span className="text-sm font-semibold text-navy-700">
+              {en ? 'Attorney Service Disclosures' : 'Divulgaciones de Servicios de Abogados'}
+            </span>
+          </div>
+          {expanded ? <ChevronUp className="w-4 h-4 text-navy-400" /> : <ChevronDown className="w-4 h-4 text-navy-400" />}
+        </button>
+        {expanded && (
+          <div className="p-4 space-y-3 text-sm text-navy-600">
+            {CONTEXT_NOTE[context]?.[language] && (
+              <p className="font-medium text-navy-700">{CONTEXT_NOTE[context][language]}</p>
+            )}
+            <p>{scopeText}</p>
+            <div className="grid sm:grid-cols-2 gap-2">
+              <div className="bg-navy-50 rounded-lg p-2.5">
+                <p className="text-xs font-semibold text-navy-700 mb-1">{en ? 'Fees' : 'Honorarios'}</p>
+                <p className="text-xs">{feesText}</p>
+              </div>
+              <div className="bg-navy-50 rounded-lg p-2.5">
+                <p className="text-xs font-semibold text-navy-700 mb-1">{en ? 'Coverage' : 'Cobertura'}</p>
+                <p className="text-xs">{geoText}</p>
+              </div>
+            </div>
+            <Link to="/scope-disclaimers" className="inline-block text-xs text-teal-600 hover:text-teal-700 underline">
+              {en ? 'View full scope disclaimers' : 'Ver divulgaciones completas'}
+            </Link>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+      <div className="flex items-start gap-3">
+        <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+        <div className="space-y-2">
+          {CONTEXT_NOTE[context]?.[language] && (
+            <p className="text-sm font-semibold text-amber-800">{CONTEXT_NOTE[context][language]}</p>
+          )}
+          <p className="text-sm text-amber-700">{scopeText}</p>
+          <p className="text-xs text-amber-600">{feesText} {geoText}</p>
+          <Link to="/scope-disclaimers" className="inline-block text-xs text-teal-600 hover:text-teal-700 underline">
+            {en ? 'View full scope disclaimers' : 'Ver divulgaciones completas'}
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+================================================================================
+FILE: src/components/shared/CrisisResourceCard.tsx
+================================================================================
+import { Phone, Heart, ExternalLink, Users, Scale } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { getCrisisResources } from '../../lib/legal-disclosures';
+import type { CrisisResource } from '../../lib/legal-disclosures';
+import Bdi from '../Bdi';
+
+interface CrisisResourceCardProps {
+  variant?: 'full' | 'compact' | 'inline';
+  filterType?: CrisisResource['type'];
+  showAttorneyLinks?: boolean;
+}
+
+export default function CrisisResourceCard({
+  variant = 'full',
+  filterType,
+  showAttorneyLinks = true,
+}: CrisisResourceCardProps) {
+  const { language, t } = useLanguage();
+  const en = language === 'en';
+  const isRtl = language === 'ar' || language === 'he';
+  const resources = getCrisisResources(language, filterType);
+
+  const label = (enStr: string, esStr: string, tKey?: string) => {
+    if (isRtl && tKey) {
+      const v = t(tKey);
+      if (v && v !== tKey) return v;
+    }
+    return en ? enStr : esStr;
+  };
+
+  if (variant === 'inline') {
+    return (
+      <div className="flex flex-wrap gap-2">
+        <a
+          href="tel:988"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg transition-colors"
+        >
+          <Phone className="w-3 h-3" aria-hidden="true" />
+          <Bdi>988</Bdi>
+        </a>
+        <a
+          href="tel:1-800-799-7233"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg transition-colors"
+        >
+          <Heart className="w-3 h-3" aria-hidden="true" />
+          {label('DV Hotline', 'Linea de VD', 'crisisResources.dvHotline')}
+        </a>
+        <Link
+          to="/emergency-resources"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-red-300 text-red-700 text-xs font-semibold rounded-lg"
+        >
+          {label('All Crisis Resources', 'Todos los Recursos de Crisis', 'crisisResources.title')}
+          <ExternalLink className="w-3 h-3" aria-hidden="true" />
+        </Link>
+      </div>
+    );
+  }
+
+  if (variant === 'compact') {
+    return (
+      <div className="flex flex-wrap gap-2">
+        <a
+          href="tel:988"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm"
+        >
+          <Phone className="w-4 h-4" aria-hidden="true" />
+          <Bdi>988</Bdi>
+        </a>
+        <a
+          href="tel:1-800-799-7233"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm"
+        >
+          <Heart className="w-4 h-4" aria-hidden="true" />
+          {label('DV Hotline', 'Linea de Violencia Domestica', 'crisisResources.dvHotline')}
+        </a>
+        <Link
+          to="/emergency-resources"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-red-300 text-red-700 hover:bg-red-50 text-sm font-semibold rounded-lg transition-colors"
+        >
+          {label('All Resources', 'Todos los Recursos', 'crisisResources.title')}
+          <ExternalLink className="w-3 h-3" aria-hidden="true" />
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-red-50 border-2 border-red-300 rounded-xl p-6" role="alert">
+      <div className="flex items-start gap-3 mb-4">
+        <Heart className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+        <div>
+          <h3 className="font-bold text-red-900">
+            {label('Your Safety Comes First', 'Tu Seguridad es lo Primero', 'crisisResources.title')}
+          </h3>
+          <p className="text-sm text-red-800 mt-1">
+            {isRtl ? (
+              <>
+                {t('crisisResources.call911')} {t('crisisResources.call211')}
+              </>
+            ) : en
+              ? <>If you or someone you know is in immediate danger, please contact emergency services (<Bdi>911</Bdi>) or one of these resources.</>
+              : <>Si usted o alguien que conoce esta en peligro inmediato, contacte los servicios de emergencia (<Bdi>911</Bdi>) o uno de estos recursos.</>}
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-3 mb-4">
+        {resources.map((resource) => (
+          <div key={resource.name} className="flex items-center justify-between p-3 bg-white rounded-lg border border-red-200">
+            <div>
+              <div className="font-medium text-stone-900 text-sm">{resource.name}</div>
+              <div className="flex items-center gap-1 text-red-700 text-sm font-semibold">
+                <Phone className="w-3 h-3" aria-hidden="true" />
+                <Bdi>{resource.phone}</Bdi>
+              </div>
+            </div>
+            <a
+              href={resource.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-red-600 hover:text-red-700"
+              aria-label={`${resource.name} (opens in new tab)`}
+            >
+              <ExternalLink className="w-4 h-4" aria-hidden="true" />
+            </a>
+          </div>
+        ))}
+      </div>
+
+      {showAttorneyLinks && (
+        <div className="grid sm:grid-cols-2 gap-3 mb-4">
+          <Link
+            to="/pro-bono"
+            className="flex items-start gap-3 p-3 bg-white border border-red-200 rounded-lg hover:border-green-300 hover:bg-green-50 transition-all group"
+          >
+            <Users className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <div>
+              <span className="text-sm font-semibold text-slate-900 group-hover:text-green-700">
+                {label('Free Legal Aid', 'Ayuda Legal Gratuita', 'nav.freeChat')}
+              </span>
+            </div>
+          </Link>
+          <Link
+            to="/find-attorney"
+            className="flex items-start gap-3 p-3 bg-white border border-red-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all group"
+          >
+            <Scale className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <div>
+              <span className="text-sm font-semibold text-slate-900 group-hover:text-blue-700">
+                {label('Find an Attorney', 'Encontrar un Abogado', 'nav.findAttorney')}
+              </span>
+            </div>
+          </Link>
+        </div>
+      )}
+
+      <Link
+        to="/emergency-resources"
+        className="inline-flex items-center gap-2 text-sm font-medium text-red-700 hover:text-red-800"
+      >
+        {label('View all crisis resources', 'Ver todos los recursos de crisis', 'crisisResources.title')}
+        <ExternalLink className="w-3 h-3" aria-hidden="true" />
+      </Link>
+    </div>
+  );
+}
+
+
+================================================================================
+FILE: src/components/shared/JurisdictionSelector.tsx
+================================================================================
+import { MapPin, ChevronDown } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { US_STATES, US_TERRITORIES, JURISDICTION_GROUPS } from '../../data/jurisdictions';
+import type { Jurisdiction } from '../../data/jurisdictions';
+import { AccessibleCombobox } from '../inclusive';
+
+const TYPE_LABEL: Record<Jurisdiction['type'], string> = {
+  'us-state': 'State',
+  federal: 'Federal',
+  territory: 'Territory',
+  international: 'International',
+};
+
+interface JurisdictionSelectorProps {
+  value: string;
+  onChange: (value: string) => void;
+  label?: string;
+  description?: string;
+  variant?: 'default' | 'compact' | 'card';
+  showGroups?: boolean;
+  statesOnly?: boolean;
+  id?: string;
+}
+
+export default function JurisdictionSelector({
+  value,
+  onChange,
+  label,
+  description,
+  variant = 'default',
+  showGroups = false,
+  statesOnly = true,
+  id,
+}: JurisdictionSelectorProps) {
+  const { language } = useLanguage();
+  const en = language === 'en';
+  const selectId = id || 'jurisdiction-selector';
+
+  const defaultLabel = en ? 'What state are you in?' : 'En que estado se encuentra?';
+  const defaultDesc = en
+    ? 'Laws vary significantly by state. This helps us provide relevant information.'
+    : 'Las leyes varian significativamente por estado. Esto nos ayuda a proporcionar información relevante.';
+  const placeholder = en ? 'Select your state...' : 'Seleccione su estado...';
+
+  const jurisdictions: Jurisdiction[] = statesOnly
+    ? [...US_STATES, ...US_TERRITORIES]
+    : JURISDICTION_GROUPS.flatMap(g => g.options);
+
+  if (variant === 'compact') {
+    return (
+      <div className="relative">
+        <select
+          id={selectId}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          aria-label={label || defaultLabel}
+          className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white"
+        >
+          <option value="">{placeholder}</option>
+          {showGroups ? (
+            JURISDICTION_GROUPS.map(group => (
+              <optgroup key={group.label} label={group.label}>
+                {group.options.map(j => (
+                  <option key={j.code} value={j.code}>{j.name}</option>
+                ))}
+              </optgroup>
+            ))
+          ) : (
+            jurisdictions.map(j => (
+              <option key={j.code} value={j.code}>{j.name}</option>
+            ))
+          )}
+        </select>
+        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" aria-hidden="true" />
+      </div>
+    );
+  }
+
+  if (variant === 'card') {
+    return (
+      <div className="bg-stone-50 border border-stone-200 rounded-xl p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-stone-100 rounded-lg flex items-center justify-center">
+            <MapPin className="w-5 h-5 text-stone-600" aria-hidden="true" />
+          </div>
+          <div>
+            <h3 className="font-bold text-stone-900" id={`${selectId}-label`}>
+              {label || (en ? 'Confirm Your Jurisdiction' : 'Confirma Tu Jurisdicción')}
+            </h3>
+            <p className="text-xs text-stone-500">{description || defaultDesc}</p>
+          </div>
+        </div>
+        <div className="relative">
+          <select
+            id={selectId}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            aria-labelledby={`${selectId}-label`}
+            className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white"
+          >
+            <option value="">{placeholder}</option>
+            {jurisdictions.map(j => (
+              <option key={j.code} value={j.code}>{j.name}</option>
+            ))}
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400 pointer-events-none" aria-hidden="true" />
+        </div>
+        {value && (
+          <div className="mt-3 flex items-center gap-2 text-sm text-stone-600">
+            <MapPin className="w-4 h-4 text-teal-600" aria-hidden="true" />
+            <span>
+              <strong>{jurisdictions.find(j => j.code === value)?.name}</strong>
+              <button
+                onClick={() => onChange('')}
+                className="ml-2 text-teal-600 hover:text-teal-700 underline"
+              >
+                {en ? 'Change' : 'Cambiar'}
+              </button>
+            </span>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  const options = jurisdictions.map((j) => ({
+    value: j.code,
+    label: j.name,
+    description: TYPE_LABEL[j.type],
+  }));
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+          <MapPin className="w-5 h-5 text-[#0067FF]" aria-hidden="true" />
+        </div>
+        <div>
+          <h4 className="font-semibold text-slate-900 mb-1" id={`${selectId}-label`}>
+            {label || defaultLabel}
+          </h4>
+          <p className="text-sm text-slate-600">{description || defaultDesc}</p>
+        </div>
+      </div>
+      <AccessibleCombobox
+        label={label || defaultLabel}
+        helpText={description || defaultDesc}
+        options={options}
+        value={value || null}
+        onChange={(v) => onChange(v ?? '')}
+        placeholder={placeholder}
+        name={selectId}
+      />
+    </div>
+  );
+}
+
+
+================================================================================
+FILE: src/components/shared/LegalDisclaimer.tsx
+================================================================================
+import { Info, AlertTriangle, Lock, UserX, Trash2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { getDisclosure } from '../../lib/legal-disclosures';
+import type { DisclosureKey } from '../../lib/legal-disclosures';
+
+type Variant = 'banner' | 'inline' | 'card' | 'footer';
+
+interface LegalDisclaimerProps {
+  variant?: Variant;
+  keys?: DisclosureKey[];
+  jurisdiction?: string;
+  showLinks?: boolean;
+  className?: string;
+}
+
+const DEFAULT_KEYS: DisclosureKey[] = ['notAdvice', 'noAttorneyClient', 'consultAttorney'];
+
+export default function LegalDisclaimer({
+  variant = 'inline',
+  keys = DEFAULT_KEYS,
+  jurisdiction,
+  showLinks = false,
+  className = '',
+}: LegalDisclaimerProps) {
+  const { language } = useLanguage();
+  const en = language === 'en';
+
+  const texts = keys.map(key => getDisclosure(key, language));
+
+  if (variant === 'banner') {
+    return (
+      <div className={`bg-amber-50 border border-amber-200 rounded-xl p-4 ${className}`}>
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <h4 className="font-semibold text-amber-900 mb-1">
+              {en ? 'Important Disclaimer' : 'Aviso Importante'}
+            </h4>
+            <div className="text-xs text-amber-800 space-y-1">
+              {texts.map((text, i) => (
+                <p key={i}>{i === 0 ? <strong>{text}</strong> : text}</p>
+              ))}
+              {jurisdiction && (
+                <p>
+                  {en
+                    ? <>Information is tailored to <strong>{jurisdiction}</strong> law where possible.</>
+                    : <>La información esta adaptada a la ley de <strong>{jurisdiction}</strong> cuando es posible.</>}
+                </p>
+              )}
+            </div>
+            {showLinks && (
+              <div className="flex flex-wrap items-center gap-3 mt-2">
+                <Link to="/scope-disclaimers" className="text-xs text-amber-700 hover:underline font-medium">
+                  {en ? 'Full Disclaimers' : 'Descargos Completos'}
+                </Link>
+                <Link to="/trust-center" className="text-xs text-amber-700 hover:underline font-medium">
+                  {en ? 'Trust Center' : 'Centro de Confianza'}
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === 'card') {
+    return (
+      <div className={`bg-slate-50 rounded-xl p-4 space-y-3 text-sm text-slate-700 ${className}`}>
+        <p><strong>{getDisclosure('notAdvice', language)}</strong></p>
+        <ul className="space-y-2 pl-4">
+          {keys.filter(k => k !== 'notAdvice').map(key => (
+            <li key={key} className="flex items-start gap-2">
+              <span className="text-slate-400">-</span>
+              <span>{getDisclosure(key, language)}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  if (variant === 'footer') {
+    return (
+      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-navy-600 ${className}`}>
+        <div className="flex items-start gap-2">
+          <Info className="w-3.5 h-3.5 text-amber-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
+          <span>{getDisclosure('notAdvice', language)}</span>
+        </div>
+        <div className="flex items-start gap-2">
+          <Lock className="w-3.5 h-3.5 text-green-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+          <span>{en ? 'AES-256 encrypted' : 'Encriptado AES-256'}</span>
+        </div>
+        <div className="flex items-start gap-2">
+          <UserX className="w-3.5 h-3.5 text-slate-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
+          <span>{getDisclosure('noPrivilege', language)}</span>
+        </div>
+        <div className="flex items-start gap-2">
+          <Trash2 className="w-3.5 h-3.5 text-slate-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
+          <Link to="/privacy" className="text-teal-600 hover:underline">
+            {en ? 'Data retention & deletion' : 'Retencion y eliminacion de datos'}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <p className={`text-xs text-slate-500 text-center ${className}`}>
+      {texts.join(' ')}
+    </p>
+  );
+}
+
+
+================================================================================
+FILE: src/components/templates/LegalDisclosureModule.tsx
+================================================================================
+import { AlertTriangle, Info, Shield, Scale } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { LEGAL_DISCLOSURES, getDisclosure } from '../../lib/microcopy';
+
+type DisclosureKey = keyof typeof LEGAL_DISCLOSURES;
+
+interface LegalDisclosureModuleProps {
+  disclosures: DisclosureKey[];
+  variant?: 'inline' | 'banner' | 'footer' | 'modal';
+  showIcon?: boolean;
+  className?: string;
+}
+
+const variantStyles = {
+  inline: 'bg-navy-50 border border-navy-200 rounded-lg px-4 py-3',
+  banner: 'bg-navy-800/60 backdrop-blur-sm border border-navy-600/50 rounded-xl px-6 py-4',
+  footer: 'bg-slate-50 border-t border-slate-200 px-6 py-4',
+  modal: 'bg-amber-50 border border-amber-200 rounded-lg px-4 py-3'
+};
+
+const textStyles = {
+  inline: 'text-navy-700 text-sm',
+  banner: 'text-white/90 text-base',
+  footer: 'text-slate-600 text-xs',
+  modal: 'text-amber-800 text-sm'
+};
+
+const iconStyles = {
+  inline: 'text-navy-500',
+  banner: 'text-teal-300',
+  footer: 'text-slate-400',
+  modal: 'text-amber-600'
+};
+
+export default function LegalDisclosureModule({
+  disclosures,
+  variant = 'inline',
+  showIcon = true,
+  className = ''
+}: LegalDisclosureModuleProps) {
+  const { language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
+
+  const Icon = variant === 'modal' ? AlertTriangle : variant === 'banner' ? Shield : Info;
+
+  const content = disclosures.map(key => getDisclosure(key, lang)).join(' ');
+
+  return (
+    <div className={`${variantStyles[variant]} ${className}`}>
+      <div className="flex items-start gap-3">
+        {showIcon && (
+          <Icon className={`w-5 h-5 flex-shrink-0 mt-0.5 ${iconStyles[variant]}`} aria-hidden="true" />
+        )}
+        <p className={`${textStyles[variant]} leading-relaxed`}>
+          {content}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+interface StandardDisclaimerProps {
+  variant?: 'hero' | 'form' | 'results' | 'compact';
+  className?: string;
+}
+
+export function StandardDisclaimer({ variant = 'hero', className = '' }: StandardDisclaimerProps) {
+  const { language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
+
+  if (variant === 'hero') {
+    return (
+      <LegalDisclosureModule
+        disclosures={['NOT_LEGAL_ADVICE', 'NO_ATTORNEY_CLIENT']}
+        variant="banner"
+        className={className}
+      />
+    );
+  }
+
+  if (variant === 'form') {
+    return (
+      <LegalDisclosureModule
+        disclosures={['NOT_LEGAL_ADVICE', 'CONFIDENTIALITY']}
+        variant="inline"
+        className={className}
+      />
+    );
+  }
+
+  if (variant === 'results') {
+    return (
+      <LegalDisclosureModule
+        disclosures={['NOT_LEGAL_ADVICE', 'AI_TRANSPARENCY', 'JURISDICTION_LIMITS']}
+        variant="inline"
+        className={className}
+      />
+    );
+  }
+
+  return (
+    <div className={`text-xs text-slate-500 ${className}`}>
+      {getDisclosure('NOT_LEGAL_ADVICE', lang)}
+    </div>
+  );
+}
+
+export function ReferralDisclaimer({ className = '' }: { className?: string }) {
+  return (
+    <LegalDisclosureModule
+      disclosures={['REFERRAL_ELIGIBILITY', 'NO_ATTORNEY_CLIENT']}
+      variant="inline"
+      className={className}
+    />
+  );
+}
+
+export function ProBonoDisclaimer({ className = '' }: { className?: string }) {
+  return (
+    <LegalDisclosureModule
+      disclosures={['PRO_BONO_ELIGIBILITY', 'NO_ATTORNEY_CLIENT']}
+      variant="inline"
+      className={className}
+    />
+  );
+}
+
+
+================================================================================
+FILE: src/components/templates/TrustModule.tsx
+================================================================================
+import { Lock, Clock, ShieldCheck, Eye, DollarSign, FileCheck, UserCheck } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { TRUST_SIGNALS, getTrustSignal } from '../../lib/microcopy';
+
+type TrustSignalKey = keyof typeof TRUST_SIGNALS;
+
+interface TrustModuleProps {
+  signals: TrustSignalKey[];
+  variant?: 'chips' | 'list' | 'inline' | 'minimal';
+  className?: string;
+}
+
+const iconMap: Record<TrustSignalKey, typeof Lock> = {
+  SECURE: Lock,
+  AVAILABLE_24_7: Clock,
+  NO_SIGNUP: ShieldCheck,
+  CONFIDENTIAL: Eye,
+  FREE_TO_USE: DollarSign,
+  REAL_CITATIONS: FileCheck,
+  EXPERT_REVIEWED: UserCheck
+};
+
+export default function TrustModule({
+  signals,
+  variant = 'chips',
+  className = ''
+}: TrustModuleProps) {
+  const { language } = useLanguage();
+  const lang = language === 'es' ? 'es' : 'en';
+
+  if (variant === 'chips') {
+    return (
+      <div className={`flex flex-wrap items-center justify-center gap-4 sm:gap-6 ${className}`}>
+        {signals.map(signal => {
+          const Icon = iconMap[signal];
+          return (
+            <div
+              key={signal}
+              className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full"
+            >
+              <Icon className="w-4 h-4 text-teal-300" aria-hidden="true" />
+              <span className="text-white font-medium text-sm">
+                {getTrustSignal(signal, lang)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (variant === 'list') {
+    return (
+      <ul className={`space-y-2 ${className}`}>
+        {signals.map(signal => {
+          const Icon = iconMap[signal];
+          return (
+            <li key={signal} className="flex items-center gap-3">
+              <Icon className="w-5 h-5 text-teal-600" aria-hidden="true" />
+              <span className="text-navy-700">{getTrustSignal(signal, lang)}</span>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
+  if (variant === 'inline') {
+    return (
+      <div className={`flex flex-wrap items-center gap-4 text-sm text-navy-500 ${className}`}>
+        {signals.map((signal, index) => {
+          const Icon = iconMap[signal];
+          return (
+            <span key={signal} className="flex items-center gap-1.5">
+              <Icon className="w-4 h-4 text-teal-600" aria-hidden="true" />
+              {getTrustSignal(signal, lang)}
+              {index < signals.length - 1 && <span className="mx-2 text-navy-300">|</span>}
+            </span>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return (
+    <div className={`flex items-center gap-4 ${className}`}>
+      {signals.slice(0, 3).map(signal => {
+        const Icon = iconMap[signal];
+        return (
+          <div key={signal} className="flex items-center gap-1.5 text-sm text-navy-500">
+            <Icon className="w-4 h-4 text-teal-600" aria-hidden="true" />
+            <span>{getTrustSignal(signal, lang)}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export function HeroTrustChips({ className = '' }: { className?: string }) {
+  return (
+    <TrustModule
+      signals={['SECURE', 'AVAILABLE_24_7', 'NO_SIGNUP']}
+      variant="chips"
+      className={className}
+    />
+  );
+}
+
+export function FormTrustSignals({ className = '' }: { className?: string }) {
+  return (
+    <TrustModule
+      signals={['CONFIDENTIAL', 'SECURE']}
+      variant="inline"
+      className={className}
+    />
+  );
+}
+
+export function ResultsTrustSignals({ className = '' }: { className?: string }) {
+  return (
+    <TrustModule
+      signals={['REAL_CITATIONS', 'EXPERT_REVIEWED']}
+      variant="inline"
+      className={className}
+    />
+  );
+}
+

@@ -1,0 +1,30 @@
+# ezLegal.ai - Complete Site Audit Export
+# Generated: 2026-06-13T03:42:25.810Z
+#
+# This export contains the COMPLETE source code for all 81 pages,
+# 167 components, and 77 library/service files.
+#
+# HOW TO USE WITH GPT 5.5 PRO:
+# 1. Upload these files as attachments to your GPT conversation
+# 2. Ask GPT to audit specific aspects (UI/UX, accessibility, SEO, security, etc.)
+# 3. No crawling needed - all content is in these files
+#
+# FILE STRUCTURE:
+# - 00_INSTRUCTIONS.txt        (this file)
+# - 01_ROUTES_AND_CONFIG.txt   (route manifest + config)
+# - 02_PAGES_*.txt             (all page components, chunked)
+# - 03_COMPONENTS_*.txt        (all UI components, chunked)
+# - 04_LIB_SERVICES_*.txt      (libs, hooks, services, chunked)
+# - 05_SUPABASE.txt            (migrations list + edge functions)
+#
+# TOTAL FILES: 325
+# TOTAL ROUTES: ~80 defined routes
+#
+# AUDIT PROMPT SUGGESTIONS:
+# - "Audit all pages for cognitive overload patterns"
+# - "Review all components for accessibility (WCAG 2.1 AA)"
+# - "Analyze conversion funnel from Home to Signup/Checkout"
+# - "Check all forms for validation and error handling"
+# - "Review SEO: meta tags, heading hierarchy, semantic HTML"
+# - "Security review: XSS vectors, input sanitization, auth flows"
+# - "Performance: bundle size, lazy loading, render optimization"

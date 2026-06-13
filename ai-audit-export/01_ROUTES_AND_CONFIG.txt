@@ -1,0 +1,931 @@
+================================================================================
+ROUTE MANIFEST
+================================================================================
+export const ROUTES = {
+  HOME: '/',
+  LOGIN: '/login',
+  SIGNUP: '/signup',
+  FORGOT_PASSWORD: '/forgot-password',
+  RESET_PASSWORD: '/reset-password',
+  PRICING: '/pricing',
+  CHECKOUT: '/checkout',
+  CONTACT: '/contact',
+  FEATURES: '/features',
+  ABOUT: '/about',
+  EZREADS: '/ezreads',
+  PRO_BONO: '/pro-bono',
+  EMERGENCY_RESOURCES: '/emergency-resources',
+  FOR_ORGANIZATIONS: '/for-organizations',
+  FOR_BUSINESS: '/for-business',
+  FOR_INDIVIDUALS: '/for-individuals',
+  FOR_PARTNERS: '/for-partners',
+  SHARE_PERSPECTIVE: '/share-perspective',
+  SCOPE_DISCLAIMERS: '/scope-disclaimers',
+  SCHEDULE_DEMO: '/schedule-demo',
+  LSO_DASHBOARD: '/lso-dashboard',
+  GRANT_REPORTING: '/grant-reporting',
+  AI_GOVERNANCE: '/ai-governance',
+  TERMS: '/terms',
+  PRIVACY: '/privacy',
+  TRUST_CENTER: '/trust-center',
+  ENTERPRISE_SECURITY: '/enterprise-security',
+  HOW_IT_WORKS: '/how-it-works',
+  PARTNER_HUB: '/partner-hub',
+  MEDIA_KIT: '/media-kit',
+  HOW_REPORTS_REVIEWED: '/how-reports-are-reviewed',
+  ESPANOL: '/espanol',
+  ES: '/es',
+  BUSINESS: '/business',
+  PARTNERS: '/partners',
+  URGENT_HELP: '/urgent-help',
+  ACCESSIBILITY: '/accessibility',
+  ACCESS_GATE: '/access',
+  NEGOTIATE: '/negotiate',
+  SITE_REVIEW: '/site-review',
+  SLA: '/sla',
+  FIND_ATTORNEY: '/find-attorney',
+  ASK: '/ask',
+  ISSUE_PACKS: '/issue-packs',
+  CASE_PREDICTOR: '/case-predictor',
+  CASE_PREDICTOR_START: '/case-predictor/start',
+  CHATBOT: '/chatbot',
+  CHATBOT_STANDALONE: '/chatbot-standalone',
+  DASHBOARD: '/dashboard',
+  DASHBOARD_AI_ASSISTANT: '/dashboard/ai-assistant',
+  DASHBOARD_CASES: '/dashboard/cases',
+  DASHBOARD_MATTERS: '/dashboard/matters',
+  DASHBOARD_CLIENTS: '/dashboard/clients',
+  DASHBOARD_HISTORY: '/dashboard/history',
+  DASHBOARD_DOCUMENTS: '/dashboard/documents',
+  DASHBOARD_RESEARCH: '/dashboard/research',
+  DASHBOARD_LAWYER_PROFILES: '/dashboard/lawyer-profiles',
+  DASHBOARD_PROFILE: '/dashboard/profile',
+  DASHBOARD_WEBSITE_INTEGRATION: '/dashboard/website-integration',
+  ADMIN: '/admin',
+} as const;
+
+export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES];
+
+const REDIRECT_MAP: Record<string, string> = {
+  '/ez-reads': ROUTES.EZREADS,
+  '/terms-of-service': ROUTES.TERMS,
+  '/privacy-policy': ROUTES.PRIVACY,
+  '/trust-safety': ROUTES.TRUST_CENTER,
+  '/app': '/chat',
+  '/chatbot': '/chat',
+  '/chat-v2': '/chat',
+  '/chatbot-standalone': '/chat',
+};
+
+const DYNAMIC_PATTERNS = [
+  /^\/ask\/[a-z-]+$/,
+  /^\/p\/[a-z0-9-]+$/,
+  /^\/admin\/.+$/,
+  /^\/dashboard\/.+$/,
+];
+
+const ALL_STATIC_ROUTES = new Set([
+  ...Object.values(ROUTES),
+  ...Object.keys(REDIRECT_MAP),
+  '/welcome',
+]);
+
+export function isValidRoute(path: string): boolean {
+  const cleanPath = path.split('?')[0].split('#')[0];
+  if (ALL_STATIC_ROUTES.has(cleanPath)) return true;
+  return DYNAMIC_PATTERNS.some((p) => p.test(cleanPath));
+}
+
+export function getRedirectTarget(path: string): string | null {
+  return REDIRECT_MAP[path] || null;
+}
+
+export function askTopicRoute(topic: string): string {
+  return `${ROUTES.ASK}/${topic}`;
+}
+
+export function issuePacksRoute(topic?: string): string {
+  return topic ? `${ROUTES.ISSUE_PACKS}?topic=${topic}` : ROUTES.ISSUE_PACKS;
+}
+
+export function signupRoute(plan?: string, trial?: number): string {
+  const params = new URLSearchParams();
+  if (plan) params.set('plan', plan);
+  if (trial) params.set('trial', String(trial));
+  const qs = params.toString();
+  return qs ? `${ROUTES.SIGNUP}?${qs}` : ROUTES.SIGNUP;
+}
+
+export function chatbotRoute(query?: string): string {
+  if (!query) return '/chat';
+  return `/chat?q=${encodeURIComponent(query)}`;
+}
+
+export function checkoutRoute(plan: string): string {
+  return `${ROUTES.CHECKOUT}?plan=${plan}`;
+}
+
+
+================================================================================
+APP ROUTER
+================================================================================
+import { useEffect, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { LanguageProvider } from './contexts/LanguageContext';
+import { PersonalizationProvider } from './contexts/PersonalizationContext';
+import { TenantProvider } from './contexts/TenantContext';
+import { DemoProvider, useDemo } from './contexts/DemoContext';
+import { ModalProvider } from './contexts/ModalContext';
+import { PersonaProvider } from './contexts/PersonaContext';
+import { FloatingChromeProvider } from './contexts/FloatingChromeContext';
+import Layout from './components/Layout';
+import Navigation from './components/Navigation';
+import Footer from './components/Footer';
+import SkipLink from './components/SkipLink';
+import ReadingPreferencesToolbar from './components/ReadingPreferencesToolbar';
+import { useRouteFocus } from './hooks/useRouteFocus';
+import AdminLayout from './components/AdminLayout';
+import DemoModeBanner from './components/DemoModeBanner';
+import { startLinkHealthMonitoring, validateAnchor } from './lib/link-health';
+import { useAccessibilityPreferences } from './hooks/useAccessibilityPreferences';
+import { useTheme } from './hooks/useTheme';
+import ErrorBoundary from './components/ErrorBoundary';
+import OfflineBanner from './components/OfflineBanner';
+import ConsentBanner from './components/ConsentBanner';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+import DeprecatedRouteRedirect from './components/DeprecatedRouteRedirect';
+import { installGlobalErrorHandlers } from './lib/error-handler';
+import { captureUTMParams } from './lib/utm';
+
+if (typeof window !== 'undefined') {
+  installGlobalErrorHandlers();
+  captureUTMParams();
+}
+
+function PreferenceLoader() {
+  useAccessibilityPreferences();
+  useTheme();
+  return null;
+}
+
+const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/Login'));
+const Signup = lazy(() => import('./pages/Signup'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const AuthCallback = lazy(() => import('./pages/AuthCallback'));
+const Chatbot = lazy(() => import('./pages/Chatbot'));
+const SimpleChatbot = lazy(() => import('./pages/SimpleChatbot'));
+const History = lazy(() => import('./pages/History'));
+const Documents = lazy(() => import('./pages/Documents'));
+const ICPTemplateLibrary = lazy(() => import('./pages/ICPTemplateLibrary'));
+const Research = lazy(() => import('./pages/Research'));
+const LawyerProfiles = lazy(() => import('./pages/LawyerProfiles'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Pricing = lazy(() => import('./pages/Pricing'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const Billing = lazy(() => import('./pages/Billing'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Features = lazy(() => import('./pages/Features'));
+const About = lazy(() => import('./pages/About'));
+const EZReads = lazy(() => import('./pages/EZReads'));
+const Admin = lazy(() => import('./pages/Admin'));
+const AdminOverview = lazy(() => import('./pages/AdminOverview'));
+const AdminAuditLog = lazy(() => import('./pages/AdminAuditLog'));
+const CollateralStudio = lazy(() => import('./pages/CollateralStudio'));
+const CollateralEditor = lazy(() => import('./pages/CollateralEditor'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const LegalSafetyNet = lazy(() => import('./pages/LegalSafetyNet'));
+const AIAssistant = lazy(() => import('./pages/AIAssistant'));
+const ProBonoIntake = lazy(() => import('./pages/ProBonoIntake'));
+const Cases = lazy(() => import('./pages/Cases'));
+const Matters = lazy(() => import('./pages/Matters'));
+const Clients = lazy(() => import('./pages/Clients'));
+const EmergencyResources = lazy(() => import('./pages/EmergencyResources'));
+const ForOrganizations = lazy(() => import('./pages/ForOrganizations'));
+const ForBusiness = lazy(() => import('./pages/ForBusiness'));
+const LSODashboard = lazy(() => import('./pages/LSODashboard'));
+const GrantReporting = lazy(() => import('./pages/GrantReporting'));
+const AIGovernance = lazy(() => import('./pages/AIGovernance'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const PrivacyAtAGlance = lazy(() => import('./pages/PrivacyAtAGlance'));
+const PrivacyFAQ = lazy(() => import('./pages/PrivacyFAQ'));
+const SecurityFAQ = lazy(() => import('./pages/SecurityFAQ'));
+const TrustCenter = lazy(() => import('./pages/TrustCenter'));
+const AccessibilityStatement = lazy(() => import('./pages/AccessibilityStatement'));
+const WebsiteIntegration = lazy(() => import('./pages/WebsiteIntegration'));
+const ForIndividuals = lazy(() => import('./pages/ForIndividuals'));
+const ScopeDisclaimers = lazy(() => import('./pages/ScopeDisclaimers'));
+const ScheduleDemo = lazy(() => import('./pages/ScheduleDemo'));
+const EnterpriseSecurity = lazy(() => import('./pages/EnterpriseSecurity'));
+const HowItWorks = lazy(() => import('./pages/HowItWorks'));
+const ForPartners = lazy(() => import('./pages/ForPartners'));
+const SharePerspective = lazy(() => import('./pages/SharePerspective'));
+const HowReportsAreReviewed = lazy(() => import('./pages/HowReportsAreReviewed'));
+const Ask = lazy(() => import('./pages/Ask'));
+const EspanolLanding = lazy(() => import('./pages/EspanolLanding'));
+const AccessGate = lazy(() => import('./pages/AccessGate'));
+const Negotiate = lazy(() => import('./pages/Negotiate'));
+const PartnerHub = lazy(() => import('./pages/PartnerHub'));
+const PartnerLanding = lazy(() => import('./pages/PartnerLanding'));
+const ChannelLanding = lazy(() => import('./pages/ChannelLanding'));
+const MediaKit = lazy(() => import('./pages/MediaKit'));
+const SiteReview = lazy(() => import('./pages/SiteReview'));
+const SLA = lazy(() => import('./pages/SLA'));
+const IssuePacks = lazy(() => import('./pages/IssuePacks'));
+const CasePredictor = lazy(() => import('./pages/CasePredictor'));
+const CasePredictorStart = lazy(() => import('./pages/CasePredictorStart'));
+const ChatV2 = lazy(() => import('./pages/ChatV2'));
+const FeatureGuide = lazy(() => import('./pages/FeatureGuide'));
+const PersonaIntake = lazy(() => import('./pages/PersonaIntake'));
+const IcpPrototype = lazy(() => import('./pages/IcpPrototype'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const Toolkit = lazy(() => import('./pages/Toolkit'));
+const AIModelCard = lazy(() => import('./pages/AIModelCard'));
+const AlgorithmicImpactAssessment = lazy(() => import('./pages/AlgorithmicImpactAssessment'));
+const BiasMonitoring = lazy(() => import('./pages/BiasMonitoring'));
+const EsLanding = lazy(() => import('./pages/gtm/EsLanding'));
+const BusinessLanding = lazy(() => import('./pages/gtm/BusinessLanding'));
+const PartnersLanding = lazy(() => import('./pages/gtm/PartnersLanding'));
+const UrgentHelp = lazy(() => import('./pages/gtm/UrgentHelp'));
+
+function PageLoader() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-navy-50">
+      <div className="flex flex-col items-center gap-3">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600" />
+        <p className="text-sm text-navy-500 font-medium">Loading...</p>
+      </div>
+    </div>
+  );
+}
+
+function PublicLawyerProfiles() {
+  return (
+    <>
+      <Navigation />
+      <main id="main-content" className="pt-24">
+        <Suspense fallback={<PageLoader />}>
+          <LawyerProfiles />
+        </Suspense>
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setTimeout(() => validateAnchor(), 300);
+  }, [pathname]);
+
+  return null;
+}
+
+function RouteFocusManager() {
+  useRouteFocus();
+  return null;
+}
+
+startLinkHealthMonitoring();
+
+function isAuditMode(): boolean {
+  try {
+    if (sessionStorage.getItem('ezlegal_demo_mode') === 'true') return true;
+  } catch {}
+  const params = new URLSearchParams(window.location.search);
+  return params.get('demo') === 'audit';
+}
+
+function PrivateRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  const { isDemoMode } = useDemo();
+  const location = useLocation();
+
+  if (isDemoMode || isAuditMode()) {
+    return <>{children}</>;
+  }
+
+  if (loading) {
+    return <PageLoader />;
+  }
+
+  if (!user) {
+    const redirectPath = encodeURIComponent(location.pathname + location.search);
+    return <Navigate to={`/login?redirect=${redirectPath}`} replace />;
+  }
+
+  return <>{children}</>;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      <RouteFocusManager />
+      <TenantProvider>
+        <LanguageProvider>
+          <PersonaProvider>
+          <AuthProvider>
+            <DemoProvider>
+            <ModalProvider>
+            <PersonalizationProvider>
+            <FloatingChromeProvider>
+              <SkipLink />
+              <PreferenceLoader />
+              <ReadingPreferencesToolbar />
+              <DemoModeBanner />
+              <OfflineBanner />
+              <ConsentBanner />
+              <PWAInstallPrompt />
+              <ErrorBoundary scope="routes">
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/start" element={<PersonaIntake />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/auth/callback" element={<AuthCallback />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/dashboard/billing" element={<Billing />} />
+                  <Route path="/billing" element={<DeprecatedRouteRedirect to="/dashboard/billing" oldPath="/billing" />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/features" element={<Features />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/ezreads" element={<EZReads />} />
+                  <Route path="/ez-reads" element={<DeprecatedRouteRedirect to="/ezreads" oldPath="/ez-reads" />} />
+                  <Route path="/pro-bono" element={<ProBonoIntake />} />
+                  <Route path="/emergency-resources" element={<EmergencyResources />} />
+                  <Route path="/for-organizations" element={<ForOrganizations />} />
+                  <Route path="/share-perspective" element={<SharePerspective />} />
+                  <Route path="/for-business" element={<ForBusiness />} />
+                  <Route path="/for-individuals" element={<ForIndividuals />} />
+                  <Route path="/scope-disclaimers" element={<ScopeDisclaimers />} />
+                  <Route path="/schedule-demo" element={<ScheduleDemo />} />
+                  <Route path="/lso-dashboard" element={<LSODashboard />} />
+                  <Route path="/grant-reporting" element={<GrantReporting />} />
+                  <Route path="/ai-governance" element={<AIGovernance />} />
+                  <Route path="/ai-model-card" element={<AIModelCard />} />
+                  <Route path="/algorithmic-impact-assessment" element={<AlgorithmicImpactAssessment />} />
+                  <Route path="/bias-monitoring" element={<BiasMonitoring />} />
+                  <Route path="/terms" element={<TermsOfService />} />
+                  <Route path="/terms-of-service" element={<DeprecatedRouteRedirect to="/terms" oldPath="/terms-of-service" />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/privacy-at-a-glance" element={<PrivacyAtAGlance />} />
+                  <Route path="/privacy-policy" element={<DeprecatedRouteRedirect to="/privacy" oldPath="/privacy-policy" />} />
+                  <Route path="/privacy-faq" element={<PrivacyFAQ />} />
+                  <Route path="/security-faq" element={<SecurityFAQ />} />
+                  <Route path="/trust-center" element={<TrustCenter />} />
+                  <Route path="/trust-safety" element={<DeprecatedRouteRedirect to="/trust-center" oldPath="/trust-safety" />} />
+                  <Route path="/enterprise-security" element={<EnterpriseSecurity />} />
+                  <Route path="/how-it-works" element={<HowItWorks />} />
+                  <Route path="/for-partners" element={<ForPartners />} />
+                  <Route path="/partner-hub" element={<PartnerHub />} />
+                  <Route path="/p/:slug" element={<PartnerLanding />} />
+                  <Route path="/welcome" element={<ChannelLanding />} />
+                  <Route path="/media-kit" element={<MediaKit />} />
+                  <Route path="/how-reports-are-reviewed" element={<HowReportsAreReviewed />} />
+                  <Route path="/espanol" element={<EspanolLanding />} />
+                  <Route path="/es" element={<EsLanding />} />
+                  <Route path="/business" element={<BusinessLanding />} />
+                  <Route path="/partners" element={<PartnersLanding />} />
+                  <Route path="/urgent-help" element={<UrgentHelp />} />
+                  <Route path="/accessibility" element={<AccessibilityStatement />} />
+                  <Route path="/access" element={<AccessGate />} />
+                  <Route path="/negotiate" element={<Negotiate />} />
+                  <Route path="/site-review" element={<SiteReview />} />
+                  <Route path="/sla" element={<SLA />} />
+                  <Route path="/icp-prototype" element={<IcpPrototype />} />
+                  <Route path="/toolkit" element={<Toolkit />} />
+                  <Route path="/find-attorney" element={<PublicLawyerProfiles />} />
+                  <Route
+                    path="/admin"
+                    element={
+                      <PrivateRoute>
+                        <AdminLayout />
+                      </PrivateRoute>
+                    }
+                  >
+                    <Route index element={<AdminOverview />} />
+                    <Route path="users" element={<Admin />} />
+                    <Route path="content" element={<Admin />} />
+                    <Route path="chat" element={<Admin />} />
+                    <Route path="partners" element={<Admin />} />
+                    <Route path="system" element={<Admin />} />
+                    <Route path="audit-log" element={<AdminAuditLog />} />
+                    <Route path="collateral" element={<CollateralStudio />} />
+                    <Route path="collateral/:id" element={<CollateralEditor />} />
+                    <Route path="*" element={<Admin />} />
+                  </Route>
+                  <Route path="/ask" element={<Ask />} />
+                  <Route path="/ask/:topic" element={<Ask />} />
+                  <Route path="/issue-packs" element={<IssuePacks />} />
+                  <Route path="/case-predictor" element={<CasePredictor />} />
+                  <Route path="/case-predictor/start" element={<CasePredictorStart />} />
+                  <Route path="/chatbot-standalone" element={<DeprecatedRouteRedirect to="/chat" oldPath="/chatbot-standalone" />} />
+                  <Route path="/chat" element={<ChatV2 />} />
+                  <Route path="/chat-v2" element={<DeprecatedRouteRedirect to="/chat" oldPath="/chat-v2" />} />
+                  <Route path="/app" element={<Navigate to="/chat" replace />} />
+                  <Route path="/chatbot" element={<DeprecatedRouteRedirect to="/chat" oldPath="/chatbot" />} />
+                  <Route path="/help/which-feature" element={<FeatureGuide />} />
+                  <Route path="/safety-net" element={<LegalSafetyNet />} />
+                  <Route path="/dashboard" element={<PrivateRoute><Layout /></PrivateRoute>}>
+                    <Route index element={<Navigate to="/chat" replace />} />
+                    <Route path="action-plan" element={<Dashboard />} />
+                    <Route path="ai-assistant" element={<AIAssistant />} />
+                    <Route path="cases" element={<Cases />} />
+                    <Route path="matters" element={<Matters />} />
+                    <Route path="clients" element={<Clients />} />
+                    <Route path="history" element={<History />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="icp-templates" element={<ICPTemplateLibrary />} />
+                    <Route path="research" element={<Research />} />
+                    <Route path="lawyer-profiles" element={<LawyerProfiles />} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="website-integration" element={<WebsiteIntegration />} />
+                  </Route>
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+              </ErrorBoundary>
+            </FloatingChromeProvider>
+            </PersonalizationProvider>
+            </ModalProvider>
+            </DemoProvider>
+          </AuthProvider>
+          </PersonaProvider>
+        </LanguageProvider>
+      </TenantProvider>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+
+================================================================================
+CONFIG: package.json
+================================================================================
+{
+  "name": "vite-react-typescript-starter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "check:claims": "node scripts/check-claims.js",
+    "test:interaction-budget": "node scripts/interaction-budget-runner.cjs",
+    "test:interaction-budget:desktop": "node scripts/assert-interaction-budget.cjs",
+    "test:interaction-budget:mobile": "node scripts/assert-interaction-budget-mobile.cjs",
+    "conformance:scaffold:dry": "node scripts/conformance/scaffold-policies.cjs",
+    "conformance:scaffold": "node scripts/conformance/scaffold-policies.cjs --write",
+    "conformance:check": "node scripts/conformance/validate-policies.cjs",
+    "conformance:report": "node scripts/conformance/generate-dashboard.cjs",
+    "conformance:ci": "npm run conformance:check && npm run conformance:report",
+    "audit:headings": "node scripts/audit-headings.cjs",
+    "audit:readability": "node scripts/audit-readability.cjs",
+    "audit:images": "node scripts/audit-images.cjs",
+    "export:gpt-review": "node scripts/export-for-gpt-review.cjs",
+    "prerender": "node scripts/prerender.cjs",
+    "build:static": "vite build && node scripts/prerender.cjs",
+    "export:ai-audit": "node scripts/export-ai-audit.cjs",
+    "test:responsive": "npx playwright test tests/e2e/home-responsive.spec.ts",
+    "test:responsive:ui": "npx playwright test tests/e2e/home-responsive.spec.ts --ui"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@supabase/supabase-js": "^2.57.4",
+    "@types/qrcode": "^1.5.6",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.1.0",
+    "lucide-react": "^0.344.0",
+    "pdfjs-dist": "^4.9.155",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.75.0",
+    "react-router-dom": "^7.11.0",
+    "tesseract.js": "^5.1.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@playwright/test": "^1.60.0",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "fast-glob": "^3.3.2",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2"
+  }
+}
+
+
+================================================================================
+CONFIG: vite.config.ts
+================================================================================
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  optimizeDeps: {
+    exclude: ['lucide-react'],
+  },
+  build: {
+    target: 'es2020',
+    cssCodeSplit: true,
+    sourcemap: false,
+    minify: 'esbuild',
+    chunkSizeWarningLimit: 700,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return undefined;
+          if (id.includes('react-router')) return 'react-router';
+          if (id.includes('react-dom') || /node_modules\/react\//.test(id)) return 'react-vendor';
+          if (id.includes('@supabase')) return 'supabase';
+          if (id.includes('lucide-react')) return 'icons';
+          if (id.includes('pdfjs-dist')) return 'pdfjs';
+          if (id.includes('jspdf')) return 'jspdf';
+          if (id.includes('html2canvas')) return 'html2canvas';
+          if (id.includes('tesseract.js')) return 'ocr-tools';
+          if (id.includes('qrcode')) return 'qr';
+          return 'vendor';
+        },
+      },
+    },
+  },
+  server: {
+    open: false,
+    fs: {
+      strict: true,
+    },
+    watch: {
+      ignored: ['**/.git/**', '**/node_modules/**', '**/dist/**'],
+    },
+  },
+});
+
+
+================================================================================
+CONFIG: tailwind.config.js
+================================================================================
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    screens: {
+      xs: '360px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+    },
+    extend: {
+      minHeight: {
+        touch: '44px',
+        screen: '100vh',
+        dvh: '100dvh',
+      },
+      minWidth: {
+        touch: '44px',
+      },
+      spacing: {
+        'safe-top': 'env(safe-area-inset-top, 0px)',
+        'safe-bottom': 'env(safe-area-inset-bottom, 0px)',
+        'safe-left': 'env(safe-area-inset-left, 0px)',
+        'safe-right': 'env(safe-area-inset-right, 0px)',
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
+      },
+      colors: {
+        primary: {
+          50: '#F0F4F8',
+          100: '#D9E2EC',
+          200: '#BCCCDC',
+          300: '#9FB3C8',
+          400: '#829AB1',
+          500: '#627D98',
+          600: '#486581',
+          700: '#334E68',
+          800: '#243B53',
+          900: '#102A43',
+        },
+        brand: {
+          50: '#E7F6FF',
+          100: '#D1EDFF',
+          200: '#A8DBFF',
+          300: '#7AC5FF',
+          400: '#4AADFF',
+          500: '#0067FF',
+          600: '#0052CC',
+          700: '#003D99',
+          800: '#002966',
+          900: '#001433',
+        },
+        accent: {
+          50: '#FFFAF0',
+          100: '#FEEBC8',
+          200: '#FBD38D',
+          300: '#F6AD55',
+          400: '#ED8936',
+          500: '#DD6B20',
+          600: '#C05621',
+          700: '#9C4221',
+          800: '#7B341E',
+          900: '#652B19',
+        },
+        gold: {
+          50: '#FEFCF3',
+          100: '#FDF6E3',
+          200: '#F9E4B7',
+          300: '#F2CE84',
+          400: '#E8B44C',
+          500: '#D4A574',
+          600: '#C08A4E',
+          700: '#A06E3C',
+          800: '#7D552E',
+          900: '#5C3D20',
+        },
+        teal: {
+          50: '#F0FDFA',
+          100: '#CCFBF1',
+          200: '#99F6E4',
+          300: '#5EEAD4',
+          400: '#2DD4BF',
+          500: '#0D9488',
+          600: '#0A8A8A',
+          700: '#0F766E',
+          800: '#115E59',
+          900: '#134E4A',
+        },
+        navy: {
+          50: '#F0F4F8',
+          100: '#D9E2EC',
+          200: '#BCCCDC',
+          300: '#9FB3C8',
+          400: '#829AB1',
+          500: '#627D98',
+          600: '#486581',
+          700: '#334E68',
+          800: '#243B53',
+          900: '#102A43',
+        },
+        success: {
+          50: '#F0FDF4',
+          100: '#DCFCE7',
+          200: '#BBF7D0',
+          300: '#86EFAC',
+          400: '#4ADE80',
+          500: '#22C55E',
+          600: '#16A34A',
+          700: '#15803D',
+          800: '#166534',
+          900: '#14532D',
+        },
+        warning: {
+          50: '#FFFBEB',
+          100: '#FEF3C7',
+          200: '#FDE68A',
+          300: '#FCD34D',
+          400: '#FBBF24',
+          500: '#F59E0B',
+          600: '#D97706',
+          700: '#B45309',
+          800: '#92400E',
+          900: '#78350F',
+        },
+        error: {
+          50: '#FEF2F2',
+          100: '#FEE2E2',
+          200: '#FECACA',
+          300: '#FCA5A5',
+          400: '#F87171',
+          500: '#EF4444',
+          600: '#DC2626',
+          700: '#B91C1C',
+          800: '#991B1B',
+          900: '#7F1D1D',
+        },
+      },
+      animation: {
+        'count-up': 'countUp 2s ease-out forwards',
+        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+        'fade-in': 'fadeIn 0.8s ease-out forwards',
+        'slide-up': 'slideUp 0.24s ease-out forwards',
+        'slide-in-left': 'slideInLeft 0.24s ease-out forwards',
+        'slide-in-right': 'slideInRight 0.24s ease-out forwards',
+        'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
+      },
+      keyframes: {
+        countUp: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(40px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideInLeft: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        slideInRight: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        pulseSoft: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
+        },
+      },
+    },
+  },
+  plugins: [],
+};
+
+
+================================================================================
+CONFIG: tsconfig.json
+================================================================================
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+
+
+================================================================================
+CONFIG: tsconfig.app.json
+================================================================================
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}
+
+
+================================================================================
+CONFIG: index.html
+================================================================================
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <script>
+      (function () {
+        try {
+          var lang = localStorage.getItem('ezlegal-language') || 'en';
+          var rtl = lang === 'ar' || lang === 'he';
+          var root = document.documentElement;
+          root.lang = lang;
+          root.dir = rtl ? 'rtl' : 'ltr';
+          root.dataset.dir = root.dir;
+        } catch (e) {
+          document.documentElement.dir = 'ltr';
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="mask-icon" href="/icons/icon-monochrome.svg" color="#0d9488" />
+    <link rel="apple-touch-icon" href="/icons/icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0d9488" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="application-name" content="ezLegal" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="ezLegal" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-TileColor" content="#0d9488" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <title>ezLegal.ai - AI Legal Assistant</title>
+    <meta name="description" content="AI-powered legal information and self-help tools. Get instant answers to legal questions 24/7, then connect with licensed attorneys when you need them. Starting free." />
+    <link rel="canonical" href="https://ezlegal.ai/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ezLegal.ai" />
+    <meta property="og:url" content="https://ezlegal.ai/" />
+    <meta property="og:title" content="ezLegal.ai - AI Legal Assistant" />
+    <meta property="og:description" content="AI-powered legal information and self-help tools. Get instant answers 24/7, then connect with licensed attorneys when you need them." />
+    <meta property="og:image" content="https://ezlegal.ai/icons/icon.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ezLegal.ai - AI Legal Assistant" />
+    <meta name="twitter:description" content="AI-powered legal information and self-help tools. Starting free." />
+    <meta name="twitter:image" content="https://ezlegal.ai/icons/icon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <meta name="geo.region" content="US-AZ" />
+    <meta name="geo.placename" content="Tucson" />
+    <meta name="geo.position" content="32.221743;-110.969749" />
+    <meta name="ICBM" content="32.221743, -110.969749" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ezLegal.ai",
+      "url": "https://ezlegal.ai",
+      "inLanguage": ["en-US", "es-US"],
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://ezlegal.ai/ask?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+================================================================================
+CONFIG: netlify.toml
+================================================================================
+[build]
+command = "npx vite build"
+publish = "dist"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(self), geolocation=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.openai.com https://api.stripe.com; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; frame-src https://js.stripe.com; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'"
+
+
+================================================================================
+CONFIG: public/_redirects
+================================================================================
+/sitemap.xml    https://qwzpcswjlhxbsghbnkrn.supabase.co/functions/v1/sitemap    200
+/chatbot        /chat   301
+/chat-v2        /chat   301
+/chatbot-standalone  /chat  301
+/*    /index.html   200
+
+

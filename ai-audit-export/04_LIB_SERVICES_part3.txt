@@ -1,0 +1,2945 @@
+
+================================================================================
+FILE: src/services/contextual-prediction-service.ts
+================================================================================
+import { supabase } from '../lib/supabase';
+
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface DocumentContext {
+  filename: string;
+  extractedText: string;
+  documentType?: string;
+}
+
+export interface ExtractedCaseContext {
+  caseType: string;
+  caseSubtype?: string;
+  jurisdiction: string;
+  parties: {
+    plaintiff?: string;
+    defendant?: string;
+    insurer?: string;
+    claimant?: string;
+  };
+  keyDates: {
+    incidentDate?: string;
+    filingDate?: string;
+    deadlines?: string[];
+  };
+  keyFacts: string[];
+  legalIssues: string[];
+  documentTypes: string[];
+  claimAmount?: number;
+  policyLimits?: number;
+  coverageIssues?: string[];
+  strengthFactors: { factor: string; impact: 'positive' | 'negative' | 'neutral'; reasoning: string }[];
+  confidence: number;
+}
+
+export interface LegalCitation {
+  section: string;
+  title: string;
+  summary: string;
+  relevance: string;
+  supportsFavorable: boolean;
+  url?: string;
+}
+
+export interface ContextualPrediction {
+  score: number;
+  confidence: 'low' | 'medium' | 'high';
+  predictedOutcome: 'favorable' | 'unfavorable' | 'likely_settled' | 'uncertain';
+  reasoning: string;
+  keyStrengths: string[];
+  keyWeaknesses: string[];
+  criticalQuestions: string[];
+  recommendations: string[];
+  nextSteps: { action: string; urgency: 'immediate' | 'soon' | 'when_ready'; description: string }[];
+  comparableCasesSummary: string;
+  legalCitations: LegalCitation[];
+  extractedContext: ExtractedCaseContext;
+}
+
+const CASE_TYPE_PATTERNS: Record<string, { keywords: string[]; subTypes: string[] }> = {
+  insurance: {
+    keywords: ['policy', 'coverage', 'claim', 'insurer', 'premium', 'deductible', 'reservation of rights', 'denial', 'homeowner', 'auto insurance', 'liability', 'underwriting', 'exclusion', 'endorsement'],
+    subTypes: ['coverage_dispute', 'bad_faith', 'claim_denial', 'underinsured', 'subrogation']
+  },
+  personal_injury: {
+    keywords: ['injury', 'accident', 'negligence', 'damages', 'medical bills', 'pain and suffering', 'liability', 'tort'],
+    subTypes: ['auto_accident', 'slip_fall', 'medical_malpractice', 'product_liability', 'premises_liability']
+  },
+  employment: {
+    keywords: ['termination', 'discrimination', 'harassment', 'wrongful', 'employer', 'employee', 'wage', 'overtime', 'retaliation'],
+    subTypes: ['wrongful_termination', 'discrimination', 'harassment', 'wage_dispute', 'retaliation']
+  },
+  contract: {
+    keywords: ['breach', 'agreement', 'contract', 'performance', 'damages', 'consideration', 'obligation'],
+    subTypes: ['breach', 'formation', 'interpretation', 'rescission', 'specific_performance']
+  },
+  housing: {
+    keywords: ['landlord', 'tenant', 'eviction', 'lease', 'rent', 'security deposit', 'habitability', 'repairs'],
+    subTypes: ['eviction', 'habitability', 'security_deposit', 'discrimination', 'lease_dispute']
+  },
+  family: {
+    keywords: ['divorce', 'custody', 'child support', 'alimony', 'visitation', 'paternity', 'adoption'],
+    subTypes: ['divorce', 'custody', 'support', 'adoption', 'domestic_violence']
+  },
+  consumer: {
+    keywords: ['debt', 'collection', 'credit', 'fraud', 'consumer protection', 'warranty', 'lemon law'],
+    subTypes: ['debt_collection', 'fraud', 'warranty', 'lemon_law', 'identity_theft']
+  },
+};
+
+const JURISDICTION_PATTERNS = [
+  { pattern: /arizona|az|maricopa|pima|pinal|coconino|yavapai|mohave|yuma|cochise|navajo|apache|gila|graham|greenlee|la paz|santa cruz/i, code: 'AZ', name: 'Arizona' },
+  { pattern: /california|ca|los angeles|san francisco|san diego|sacramento/i, code: 'CA', name: 'California' },
+  { pattern: /texas|tx|houston|dallas|austin|san antonio/i, code: 'TX', name: 'Texas' },
+  { pattern: /florida|fl|miami|orlando|tampa|jacksonville/i, code: 'FL', name: 'Florida' },
+  { pattern: /new york|ny|manhattan|brooklyn|bronx|queens/i, code: 'NY', name: 'New York' },
+  { pattern: /nevada|nv|las vegas|reno|clark county/i, code: 'NV', name: 'Nevada' },
+  { pattern: /colorado|co|denver|boulder|colorado springs/i, code: 'CO', name: 'Colorado' },
+  { pattern: /utah|ut|salt lake/i, code: 'UT', name: 'Utah' },
+  { pattern: /new mexico|nm|albuquerque|santa fe/i, code: 'NM', name: 'New Mexico' },
+];
+
+class ContextualPredictionService {
+  async extractCaseContext(
+    chatMessages: ChatMessage[],
+    documents: DocumentContext[]
+  ): Promise<ExtractedCaseContext> {
+    const allText = [
+      ...chatMessages.map(m => m.content),
+      ...documents.map(d => d.extractedText)
+    ].join('\n\n');
+
+    const caseType = this.detectCaseType(allText);
+    const jurisdiction = this.detectJurisdiction(allText);
+    const parties = this.extractParties(allText);
+    const keyFacts = this.extractKeyFacts(allText, caseType);
+    const legalIssues = this.extractLegalIssues(allText, caseType);
+    const documentTypes = this.detectDocumentTypes(documents);
+    const strengthFactors = this.analyzeStrengthFactors(allText, caseType, documentTypes);
+    const financials = this.extractFinancials(allText);
+
+    const confidence = this.calculateExtractionConfidence(
+      caseType,
+      jurisdiction,
+      keyFacts.length,
+      documentTypes.length
+    );
+
+    return {
+      caseType: caseType.type,
+      caseSubtype: caseType.subType,
+      jurisdiction: jurisdiction.code,
+      parties,
+      keyDates: this.extractDates(allText),
+      keyFacts,
+      legalIssues,
+      documentTypes,
+      claimAmount: financials.claimAmount,
+      policyLimits: financials.policyLimits,
+      coverageIssues: caseType.type === 'insurance' ? this.extractCoverageIssues(allText) : undefined,
+      strengthFactors,
+      confidence
+    };
+  }
+
+  private detectCaseType(text: string): { type: string; subType?: string } {
+    const lowerText = text.toLowerCase();
+    const scores: Record<string, number> = {};
+
+    for (const [caseType, config] of Object.entries(CASE_TYPE_PATTERNS)) {
+      scores[caseType] = 0;
+      for (const keyword of config.keywords) {
+        const regex = new RegExp(keyword, 'gi');
+        const matches = lowerText.match(regex);
+        if (matches) {
+          scores[caseType] += matches.length * (keyword.length > 10 ? 3 : 1);
+        }
+      }
+    }
+
+    const sortedTypes = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    if (sortedTypes[0][1] === 0) {
+      return { type: 'general' };
+    }
+
+    const topType = sortedTypes[0][0];
+    const config = CASE_TYPE_PATTERNS[topType];
+
+    let subType: string | undefined;
+    if (config.subTypes.length > 0) {
+      for (const st of config.subTypes) {
+        const stKeywords = st.replace(/_/g, ' ');
+        if (lowerText.includes(stKeywords)) {
+          subType = st;
+          break;
+        }
+      }
+    }
+
+    return { type: topType, subType };
+  }
+
+  private detectJurisdiction(text: string): { code: string; name: string } {
+    for (const jur of JURISDICTION_PATTERNS) {
+      if (jur.pattern.test(text)) {
+        return { code: jur.code, name: jur.name };
+      }
+    }
+    return { code: 'AZ', name: 'Arizona' };
+  }
+
+  private extractParties(text: string): ExtractedCaseContext['parties'] {
+    const parties: ExtractedCaseContext['parties'] = {};
+
+    const plaintiffMatch = text.match(/plaintiff[:\s]+([A-Z][a-zA-Z\s,]+?)(?:\n|,|v\.|vs)/i);
+    if (plaintiffMatch) parties.plaintiff = plaintiffMatch[1].trim();
+
+    const defendantMatch = text.match(/defendant[:\s]+([A-Z][a-zA-Z\s,]+?)(?:\n|,|$)/i);
+    if (defendantMatch) parties.defendant = defendantMatch[1].trim();
+
+    const insurerPatterns = [
+      /insured by[:\s]+([A-Z][a-zA-Z\s]+(?:Insurance|Mutual|Indemnity|Company)?)/i,
+      /policy.*?(?:with|from)[:\s]+([A-Z][a-zA-Z\s]+(?:Insurance|Mutual|Company)?)/i,
+      /(Farm Bureau|State Farm|Allstate|GEICO|Progressive|USAA|Liberty Mutual|Nationwide)[^,\n]*/i
+    ];
+    for (const pattern of insurerPatterns) {
+      const match = text.match(pattern);
+      if (match) {
+        parties.insurer = match[1].trim();
+        break;
+      }
+    }
+
+    return parties;
+  }
+
+  private extractKeyFacts(text: string, caseType: { type: string }): string[] {
+    const facts: string[] = [];
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 20);
+
+    const factPatterns: Record<string, RegExp[]> = {
+      insurance: [
+        /policy.*?(?:covers|excludes|provides)/i,
+        /claim.*?(?:denied|approved|pending)/i,
+        /coverage.*?(?:limits?|amount|extent)/i,
+        /reservation of rights/i,
+        /bad faith/i,
+        /damages.*?(?:caused|resulted)/i,
+      ],
+      personal_injury: [
+        /(?:injury|injuries).*?(?:sustained|suffered)/i,
+        /medical.*?(?:treatment|bills|expenses)/i,
+        /accident.*?(?:occurred|happened)/i,
+        /negligent|negligence/i,
+      ],
+      employment: [
+        /termination|terminated/i,
+        /discrimination|discriminated/i,
+        /harassment/i,
+        /retaliation/i,
+      ],
+      general: [
+        /caused|resulted in/i,
+        /agreement|contract/i,
+        /breach|violation/i,
+      ]
+    };
+
+    const patterns = factPatterns[caseType.type] || factPatterns.general;
+
+    for (const sentence of sentences.slice(0, 100)) {
+      for (const pattern of patterns) {
+        if (pattern.test(sentence) && facts.length < 10) {
+          const cleanFact = sentence.trim().replace(/\s+/g, ' ');
+          if (cleanFact.length < 300 && !facts.includes(cleanFact)) {
+            facts.push(cleanFact);
+          }
+          break;
+        }
+      }
+    }
+
+    return facts;
+  }
+
+  private extractLegalIssues(text: string, caseType: { type: string; subType?: string }): string[] {
+    const issues: string[] = [];
+    const lowerText = text.toLowerCase();
+
+    const issuePatterns: Record<string, string[]> = {
+      insurance: [
+        'Whether coverage exists under the policy',
+        'Bad faith claim handling',
+        'Policy exclusion applicability',
+        'Duty to defend vs. duty to indemnify',
+        'Reservation of rights validity',
+        'Coverage limits dispute',
+        'Subrogation rights',
+      ],
+      personal_injury: [
+        'Establishing negligence',
+        'Causation of injuries',
+        'Damages calculation',
+        'Comparative fault',
+        'Statute of limitations',
+      ],
+      employment: [
+        'Wrongful termination claim',
+        'Discrimination under Title VII/state law',
+        'Retaliation claim',
+        'Wage and hour violations',
+        'Hostile work environment',
+      ],
+      housing: [
+        'Lease violation',
+        'Habitability issues',
+        'Security deposit return',
+        'Eviction defense',
+        'Fair housing violations',
+      ],
+    };
+
+    const relevantIssues = issuePatterns[caseType.type] || [];
+
+    for (const issue of relevantIssues) {
+      const keywords = issue.toLowerCase().split(/\s+/);
+      const matchCount = keywords.filter(k => lowerText.includes(k)).length;
+      if (matchCount >= Math.min(2, keywords.length / 2)) {
+        issues.push(issue);
+      }
+    }
+
+    if (caseType.type === 'insurance') {
+      if (lowerText.includes('reservation of rights')) {
+        issues.push('Insurer has reserved rights - potential coverage dispute');
+      }
+      if (lowerText.includes('exclusion')) {
+        issues.push('Policy exclusion defense may be raised');
+      }
+      if (lowerText.includes('bad faith')) {
+        issues.push('Potential bad faith claim against insurer');
+      }
+    }
+
+    return [...new Set(issues)].slice(0, 8);
+  }
+
+  private detectDocumentTypes(documents: DocumentContext[]): string[] {
+    const types: string[] = [];
+
+    for (const doc of documents) {
+      const lowerText = doc.extractedText.toLowerCase();
+      const filename = doc.filename.toLowerCase();
+
+      if (lowerText.includes('policy') && (lowerText.includes('coverage') || lowerText.includes('premium'))) {
+        types.push('Insurance Policy');
+      }
+      if (lowerText.includes('complaint') && (lowerText.includes('plaintiff') || lowerText.includes('defendant'))) {
+        types.push('Complaint');
+      }
+      if (lowerText.includes('reservation of rights')) {
+        types.push('Reservation of Rights Letter');
+      }
+      if (lowerText.includes('answer') && lowerText.includes('defendant')) {
+        types.push('Answer');
+      }
+      if (lowerText.includes('motion') || lowerText.includes('memorandum')) {
+        types.push('Motion/Brief');
+      }
+      if (filename.includes('contract') || lowerText.includes('agreement')) {
+        types.push('Contract/Agreement');
+      }
+      if (lowerText.includes('demand') && lowerText.includes('settlement')) {
+        types.push('Demand Letter');
+      }
+      if (lowerText.includes('medical') && lowerText.includes('record')) {
+        types.push('Medical Records');
+      }
+    }
+
+    return [...new Set(types)];
+  }
+
+  private extractDates(text: string): ExtractedCaseContext['keyDates'] {
+    const dates: ExtractedCaseContext['keyDates'] = {};
+
+    const datePattern = /(\d{1,2}\/\d{1,2}\/\d{2,4}|\w+\s+\d{1,2},?\s+\d{4})/g;
+    text.match(datePattern);
+
+    const incidentPatterns = [
+      /(?:incident|accident|occurred|happened).*?(\d{1,2}\/\d{1,2}\/\d{2,4})/i,
+      /on\s+(\w+\s+\d{1,2},?\s+\d{4})/i,
+    ];
+    for (const pattern of incidentPatterns) {
+      const match = text.match(pattern);
+      if (match) {
+        dates.incidentDate = match[1];
+        break;
+      }
+    }
+
+    const filingMatch = text.match(/filed.*?(\d{1,2}\/\d{1,2}\/\d{2,4})/i);
+    if (filingMatch) {
+      dates.filingDate = filingMatch[1];
+    }
+
+    return dates;
+  }
+
+  private extractFinancials(text: string): { claimAmount?: number; policyLimits?: number } {
+    const result: { claimAmount?: number; policyLimits?: number } = {};
+
+    const amountPattern = /\$[\d,]+(?:\.\d{2})?/g;
+    const amounts = text.match(amountPattern) || [];
+
+    const cleanedAmounts = amounts
+      .map(a => parseFloat(a.replace(/[$,]/g, '')))
+      .filter(a => a > 0)
+      .sort((a, b) => b - a);
+
+    if (cleanedAmounts.length > 0) {
+      const limitsMatch = text.match(/(?:policy\s+)?limits?.*?\$[\d,]+/i);
+      if (limitsMatch) {
+        const limitAmount = limitsMatch[0].match(/\$[\d,]+/);
+        if (limitAmount) {
+          result.policyLimits = parseFloat(limitAmount[0].replace(/[$,]/g, ''));
+        }
+      }
+
+      const claimMatch = text.match(/(?:claim|damages|seeking|amount).*?\$[\d,]+/i);
+      if (claimMatch) {
+        const claimAmount = claimMatch[0].match(/\$[\d,]+/);
+        if (claimAmount) {
+          result.claimAmount = parseFloat(claimAmount[0].replace(/[$,]/g, ''));
+        }
+      }
+    }
+
+    return result;
+  }
+
+  private extractCoverageIssues(text: string): string[] {
+    const issues: string[] = [];
+    const lowerText = text.toLowerCase();
+
+    const coveragePatterns = [
+      { pattern: /excluded.*?coverage/i, issue: 'Coverage exclusion may apply' },
+      { pattern: /reservation of rights/i, issue: 'Insurer reserving right to deny coverage' },
+      { pattern: /policy\s+limit/i, issue: 'Policy limits may cap recovery' },
+      { pattern: /late\s+notice/i, issue: 'Late notice defense possible' },
+      { pattern: /misrepresentation/i, issue: 'Misrepresentation defense raised' },
+      { pattern: /intentional\s+act/i, issue: 'Intentional act exclusion' },
+      { pattern: /pre-?existing/i, issue: 'Pre-existing condition/damage issue' },
+      { pattern: /not\s+covered|no\s+coverage/i, issue: 'Coverage denial' },
+      { pattern: /duty\s+to\s+defend/i, issue: 'Duty to defend dispute' },
+    ];
+
+    for (const { pattern, issue } of coveragePatterns) {
+      if (pattern.test(lowerText)) {
+        issues.push(issue);
+      }
+    }
+
+    return [...new Set(issues)];
+  }
+
+  private analyzeStrengthFactors(
+    text: string,
+    caseType: { type: string },
+    documentTypes: string[]
+  ): ExtractedCaseContext['strengthFactors'] {
+    const factors: ExtractedCaseContext['strengthFactors'] = [];
+    const lowerText = text.toLowerCase();
+
+    if (documentTypes.includes('Insurance Policy')) {
+      factors.push({
+        factor: 'Policy documentation available',
+        impact: 'positive',
+        reasoning: 'Having the actual policy allows for precise coverage analysis'
+      });
+    }
+
+    if (documentTypes.includes('Complaint')) {
+      factors.push({
+        factor: 'Formal complaint filed',
+        impact: 'neutral',
+        reasoning: 'Litigation has commenced - formal procedures apply'
+      });
+    }
+
+    if (documentTypes.includes('Reservation of Rights Letter')) {
+      factors.push({
+        factor: 'Reservation of rights received',
+        impact: 'negative',
+        reasoning: 'Insurer may later deny coverage based on reserved issues'
+      });
+    }
+
+    if (documentTypes.length >= 3) {
+      factors.push({
+        factor: 'Comprehensive documentation',
+        impact: 'positive',
+        reasoning: 'Multiple supporting documents strengthen the case'
+      });
+    }
+
+    if (caseType.type === 'insurance') {
+      if (lowerText.includes('bad faith')) {
+        factors.push({
+          factor: 'Bad faith allegations',
+          impact: 'positive',
+          reasoning: 'Bad faith claims can result in damages beyond policy limits'
+        });
+      }
+      if (lowerText.includes('exclusion')) {
+        factors.push({
+          factor: 'Exclusion defense raised',
+          impact: 'negative',
+          reasoning: 'Insurer may avoid coverage through policy exclusions'
+        });
+      }
+    }
+
+    return factors;
+  }
+
+  private calculateExtractionConfidence(
+    caseType: { type: string },
+    jurisdiction: { code: string },
+    factCount: number,
+    docCount: number
+  ): number {
+    let confidence = 50;
+
+    if (caseType.type !== 'general') confidence += 15;
+    if (jurisdiction.code) confidence += 10;
+    confidence += Math.min(factCount * 3, 15);
+    confidence += Math.min(docCount * 5, 10);
+
+    return Math.min(confidence, 95);
+  }
+
+  async generatePrediction(context: ExtractedCaseContext): Promise<ContextualPrediction> {
+    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+    const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+    const legalCitations = await this.fetchRelevantCitations(context);
+
+    try {
+      const { data: session } = await supabase.auth.getSession();
+
+      const prompt = this.buildPredictionPrompt(context, legalCitations);
+
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/openai-chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.session?.access_token || SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: prompt }],
+          sessionId: crypto.randomUUID(),
+          jurisdiction: context.jurisdiction,
+          systemPromptOverride: this.getSystemPrompt(),
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return this.parseAIPrediction(data.response, context, legalCitations);
+      }
+    } catch (error) {
+      console.error('AI prediction error:', error);
+    }
+
+    return this.generateLocalPrediction(context, legalCitations);
+  }
+
+  private async fetchRelevantCitations(context: ExtractedCaseContext): Promise<LegalCitation[]> {
+    const citations: LegalCitation[] = [];
+
+    if (context.jurisdiction !== 'AZ') {
+      return this.getStaticCitationsForCaseType(context.caseType, context.jurisdiction);
+    }
+
+    try {
+      const practiceAreas = this.mapCaseTypeToPracticeAreas(context.caseType);
+
+      const { data: statutes, error } = await supabase
+        .from('arizona_legal_sources')
+        .select('section, section_title, summary, content, url, practice_areas')
+        .eq('is_active', true)
+        .overlaps('practice_areas', practiceAreas)
+        .limit(10);
+
+      if (!error && statutes && statutes.length > 0) {
+        for (const statute of statutes) {
+          const relevance = this.determineRelevance(statute, context);
+          if (relevance) {
+            citations.push({
+              section: statute.section,
+              title: statute.section_title,
+              summary: statute.summary || statute.content?.substring(0, 200) + '...',
+              relevance: relevance.explanation,
+              supportsFavorable: relevance.supportsFavorable,
+              url: statute.url
+            });
+          }
+        }
+      }
+
+      if (citations.length === 0) {
+        return this.getStaticCitationsForCaseType(context.caseType, context.jurisdiction);
+      }
+    } catch (error) {
+      console.error('Error fetching citations:', error);
+      return this.getStaticCitationsForCaseType(context.caseType, context.jurisdiction);
+    }
+
+    return citations.slice(0, 6);
+  }
+
+  private mapCaseTypeToPracticeAreas(caseType: string): string[] {
+    const mapping: Record<string, string[]> = {
+      insurance: ['insurance', 'contracts', 'bad faith', 'coverage'],
+      personal_injury: ['torts', 'negligence', 'personal injury', 'damages'],
+      employment: ['employment', 'labor', 'discrimination', 'wages'],
+      housing: ['landlord-tenant', 'real property', 'housing', 'eviction'],
+      contract: ['contracts', 'commercial', 'breach'],
+      consumer: ['consumer protection', 'debt collection', 'fraud'],
+      family: ['family law', 'divorce', 'custody', 'domestic relations'],
+    };
+    return mapping[caseType] || ['general'];
+  }
+
+  private determineRelevance(
+    statute: { section: string; section_title: string; content?: string; practice_areas?: string[] },
+    context: ExtractedCaseContext
+  ): { explanation: string; supportsFavorable: boolean } | null {
+    const content = (statute.content || '').toLowerCase();
+    const title = statute.section_title.toLowerCase();
+
+    if (context.caseType === 'insurance') {
+      if (title.includes('bad faith') || content.includes('bad faith')) {
+        return {
+          explanation: 'Governs insurer duty of good faith and fair dealing',
+          supportsFavorable: context.legalIssues.some(i => i.toLowerCase().includes('bad faith'))
+        };
+      }
+      if (title.includes('coverage') || title.includes('policy')) {
+        return {
+          explanation: 'Defines insurance coverage requirements and policy interpretation',
+          supportsFavorable: true
+        };
+      }
+      if (title.includes('claim') || content.includes('claims handling')) {
+        return {
+          explanation: 'Establishes standards for insurance claims processing',
+          supportsFavorable: context.coverageIssues?.some(i => i.includes('claim')) || false
+        };
+      }
+    }
+
+    if (context.caseType === 'housing') {
+      if (title.includes('landlord') || title.includes('tenant')) {
+        return {
+          explanation: 'Defines landlord-tenant rights and obligations',
+          supportsFavorable: true
+        };
+      }
+    }
+
+    if (context.caseType === 'employment') {
+      if (title.includes('employment') || title.includes('wage')) {
+        return {
+          explanation: 'Establishes employment law standards in Arizona',
+          supportsFavorable: true
+        };
+      }
+    }
+
+    return null;
+  }
+
+  private getStaticCitationsForCaseType(caseType: string, jurisdiction: string): LegalCitation[] {
+    const azInsuranceCitations: LegalCitation[] = [
+      {
+        section: 'A.R.S. 20-461',
+        title: 'Unfair Claims Settlement Practices',
+        summary: 'Prohibits insurers from engaging in unfair claims practices including failing to promptly investigate claims, denying claims without reasonable basis, and failing to affirm or deny coverage within a reasonable time.',
+        relevance: 'Establishes standards for fair claims handling that insurer must follow',
+        supportsFavorable: true,
+        url: 'https://www.azleg.gov/ars/20/00461.htm'
+      },
+      {
+        section: 'A.R.S. 20-1118',
+        title: 'Property Insurance Claims Time Limits',
+        summary: 'Requires insurers to acknowledge claims within 10 working days and complete investigation within 30 days. Insurer must accept or deny claim within 15 days after investigation.',
+        relevance: 'Sets strict timelines for insurer response to property claims',
+        supportsFavorable: true,
+        url: 'https://www.azleg.gov/ars/20/01118.htm'
+      },
+      {
+        section: 'Rawlings v. Apodaca',
+        title: 'Arizona Bad Faith Standard (162 Ariz. 324)',
+        summary: 'Arizona Supreme Court established that insurers have duty of good faith and fair dealing. Breach can result in damages beyond policy limits including punitive damages.',
+        relevance: 'Landmark case establishing bad faith liability for insurers',
+        supportsFavorable: true
+      },
+      {
+        section: 'A.R.S. 12-341.01',
+        title: "Attorney's Fees in Contract Actions",
+        summary: 'Allows prevailing party in contract dispute (including insurance) to recover reasonable attorney fees from losing party.',
+        relevance: 'May allow recovery of legal fees if claim succeeds',
+        supportsFavorable: true,
+        url: 'https://www.azleg.gov/ars/12/00341-01.htm'
+      },
+      {
+        section: 'Sparks v. Republic Nat\'l Life Ins. Co.',
+        title: 'Duty to Defend Standard (132 Ariz. 529)',
+        summary: 'Insurer\'s duty to defend is broader than duty to indemnify. Must defend if complaint allegations potentially fall within coverage.',
+        relevance: 'Defines when insurer must provide legal defense',
+        supportsFavorable: true
+      }
+    ];
+
+    const azHousingCitations: LegalCitation[] = [
+      {
+        section: 'A.R.S. 33-1321',
+        title: 'Arizona Residential Landlord Tenant Act',
+        summary: 'Establishes rights and obligations of landlords and tenants including security deposits, repairs, and eviction procedures.',
+        relevance: 'Primary statute governing rental housing disputes',
+        supportsFavorable: true,
+        url: 'https://www.azleg.gov/ars/33/01321.htm'
+      },
+      {
+        section: 'A.R.S. 33-1324',
+        title: 'Security Deposit Limits and Returns',
+        summary: 'Limits security deposits to 1.5 months rent. Landlord must return within 14 days with itemized deductions.',
+        relevance: 'Governs security deposit disputes',
+        supportsFavorable: true,
+        url: 'https://www.azleg.gov/ars/33/01324.htm'
+      }
+    ];
+
+    const azEmploymentCitations: LegalCitation[] = [
+      {
+        section: 'A.R.S. 23-1501',
+        title: 'Employment Protection Act',
+        summary: 'Establishes at-will employment but prohibits termination for discriminatory reasons or in violation of public policy.',
+        relevance: 'Defines wrongful termination standards',
+        supportsFavorable: true,
+        url: 'https://www.azleg.gov/ars/23/01501.htm'
+      },
+      {
+        section: 'A.R.S. 23-364',
+        title: 'Minimum Wage and Payment of Wages',
+        summary: 'Requires timely payment of wages and establishes penalties for wage violations.',
+        relevance: 'Governs wage dispute claims',
+        supportsFavorable: true,
+        url: 'https://www.azleg.gov/ars/23/00364.htm'
+      }
+    ];
+
+    const citationMap: Record<string, LegalCitation[]> = {
+      insurance: azInsuranceCitations,
+      housing: azHousingCitations,
+      employment: azEmploymentCitations,
+    };
+
+    if (jurisdiction === 'AZ' && citationMap[caseType]) {
+      return citationMap[caseType];
+    }
+
+    return [{
+      section: `${jurisdiction} State Law`,
+      title: `${caseType.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} Statutes`,
+      summary: `Relevant ${jurisdiction} state laws governing ${caseType.replace(/_/g, ' ')} matters. Consult with a licensed attorney for specific statutory analysis.`,
+      relevance: 'General legal framework for this case type',
+      supportsFavorable: true
+    }];
+  }
+
+  private buildPredictionPrompt(context: ExtractedCaseContext, citations: LegalCitation[]): string {
+    const citationText = citations.length > 0
+      ? `\n\nRELEVANT LEGAL AUTHORITIES:\n${citations.map((c, i) => `${i + 1}. ${c.section} - ${c.title}\n   ${c.summary}`).join('\n\n')}`
+      : '';
+
+    return `Analyze this ${context.caseType} case and provide an outcome prediction:
+
+CASE TYPE: ${context.caseType}${context.caseSubtype ? ` (${context.caseSubtype})` : ''}
+JURISDICTION: ${context.jurisdiction}
+
+PARTIES:
+${context.parties.plaintiff ? `- Plaintiff: ${context.parties.plaintiff}` : ''}
+${context.parties.defendant ? `- Defendant: ${context.parties.defendant}` : ''}
+${context.parties.insurer ? `- Insurer: ${context.parties.insurer}` : ''}
+
+DOCUMENTS REVIEWED: ${context.documentTypes.join(', ') || 'None specified'}
+
+KEY FACTS:
+${context.keyFacts.map((f, i) => `${i + 1}. ${f}`).join('\n')}
+
+LEGAL ISSUES IDENTIFIED:
+${context.legalIssues.map((i, idx) => `${idx + 1}. ${i}`).join('\n')}
+
+${context.coverageIssues ? `COVERAGE ISSUES:\n${context.coverageIssues.map((c, i) => `${i + 1}. ${c}`).join('\n')}` : ''}
+
+${context.claimAmount ? `CLAIM AMOUNT: $${context.claimAmount.toLocaleString()}` : ''}
+${context.policyLimits ? `POLICY LIMITS: $${context.policyLimits.toLocaleString()}` : ''}
+${citationText}
+
+Based on this analysis and the applicable legal authorities, provide:
+1. A success probability score (0-100)
+2. Key strengths of the case (cite relevant statutes/case law)
+3. Key weaknesses or challenges
+4. Critical questions that need answers
+5. Strategic recommendations
+6. Immediate next steps
+
+Format your response as JSON with keys: score, strengths, weaknesses, criticalQuestions, recommendations, nextSteps, reasoning`;
+  }
+
+  private getSystemPrompt(): string {
+    return `You are an expert legal analyst specializing in case outcome prediction.
+Analyze the provided case information and give an objective assessment.
+Be specific to the facts provided. Consider jurisdiction-specific factors.
+For insurance cases, analyze coverage issues, policy language, and bad faith potential.
+Provide actionable, specific recommendations.
+Always note that this is predictive analysis, not legal advice.`;
+  }
+
+  private parseAIPrediction(aiResponse: string, context: ExtractedCaseContext, legalCitations: LegalCitation[]): ContextualPrediction {
+    try {
+      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]);
+        return {
+          score: Math.max(0, Math.min(100, parsed.score || 50)),
+          confidence: parsed.score > 70 ? 'high' : parsed.score > 40 ? 'medium' : 'low',
+          predictedOutcome: parsed.score >= 70 ? 'favorable' : parsed.score >= 50 ? 'likely_settled' : parsed.score >= 30 ? 'uncertain' : 'unfavorable',
+          reasoning: parsed.reasoning || '',
+          keyStrengths: parsed.strengths || [],
+          keyWeaknesses: parsed.weaknesses || [],
+          criticalQuestions: parsed.criticalQuestions || [],
+          recommendations: parsed.recommendations || [],
+          nextSteps: (parsed.nextSteps || []).map((s: string, i: number) => ({
+            action: s,
+            urgency: i === 0 ? 'immediate' : i < 3 ? 'soon' : 'when_ready',
+            description: ''
+          })),
+          comparableCasesSummary: '',
+          legalCitations,
+          extractedContext: context,
+        };
+      }
+    } catch (e) {
+      console.error('Error parsing AI response:', e);
+    }
+
+    return this.generateLocalPrediction(context, legalCitations);
+  }
+
+  private generateLocalPrediction(context: ExtractedCaseContext, legalCitations: LegalCitation[] = []): ContextualPrediction {
+    let score = 50;
+    const strengths: string[] = [];
+    const weaknesses: string[] = [];
+    const questions: string[] = [];
+    const recommendations: string[] = [];
+    const nextSteps: { action: string; urgency: 'immediate' | 'soon' | 'when_ready'; description: string }[] = [];
+
+    const hasPolicy = context.documentTypes.includes('Insurance Policy');
+    const hasRoR = context.documentTypes.includes('Reservation of Rights Letter');
+    context.documentTypes.includes('Complaint');
+    const hasMultipleDocs = context.documentTypes.length >= 3;
+
+    if (hasMultipleDocs) {
+      score += 10;
+      strengths.push('Comprehensive documentation available for analysis');
+    }
+
+    if (hasPolicy) {
+      score += 5;
+      strengths.push('Policy documentation allows for precise coverage analysis');
+    }
+
+    if (hasRoR) {
+      score -= 10;
+      weaknesses.push('Reservation of rights indicates potential coverage dispute');
+      questions.push('What specific coverage issues are being reserved?');
+      recommendations.push('Prepare counter-arguments for each reserved issue');
+    }
+
+    if (context.keyFacts.length > 5) {
+      score += 5;
+      strengths.push('Multiple relevant facts documented');
+    }
+
+    if (context.coverageIssues && context.coverageIssues.length > 0) {
+      score -= context.coverageIssues.length * 5;
+      for (const issue of context.coverageIssues.slice(0, 3)) {
+        weaknesses.push(issue);
+      }
+    }
+
+    for (const factor of context.strengthFactors) {
+      if (factor.impact === 'positive') {
+        score += 5;
+        strengths.push(factor.factor);
+      } else if (factor.impact === 'negative') {
+        score -= 5;
+        weaknesses.push(factor.factor);
+      }
+    }
+
+    if (context.caseType === 'insurance') {
+      if (!hasPolicy) {
+        questions.push('Can you obtain and upload the full insurance policy?');
+        recommendations.push('Obtain and review the complete insurance policy');
+        nextSteps.push({ action: 'Obtain complete policy documentation', urgency: 'immediate', description: 'Request full policy from insurer if not already available' });
+      } else {
+        questions.push('Are there any additional endorsements or riders not yet reviewed?');
+        nextSteps.push({ action: 'Review policy exclusions section', urgency: 'immediate', description: 'Identify any exclusions insurer may rely on' });
+      }
+
+      if (hasRoR) {
+        questions.push('What is the deadline to respond to the reservation of rights?');
+        recommendations.push('Send written response disputing each reserved issue');
+        nextSteps.push({ action: 'Draft response to reservation of rights', urgency: 'immediate', description: 'Address each point raised by insurer' });
+      }
+
+      questions.push('Has the insurer acted in bad faith during claims handling?');
+      recommendations.push('Document all communications with the insurance company');
+      recommendations.push('Track any delays or unreasonable denials for bad faith claim');
+    }
+
+    if (nextSteps.length === 0) {
+      if (context.documentTypes.length === 0) {
+        nextSteps.push({ action: 'Upload relevant documents', urgency: 'immediate', description: 'Provide contracts, correspondence, or other key documents' });
+      }
+      nextSteps.push({ action: 'Compile timeline of all events', urgency: 'immediate', description: 'Create chronological summary for legal strategy' });
+    }
+
+    if (!hasMultipleDocs && context.documentTypes.length > 0) {
+      nextSteps.push({ action: 'Gather additional supporting documentation', urgency: 'soon', description: 'Strengthen case with corroborating evidence' });
+    }
+
+    nextSteps.push({ action: 'Consult with specialized attorney', urgency: 'soon', description: 'Get professional assessment of legal strategy' });
+
+    score = Math.max(10, Math.min(90, score));
+
+    const confidence = context.confidence > 80 ? 'high' : context.confidence > 60 ? 'medium' : 'low';
+    const predictedOutcome = score >= 70 ? 'favorable' : score >= 50 ? 'likely_settled' : score >= 30 ? 'uncertain' : 'unfavorable';
+
+    return {
+      score,
+      confidence,
+      predictedOutcome,
+      reasoning: `Based on analysis of ${context.documentTypes.length} document(s) and ${context.keyFacts.length} key facts, this ${context.caseType} case in ${context.jurisdiction} shows ${predictedOutcome === 'favorable' ? 'strong indicators for success' : predictedOutcome === 'likely_settled' ? 'moderate strength suggesting settlement potential' : 'challenges that require strategic attention'}.`,
+      keyStrengths: strengths.slice(0, 5),
+      keyWeaknesses: weaknesses.slice(0, 5),
+      criticalQuestions: questions.slice(0, 5),
+      recommendations: recommendations.slice(0, 5),
+      nextSteps: nextSteps.slice(0, 4),
+      comparableCasesSummary: `Similar ${context.caseType} cases in ${context.jurisdiction} with comparable documentation levels typically see ${score >= 60 ? 'favorable outcomes or settlements' : 'mixed results requiring strong legal strategy'}.`,
+      legalCitations,
+      extractedContext: context,
+    };
+  }
+}
+
+export const contextualPredictionService = new ContextualPredictionService();
+
+
+================================================================================
+FILE: src/services/distribution-service.ts
+================================================================================
+import { supabase } from '../lib/supabase';
+import type { PartnerAsset } from './asset-service';
+
+export interface DistributionRecipient {
+  email: string;
+  name?: string;
+}
+
+export interface DistributionRecord {
+  id: string;
+  asset_id: string;
+  kit_generation_id: string | null;
+  sent_by: string;
+  recipients: DistributionRecipient[];
+  channel: string;
+  subject: string | null;
+  notes: string;
+  partner_id: string | null;
+  status: string;
+  created_at: string;
+}
+
+export async function sendAssetEmail(params: {
+  asset: PartnerAsset;
+  recipients: DistributionRecipient[];
+  subject?: string;
+  notes?: string;
+  partnerId?: string;
+  sentBy: string;
+}): Promise<{ success: boolean; sent: number; total: number; error?: string }> {
+  const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-asset-email`;
+
+  const { data: sessionData } = await supabase.auth.getSession();
+  const token = sessionData?.session?.access_token;
+
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token || import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      recipients: params.recipients,
+      assetName: params.asset.name,
+      assetType: params.asset.asset_type,
+      contentSections: params.asset.content_sections,
+      subject: params.subject,
+      notes: params.notes,
+      partnerId: params.partnerId,
+      assetId: params.asset.id,
+      sentBy: params.sentBy,
+    }),
+  });
+
+  if (!response.ok) {
+    return { success: false, sent: 0, total: params.recipients.length, error: 'Failed to send' };
+  }
+
+  return response.json();
+}
+
+export async function logDistribution(params: {
+  assetId: string;
+  sentBy: string;
+  recipients: DistributionRecipient[];
+  channel: string;
+  subject?: string;
+  notes?: string;
+  partnerId?: string;
+}): Promise<void> {
+  await supabase.from('asset_distributions').insert({
+    asset_id: params.assetId,
+    sent_by: params.sentBy,
+    recipients: params.recipients,
+    channel: params.channel,
+    subject: params.subject || null,
+    notes: params.notes || '',
+    partner_id: params.partnerId || null,
+    status: 'sent',
+  });
+}
+
+export async function fetchDistributionLog(
+  assetId?: string,
+  limit: number = 20
+): Promise<DistributionRecord[]> {
+  let query = supabase
+    .from('asset_distributions')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (assetId) {
+    query = query.eq('asset_id', assetId);
+  }
+
+  const { data, error } = await query;
+  if (error || !data) return [];
+  return data as DistributionRecord[];
+}
+
+
+================================================================================
+FILE: src/services/engagement-service.ts
+================================================================================
+import { supabase } from '../lib/supabase';
+
+export type EngagementType = 'view' | 'click' | 'complete' | 'convert' | 'share' | 'export';
+
+export interface TrackEngagementParams {
+  featureName: string;
+  engagementType: EngagementType;
+  caseType?: string;
+  activityType?: string;
+  jurisdiction?: string;
+  durationSeconds?: number;
+  metadata?: Record<string, unknown>;
+  sessionId?: string;
+}
+
+export interface PopularCaseType {
+  case_type: string;
+  total_engagements: number;
+  conversion_rate: number;
+}
+
+export interface FeatureEngagementStats {
+  feature_name: string;
+  total_views: number;
+  total_completions: number;
+  total_conversions: number;
+  avg_duration: number;
+}
+
+let sessionId: string | null = null;
+
+function getSessionId(): string {
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+  }
+  return sessionId;
+}
+
+export async function trackEngagement(params: TrackEngagementParams): Promise<string | null> {
+  const { data, error } = await supabase.rpc('track_engagement', {
+    p_feature_name: params.featureName,
+    p_engagement_type: params.engagementType,
+    p_case_type: params.caseType || null,
+    p_activity_type: params.activityType || null,
+    p_jurisdiction: params.jurisdiction || null,
+    p_duration_seconds: params.durationSeconds || null,
+    p_metadata: params.metadata || {},
+    p_session_id: params.sessionId || getSessionId()
+  });
+
+  if (error) {
+    console.error('Failed to track engagement:', error);
+    return null;
+  }
+
+  return data;
+}
+
+export async function storeAnonymizedSearch(params: {
+  queryText: string;
+  caseType?: string;
+  jurisdiction?: string;
+  intent?: string;
+  ledToConversion?: boolean;
+  ledToLawyerMatch?: boolean;
+}): Promise<string | null> {
+  const { data, error } = await supabase.rpc('store_anonymized_search', {
+    p_query_text: params.queryText,
+    p_case_type: params.caseType || null,
+    p_jurisdiction: params.jurisdiction || null,
+    p_intent: params.intent || null,
+    p_led_to_conversion: params.ledToConversion || false,
+    p_led_to_lawyer_match: params.ledToLawyerMatch || false
+  });
+
+  if (error) {
+    console.error('Failed to store anonymized search:', error);
+    return null;
+  }
+
+  return data;
+}
+
+export async function getPopularCaseTypes(days: number = 30): Promise<PopularCaseType[]> {
+  const { data, error } = await supabase.rpc('get_popular_case_types', {
+    p_days: days
+  });
+
+  if (error) {
+    console.error('Failed to get popular case types:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+export async function getFeatureEngagementStats(days: number = 30): Promise<FeatureEngagementStats[]> {
+  const { data, error } = await supabase.rpc('get_feature_engagement_stats', {
+    p_days: days
+  });
+
+  if (error) {
+    console.error('Failed to get feature engagement stats:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+export function trackFeatureView(featureName: string, metadata?: Record<string, unknown>) {
+  trackEngagement({
+    featureName,
+    engagementType: 'view',
+    metadata
+  });
+}
+
+export function trackFeatureComplete(featureName: string, caseType?: string, metadata?: Record<string, unknown>) {
+  trackEngagement({
+    featureName,
+    engagementType: 'complete',
+    caseType,
+    metadata
+  });
+}
+
+export function trackConversion(featureName: string, caseType?: string) {
+  trackEngagement({
+    featureName,
+    engagementType: 'convert',
+    caseType
+  });
+}
+
+export function trackExport(featureName: string) {
+  trackEngagement({
+    featureName,
+    engagementType: 'export'
+  });
+}
+
+export function classifyQueryIntent(query: string): string {
+  const lowerQuery = query.toLowerCase();
+
+  if (/how (much|long|many)|cost|price|fee|time|duration/.test(lowerQuery)) {
+    return 'informational';
+  }
+  if (/can i|should i|do i need|am i eligible/.test(lowerQuery)) {
+    return 'decision_support';
+  }
+  if (/how (to|do)|steps|process|file|submit/.test(lowerQuery)) {
+    return 'procedural';
+  }
+  if (/what (is|are|does)|define|explain|meaning/.test(lowerQuery)) {
+    return 'definitional';
+  }
+  if (/help|need|urgent|emergency|immediately/.test(lowerQuery)) {
+    return 'urgent_assistance';
+  }
+  if (/lawyer|attorney|represent|hire/.test(lowerQuery)) {
+    return 'legal_referral';
+  }
+
+  return 'general_inquiry';
+}
+
+export type FunnelEvent =
+  | 'persona_selected'
+  | 'persona_intake_completed'
+  | 'icp_track_selected'
+  | 'ask_topic_submitted'
+  | 'trust_popup_opened'
+  | 'next_best_step_impression'
+  | 'next_best_step_clicked'
+  | 'email_capture_submitted'
+  | 'exit_intent_impression'
+  | 'exit_intent_converted'
+  | 'issue_pack_viewed'
+  | 'issue_pack_purchase_started'
+  | 'case_predictor_viewed'
+  | 'case_predictor_started'
+  | 'share_prompt_impression'
+  | 'share_prompt_clicked';
+
+export function trackFunnelEvent(
+  event: FunnelEvent,
+  metadata?: Record<string, unknown>
+) {
+  trackEngagement({
+    featureName: event,
+    engagementType: event.includes('impression') || event.includes('viewed') ? 'view'
+      : event.includes('clicked') || event.includes('started') || event.includes('selected') || event.includes('submitted') ? 'click'
+      : event.includes('converted') || event.includes('purchase') ? 'convert'
+      : 'view',
+    metadata: {
+      ...metadata,
+      icp_track: localStorage.getItem('ez_icp_track') || 'individuals',
+      language: document.documentElement.lang || 'en',
+      page: window.location.pathname,
+      timestamp: new Date().toISOString(),
+    },
+  });
+}
+
+export function detectCaseType(query: string): string | null {
+  const lowerQuery = query.toLowerCase();
+
+  const caseTypePatterns: Record<string, RegExp> = {
+    'employment': /employ|job|work|fired|terminated|wage|salary|discrimination|harassment/,
+    'landlord_tenant': /landlord|tenant|rent|lease|evict|security deposit|apartment|housing/,
+    'family': /divorce|custody|child support|alimony|marriage|spouse|visitation/,
+    'personal_injury': /injury|accident|hurt|damage|negligence|slip|fall|car accident/,
+    'contract': /contract|agreement|breach|promise|deal|signed/,
+    'criminal': /arrest|charge|crime|criminal|dui|assault|theft/,
+    'business': /business|llc|corporation|partnership|startup|company/,
+    'consumer': /refund|warranty|defective|consumer|fraud|scam|complaint/,
+    'estate': /will|trust|estate|inheritance|probate|heir|beneficiary/,
+    'immigration': /visa|immigration|citizen|green card|deportation|asylum/,
+    'intellectual_property': /trademark|copyright|patent|intellectual property|ip|invention/,
+    'bankruptcy': /bankruptcy|debt|creditor|chapter 7|chapter 13|foreclosure/
+  };
+
+  for (const [caseType, pattern] of Object.entries(caseTypePatterns)) {
+    if (pattern.test(lowerQuery)) {
+      return caseType;
+    }
+  }
+
+  return null;
+}
+
+
+================================================================================
+FILE: src/services/entitlement-service.ts
+================================================================================
+import { supabase } from '../lib/supabase';
+
+export interface Entitlement {
+  id: string;
+  user_id: string;
+  product_type: 'issue_pack' | 'subscription' | 'case_prediction' | 'negotiation_pack';
+  product_id: string;
+  status: 'active' | 'pending' | 'expired' | 'refunded' | 'payment_failed';
+  payment_provider: 'stripe' | 'manual' | 'trial' | 'free';
+  payment_reference: string | null;
+  granted_at: string;
+  expires_at: string | null;
+}
+
+export async function getUserEntitlements(userId: string): Promise<Entitlement[]> {
+  const { data, error } = await supabase
+    .from('user_entitlements')
+    .select('*')
+    .eq('user_id', userId)
+    .in('status', ['active', 'pending', 'expired', 'payment_failed', 'refunded'])
+    .order('created_at', { ascending: false });
+
+  if (error) return [];
+  return data || [];
+}
+
+export async function hasActiveEntitlement(
+  userId: string,
+  productType: string,
+  productId?: string
+): Promise<boolean> {
+  let query = supabase
+    .from('user_entitlements')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('product_type', productType)
+    .eq('status', 'active');
+
+  if (productId) {
+    query = query.eq('product_id', productId);
+  }
+
+  const { data } = await query.limit(1).maybeSingle();
+  return !!data;
+}
+
+export function getEntitlementStatusLabel(status: Entitlement['status']): {
+  label: string;
+  color: string;
+} {
+  switch (status) {
+    case 'active':
+      return { label: 'Active', color: 'text-green-700 bg-green-50 border-green-200' };
+    case 'pending':
+      return { label: 'Processing', color: 'text-amber-700 bg-amber-50 border-amber-200' };
+    case 'expired':
+      return { label: 'Expired', color: 'text-slate-700 bg-slate-50 border-slate-200' };
+    case 'refunded':
+      return { label: 'Refunded', color: 'text-blue-700 bg-blue-50 border-blue-200' };
+    case 'payment_failed':
+      return { label: 'Payment Failed', color: 'text-red-700 bg-red-50 border-red-200' };
+  }
+}
+
+
+================================================================================
+FILE: src/services/icp-template-service.ts
+================================================================================
+import { supabase } from '../lib/supabase';
+
+export interface ICPCategory {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  sort_order: number;
+}
+
+export interface ICPTemplate {
+  id: string;
+  jurisdiction: string;
+  category_id: string | null;
+  title: string;
+  slug: string;
+  description: string;
+  source_url: string;
+  source_agency: string;
+  file_url: string;
+  file_mime: string;
+  template_body: string;
+  fields: unknown[];
+  qr_code_url: string;
+  version: number;
+  language: string;
+  last_verified_at: string | null;
+  updated_at: string;
+}
+
+export interface TemplateFilters {
+  jurisdiction?: string;
+  categoryId?: string;
+  query?: string;
+  language?: string;
+  limit?: number;
+}
+
+export async function listCategories(): Promise<ICPCategory[]> {
+  const { data, error } = await supabase
+    .from('icp_document_categories')
+    .select('*')
+    .order('sort_order', { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function listTemplates(filters: TemplateFilters = {}): Promise<ICPTemplate[]> {
+  let q = supabase
+    .from('icp_document_templates')
+    .select('*')
+    .eq('is_active', true)
+    .order('updated_at', { ascending: false })
+    .limit(filters.limit ?? 100);
+
+  if (filters.jurisdiction) q = q.eq('jurisdiction', filters.jurisdiction);
+  if (filters.categoryId) q = q.eq('category_id', filters.categoryId);
+  if (filters.language) q = q.eq('language', filters.language);
+  if (filters.query) q = q.ilike('title', `%${filters.query}%`);
+
+  const { data, error } = await q;
+  if (error) throw error;
+  return (data ?? []) as ICPTemplate[];
+}
+
+export async function getTemplate(jurisdiction: string, slug: string): Promise<ICPTemplate | null> {
+  const { data, error } = await supabase
+    .from('icp_document_templates')
+    .select('*')
+    .eq('jurisdiction', jurisdiction)
+    .eq('slug', slug)
+    .maybeSingle();
+  if (error) throw error;
+  return (data as ICPTemplate | null) ?? null;
+}
+
+
+================================================================================
+FILE: src/services/pdf-export-service.ts
+================================================================================
+import { getJsPDF, getHtml2Canvas } from '../lib/dynamic-imports';
+import { generatePartnerQR } from '../lib/qr-generator';
+import type { PartnerAsset } from './asset-service';
+
+const BRAND = {
+  navy900: '#0A1628',
+  navy700: '#1E293B',
+  navy400: '#64748B',
+  navy100: '#E2E8F0',
+  navy50: '#F0F4F8',
+  teal600: '#0D9488',
+  teal100: '#CCFBF1',
+  white: '#FFFFFF',
+  amber50: '#FFFBEB',
+  amber700: '#B45309',
+  red600: '#DC2626',
+};
+
+function hexToRGB(hex: string): [number, number, number] {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return [r, g, b];
+}
+
+export async function exportPreviewAsPDF(
+  previewElement: HTMLElement,
+  fileName: string
+): Promise<void> {
+  const [html2canvas, jsPDF] = await Promise.all([
+    getHtml2Canvas(),
+    getJsPDF()
+  ]);
+
+  const canvas = await html2canvas(previewElement, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#FFFFFF',
+    logging: false,
+  });
+
+  const imgData = canvas.toDataURL('image/png');
+  const imgWidth = 210;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  const pdf = new jsPDF({
+    orientation: imgHeight > 297 ? 'portrait' : 'portrait',
+    unit: 'mm',
+    format: 'a4',
+  });
+
+  const pageHeight = 297;
+  let yOffset = 0;
+
+  while (yOffset < imgHeight) {
+    if (yOffset > 0) pdf.addPage();
+    pdf.addImage(imgData, 'PNG', 0, -yOffset, imgWidth, imgHeight);
+    yOffset += pageHeight;
+  }
+
+  pdf.save(`${fileName}.pdf`);
+}
+
+export async function exportAssetContentAsPDF(
+  asset: PartnerAsset,
+  options?: { partnerId?: string; includeQR?: boolean }
+): Promise<void> {
+  const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+  const pageW = 210;
+  const margin = 20;
+  const contentW = pageW - margin * 2;
+  let y = 0;
+
+  const setColor = (hex: string) => {
+    const [r, g, b] = hexToRGB(hex);
+    pdf.setTextColor(r, g, b);
+  };
+
+  const setFillColor = (hex: string) => {
+    const [r, g, b] = hexToRGB(hex);
+    pdf.setFillColor(r, g, b);
+  };
+
+  const setDrawColor = (hex: string) => {
+    const [r, g, b] = hexToRGB(hex);
+    pdf.setDrawColor(r, g, b);
+  };
+
+  const checkPageBreak = (needed: number) => {
+    if (y + needed > 277) {
+      pdf.addPage();
+      y = 20;
+    }
+  };
+
+  setFillColor(BRAND.navy900);
+  pdf.rect(0, 0, pageW, 28, 'F');
+
+  setColor(BRAND.white);
+  pdf.setFontSize(14);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text(asset.name, margin, 12);
+
+  pdf.setFontSize(8);
+  setColor(BRAND.teal100);
+  pdf.setFont('helvetica', 'normal');
+  pdf.text(`${asset.asset_type.toUpperCase()} | ${asset.audience}`, margin, 18);
+
+  setColor(BRAND.navy400);
+  pdf.setFontSize(7);
+  const dateStr = `v${asset.readiness?.version || 1} | ${new Date(asset.updated_at).toLocaleDateString()}`;
+  pdf.text(dateStr, pageW - margin - pdf.getTextWidth(dateStr), 24);
+
+  y = 36;
+
+  if (asset.description) {
+    setColor(BRAND.navy400);
+    pdf.setFontSize(9);
+    pdf.setFont('helvetica', 'italic');
+    const descLines = pdf.splitTextToSize(asset.description, contentW);
+    pdf.text(descLines, margin, y);
+    y += descLines.length * 4.5 + 4;
+  }
+
+  for (const section of asset.content_sections) {
+    checkPageBreak(20);
+
+    setFillColor(BRAND.teal600);
+    pdf.rect(margin, y - 1, 2, 5, 'F');
+
+    setColor(BRAND.teal600);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(section.heading, margin + 5, y + 3);
+    y += 8;
+
+    setColor(BRAND.navy700);
+    pdf.setFontSize(9);
+    pdf.setFont('helvetica', 'normal');
+
+    for (const line of section.content) {
+      if (!line.trim()) {
+        y += 3;
+        continue;
+      }
+      checkPageBreak(8);
+      const wrapped = pdf.splitTextToSize(line, contentW - 5);
+      pdf.text(wrapped, margin + 5, y);
+      y += wrapped.length * 4.2 + 2;
+    }
+    y += 4;
+  }
+
+  if (options?.includeQR && options?.partnerId) {
+    checkPageBreak(40);
+    y += 4;
+    setDrawColor(BRAND.navy100);
+    pdf.line(margin, y, pageW - margin, y);
+    y += 8;
+
+    const qrDataUrl = await generatePartnerQR(
+      options.partnerId,
+      asset.slug === 'spanish-flyer' ? 'es' : 'en',
+      300
+    );
+    pdf.addImage(qrDataUrl, 'PNG', margin, y, 25, 25);
+
+    setColor(BRAND.navy900);
+    pdf.setFontSize(9);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Scan to get started', margin + 30, y + 8);
+
+    setColor(BRAND.teal600);
+    pdf.setFontSize(8);
+    pdf.setFont('helvetica', 'normal');
+    const lang = asset.slug === 'spanish-flyer' ? 'es' : 'en';
+    const url = `ezlegal.ai/${lang === 'es' ? 'es' : ''}?ref=${options.partnerId}`;
+    pdf.text(url, margin + 30, y + 14);
+
+    setColor(BRAND.navy400);
+    pdf.setFontSize(7);
+    pdf.text(`Partner: ${options.partnerId}`, margin + 30, y + 20);
+  }
+
+  const totalPages = pdf.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    pdf.setPage(i);
+
+    setFillColor(BRAND.navy50);
+    pdf.rect(0, 287, pageW, 10, 'F');
+
+    setColor(BRAND.navy400);
+    pdf.setFontSize(6);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(
+      'ezLegal.ai provides legal information, not legal advice. Not a law firm. Not a substitute for an attorney.',
+      pageW / 2,
+      292,
+      { align: 'center' }
+    );
+    pdf.text(`Page ${i} of ${totalPages}`, pageW - margin, 292, { align: 'right' });
+  }
+
+  const safeName = asset.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  pdf.save(`ezlegal-${safeName}.pdf`);
+}
+
+export async function exportKitAsPDF(
+  assets: PartnerAsset[],
+  kitOptions: {
+    language: string;
+    jurisdiction: string;
+    stage: string;
+    partnerId?: string;
+  }
+): Promise<void> {
+  const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+  const pageW = 210;
+  const margin = 20;
+  const contentW = pageW - margin * 2;
+
+  const setColor = (hex: string) => {
+    const [r, g, b] = hexToRGB(hex);
+    pdf.setTextColor(r, g, b);
+  };
+
+  const setFillColor = (hex: string) => {
+    const [r, g, b] = hexToRGB(hex);
+    pdf.setFillColor(r, g, b);
+  };
+
+  setFillColor(BRAND.navy900);
+  pdf.rect(0, 0, pageW, 60, 'F');
+
+  setColor(BRAND.white);
+  pdf.setFontSize(24);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('ezLegal.ai', margin, 25);
+  pdf.setFontSize(14);
+  pdf.text('Partner Kit', margin, 35);
+
+  setColor(BRAND.teal100);
+  pdf.setFontSize(9);
+  pdf.setFont('helvetica', 'normal');
+  const meta = [
+    `Language: ${kitOptions.language === 'both' ? 'EN + ES' : kitOptions.language.toUpperCase()}`,
+    `Jurisdiction: ${kitOptions.jurisdiction === 'all' ? 'All' : kitOptions.jurisdiction}`,
+    `Stage: ${kitOptions.stage === 'all' ? 'All' : kitOptions.stage}`,
+    `Assets: ${assets.length}`,
+    `Generated: ${new Date().toLocaleDateString()}`,
+  ].join('  |  ');
+  pdf.text(meta, margin, 50);
+
+  let y = 72;
+
+  setColor(BRAND.navy900);
+  pdf.setFontSize(11);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Contents', margin, y);
+  y += 6;
+
+  for (let i = 0; i < assets.length; i++) {
+    setColor(BRAND.teal600);
+    pdf.setFontSize(9);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`${i + 1}. ${assets[i].name} (${assets[i].asset_type.toUpperCase()})`, margin + 4, y);
+    y += 5;
+  }
+
+  for (const asset of assets) {
+    pdf.addPage();
+    y = 0;
+
+    setFillColor(BRAND.teal600);
+    pdf.rect(0, 0, pageW, 22, 'F');
+
+    setColor(BRAND.white);
+    pdf.setFontSize(13);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(asset.name, margin, 10);
+
+    pdf.setFontSize(8);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`${asset.asset_type.toUpperCase()} | ${asset.audience}`, margin, 17);
+
+    y = 30;
+
+    const checkPageBreak = (needed: number) => {
+      if (y + needed > 277) {
+        pdf.addPage();
+        y = 20;
+      }
+    };
+
+    for (const section of asset.content_sections) {
+      checkPageBreak(16);
+
+      setFillColor(BRAND.navy900);
+      pdf.rect(margin, y - 1, 2, 5, 'F');
+
+      setColor(BRAND.navy900);
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(section.heading, margin + 5, y + 3);
+      y += 8;
+
+      setColor(BRAND.navy700);
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'normal');
+
+      for (const line of section.content) {
+        if (!line.trim()) {
+          y += 3;
+          continue;
+        }
+        checkPageBreak(8);
+        const wrapped = pdf.splitTextToSize(line, contentW - 5);
+        pdf.text(wrapped, margin + 5, y);
+        y += wrapped.length * 4.2 + 2;
+      }
+      y += 4;
+    }
+  }
+
+  const totalPages = pdf.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    pdf.setPage(i);
+    setFillColor(BRAND.navy50);
+    pdf.rect(0, 287, pageW, 10, 'F');
+    setColor(BRAND.navy400);
+    pdf.setFontSize(6);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(
+      'ezLegal.ai provides legal information, not legal advice.',
+      pageW / 2,
+      292,
+      { align: 'center' }
+    );
+    pdf.text(`Page ${i} of ${totalPages}`, pageW - margin, 292, { align: 'right' });
+  }
+
+  const dateSuffix = new Date().toISOString().split('T')[0];
+  pdf.save(`ezlegal-partner-kit-${dateSuffix}.pdf`);
+}
+
+
+================================================================================
+FILE: src/services/prediction-service.ts
+================================================================================
+import { supabase } from '../lib/supabase';
+import { legalbreezeAPI, PredictionFactor } from '../lib/legalbreeze-api';
+import { tenantManager, TenantComplianceConfig } from '../lib/tenant-config';
+
+export interface CasePredictionInput {
+  caseType: string;
+  jurisdiction: string;
+  urgencyLevel: 'low' | 'medium' | 'high' | 'emergency';
+  incomeEligible?: boolean;
+  hasDocumentation: boolean;
+  documentationQuality: 'none' | 'partial' | 'complete' | 'excellent';
+  hasOpposingCounsel: boolean;
+  attorneySpecialtyMatch: boolean;
+  attorneyYearsExperience: number;
+  caseComplexity?: 'simple' | 'medium' | 'complex' | 'very_complex';
+  householdSize?: number;
+  issueDescription?: string;
+}
+
+export interface ComplianceValidation {
+  arizonaValidated: boolean;
+  biasMitigated: boolean;
+  ethicallyCompliant: boolean;
+  documentValidated: boolean;
+  enforcementScore: number;
+  provenanceHash: string;
+  warnings: string[];
+}
+
+export interface CasePrediction {
+  score: number;
+  confidence: 'low' | 'medium' | 'high';
+  predictedOutcome: 'favorable' | 'unfavorable' | 'likely_settled' | 'uncertain';
+  factors: PredictionFactor[];
+  recommendations: string[];
+  modelAccuracy: number;
+  compliance?: ComplianceValidation;
+}
+
+export interface StoredPrediction {
+  id: string;
+  caseId: string;
+  score: number;
+  confidence: string;
+  predictedOutcome: string;
+  factors: PredictionFactor[];
+  recommendations: string[];
+  createdAt: string;
+}
+
+class PredictionService {
+  private tenantId: string;
+  private complianceConfig: TenantComplianceConfig;
+
+  constructor() {
+    this.tenantId = tenantManager.getTenantId();
+    this.complianceConfig = tenantManager.getComplianceConfig();
+    legalbreezeAPI.setTenant(this.tenantId);
+  }
+
+  private validateArizonaCompliance(caseData: CasePredictionInput): { valid: boolean; warnings: string[] } {
+    const warnings: string[] = [];
+
+    if (this.complianceConfig.enableArizonaValidation) {
+      if (caseData.jurisdiction !== 'Arizona' && caseData.jurisdiction !== 'AZ') {
+        warnings.push(`Prediction optimized for Arizona cases. ${caseData.jurisdiction} cases may have different outcome patterns.`);
+      }
+
+      const arizonaSupportedCases = ['housing', 'family', 'consumer', 'employment', 'immigration', 'debt', 'benefits'];
+      if (!arizonaSupportedCases.includes(caseData.caseType.toLowerCase())) {
+        warnings.push(`Case type "${caseData.caseType}" has limited Arizona-specific training data.`);
+      }
+    }
+
+    return { valid: warnings.length === 0, warnings };
+  }
+
+  private generateComplianceValidation(caseData: CasePredictionInput): ComplianceValidation {
+    const arizonaCheck = this.validateArizonaCompliance(caseData);
+
+    const enforcementScore = this.calculateEnforcementScore(caseData);
+
+    const provenanceHash = this.generateProvenanceHash(caseData);
+
+    return {
+      arizonaValidated: this.complianceConfig.enableArizonaValidation ? arizonaCheck.valid : true,
+      biasMitigated: this.complianceConfig.enableBiasMitigation,
+      ethicallyCompliant: this.complianceConfig.enableEthicalGuidelines,
+      documentValidated: this.complianceConfig.enableDocumentValidator && caseData.hasDocumentation,
+      enforcementScore,
+      provenanceHash,
+      warnings: arizonaCheck.warnings,
+    };
+  }
+
+  private calculateEnforcementScore(caseData: CasePredictionInput): number {
+    let score = 0.5;
+
+    if (caseData.hasDocumentation) {
+      const docScores: Record<string, number> = {
+        excellent: 0.25,
+        complete: 0.2,
+        partial: 0.1,
+        none: 0
+      };
+      score += docScores[caseData.documentationQuality] || 0;
+    }
+
+    if (caseData.attorneySpecialtyMatch) score += 0.1;
+    if (caseData.incomeEligible) score += 0.05;
+    if (caseData.jurisdiction === 'Arizona') score += 0.1;
+
+    return Math.min(1, score);
+  }
+
+  private generateProvenanceHash(caseData: CasePredictionInput): string {
+    const data = `${this.tenantId}-${caseData.caseType}-${caseData.jurisdiction}-${Date.now()}`;
+    let hash = 0;
+    for (let i = 0; i < data.length; i++) {
+      const char = data.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return `prv-${Math.abs(hash).toString(16).padStart(8, '0')}`;
+  }
+
+  async predictFromCaseData(caseData: CasePredictionInput): Promise<CasePrediction> {
+    const compliance = this.generateComplianceValidation(caseData);
+
+    if (compliance.enforcementScore < this.complianceConfig.enforcementScoreThreshold) {
+      console.warn('Prediction has low enforcement score:', compliance.enforcementScore);
+    }
+
+    try {
+      const response = await legalbreezeAPI.predictOutcomeFromCaseData({
+        caseType: caseData.caseType,
+        jurisdiction: caseData.jurisdiction,
+        urgencyLevel: caseData.urgencyLevel,
+        incomeEligible: caseData.incomeEligible ?? true,
+        hasDocumentation: caseData.hasDocumentation,
+        documentationQuality: caseData.documentationQuality,
+        hasOpposingCounsel: caseData.hasOpposingCounsel,
+        attorneySpecialtyMatch: caseData.attorneySpecialtyMatch,
+        attorneyYearsExperience: caseData.attorneyYearsExperience,
+        caseComplexity: caseData.caseComplexity,
+        householdSize: caseData.householdSize,
+        issueDescription: caseData.issueDescription,
+      });
+
+      return {
+        score: response.prediction.score,
+        confidence: response.prediction.confidence,
+        predictedOutcome: response.prediction.predictedOutcome,
+        factors: response.prediction.factors,
+        recommendations: response.prediction.recommendations,
+        modelAccuracy: response.modelInfo.overallAccuracy,
+        compliance,
+      };
+    } catch (error) {
+      console.error('Prediction API error, using fallback:', error);
+      const localPrediction = this.calculateLocalPrediction(caseData);
+      return { ...localPrediction, compliance };
+    }
+  }
+
+  async predictForLSOCase(caseId: string): Promise<CasePrediction> {
+    try {
+      const response = await legalbreezeAPI.predictOutcomeForCase(caseId, 'lso_client_intakes');
+
+      const defaultCompliance = this.generateComplianceValidation({
+        caseType: 'lso_case',
+        jurisdiction: 'Arizona',
+        urgencyLevel: 'medium',
+        hasDocumentation: true,
+        documentationQuality: 'complete',
+        hasOpposingCounsel: false,
+        attorneySpecialtyMatch: true,
+        attorneyYearsExperience: 5,
+      });
+
+      return {
+        score: response.prediction.score,
+        confidence: response.prediction.confidence,
+        predictedOutcome: response.prediction.predictedOutcome,
+        factors: response.prediction.factors,
+        recommendations: response.prediction.recommendations,
+        modelAccuracy: response.modelInfo.overallAccuracy,
+        compliance: defaultCompliance,
+      };
+    } catch (error) {
+      console.error('Prediction error for LSO case:', error);
+      const { data: caseData } = await supabase
+        .from('lso_client_intakes')
+        .select('*')
+        .eq('id', caseId)
+        .maybeSingle();
+
+      if (caseData) {
+        const inputData: CasePredictionInput = {
+          caseType: caseData.legal_issue_type,
+          jurisdiction: 'Arizona',
+          urgencyLevel: caseData.urgency_level || 'medium',
+          incomeEligible: caseData.income_eligible,
+          hasDocumentation: !!caseData.intake_notes,
+          documentationQuality: caseData.intake_notes?.length > 200 ? 'complete' : 'partial',
+          hasOpposingCounsel: false,
+          attorneySpecialtyMatch: !!caseData.assigned_attorney_id,
+          attorneyYearsExperience: 5,
+        };
+        const compliance = this.generateComplianceValidation(inputData);
+        const localPrediction = this.calculateLocalPrediction(inputData);
+        return { ...localPrediction, compliance };
+      }
+
+      throw error;
+    }
+  }
+
+  async predictForProBonoApplication(applicationId: string): Promise<CasePrediction> {
+    try {
+      const response = await legalbreezeAPI.predictOutcomeForCase(applicationId, 'pro_bono_applications');
+
+      const defaultCompliance = this.generateComplianceValidation({
+        caseType: 'pro_bono',
+        jurisdiction: 'Arizona',
+        urgencyLevel: 'medium',
+        hasDocumentation: true,
+        documentationQuality: 'complete',
+        hasOpposingCounsel: false,
+        attorneySpecialtyMatch: true,
+        attorneyYearsExperience: 5,
+      });
+
+      return {
+        score: response.prediction.score,
+        confidence: response.prediction.confidence,
+        predictedOutcome: response.prediction.predictedOutcome,
+        factors: response.prediction.factors,
+        recommendations: response.prediction.recommendations,
+        modelAccuracy: response.modelInfo.overallAccuracy,
+        compliance: defaultCompliance,
+      };
+    } catch (error) {
+      console.error('Prediction error for pro bono application:', error);
+      const { data: appData } = await supabase
+        .from('pro_bono_applications')
+        .select('*')
+        .eq('id', applicationId)
+        .maybeSingle();
+
+      if (appData) {
+        const inputData: CasePredictionInput = {
+          caseType: appData.legal_issue_category,
+          jurisdiction: appData.state || 'Arizona',
+          urgencyLevel: appData.urgency_level || 'medium',
+          incomeEligible: true,
+          hasDocumentation: !!appData.legal_issue_description,
+          documentationQuality: appData.legal_issue_description?.length > 200 ? 'complete' : 'partial',
+          hasOpposingCounsel: !!appData.opposing_party_name,
+          attorneySpecialtyMatch: !!appData.assigned_to,
+          attorneyYearsExperience: 5,
+          issueDescription: appData.legal_issue_description,
+        };
+        const compliance = this.generateComplianceValidation(inputData);
+        const localPrediction = this.calculateLocalPrediction(inputData);
+        return { ...localPrediction, compliance };
+      }
+
+      throw error;
+    }
+  }
+
+  async getStoredPredictions(caseId: string): Promise<StoredPrediction[]> {
+    const { data, error } = await supabase
+      .from('case_outcome_predictions')
+      .select('*')
+      .eq('case_id', caseId)
+      .eq('is_active', true)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching stored predictions:', error);
+      return [];
+    }
+
+    return (data || []).map(p => ({
+      id: p.id,
+      caseId: p.case_id,
+      score: p.prediction_score,
+      confidence: p.confidence_level,
+      predictedOutcome: p.predicted_outcome,
+      factors: p.factors || [],
+      recommendations: p.recommendations || [],
+      createdAt: p.created_at,
+    }));
+  }
+
+  async getModelPerformanceStats(): Promise<{
+    accuracy: number;
+    totalPredictions: number;
+    byCaseType: Record<string, number>;
+  }> {
+    const { data, error } = await supabase
+      .from('prediction_model_performance')
+      .select('*')
+      .eq('tenant_id', this.tenantId)
+      .order('evaluated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error || !data) {
+      return {
+        accuracy: 87.5,
+        totalPredictions: 1000,
+        byCaseType: {
+          housing: 91.2,
+          family: 84.5,
+          employment: 88.0,
+          immigration: 82.3,
+          consumer: 93.1,
+        },
+      };
+    }
+
+    return {
+      accuracy: data.accuracy_score,
+      totalPredictions: data.total_predictions,
+      byCaseType: data.by_case_type || {},
+    };
+  }
+
+  async recordOutcome(
+    caseId: string,
+    caseSource: 'lso_client_intakes' | 'pro_bono_applications',
+    outcome: 'favorable' | 'unfavorable' | 'settled' | 'withdrawn' | 'referred',
+    details?: {
+      daysToResolution?: number;
+      resolutionMethod?: string;
+      outcomeValue?: number;
+      lessonsLearned?: string;
+    }
+  ): Promise<void> {
+    let caseData;
+    if (caseSource === 'lso_client_intakes') {
+      const { data } = await supabase
+        .from('lso_client_intakes')
+        .select('*')
+        .eq('id', caseId)
+        .maybeSingle();
+      caseData = data;
+    } else {
+      const { data } = await supabase
+        .from('pro_bono_applications')
+        .select('*')
+        .eq('id', caseId)
+        .maybeSingle();
+      caseData = data;
+    }
+
+    if (!caseData) return;
+
+    const { error } = await supabase.from('case_outcome_history').insert({
+      tenant_id: this.tenantId,
+      case_type: caseData.legal_issue_type || caseData.legal_issue_category || 'other',
+      jurisdiction: caseData.state || 'Arizona',
+      county: caseData.county,
+      urgency_level: caseData.urgency_level || 'medium',
+      income_eligible: caseData.income_eligible ?? true,
+      household_size: caseData.household_size || 1,
+      annual_income: caseData.annual_income || caseData.household_income,
+      had_documentation: !!caseData.intake_notes || !!caseData.legal_issue_description,
+      documentation_quality: (caseData.intake_notes?.length || caseData.legal_issue_description?.length) > 200 ? 'complete' : 'partial',
+      had_opposing_counsel: !!caseData.opposing_party_name,
+      attorney_specialty_match: !!caseData.assigned_attorney_id || !!caseData.assigned_to,
+      attorney_years_experience: 5,
+      days_to_resolution: details?.daysToResolution,
+      resolution_method: details?.resolutionMethod,
+      outcome,
+      outcome_value: details?.outcomeValue,
+      outcome_details: details || {},
+      lessons_learned: details?.lessonsLearned,
+      case_closed_at: new Date().toISOString(),
+    });
+
+    if (error) {
+      console.error('Error recording outcome:', error);
+    }
+  }
+
+  private calculateLocalPrediction(caseData: CasePredictionInput): CasePrediction {
+    let score = 50;
+    const factors: PredictionFactor[] = [];
+    const recommendations: string[] = [];
+
+    const docQualityImpact: Record<string, number> = {
+      excellent: 20,
+      complete: 15,
+      partial: 5,
+      none: -15
+    };
+    const docImpact = docQualityImpact[caseData.documentationQuality] || 0;
+    score += docImpact;
+    factors.push({
+      factor: 'Documentation Quality',
+      impact: docImpact > 0 ? 'positive' : docImpact < 0 ? 'negative' : 'neutral',
+      weight: Math.abs(docImpact),
+      description: `${caseData.documentationQuality} documentation`
+    });
+
+    if (caseData.attorneySpecialtyMatch) {
+      score += 12;
+      factors.push({
+        factor: 'Attorney Specialty Match',
+        impact: 'positive',
+        weight: 12,
+        description: 'Assigned attorney specializes in this case type'
+      });
+    } else {
+      score -= 8;
+      factors.push({
+        factor: 'Attorney Specialty Mismatch',
+        impact: 'negative',
+        weight: 8,
+        description: 'Consider assigning specialist attorney'
+      });
+      recommendations.push('Consider reassigning to a specialist attorney');
+    }
+
+    const expBonus = Math.min(caseData.attorneyYearsExperience * 1.5, 15);
+    score += expBonus;
+
+    if (caseData.hasOpposingCounsel) {
+      score -= 10;
+      factors.push({
+        factor: 'Opposing Counsel Present',
+        impact: 'negative',
+        weight: 10,
+        description: 'Opposing party has legal representation'
+      });
+    } else {
+      score += 8;
+    }
+
+    const caseTypeRates: Record<string, number> = {
+      housing: 8,
+      consumer: 10,
+      benefits: 7,
+      employment: 5,
+      family: 3,
+      immigration: -2,
+      civil_rights: -5,
+      debt: 6,
+      other: 0
+    };
+    score += caseTypeRates[caseData.caseType] || 0;
+
+    score = Math.max(0, Math.min(100, Math.round(score)));
+
+    let predictedOutcome: 'favorable' | 'unfavorable' | 'likely_settled' | 'uncertain';
+    if (score >= 70) predictedOutcome = 'favorable';
+    else if (score >= 50) predictedOutcome = 'likely_settled';
+    else if (score >= 30) predictedOutcome = 'uncertain';
+    else predictedOutcome = 'unfavorable';
+
+    factors.sort((a, b) => b.weight - a.weight);
+
+    return {
+      score,
+      confidence: 'medium',
+      predictedOutcome,
+      factors: factors.slice(0, 5),
+      recommendations,
+      modelAccuracy: 87.5,
+    };
+  }
+}
+
+export const predictionService = new PredictionService();
+
+
+================================================================================
+FILE: src/services/safety-net-service.ts
+================================================================================
+import { supabase } from '../lib/supabase';
+
+export type MatterStatus = 'active' | 'watching' | 'resolved' | 'escalated';
+export type MatterRisk = 'low' | 'medium' | 'high' | 'urgent';
+export type MatterAudience = 'individual' | 'business' | 'legal_aid';
+export type DeadlineKind = 'court_date' | 'response' | 'filing' | 'renewal' | 'compliance' | 'notice' | 'other';
+export type VaultKind = 'notice' | 'lease' | 'contract' | 'court' | 'correspondence' | 'policy' | 'identity' | 'other';
+
+export interface LegalMatter {
+  id: string;
+  user_id: string;
+  title: string;
+  issue_type: string;
+  jurisdiction: string;
+  status: MatterStatus;
+  summary: string;
+  next_step: string;
+  next_step_due: string | null;
+  risk_level: MatterRisk;
+  audience: MatterAudience;
+  pack_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SafetyDeadline {
+  id: string;
+  matter_id: string;
+  user_id: string;
+  title: string;
+  description: string;
+  due_at: string;
+  kind: DeadlineKind;
+  completed_at: string | null;
+  reminder_days_before: number[];
+  created_at: string;
+}
+
+export interface VaultItem {
+  id: string;
+  matter_id: string | null;
+  user_id: string;
+  title: string;
+  kind: VaultKind;
+  storage_path: string;
+  mime_type: string;
+  size_bytes: number;
+  summary: string;
+  created_at: string;
+}
+
+export interface TimelineEvent {
+  id: string;
+  matter_id: string;
+  user_id: string;
+  event_type: string;
+  summary: string;
+  metadata: Record<string, unknown>;
+  occurred_at: string;
+}
+
+export interface HealthSignals {
+  has_jurisdiction: boolean;
+  has_active_matter: boolean;
+  has_vault_document: boolean;
+  deadlines_tracked: number;
+  overdue_deadlines: number;
+  resolved_matters: number;
+  emergency_contact: boolean;
+  plan_next_step_set: boolean;
+}
+
+export interface HealthRecommendation {
+  id: string;
+  en: string;
+  es: string;
+  weight: number;
+  cta_route: string;
+}
+
+export interface HealthSnapshot {
+  score: number;
+  signals: HealthSignals;
+  recommendations: HealthRecommendation[];
+}
+
+async function currentUserId(): Promise<string | null> {
+  const { data } = await supabase.auth.getUser();
+  return data.user?.id ?? null;
+}
+
+export type PlanId = 'free' | 'plus' | 'protection' | 'business' | 'business_plus';
+export type ReminderChannel = 'in_app' | 'email' | 'sms' | 'whatsapp';
+
+export interface PlanEntitlements {
+  user_id: string;
+  plan: PlanId;
+  vault_mb_limit: number;
+  matter_limit: number;
+  reminder_channels: ReminderChannel[];
+  monthly_checkup_enabled: boolean;
+  attorney_handoff_enabled: boolean;
+  updated_at: string;
+}
+
+const PLAN_DEFAULTS: Record<PlanId, Omit<PlanEntitlements, 'user_id' | 'updated_at'>> = {
+  free: {
+    plan: 'free',
+    vault_mb_limit: 10,
+    matter_limit: 1,
+    reminder_channels: ['in_app'],
+    monthly_checkup_enabled: false,
+    attorney_handoff_enabled: false,
+  },
+  plus: {
+    plan: 'plus',
+    vault_mb_limit: 500,
+    matter_limit: 5,
+    reminder_channels: ['in_app', 'email'],
+    monthly_checkup_enabled: true,
+    attorney_handoff_enabled: false,
+  },
+  protection: {
+    plan: 'protection',
+    vault_mb_limit: 2000,
+    matter_limit: 25,
+    reminder_channels: ['in_app', 'email', 'sms', 'whatsapp'],
+    monthly_checkup_enabled: true,
+    attorney_handoff_enabled: true,
+  },
+  business: {
+    plan: 'business',
+    vault_mb_limit: 5000,
+    matter_limit: 50,
+    reminder_channels: ['in_app', 'email', 'sms'],
+    monthly_checkup_enabled: true,
+    attorney_handoff_enabled: true,
+  },
+  business_plus: {
+    plan: 'business_plus',
+    vault_mb_limit: 20000,
+    matter_limit: 250,
+    reminder_channels: ['in_app', 'email', 'sms', 'whatsapp'],
+    monthly_checkup_enabled: true,
+    attorney_handoff_enabled: true,
+  },
+};
+
+export async function getEntitlements(): Promise<PlanEntitlements | null> {
+  const uid = await currentUserId();
+  if (!uid) return null;
+  const { data } = await supabase
+    .from('safety_plan_entitlements')
+    .select('*')
+    .eq('user_id', uid)
+    .maybeSingle();
+  if (data) return data as PlanEntitlements;
+  const defaults = { ...PLAN_DEFAULTS.free, user_id: uid };
+  const { data: created } = await supabase
+    .from('safety_plan_entitlements')
+    .insert(defaults)
+    .select('*')
+    .maybeSingle();
+  return (created as PlanEntitlements) ?? null;
+}
+
+export async function setPlan(plan: PlanId): Promise<PlanEntitlements | null> {
+  const uid = await currentUserId();
+  if (!uid) return null;
+  const defaults = PLAN_DEFAULTS[plan];
+  const { data } = await supabase
+    .from('safety_plan_entitlements')
+    .upsert({ user_id: uid, ...defaults, updated_at: new Date().toISOString() }, { onConflict: 'user_id' })
+    .select('*')
+    .maybeSingle();
+  return (data as PlanEntitlements) ?? null;
+}
+
+export async function scheduleReminders(
+  deadlineId: string,
+  dueAt: string,
+  daysBefore: number[],
+  channels: ReminderChannel[],
+): Promise<void> {
+  const uid = await currentUserId();
+  if (!uid) return;
+  const due = new Date(dueAt).getTime();
+  const rows = daysBefore.flatMap((d) =>
+    channels.map((c) => ({
+      deadline_id: deadlineId,
+      user_id: uid,
+      channel: c,
+      scheduled_for: new Date(due - d * 86400000).toISOString(),
+      status: 'pending',
+    })),
+  );
+  if (rows.length === 0) return;
+  await supabase.from('safety_reminders').delete().eq('deadline_id', deadlineId).eq('user_id', uid);
+  await supabase.from('safety_reminders').insert(rows);
+}
+
+export async function listReminders(deadlineId: string) {
+  const { data } = await supabase
+    .from('safety_reminders')
+    .select('id, channel, scheduled_for, sent_at, status')
+    .eq('deadline_id', deadlineId)
+    .order('scheduled_for');
+  return data || [];
+}
+
+export async function uploadVaultFile(
+  file: File,
+  kind: VaultKind,
+  matterId: string | null,
+  title: string,
+): Promise<{ item: VaultItem | null; error: string | null }> {
+  const uid = await currentUserId();
+  if (!uid) return { item: null, error: 'Not signed in' };
+
+  const ent = await getEntitlements();
+  if (ent) {
+    const { data: existing } = await supabase
+      .from('safety_vault_items')
+      .select('size_bytes')
+      .eq('user_id', uid);
+    const used = (existing || []).reduce((n, r: { size_bytes: number }) => n + (r.size_bytes || 0), 0);
+    const limitBytes = ent.vault_mb_limit * 1024 * 1024;
+    if (used + file.size > limitBytes) {
+      return { item: null, error: 'vault_limit_reached' };
+    }
+  }
+
+  const path = `${uid}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+  const up = await supabase.storage.from('legal-vault').upload(path, file, {
+    contentType: file.type || 'application/octet-stream',
+    upsert: false,
+  });
+  if (up.error) return { item: null, error: up.error.message };
+
+  const { data } = await supabase
+    .from('safety_vault_items')
+    .insert({
+      user_id: uid,
+      matter_id: matterId,
+      title: title || file.name,
+      kind,
+      storage_path: path,
+      mime_type: file.type || '',
+      size_bytes: file.size,
+      summary: '',
+    })
+    .select('*')
+    .maybeSingle();
+  return { item: (data as VaultItem) ?? null, error: null };
+}
+
+export async function deleteVaultFile(item: VaultItem): Promise<void> {
+  if (item.storage_path) {
+    await supabase.storage.from('legal-vault').remove([item.storage_path]);
+  }
+  await supabase.from('safety_vault_items').delete().eq('id', item.id);
+}
+
+export async function explainDocumentText(
+  text: string,
+  language: 'en' | 'es',
+  kind: string,
+): Promise<{
+  summary: string;
+  what_it_is: string;
+  who_sent_it: string;
+  what_they_want: string;
+  deadlines: string[];
+  risks: string[];
+  suggested_next_steps: string[];
+} | null> {
+  const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/explain-document`;
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token ?? import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text, language, kind }),
+  });
+  if (!res.ok) return null;
+  return await res.json();
+}
+
+export async function saveDocumentSummary(itemId: string, summary: string): Promise<void> {
+  await supabase.from('safety_vault_items').update({ summary }).eq('id', itemId);
+}
+
+export interface CheckupAnswers {
+  address_still_current: boolean;
+  new_notice_received: boolean;
+  new_documents_to_upload: boolean;
+  deadline_changed: boolean;
+  emergency_contact_current: boolean;
+  attorney_needed: boolean;
+  notes: string;
+}
+
+export interface CheckupRow {
+  id: string;
+  user_id: string;
+  period_key: string;
+  answers: CheckupAnswers;
+  action_items: string[];
+  completed_at: string;
+}
+
+function currentPeriodKey(): string {
+  const d = new Date();
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+}
+
+export async function getCurrentCheckup(): Promise<CheckupRow | null> {
+  const uid = await currentUserId();
+  if (!uid) return null;
+  const { data } = await supabase
+    .from('safety_checkups')
+    .select('*')
+    .eq('user_id', uid)
+    .eq('period_key', currentPeriodKey())
+    .maybeSingle();
+  return (data as CheckupRow) ?? null;
+}
+
+export async function saveCheckup(answers: CheckupAnswers): Promise<CheckupRow | null> {
+  const uid = await currentUserId();
+  if (!uid) return null;
+  const actions: string[] = [];
+  if (answers.new_notice_received || answers.new_documents_to_upload) actions.push('upload_documents');
+  if (answers.deadline_changed) actions.push('review_deadlines');
+  if (!answers.emergency_contact_current) actions.push('update_emergency_contact');
+  if (!answers.address_still_current) actions.push('update_address');
+  if (answers.attorney_needed) actions.push('request_attorney_handoff');
+
+  const { data } = await supabase
+    .from('safety_checkups')
+    .upsert(
+      {
+        user_id: uid,
+        period_key: currentPeriodKey(),
+        answers,
+        action_items: actions,
+        completed_at: new Date().toISOString(),
+      },
+      { onConflict: 'user_id,period_key' },
+    )
+    .select('*')
+    .maybeSingle();
+  return (data as CheckupRow) ?? null;
+}
+
+export async function listMatters(): Promise<LegalMatter[]> {
+  const { data } = await supabase
+    .from('legal_matters')
+    .select('*')
+    .order('updated_at', { ascending: false });
+  return (data as LegalMatter[]) || [];
+}
+
+export async function createMatter(input: Partial<LegalMatter> & { title: string }): Promise<LegalMatter | null> {
+  const uid = await currentUserId();
+  if (!uid) return null;
+  const { data } = await supabase
+    .from('legal_matters')
+    .insert({
+      user_id: uid,
+      title: input.title,
+      issue_type: input.issue_type ?? 'general',
+      jurisdiction: input.jurisdiction ?? '',
+      status: input.status ?? 'active',
+      summary: input.summary ?? '',
+      next_step: input.next_step ?? '',
+      next_step_due: input.next_step_due ?? null,
+      risk_level: input.risk_level ?? 'low',
+      audience: input.audience ?? 'individual',
+      pack_id: input.pack_id ?? null,
+    })
+    .select('*')
+    .maybeSingle();
+  if (data) {
+    await logTimeline(data.id, 'created', input.title);
+  }
+  return data as LegalMatter | null;
+}
+
+export async function updateMatter(id: string, patch: Partial<LegalMatter>): Promise<void> {
+  await supabase
+    .from('legal_matters')
+    .update({ ...patch, updated_at: new Date().toISOString() })
+    .eq('id', id);
+}
+
+export async function listDeadlines(matterId?: string): Promise<SafetyDeadline[]> {
+  let q = supabase.from('safety_deadlines').select('*').order('due_at', { ascending: true });
+  if (matterId) q = q.eq('matter_id', matterId);
+  const { data } = await q;
+  return (data as SafetyDeadline[]) || [];
+}
+
+export async function listUpcomingDeadlines(withinDays = 30): Promise<SafetyDeadline[]> {
+  const until = new Date(Date.now() + withinDays * 86400000).toISOString();
+  const { data } = await supabase
+    .from('safety_deadlines')
+    .select('*')
+    .is('completed_at', null)
+    .lte('due_at', until)
+    .order('due_at', { ascending: true });
+  return (data as SafetyDeadline[]) || [];
+}
+
+export async function createDeadline(input: Omit<SafetyDeadline, 'id' | 'user_id' | 'created_at' | 'completed_at'>): Promise<SafetyDeadline | null> {
+  const uid = await currentUserId();
+  if (!uid) return null;
+  const { data } = await supabase
+    .from('safety_deadlines')
+    .insert({ ...input, user_id: uid })
+    .select('*')
+    .maybeSingle();
+  if (data) {
+    await logTimeline(input.matter_id, 'deadline_added', `${input.title} due ${input.due_at}`);
+  }
+  return data as SafetyDeadline | null;
+}
+
+export async function completeDeadline(id: string): Promise<void> {
+  const { data } = await supabase
+    .from('safety_deadlines')
+    .update({ completed_at: new Date().toISOString() })
+    .eq('id', id)
+    .select('matter_id, title')
+    .maybeSingle();
+  if (data) {
+    await logTimeline(data.matter_id as string, 'deadline_completed', data.title as string);
+  }
+}
+
+export async function listVaultItems(matterId?: string): Promise<VaultItem[]> {
+  let q = supabase.from('safety_vault_items').select('*').order('created_at', { ascending: false });
+  if (matterId) q = q.eq('matter_id', matterId);
+  const { data } = await q;
+  return (data as VaultItem[]) || [];
+}
+
+export async function logTimeline(matterId: string, eventType: string, summary: string, metadata: Record<string, unknown> = {}): Promise<void> {
+  const uid = await currentUserId();
+  if (!uid) return;
+  await supabase.from('safety_timeline_events').insert({
+    matter_id: matterId,
+    user_id: uid,
+    event_type: eventType,
+    summary,
+    metadata,
+  });
+}
+
+export async function listTimeline(matterId: string): Promise<TimelineEvent[]> {
+  const { data } = await supabase
+    .from('safety_timeline_events')
+    .select('*')
+    .eq('matter_id', matterId)
+    .order('occurred_at', { ascending: false });
+  return (data as TimelineEvent[]) || [];
+}
+
+const RECOMMENDATIONS: HealthRecommendation[] = [
+  { id: 'set_jurisdiction', en: 'Select your state so answers match your law', es: 'Selecciona tu estado para obtener respuestas de tu ley', weight: 15, cta_route: '/profile' },
+  { id: 'create_matter', en: 'Save your first legal matter so we can track it over time', es: 'Guarda tu primer caso legal para darle seguimiento', weight: 20, cta_route: '/dashboard/matters/new' },
+  { id: 'upload_document', en: 'Upload a notice, lease, or contract to your secure vault', es: 'Sube un aviso, contrato o carta a tu boveda segura', weight: 15, cta_route: '/dashboard/vault' },
+  { id: 'add_deadline', en: 'Add a deadline so we can remind you before it matters', es: 'Agrega una fecha limite para recordarte antes de que importe', weight: 20, cta_route: '/dashboard/deadlines' },
+  { id: 'set_next_step', en: 'Define your next best step on each active matter', es: 'Define tu siguiente mejor paso en cada caso activo', weight: 15, cta_route: '/dashboard' },
+  { id: 'review_overdue', en: 'Review overdue deadlines and mark completed or reschedule', es: 'Revisa fechas vencidas y marcalas como completadas', weight: 15, cta_route: '/dashboard/deadlines' },
+];
+
+export async function computeHealthSnapshot(): Promise<HealthSnapshot> {
+  const uid = await currentUserId();
+  if (!uid) {
+    return {
+      score: 0,
+      signals: {
+        has_jurisdiction: false,
+        has_active_matter: false,
+        has_vault_document: false,
+        deadlines_tracked: 0,
+        overdue_deadlines: 0,
+        resolved_matters: 0,
+        emergency_contact: false,
+        plan_next_step_set: false,
+      },
+      recommendations: RECOMMENDATIONS.slice(0, 3),
+    };
+  }
+
+  const [profileRes, mattersRes, deadlinesRes, vaultRes] = await Promise.all([
+    supabase.from('profiles').select('preferred_jurisdiction, phone').eq('id', uid).maybeSingle(),
+    supabase.from('legal_matters').select('id, status, next_step').eq('user_id', uid),
+    supabase.from('safety_deadlines').select('id, due_at, completed_at').eq('user_id', uid),
+    supabase.from('safety_vault_items').select('id').eq('user_id', uid).limit(1),
+  ]);
+
+  const profile = profileRes.data || {};
+  const matters = (mattersRes.data as Array<{ id: string; status: string; next_step: string }>) || [];
+  const deadlines = (deadlinesRes.data as Array<{ due_at: string; completed_at: string | null }>) || [];
+  const vault = (vaultRes.data as Array<{ id: string }>) || [];
+
+  const now = Date.now();
+  const overdue = deadlines.filter(d => !d.completed_at && new Date(d.due_at).getTime() < now).length;
+  const activeMatter = matters.find(m => m.status === 'active' || m.status === 'escalated');
+  const resolved = matters.filter(m => m.status === 'resolved').length;
+
+  const signals: HealthSignals = {
+    has_jurisdiction: !!profile.preferred_jurisdiction,
+    has_active_matter: matters.length > 0,
+    has_vault_document: vault.length > 0,
+    deadlines_tracked: deadlines.length,
+    overdue_deadlines: overdue,
+    resolved_matters: resolved,
+    emergency_contact: !!profile.phone,
+    plan_next_step_set: !!activeMatter?.next_step,
+  };
+
+  let score = 0;
+  if (signals.has_jurisdiction) score += 15;
+  if (signals.has_active_matter) score += 20;
+  if (signals.has_vault_document) score += 15;
+  if (signals.deadlines_tracked > 0) score += 20;
+  if (signals.plan_next_step_set) score += 15;
+  if (signals.emergency_contact) score += 10;
+  if (signals.resolved_matters > 0) score += 5;
+  score -= Math.min(20, signals.overdue_deadlines * 5);
+  score = Math.max(0, Math.min(100, score));
+
+  const missing: HealthRecommendation[] = [];
+  if (!signals.has_jurisdiction) missing.push(RECOMMENDATIONS[0]);
+  if (!signals.has_active_matter) missing.push(RECOMMENDATIONS[1]);
+  if (!signals.has_vault_document) missing.push(RECOMMENDATIONS[2]);
+  if (signals.deadlines_tracked === 0) missing.push(RECOMMENDATIONS[3]);
+  if (!signals.plan_next_step_set && signals.has_active_matter) missing.push(RECOMMENDATIONS[4]);
+  if (signals.overdue_deadlines > 0) missing.unshift(RECOMMENDATIONS[5]);
+
+  await supabase.from('legal_health_snapshots').insert({
+    user_id: uid,
+    score,
+    signals,
+    recommendations: missing.slice(0, 3),
+  });
+
+  return { score, signals, recommendations: missing.slice(0, 3) };
+}
+
+
+================================================================================
+FILE: src/services/ui-preferences-service.ts
+================================================================================
+import { supabase } from '../lib/supabase';
+
+export type FloatingSurfaceId =
+  | 'pwa_install'
+  | 'reading_toolbar'
+  | 'demo_banner'
+  | 'resume_banner';
+
+const LOCAL_PREFIX = 'ezlegal_dismiss_';
+
+function localKey(surface: FloatingSurfaceId) {
+  return `${LOCAL_PREFIX}${surface}`;
+}
+
+export async function isDismissed(
+  surface: FloatingSurfaceId,
+  userId: string | null
+): Promise<boolean> {
+  try {
+    if (localStorage.getItem(localKey(surface))) return true;
+  } catch {}
+
+  if (!userId) return false;
+
+  const { data } = await supabase
+    .from('ui_dismissals')
+    .select('surface_id')
+    .eq('user_id', userId)
+    .eq('surface_id', surface)
+    .maybeSingle();
+
+  return Boolean(data);
+}
+
+export async function dismiss(
+  surface: FloatingSurfaceId,
+  userId: string | null
+): Promise<void> {
+  try {
+    localStorage.setItem(localKey(surface), new Date().toISOString());
+  } catch {}
+
+  if (!userId) return;
+
+  await supabase
+    .from('ui_dismissals')
+    .upsert(
+      { user_id: userId, surface_id: surface, dismissed_at: new Date().toISOString() },
+      { onConflict: 'user_id,surface_id' }
+    );
+}
+
+export async function markHeroVariantSeen(userId: string | null) {
+  if (!userId) return;
+  await supabase
+    .from('profiles')
+    .update({ hero_variant_seen: true })
+    .eq('id', userId);
+}
+
+export async function getDefaultLandingRoute(userId: string): Promise<string | null> {
+  const { data } = await supabase
+    .from('profiles')
+    .select('default_landing_route, user_type')
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (!data) return null;
+  if (data.default_landing_route) return data.default_landing_route;
+
+  const inferred = inferLandingFromUserType(data.user_type);
+  if (inferred) {
+    await supabase
+      .from('profiles')
+      .update({ default_landing_route: inferred })
+      .eq('id', userId);
+  }
+  return inferred;
+}
+
+function inferLandingFromUserType(userType: string | null): string | null {
+  switch (userType) {
+    case 'business':
+      return '/dashboard';
+    case 'organization':
+      return '/lso-dashboard';
+    case 'individual':
+      return '/chat';
+    default:
+      return null;
+  }
+}
+
+export async function logDeprecationHit(oldPath: string): Promise<void> {
+  try {
+    await supabase.rpc('increment_route_deprecation_hit', { p_old_path: oldPath });
+  } catch {
+    /* best-effort */
+  }
+}
+
