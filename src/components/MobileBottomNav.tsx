@@ -30,7 +30,7 @@ export default function MobileBottomNav({ onOpenMenu }: Props) {
 
   return (
     <nav
-      aria-label={language === 'es' ? 'Navegación inferior' : 'Bottom navigation'}
+      aria-label={language === 'es' ? 'Navegacion inferior' : 'Bottom navigation'}
       className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-white/95 backdrop-blur border-t border-navy-200 shadow-[0_-4px_12px_rgba(15,23,42,0.06)]"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
@@ -74,7 +74,7 @@ export default function MobileBottomNav({ onOpenMenu }: Props) {
             aria-haspopup="dialog"
           >
             <MenuIcon className="h-5 w-5" aria-hidden="true" />
-            <span>{language === 'es' ? 'Menú' : 'More'}</span>
+            <span>{language === 'es' ? 'Menu' : 'More'}</span>
           </button>
         </li>
       </ul>

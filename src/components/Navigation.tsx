@@ -288,7 +288,7 @@ export default function Navigation() {
                 className="lg:hidden p-2 text-navy-500 hover:text-navy-800 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-lg"
                 aria-expanded={drawerOpen}
                 aria-controls="nav-drawer"
-                aria-label={drawerOpen ? (language === 'en' ? 'Close menu' : 'Cerrar menú') : (language === 'en' ? 'Open menu' : 'Abrir menú')}
+                aria-label={drawerOpen ? (language === 'en' ? 'Close menu' : 'Cerrar menu') : (language === 'en' ? 'Open menu' : 'Abrir menu')}
               >
                 {drawerOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <MenuIcon className="h-5 w-5" aria-hidden="true" />}
               </button>
@@ -310,16 +310,16 @@ export default function Navigation() {
         ref={drawerRef}
         role="dialog"
         aria-modal="true"
-        aria-label={language === 'en' ? 'Navigation menu' : 'Menú de navegación'}
+        aria-label={language === 'en' ? 'Navigation menu' : 'Menu de navegacion'}
         className={`fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 transform transition-transform duration-300 ease-out shadow-2xl ${drawerOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-4 border-b border-navy-100">
-            <span className="font-bold text-navy-900">{language === 'en' ? 'Menu' : 'Menú'}</span>
+            <span className="font-bold text-navy-900">{language === 'en' ? 'Menu' : 'Menu'}</span>
             <button
               onClick={() => setDrawerOpen(false)}
               className="p-2 text-navy-500 hover:text-navy-700 hover:bg-navy-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
-              aria-label={language === 'en' ? 'Close menu' : 'Cerrar menú'}
+              aria-label={language === 'en' ? 'Close menu' : 'Cerrar menu'}
             >
               <X className="h-5 w-5" />
             </button>
@@ -332,12 +332,12 @@ export default function Navigation() {
               className="flex items-center gap-2 w-full px-3 py-2.5 bg-navy-50 hover:bg-navy-100 text-navy-600 rounded-lg transition-colors"
             >
               <Search className="h-4 w-4" aria-hidden="true" />
-              <span className="text-sm">{language === 'es' ? 'Buscar guías, temas…' : 'Search guides, topics…'}</span>
+              <span className="text-sm">{language === 'es' ? 'Buscar guias, temas…' : 'Search guides, topics…'}</span>
             </Link>
           </div>
 
           <div className="flex-1 overflow-y-auto">
-            <nav className="p-4 space-y-2" role="navigation" aria-label={language === 'en' ? 'Main navigation' : 'Navegación principal'}>
+            <nav className="p-4 space-y-2" role="navigation" aria-label={language === 'en' ? 'Main navigation' : 'Navegacion principal'}>
               {visibleGroups.map((section) => {
                 const hasMultiple = section.items.length > 1;
                 const isExpanded = openDrawerSection === section.slug;
