@@ -22,6 +22,9 @@
     "audit:readability": "node scripts/audit-readability.cjs",
     "audit:images": "node scripts/audit-images.cjs",
     "export:gpt-review": "node scripts/export-for-gpt-review.cjs",
+    "prerender": "node scripts/prerender.cjs",
+    "build:static": "vite build && node scripts/prerender.cjs",
+    "export:ai-audit": "node scripts/export-ai-audit.cjs",
     "test:responsive": "npx playwright test tests/e2e/home-responsive.spec.ts",
     "test:responsive:ui": "npx playwright test tests/e2e/home-responsive.spec.ts --ui"
   },
