@@ -1,6 +1,6 @@
 # ezLegal.ai Full Site Audit Report
 
-**Generated:** 2026-06-14T00:38:40.646Z
+**Generated:** 2026-06-14T03:30:49.007Z
 **Audit System Version:** 2.0
 **Base URL:** http://localhost:5173
 
