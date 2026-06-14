@@ -1,0 +1,472 @@
+{
+  "discoveredAt": "2026-06-14T04:26:13.088Z",
+  "mode": "local",
+  "baseUrl": "http://localhost:5173",
+  "totalRoutes": 62,
+  "routes": [
+    {
+      "path": "/",
+      "fullUrl": "http://localhost:5173/",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/login",
+      "fullUrl": "http://localhost:5173/login",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/signup",
+      "fullUrl": "http://localhost:5173/signup",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/forgot-password",
+      "fullUrl": "http://localhost:5173/forgot-password",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/pricing",
+      "fullUrl": "http://localhost:5173/pricing",
+      "icp": "smb",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/checkout",
+      "fullUrl": "http://localhost:5173/checkout",
+      "icp": "smb",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/contact",
+      "fullUrl": "http://localhost:5173/contact",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/features",
+      "fullUrl": "http://localhost:5173/features",
+      "icp": "smb",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/about",
+      "fullUrl": "http://localhost:5173/about",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/ezreads",
+      "fullUrl": "http://localhost:5173/ezreads",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/pro-bono",
+      "fullUrl": "http://localhost:5173/pro-bono",
+      "icp": "pro-bono-lso",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/emergency-resources",
+      "fullUrl": "http://localhost:5173/emergency-resources",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/for-organizations",
+      "fullUrl": "http://localhost:5173/for-organizations",
+      "icp": "pro-bono-lso",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/for-business",
+      "fullUrl": "http://localhost:5173/for-business",
+      "icp": "smb",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/for-individuals",
+      "fullUrl": "http://localhost:5173/for-individuals",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/for-partners",
+      "fullUrl": "http://localhost:5173/for-partners",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/share-perspective",
+      "fullUrl": "http://localhost:5173/share-perspective",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/scope-disclaimers",
+      "fullUrl": "http://localhost:5173/scope-disclaimers",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/schedule-demo",
+      "fullUrl": "http://localhost:5173/schedule-demo",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/lso-dashboard",
+      "fullUrl": "http://localhost:5173/lso-dashboard",
+      "icp": "pro-bono-lso",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/grant-reporting",
+      "fullUrl": "http://localhost:5173/grant-reporting",
+      "icp": "pro-bono-lso",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/ai-governance",
+      "fullUrl": "http://localhost:5173/ai-governance",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/terms",
+      "fullUrl": "http://localhost:5173/terms",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/privacy",
+      "fullUrl": "http://localhost:5173/privacy",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/trust-center",
+      "fullUrl": "http://localhost:5173/trust-center",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/enterprise-security",
+      "fullUrl": "http://localhost:5173/enterprise-security",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/how-it-works",
+      "fullUrl": "http://localhost:5173/how-it-works",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/partner-hub",
+      "fullUrl": "http://localhost:5173/partner-hub",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/media-kit",
+      "fullUrl": "http://localhost:5173/media-kit",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/how-reports-are-reviewed",
+      "fullUrl": "http://localhost:5173/how-reports-are-reviewed",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/espanol",
+      "fullUrl": "http://localhost:5173/espanol",
+      "icp": "spanish-speaking",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/es",
+      "fullUrl": "http://localhost:5173/es",
+      "icp": "spanish-speaking",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/business",
+      "fullUrl": "http://localhost:5173/business",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/partners",
+      "fullUrl": "http://localhost:5173/partners",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/urgent-help",
+      "fullUrl": "http://localhost:5173/urgent-help",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/accessibility",
+      "fullUrl": "http://localhost:5173/accessibility",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/access",
+      "fullUrl": "http://localhost:5173/access",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/negotiate",
+      "fullUrl": "http://localhost:5173/negotiate",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/site-review",
+      "fullUrl": "http://localhost:5173/site-review",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/sla",
+      "fullUrl": "http://localhost:5173/sla",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/find-attorney",
+      "fullUrl": "http://localhost:5173/find-attorney",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/ask",
+      "fullUrl": "http://localhost:5173/ask",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/issue-packs",
+      "fullUrl": "http://localhost:5173/issue-packs",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/case-predictor",
+      "fullUrl": "http://localhost:5173/case-predictor",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/case-predictor/start",
+      "fullUrl": "http://localhost:5173/case-predictor/start",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/chatbot",
+      "fullUrl": "http://localhost:5173/chatbot",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/chatbot-standalone",
+      "fullUrl": "http://localhost:5173/chatbot-standalone",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard",
+      "fullUrl": "http://localhost:5173/dashboard",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard/ai-assistant",
+      "fullUrl": "http://localhost:5173/dashboard/ai-assistant",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard/cases",
+      "fullUrl": "http://localhost:5173/dashboard/cases",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard/matters",
+      "fullUrl": "http://localhost:5173/dashboard/matters",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard/clients",
+      "fullUrl": "http://localhost:5173/dashboard/clients",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard/history",
+      "fullUrl": "http://localhost:5173/dashboard/history",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard/documents",
+      "fullUrl": "http://localhost:5173/dashboard/documents",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard/research",
+      "fullUrl": "http://localhost:5173/dashboard/research",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard/lawyer-profiles",
+      "fullUrl": "http://localhost:5173/dashboard/lawyer-profiles",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard/profile",
+      "fullUrl": "http://localhost:5173/dashboard/profile",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/dashboard/website-integration",
+      "fullUrl": "http://localhost:5173/dashboard/website-integration",
+      "icp": "general",
+      "requiresAuth": true,
+      "isDynamic": false
+    },
+    {
+      "path": "/chat",
+      "fullUrl": "http://localhost:5173/chat",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/chat",
+      "fullUrl": "http://localhost:5173/chat",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/chat",
+      "fullUrl": "http://localhost:5173/chat",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    },
+    {
+      "path": "/chat",
+      "fullUrl": "http://localhost:5173/chat",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    }
+  ],
+  "byIcp": [
+    {
+      "id": "spanish-speaking",
+      "label": "Spanish-speaking individuals",
+      "routes": [
+        "/espanol",
+        "/es"
+      ]
+    },
+    {
+      "id": "smb",
+      "label": "Small and Medium Businesses",
+      "routes": [
+        "/pricing",
+        "/checkout",
+        "/features",
+        "/for-business"
+      ]
+    },
+    {
+      "id": "pro-bono-lso",
+      "label": "Pro Bono / Legal Service Organizations",
+      "routes": [
+        "/pro-bono",
+        "/for-organizations",
+        "/lso-dashboard",
+        "/grant-reporting"
+      ]
+    }
+  ]
+}

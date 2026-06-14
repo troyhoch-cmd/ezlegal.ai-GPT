@@ -1,12 +1,11 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { resolve } from 'path';
 import { chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { resolveAuditConfig } from './resolve-config.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(__dirname, '../..');
-const config = JSON.parse(readFileSync(resolve(ROOT, 'audit.config.json'), 'utf-8'));
+const config = resolveAuditConfig();
+const ROOT = config.ROOT;
 const inventory = JSON.parse(readFileSync(resolve(ROOT, config.outputDir, 'route-inventory.json'), 'utf-8'));
 
 async function runAccessibilityAudit() {
@@ -116,6 +115,10 @@ async function runAccessibilityAudit() {
     }
 
     await context.close();
+
+    if (config.mode === 'live' && config.liveCrawl?.crawlDelay) {
+      await new Promise(r => setTimeout(r, config.liveCrawl.crawlDelay));
+    }
   }
 
   await browser.close();
@@ -150,7 +153,9 @@ const output = {
   findings,
 };
 
-const outputPath = resolve(ROOT, config.outputDir, 'accessibility-audit.json');
+const outputDir = resolve(ROOT, config.outputDir);
+mkdirSync(outputDir, { recursive: true });
+const outputPath = resolve(outputDir, 'accessibility-audit.json');
 writeFileSync(outputPath, JSON.stringify(output, null, 2));
 console.log(`Accessibility Audit Complete: ${findings.length} findings`);
 console.log(`  Critical: ${output.bySeverity.critical} | High: ${output.bySeverity.high} | Medium: ${output.bySeverity.medium} | Low: ${output.bySeverity.low}`);

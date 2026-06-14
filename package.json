@@ -29,6 +29,8 @@
     "audit:conversion": "node scripts/audit/run-conversion-audit.mjs",
     "audit:report": "node scripts/audit/generate-full-site-audit.mjs",
     "audit:all": "node scripts/audit/discover-routes.mjs && node scripts/audit/run-visual-audit.mjs && node scripts/audit/run-accessibility-audit.mjs && node scripts/audit/run-content-audit.mjs && node scripts/audit/run-conversion-audit.mjs && node scripts/audit/generate-full-site-audit.mjs",
+    "audit:all:local": "node scripts/audit/discover-routes.mjs --local && node scripts/audit/run-visual-audit.mjs --local && node scripts/audit/run-accessibility-audit.mjs --local && node scripts/audit/run-content-audit.mjs --local && node scripts/audit/run-conversion-audit.mjs --local && node scripts/audit/generate-full-site-audit.mjs --local",
+    "audit:all:live": "node scripts/audit/discover-routes.mjs --live && node scripts/audit/run-visual-audit.mjs --live && node scripts/audit/run-accessibility-audit.mjs --live && node scripts/audit/run-content-audit.mjs --live && node scripts/audit/run-conversion-audit.mjs --live && node scripts/audit/generate-full-site-audit.mjs --live",
     "export:gpt-review": "node scripts/export-for-gpt-review.cjs",
     "prerender": "node scripts/prerender.cjs",
     "build:static": "vite build && node scripts/prerender.cjs",

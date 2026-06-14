@@ -1,11 +1,10 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { resolve } from 'path';
 import { chromium } from '@playwright/test';
+import { resolveAuditConfig } from './resolve-config.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(__dirname, '../..');
-const config = JSON.parse(readFileSync(resolve(ROOT, 'audit.config.json'), 'utf-8'));
+const config = resolveAuditConfig();
+const ROOT = config.ROOT;
 const inventory = JSON.parse(readFileSync(resolve(ROOT, config.outputDir, 'route-inventory.json'), 'utf-8'));
 
 const screenshotDir = resolve(ROOT, config.screenshotDir);
@@ -223,6 +222,10 @@ async function runVisualAudit() {
     }
 
     domInventory.push(routeData);
+
+    if (config.mode === 'live' && config.liveCrawl?.crawlDelay) {
+      await new Promise(r => setTimeout(r, config.liveCrawl.crawlDelay));
+    }
   }
 
   await browser.close();
@@ -245,9 +248,10 @@ const output = {
   findings,
 };
 
-const outputDir = resolve(ROOT, config.outputDir);
-writeFileSync(resolve(outputDir, 'visual-audit.json'), JSON.stringify(output, null, 2));
-writeFileSync(resolve(outputDir, 'page-dom-inventory.json'), JSON.stringify({ auditedAt: new Date().toISOString(), pages: domInventory }, null, 2));
+const outDir = resolve(ROOT, config.outputDir);
+mkdirSync(outDir, { recursive: true });
+writeFileSync(resolve(outDir, 'visual-audit.json'), JSON.stringify(output, null, 2));
+writeFileSync(resolve(outDir, 'page-dom-inventory.json'), JSON.stringify({ auditedAt: new Date().toISOString(), pages: domInventory }, null, 2));
 
 console.log(`Visual Audit Complete: ${findings.length} findings`);
 console.log(`  Critical: ${output.bySeverity.critical} | High: ${output.bySeverity.high} | Medium: ${output.bySeverity.medium} | Low: ${output.bySeverity.low}`);

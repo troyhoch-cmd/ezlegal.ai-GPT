@@ -1,8 +1,18 @@
 {
+  "mode": "local",
+  "localBaseUrl": "http://localhost:5173",
+  "liveBaseUrl": "https://dev.ezlegal.ai",
   "baseUrl": "http://localhost:5173",
   "routeSource": "src/lib/routes.ts",
   "outputDir": "audit-output",
   "screenshotDir": "audit-output/screenshots",
+  "liveCrawl": {
+    "maxDepth": 3,
+    "maxPages": 100,
+    "respectRobotsTxt": true,
+    "crawlDelay": 500,
+    "userAgent": "ezLegalAuditBot/2.0 (+https://ezlegal.ai/audit-bot)"
+  },
   "viewports": {
     "mobile": { "width": 375, "height": 812 },
     "tablet": { "width": 768, "height": 1024 },
