@@ -24,7 +24,9 @@ if (report.auditValidity !== 'valid') {
 }
 
 if (!report.launchReady) {
-  console.error(`[launch:check] BLOCKED - Not launch ready. Critical findings: ${report.summary?.bySeverity?.critical || 0}`);
+  const criticals = report.summary?.bySeverity?.critical || 0;
+  const blocked = report.summary?.icpBlockedFields || 0;
+  console.error(`[launch:check] BLOCKED - Not launch ready. Critical findings: ${criticals}, ICP blocked fields: ${blocked}`);
   process.exit(1);
 }
 

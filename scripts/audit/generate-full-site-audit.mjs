@@ -19,12 +19,14 @@ const domInventory = loadJson('page-dom-inventory.json');
 const a11yAudit = loadJson('accessibility-audit.json');
 const contentAudit = loadJson('content-audit.json');
 const conversionAudit = loadJson('conversion-audit.json');
+const icpEvidenceAudit = loadJson('icp-evidence-audit.json');
 
 const allFindings = [
   ...(visualAudit?.findings || []),
   ...(a11yAudit?.findings || []),
   ...(contentAudit?.findings || []),
   ...(conversionAudit?.findings || []),
+  ...(icpEvidenceAudit?.findings || []),
 ];
 
 // Determine audit validity
@@ -44,7 +46,10 @@ if (!routeInventory || routeInventory.totalRoutes === 0) {
   invalidReason = `${navigationErrors.length} route(s) had navigation/connection errors`;
 }
 
-const launchReady = auditValidity === 'valid' && allFindings.filter(f => f.severity === 'critical').length === 0;
+// Count ICP blocked fields
+const icpBlockedFields = icpEvidenceAudit ? Object.values(icpEvidenceAudit.byICP || {}).reduce((sum, icp) => sum + (icp.blockedFields || 0), 0) : 0;
+
+const launchReady = auditValidity === 'valid' && allFindings.filter(f => f.severity === 'critical').length === 0 && icpBlockedFields === 0;
 
 const bySeverity = {
   critical: allFindings.filter(f => f.severity === 'critical'),
@@ -67,7 +72,7 @@ function md() {
   push('# ezLegal.ai Full Site Audit Report');
   push('');
   push(`**Generated:** ${new Date().toISOString()}`);
-  push(`**Audit System Version:** 2.1`);
+  push(`**Audit System Version:** 2.2`);
   push(`**Mode:** ${config.mode}`);
   push(`**Base URL:** ${config.baseUrl}`);
   push('');
@@ -183,37 +188,59 @@ function md() {
   }
   push(hr);
 
-  // D. ICP-by-ICP Matrix
-  push('## D. ICP Coverage Matrix');
+  // D. ICP Evidence & Assertions
+  push('## D. ICP Evidence & Assertions');
   push('');
-  for (const icp of config.icpDefinitions) {
-    push(`### ${icp.label}`);
-    push(`> ${icp.description}`);
-    push('');
-    push('**Dedicated Routes:**');
-    const icpRoutes = (routeInventory?.routes || []).filter(r => r.icp === icp.id);
-    if (icpRoutes.length > 0) {
-      for (const r of icpRoutes) push(`- \`${r.path}\``);
-    } else {
-      push('- None dedicated');
-    }
-    push('');
-    push('**Expectations vs. Reality:**');
-    push('| Expectation | Status |');
-    push('|------------|--------|');
-    for (const exp of icp.expectations) {
-      const hasEvidence = domInventory?.pages?.some(p =>
-        p.icp === icp.id && p.inventory
-      );
-      push(`| ${exp} | ${hasEvidence ? '[inference] Partially present' : '[evidence unavailable]'} |`);
-    }
-    push('');
 
-    const icpFindings = allFindings.filter(f => icpRoutes.some(r => r.path === f.route));
-    if (icpFindings.length > 0) {
-      push(`**Findings affecting this ICP:** ${icpFindings.length}`);
+  if (icpEvidenceAudit) {
+    for (const icp of config.icpDefinitions) {
+      push(`### ${icp.label} (\`${icp.id}\`)`);
+      push(`> ${icp.description}`);
       push('');
+
+      const icpStats = icpEvidenceAudit.byICP?.[icp.id];
+      const icpRouteEvidence = icpEvidenceAudit.evidence?.[icp.id]?.routes || {};
+      const icpRoutes = (routeInventory?.routes || []).filter(r => r.icp === icp.id);
+
+      push(`**Required Routes:** ${icp.routes.join(', ')}`);
+      push(`**Routes Audited:** ${icpStats?.routesAudited || 0}`);
+      push(`**Findings:** ${icpStats?.findings || 0}`);
+      push(`**Blocked Fields:** ${icpStats?.blockedFields || 0}`);
+      push('');
+
+      for (const [routePath, routeData] of Object.entries(icpRouteEvidence)) {
+        push(`#### \`${routePath}\``);
+        push('');
+        push('| Field | Value |');
+        push('|-------|-------|');
+        push(`| Title | ${routeData.title === '[blocked]' ? '**[blocked]**' : (routeData.title || '[empty]').slice(0, 80)} |`);
+        push(`| H1 | ${routeData.h1 === '[blocked]' ? '**[blocked]**' : (routeData.h1 || '[empty]').slice(0, 80)} |`);
+        push(`| Lang | ${routeData.lang === '[blocked]' ? '**[blocked]**' : (routeData.lang || '[empty]')} |`);
+        push(`| Nav Labels | ${routeData.navLabels === '[blocked]' ? '**[blocked]**' : Array.isArray(routeData.navLabels) ? routeData.navLabels.slice(0, 5).join(', ') : '[empty]'} |`);
+        push(`| CTAs | ${routeData.ctaLabels === '[blocked]' ? '**[blocked]**' : Array.isArray(routeData.ctaLabels) ? routeData.ctaLabels.slice(0, 3).map(c => c.text).join(', ') : '[empty]'} |`);
+        push(`| Forms | ${routeData.forms === '[blocked]' ? '**[blocked]**' : Array.isArray(routeData.forms) ? `${routeData.forms.length} form(s)` : '[empty]'} |`);
+        push(`| Trust Signals | ${routeData.trustSignals === '[blocked]' ? '**[blocked]**' : Array.isArray(routeData.trustSignals) ? routeData.trustSignals.join(', ') || '[none]' : '[empty]'} |`);
+        push(`| AI Disclosure | ${routeData.aiDisclosure === '[blocked]' ? '**[blocked]**' : (routeData.aiDisclosure || '[none]').slice(0, 100)} |`);
+        push(`| Legal Boundary | ${routeData.legalBoundary === '[blocked]' ? '**[blocked]**' : (routeData.legalBoundary || '[none]').slice(0, 100)} |`);
+        push(`| Jurisdiction Warning | ${routeData.jurisdictionWarning === '[blocked]' ? '**[blocked]**' : (routeData.jurisdictionWarning || '[none]').slice(0, 100)} |`);
+        push(`| Human Escalation | ${routeData.humanEscalation === '[blocked]' ? '**[blocked]**' : (routeData.humanEscalation || '[none]').slice(0, 100)} |`);
+        push(`| Pricing | ${routeData.pricingText === '[blocked]' ? '**[blocked]**' : (routeData.pricingText || '[none]').slice(0, 100)} |`);
+        push(`| Screenshots | ${routeData.screenshots ? Object.keys(routeData.screenshots).join(', ') : '[none]'} |`);
+        push('');
+      }
+
+      const icpFindings = allFindings.filter(f => f.icp === icp.id);
+      if (icpFindings.length > 0) {
+        push('**ICP Assertion Failures:**');
+        for (const f of icpFindings.slice(0, 15)) {
+          push(`- [${f.severity.toUpperCase()}] \`${f.route}\` - ${f.issue}: ${f.description}`);
+        }
+        push('');
+      }
     }
+  } else {
+    push('*ICP evidence audit not available. Run `npm run audit:icp` with dev server active.*');
+    push('');
   }
   push(hr);
 
@@ -530,7 +557,7 @@ writeFileSync(resolve(outputDir, 'FULL_SITE_AUDIT.md'), markdown);
 
 const jsonReport = {
   generatedAt: new Date().toISOString(),
-  version: '2.1',
+  version: '2.2',
   auditValidity,
   invalidReason,
   launchReady,
@@ -538,6 +565,7 @@ const jsonReport = {
     totalRoutes: routeInventory?.totalRoutes || 0,
     totalFindings: allFindings.length,
     navigationErrors: navigationErrors.length,
+    icpBlockedFields,
     bySeverity: { critical: bySeverity.critical.length, high: bySeverity.high.length, medium: bySeverity.medium.length, low: bySeverity.low.length },
     byCategory: Object.fromEntries(Object.entries(byCategory).map(([k, v]) => [k, v.length])),
   },
@@ -546,6 +574,7 @@ const jsonReport = {
     accessibility: a11yAudit ? { findings: a11yAudit.totalFindings, bySeverity: a11yAudit.bySeverity } : null,
     content: contentAudit ? { findings: contentAudit.totalFindings, summary: contentAudit.summary } : null,
     conversion: conversionAudit ? { findings: conversionAudit.totalFindings, summary: conversionAudit.summary } : null,
+    icpEvidence: icpEvidenceAudit ? { findings: icpEvidenceAudit.totalFindings, bySeverity: icpEvidenceAudit.bySeverity, byICP: icpEvidenceAudit.byICP } : null,
   },
   icpCoverage: config.icpDefinitions.map(icp => ({
     id: icp.id,
@@ -579,6 +608,7 @@ console.log(`    High:     ${bySeverity.high.length}`);
 console.log(`    Medium:   ${bySeverity.medium.length}`);
 console.log(`    Low:      ${bySeverity.low.length}`);
 console.log(`    Navigation Errors: ${navigationErrors.length}`);
+console.log(`    ICP Blocked Fields: ${icpBlockedFields}`);
 console.log('');
 
 if (auditValidity !== 'valid') {
