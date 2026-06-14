@@ -162,7 +162,19 @@ if (config.mode === 'live') {
   rawRoutes = discoverRoutesFromSource();
 }
 
-const categorized = categorizeRoutes(rawRoutes);
+// Deduplicate routes by normalized pathname
+const seen = new Set();
+const deduped = [];
+for (const route of rawRoutes) {
+  const normalized = route.replace(/\/+$/, '') || '/';
+  if (!seen.has(normalized)) {
+    seen.add(normalized);
+    deduped.push(normalized);
+  }
+}
+console.log(`  Deduplication: ${rawRoutes.length} raw -> ${deduped.length} unique`);
+
+const categorized = categorizeRoutes(deduped);
 
 const inventory = {
   discoveredAt: new Date().toISOString(),

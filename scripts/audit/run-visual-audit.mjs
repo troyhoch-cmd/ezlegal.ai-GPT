@@ -207,12 +207,13 @@ async function runVisualAudit() {
           });
         }
       } catch (err) {
+        const isNavError = /ERR_CONNECTION_REFUSED|ECONNREFUSED|ERR_NAME_NOT_RESOLVED|DNS|net::ERR_|Navigation timeout|Timeout|blank page/i.test(err.message);
         findings.push({
           route: route.path,
           viewport: vpName,
           category: 'visual',
-          severity: 'medium',
-          issue: 'navigation-error',
+          severity: 'critical',
+          issue: isNavError ? 'navigation-error' : 'audit-error',
           description: err.message.slice(0, 200),
           evidence: { url: route.fullUrl },
         });
@@ -257,3 +258,9 @@ console.log(`Visual Audit Complete: ${findings.length} findings`);
 console.log(`  Critical: ${output.bySeverity.critical} | High: ${output.bySeverity.high} | Medium: ${output.bySeverity.medium} | Low: ${output.bySeverity.low}`);
 console.log(`  DOM Inventory: ${domInventory.length} pages collected`);
 console.log(`  Screenshots: ${screenshotDir}`);
+
+const navErrors = findings.filter(f => f.issue === 'navigation-error' || f.issue === 'audit-error');
+if (navErrors.length > 0) {
+  console.error(`\n[FATAL] ${navErrors.length} navigation/audit errors detected. Dev server may be unavailable.`);
+  process.exit(1);
+}
