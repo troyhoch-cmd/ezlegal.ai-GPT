@@ -1,0 +1,97 @@
+{
+  "baseUrl": "http://localhost:5173",
+  "routeSource": "src/lib/routes.ts",
+  "outputDir": "audit-output",
+  "screenshotDir": "audit-output/screenshots",
+  "viewports": {
+    "mobile": { "width": 375, "height": 812 },
+    "tablet": { "width": 768, "height": 1024 },
+    "desktop": { "width": 1440, "height": 900 }
+  },
+  "icpDefinitions": [
+    {
+      "id": "spanish-speaking",
+      "label": "Spanish-speaking individuals",
+      "description": "Users who primarily speak Spanish seeking legal help in their language",
+      "routes": ["/espanol", "/es"],
+      "expectations": ["Spanish language content", "Bilingual navigation", "Culturally appropriate imagery"]
+    },
+    {
+      "id": "smb",
+      "label": "Small and Medium Businesses",
+      "description": "Business owners who cannot afford traditional legal counsel",
+      "routes": ["/for-business", "/pricing", "/features", "/checkout"],
+      "expectations": ["Clear pricing", "ROI messaging", "Business-specific use cases", "Integration options"]
+    },
+    {
+      "id": "pro-bono-lso",
+      "label": "Pro Bono / Legal Service Organizations",
+      "description": "Non-profits and legal aid organizations seeking tools for underserved communities",
+      "routes": ["/for-organizations", "/pro-bono", "/grant-reporting", "/lso-dashboard"],
+      "expectations": ["Impact metrics", "Grant compliance", "Volume pricing", "White-label options"]
+    }
+  ],
+  "auditCategories": [
+    {
+      "id": "visual",
+      "label": "Visual & Layout",
+      "description": "Screenshot capture, responsive layout verification, visual consistency"
+    },
+    {
+      "id": "accessibility",
+      "label": "Accessibility (WCAG 2.1 AA)",
+      "description": "Automated axe-core checks, heading hierarchy, ARIA, contrast, focus management"
+    },
+    {
+      "id": "content",
+      "label": "Content Quality",
+      "description": "Reading level, jargon detection, sentence complexity, Spanish presence"
+    },
+    {
+      "id": "conversion",
+      "label": "Conversion & CTA",
+      "description": "CTA hierarchy, funnel clarity, form burden, trust signals"
+    },
+    {
+      "id": "ethical-ai",
+      "label": "Ethical AI Compliance",
+      "description": "AI disclosure, escalation paths, jurisdiction warnings, human oversight"
+    }
+  ],
+  "severityLevels": {
+    "critical": {
+      "label": "Critical",
+      "description": "Blocks user access or violates legal/compliance requirements",
+      "sla": "Fix within 24 hours"
+    },
+    "high": {
+      "label": "High",
+      "description": "Significantly degrades user experience or conversion",
+      "sla": "Fix within 1 week"
+    },
+    "medium": {
+      "label": "Medium",
+      "description": "Noticeable UX issue that affects specific user segments",
+      "sla": "Fix within 2 weeks"
+    },
+    "low": {
+      "label": "Low",
+      "description": "Minor polish item or enhancement opportunity",
+      "sla": "Fix in next sprint"
+    }
+  },
+  "contentThresholds": {
+    "maxFleschKincaidGrade": 8,
+    "maxSentenceLength": 30,
+    "maxParagraphSentences": 5,
+    "jargonDensityMax": 0.02
+  },
+  "conversionThresholds": {
+    "maxFormFields": 5,
+    "maxClicksToConversion": 3,
+    "minCtaPerPage": 1,
+    "maxCtaPerViewport": 3
+  },
+  "excludeRoutes": ["/auth/callback", "/reset-password", "/admin"],
+  "timeout": 30000
+}

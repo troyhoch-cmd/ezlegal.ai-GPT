@@ -1,0 +1,3139 @@
+{
+  "generatedAt": "2026-06-14T00:38:40.650Z",
+  "version": "2.0",
+  "summary": {
+    "totalRoutes": 62,
+    "totalFindings": 306,
+    "bySeverity": {
+      "critical": 0,
+      "high": 0,
+      "medium": 204,
+      "low": 102
+    },
+    "byCategory": {
+      "visual": 153,
+      "accessibility": 51,
+      "content": 51,
+      "conversion": 51
+    }
+  },
+  "audits": {
+    "visual": {
+      "findings": 153,
+      "bySeverity": {
+        "critical": 0,
+        "high": 0,
+        "medium": 153,
+        "low": 0
+      }
+    },
+    "accessibility": {
+      "findings": 51,
+      "bySeverity": {
+        "critical": 0,
+        "high": 0,
+        "medium": 51,
+        "low": 0
+      }
+    },
+    "content": {
+      "findings": 51,
+      "summary": {
+        "averageReadingGrade": 0,
+        "routesAboveThreshold": 0,
+        "totalJargonInstances": 0,
+        "spanishContentRoutes": 0
+      }
+    },
+    "conversion": {
+      "findings": 51,
+      "summary": {
+        "avgTrustSignals": 0,
+        "routesWithoutCta": 0,
+        "avgEthicalAIScore": 0
+      }
+    }
+  },
+  "icpCoverage": [
+    {
+      "id": "spanish-speaking",
+      "label": "Spanish-speaking individuals",
+      "dedicatedRoutes": 2,
+      "findings": 12
+    },
+    {
+      "id": "smb",
+      "label": "Small and Medium Businesses",
+      "dedicatedRoutes": 4,
+      "findings": 24
+    },
+    {
+      "id": "pro-bono-lso",
+      "label": "Pro Bono / Legal Service Organizations",
+      "dedicatedRoutes": 4,
+      "findings": 24
+    }
+  ],
+  "remediationBacklog": [
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/\nCall log:\n  - navigating to \"http://localhost:5173/\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/\nCall log:\n  - navigating to \"http://localhost:5173/\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/\nCall log:\n  - navigating to \"http://localhost:5173/\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/login",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login\nCall log:\n  - navigating to \"http://localhost:5173/login\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/login"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/login",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login\nCall log:\n  - navigating to \"http://localhost:5173/login\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/login"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/login",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login\nCall log:\n  - navigating to \"http://localhost:5173/login\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/login"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/signup",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup\nCall log:\n  - navigating to \"http://localhost:5173/signup\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/signup"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/signup",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup\nCall log:\n  - navigating to \"http://localhost:5173/signup\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/signup"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/signup",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup\nCall log:\n  - navigating to \"http://localhost:5173/signup\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/signup"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/forgot-password",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/forgot-password\nCall log:\n  - navigating to \"http://localhost:5173/forgot-password\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/forgot-password"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/forgot-password",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/forgot-password\nCall log:\n  - navigating to \"http://localhost:5173/forgot-password\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/forgot-password"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/forgot-password",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/forgot-password\nCall log:\n  - navigating to \"http://localhost:5173/forgot-password\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/forgot-password"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/pricing",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pricing\nCall log:\n  - navigating to \"http://localhost:5173/pricing\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/pricing"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/pricing",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pricing\nCall log:\n  - navigating to \"http://localhost:5173/pricing\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/pricing"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/pricing",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pricing\nCall log:\n  - navigating to \"http://localhost:5173/pricing\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/pricing"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/checkout",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/checkout\nCall log:\n  - navigating to \"http://localhost:5173/checkout\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/checkout"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/checkout",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/checkout\nCall log:\n  - navigating to \"http://localhost:5173/checkout\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/checkout"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/checkout",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/checkout\nCall log:\n  - navigating to \"http://localhost:5173/checkout\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/checkout"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/contact",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/contact\nCall log:\n  - navigating to \"http://localhost:5173/contact\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/contact"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/contact",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/contact\nCall log:\n  - navigating to \"http://localhost:5173/contact\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/contact"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/contact",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/contact\nCall log:\n  - navigating to \"http://localhost:5173/contact\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/contact"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/features",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/features\nCall log:\n  - navigating to \"http://localhost:5173/features\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/features"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/features",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/features\nCall log:\n  - navigating to \"http://localhost:5173/features\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/features"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/features",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/features\nCall log:\n  - navigating to \"http://localhost:5173/features\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/features"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/about",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/about\nCall log:\n  - navigating to \"http://localhost:5173/about\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/about"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/about",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/about\nCall log:\n  - navigating to \"http://localhost:5173/about\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/about"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/about",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/about\nCall log:\n  - navigating to \"http://localhost:5173/about\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/about"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/ezreads",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ezreads\nCall log:\n  - navigating to \"http://localhost:5173/ezreads\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/ezreads"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/ezreads",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ezreads\nCall log:\n  - navigating to \"http://localhost:5173/ezreads\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/ezreads"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/ezreads",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ezreads\nCall log:\n  - navigating to \"http://localhost:5173/ezreads\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/ezreads"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/pro-bono",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pro-bono\nCall log:\n  - navigating to \"http://localhost:5173/pro-bono\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/pro-bono"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/pro-bono",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pro-bono\nCall log:\n  - navigating to \"http://localhost:5173/pro-bono\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/pro-bono"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/pro-bono",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pro-bono\nCall log:\n  - navigating to \"http://localhost:5173/pro-bono\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/pro-bono"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/emergency-resources",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/emergency-resources\nCall log:\n  - navigating to \"http://localhost:5173/emergency-resources\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/emergency-resources"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/emergency-resources",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/emergency-resources\nCall log:\n  - navigating to \"http://localhost:5173/emergency-resources\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/emergency-resources"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/emergency-resources",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/emergency-resources\nCall log:\n  - navigating to \"http://localhost:5173/emergency-resources\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/emergency-resources"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-organizations",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-organizations\nCall log:\n  - navigating to \"http://localhost:5173/for-organizations\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-organizations"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-organizations",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-organizations\nCall log:\n  - navigating to \"http://localhost:5173/for-organizations\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-organizations"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-organizations",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-organizations\nCall log:\n  - navigating to \"http://localhost:5173/for-organizations\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-organizations"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-business",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-business\nCall log:\n  - navigating to \"http://localhost:5173/for-business\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-business"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-business",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-business\nCall log:\n  - navigating to \"http://localhost:5173/for-business\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-business"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-business",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-business\nCall log:\n  - navigating to \"http://localhost:5173/for-business\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-business"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-individuals",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-individuals\nCall log:\n  - navigating to \"http://localhost:5173/for-individuals\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-individuals"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-individuals",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-individuals\nCall log:\n  - navigating to \"http://localhost:5173/for-individuals\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-individuals"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-individuals",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-individuals\nCall log:\n  - navigating to \"http://localhost:5173/for-individuals\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-individuals"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-partners",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-partners\nCall log:\n  - navigating to \"http://localhost:5173/for-partners\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-partners"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-partners",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-partners\nCall log:\n  - navigating to \"http://localhost:5173/for-partners\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-partners"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/for-partners",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-partners\nCall log:\n  - navigating to \"http://localhost:5173/for-partners\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/for-partners"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/share-perspective",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/share-perspective\nCall log:\n  - navigating to \"http://localhost:5173/share-perspective\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/share-perspective"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/share-perspective",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/share-perspective\nCall log:\n  - navigating to \"http://localhost:5173/share-perspective\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/share-perspective"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/share-perspective",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/share-perspective\nCall log:\n  - navigating to \"http://localhost:5173/share-perspective\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/share-perspective"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/scope-disclaimers",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/scope-disclaimers\nCall log:\n  - navigating to \"http://localhost:5173/scope-disclaimers\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/scope-disclaimers"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/scope-disclaimers",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/scope-disclaimers\nCall log:\n  - navigating to \"http://localhost:5173/scope-disclaimers\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/scope-disclaimers"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/scope-disclaimers",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/scope-disclaimers\nCall log:\n  - navigating to \"http://localhost:5173/scope-disclaimers\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/scope-disclaimers"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/schedule-demo",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/schedule-demo\nCall log:\n  - navigating to \"http://localhost:5173/schedule-demo\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/schedule-demo"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/schedule-demo",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/schedule-demo\nCall log:\n  - navigating to \"http://localhost:5173/schedule-demo\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/schedule-demo"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/schedule-demo",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/schedule-demo\nCall log:\n  - navigating to \"http://localhost:5173/schedule-demo\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/schedule-demo"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/lso-dashboard",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/lso-dashboard\nCall log:\n  - navigating to \"http://localhost:5173/lso-dashboard\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/lso-dashboard"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/lso-dashboard",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/lso-dashboard\nCall log:\n  - navigating to \"http://localhost:5173/lso-dashboard\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/lso-dashboard"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/lso-dashboard",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/lso-dashboard\nCall log:\n  - navigating to \"http://localhost:5173/lso-dashboard\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/lso-dashboard"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/grant-reporting",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/grant-reporting\nCall log:\n  - navigating to \"http://localhost:5173/grant-reporting\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/grant-reporting"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/grant-reporting",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/grant-reporting\nCall log:\n  - navigating to \"http://localhost:5173/grant-reporting\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/grant-reporting"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/grant-reporting",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/grant-reporting\nCall log:\n  - navigating to \"http://localhost:5173/grant-reporting\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/grant-reporting"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/ai-governance",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ai-governance\nCall log:\n  - navigating to \"http://localhost:5173/ai-governance\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/ai-governance"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/ai-governance",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ai-governance\nCall log:\n  - navigating to \"http://localhost:5173/ai-governance\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/ai-governance"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/ai-governance",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ai-governance\nCall log:\n  - navigating to \"http://localhost:5173/ai-governance\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/ai-governance"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/terms",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/terms\nCall log:\n  - navigating to \"http://localhost:5173/terms\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/terms"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/terms",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/terms\nCall log:\n  - navigating to \"http://localhost:5173/terms\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/terms"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/terms",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/terms\nCall log:\n  - navigating to \"http://localhost:5173/terms\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/terms"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/privacy",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/privacy\nCall log:\n  - navigating to \"http://localhost:5173/privacy\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/privacy"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/privacy",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/privacy\nCall log:\n  - navigating to \"http://localhost:5173/privacy\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/privacy"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/privacy",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/privacy\nCall log:\n  - navigating to \"http://localhost:5173/privacy\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/privacy"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/trust-center",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/trust-center\nCall log:\n  - navigating to \"http://localhost:5173/trust-center\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/trust-center"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/trust-center",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/trust-center\nCall log:\n  - navigating to \"http://localhost:5173/trust-center\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/trust-center"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/trust-center",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/trust-center\nCall log:\n  - navigating to \"http://localhost:5173/trust-center\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/trust-center"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/enterprise-security",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/enterprise-security\nCall log:\n  - navigating to \"http://localhost:5173/enterprise-security\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/enterprise-security"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/enterprise-security",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/enterprise-security\nCall log:\n  - navigating to \"http://localhost:5173/enterprise-security\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/enterprise-security"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/enterprise-security",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/enterprise-security\nCall log:\n  - navigating to \"http://localhost:5173/enterprise-security\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/enterprise-security"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/how-it-works",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-it-works\nCall log:\n  - navigating to \"http://localhost:5173/how-it-works\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/how-it-works"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/how-it-works",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-it-works\nCall log:\n  - navigating to \"http://localhost:5173/how-it-works\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/how-it-works"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/how-it-works",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-it-works\nCall log:\n  - navigating to \"http://localhost:5173/how-it-works\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/how-it-works"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/partner-hub",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partner-hub\nCall log:\n  - navigating to \"http://localhost:5173/partner-hub\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/partner-hub"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/partner-hub",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partner-hub\nCall log:\n  - navigating to \"http://localhost:5173/partner-hub\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/partner-hub"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/partner-hub",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partner-hub\nCall log:\n  - navigating to \"http://localhost:5173/partner-hub\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/partner-hub"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/media-kit",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/media-kit\nCall log:\n  - navigating to \"http://localhost:5173/media-kit\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/media-kit"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/media-kit",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/media-kit\nCall log:\n  - navigating to \"http://localhost:5173/media-kit\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/media-kit"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/media-kit",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/media-kit\nCall log:\n  - navigating to \"http://localhost:5173/media-kit\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/media-kit"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/how-reports-are-reviewed",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-reports-are-reviewed\nCall log:\n  - navigating to \"http://localhost:5173/how-reports-are-reviewed\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/how-reports-are-reviewed"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/how-reports-are-reviewed",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-reports-are-reviewed\nCall log:\n  - navigating to \"http://localhost:5173/how-reports-are-reviewed\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/how-reports-are-reviewed"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/how-reports-are-reviewed",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-reports-are-reviewed\nCall log:\n  - navigating to \"http://localhost:5173/how-reports-are-reviewed\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/how-reports-are-reviewed"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/espanol",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/espanol\nCall log:\n  - navigating to \"http://localhost:5173/espanol\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/espanol"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/espanol",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/espanol\nCall log:\n  - navigating to \"http://localhost:5173/espanol\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/espanol"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/espanol",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/espanol\nCall log:\n  - navigating to \"http://localhost:5173/espanol\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/espanol"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/es",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/es\nCall log:\n  - navigating to \"http://localhost:5173/es\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/es"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/es",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/es\nCall log:\n  - navigating to \"http://localhost:5173/es\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/es"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/es",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/es\nCall log:\n  - navigating to \"http://localhost:5173/es\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/es"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/business",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/business\nCall log:\n  - navigating to \"http://localhost:5173/business\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/business"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/business",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/business\nCall log:\n  - navigating to \"http://localhost:5173/business\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/business"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/business",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/business\nCall log:\n  - navigating to \"http://localhost:5173/business\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/business"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/partners",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partners\nCall log:\n  - navigating to \"http://localhost:5173/partners\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/partners"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/partners",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partners\nCall log:\n  - navigating to \"http://localhost:5173/partners\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/partners"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/partners",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partners\nCall log:\n  - navigating to \"http://localhost:5173/partners\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/partners"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/urgent-help",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/urgent-help\nCall log:\n  - navigating to \"http://localhost:5173/urgent-help\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/urgent-help"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/urgent-help",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/urgent-help\nCall log:\n  - navigating to \"http://localhost:5173/urgent-help\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/urgent-help"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/urgent-help",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/urgent-help\nCall log:\n  - navigating to \"http://localhost:5173/urgent-help\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/urgent-help"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/accessibility",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/accessibility\nCall log:\n  - navigating to \"http://localhost:5173/accessibility\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/accessibility"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/accessibility",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/accessibility\nCall log:\n  - navigating to \"http://localhost:5173/accessibility\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/accessibility"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/accessibility",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/accessibility\nCall log:\n  - navigating to \"http://localhost:5173/accessibility\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/accessibility"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/access",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/access\nCall log:\n  - navigating to \"http://localhost:5173/access\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/access"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/access",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/access\nCall log:\n  - navigating to \"http://localhost:5173/access\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/access"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/access",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/access\nCall log:\n  - navigating to \"http://localhost:5173/access\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/access"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/negotiate",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/negotiate\nCall log:\n  - navigating to \"http://localhost:5173/negotiate\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/negotiate"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/negotiate",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/negotiate\nCall log:\n  - navigating to \"http://localhost:5173/negotiate\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/negotiate"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/negotiate",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/negotiate\nCall log:\n  - navigating to \"http://localhost:5173/negotiate\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/negotiate"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/site-review",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/site-review\nCall log:\n  - navigating to \"http://localhost:5173/site-review\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/site-review"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/site-review",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/site-review\nCall log:\n  - navigating to \"http://localhost:5173/site-review\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/site-review"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/site-review",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/site-review\nCall log:\n  - navigating to \"http://localhost:5173/site-review\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/site-review"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/sla",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/sla\nCall log:\n  - navigating to \"http://localhost:5173/sla\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/sla"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/sla",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/sla\nCall log:\n  - navigating to \"http://localhost:5173/sla\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/sla"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/sla",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/sla\nCall log:\n  - navigating to \"http://localhost:5173/sla\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/sla"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/find-attorney",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/find-attorney\nCall log:\n  - navigating to \"http://localhost:5173/find-attorney\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/find-attorney"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/find-attorney",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/find-attorney\nCall log:\n  - navigating to \"http://localhost:5173/find-attorney\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/find-attorney"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/find-attorney",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/find-attorney\nCall log:\n  - navigating to \"http://localhost:5173/find-attorney\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/find-attorney"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/ask",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ask\nCall log:\n  - navigating to \"http://localhost:5173/ask\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/ask"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/ask",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ask\nCall log:\n  - navigating to \"http://localhost:5173/ask\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/ask"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/ask",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ask\nCall log:\n  - navigating to \"http://localhost:5173/ask\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/ask"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/issue-packs",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/issue-packs\nCall log:\n  - navigating to \"http://localhost:5173/issue-packs\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/issue-packs"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/issue-packs",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/issue-packs\nCall log:\n  - navigating to \"http://localhost:5173/issue-packs\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/issue-packs"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/issue-packs",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/issue-packs\nCall log:\n  - navigating to \"http://localhost:5173/issue-packs\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/issue-packs"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/case-predictor",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/case-predictor"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/case-predictor",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/case-predictor"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/case-predictor",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/case-predictor"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/case-predictor/start",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor/start\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor/start\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/case-predictor/start"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/case-predictor/start",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor/start\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor/start\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/case-predictor/start"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/case-predictor/start",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor/start\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor/start\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/case-predictor/start"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chatbot",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot\nCall log:\n  - navigating to \"http://localhost:5173/chatbot\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chatbot"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chatbot",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot\nCall log:\n  - navigating to \"http://localhost:5173/chatbot\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chatbot"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chatbot",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot\nCall log:\n  - navigating to \"http://localhost:5173/chatbot\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chatbot"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chatbot-standalone",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot-standalone\nCall log:\n  - navigating to \"http://localhost:5173/chatbot-standalone\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chatbot-standalone"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chatbot-standalone",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot-standalone\nCall log:\n  - navigating to \"http://localhost:5173/chatbot-standalone\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chatbot-standalone"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chatbot-standalone",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot-standalone\nCall log:\n  - navigating to \"http://localhost:5173/chatbot-standalone\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chatbot-standalone"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "medium",
+      "issue": "navigation-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "evidence": {
+        "url": "http://localhost:5173/chat"
+      },
+      "priority": 3
+    },
+    {
+      "route": "/",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/\nCall log:\n  - navigating to \"http://localhost:5173/\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/login",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login\nCall log:\n  - navigating to \"http://localhost:5173/login\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/signup",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup\nCall log:\n  - navigating to \"http://localhost:5173/signup\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/forgot-password",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/forgot-password\nCall log:\n  - navigating to \"http://localhost:5173/forgot-password\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/pricing",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pricing\nCall log:\n  - navigating to \"http://localhost:5173/pricing\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/checkout",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/checkout\nCall log:\n  - navigating to \"http://localhost:5173/checkout\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/contact",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/contact\nCall log:\n  - navigating to \"http://localhost:5173/contact\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/features",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/features\nCall log:\n  - navigating to \"http://localhost:5173/features\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/about",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/about\nCall log:\n  - navigating to \"http://localhost:5173/about\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/ezreads",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ezreads\nCall log:\n  - navigating to \"http://localhost:5173/ezreads\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/pro-bono",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pro-bono\nCall log:\n  - navigating to \"http://localhost:5173/pro-bono\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/emergency-resources",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/emergency-resources\nCall log:\n  - navigating to \"http://localhost:5173/emergency-resources\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/for-organizations",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-organizations\nCall log:\n  - navigating to \"http://localhost:5173/for-organizations\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/for-business",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-business\nCall log:\n  - navigating to \"http://localhost:5173/for-business\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/for-individuals",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-individuals\nCall log:\n  - navigating to \"http://localhost:5173/for-individuals\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/for-partners",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-partners\nCall log:\n  - navigating to \"http://localhost:5173/for-partners\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/share-perspective",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/share-perspective\nCall log:\n  - navigating to \"http://localhost:5173/share-perspective\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/scope-disclaimers",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/scope-disclaimers\nCall log:\n  - navigating to \"http://localhost:5173/scope-disclaimers\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/schedule-demo",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/schedule-demo\nCall log:\n  - navigating to \"http://localhost:5173/schedule-demo\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/lso-dashboard",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/lso-dashboard\nCall log:\n  - navigating to \"http://localhost:5173/lso-dashboard\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/grant-reporting",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/grant-reporting\nCall log:\n  - navigating to \"http://localhost:5173/grant-reporting\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/ai-governance",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ai-governance\nCall log:\n  - navigating to \"http://localhost:5173/ai-governance\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/terms",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/terms\nCall log:\n  - navigating to \"http://localhost:5173/terms\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/privacy",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/privacy\nCall log:\n  - navigating to \"http://localhost:5173/privacy\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/trust-center",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/trust-center\nCall log:\n  - navigating to \"http://localhost:5173/trust-center\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/enterprise-security",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/enterprise-security\nCall log:\n  - navigating to \"http://localhost:5173/enterprise-security\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/how-it-works",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-it-works\nCall log:\n  - navigating to \"http://localhost:5173/how-it-works\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/partner-hub",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partner-hub\nCall log:\n  - navigating to \"http://localhost:5173/partner-hub\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/media-kit",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/media-kit\nCall log:\n  - navigating to \"http://localhost:5173/media-kit\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/how-reports-are-reviewed",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-reports-are-reviewed\nCall log:\n  - navigating to \"http://localhost:5173/how-reports-are-reviewed\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/espanol",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/espanol\nCall log:\n  - navigating to \"http://localhost:5173/espanol\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/es",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/es\nCall log:\n  - navigating to \"http://localhost:5173/es\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/business",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/business\nCall log:\n  - navigating to \"http://localhost:5173/business\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/partners",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partners\nCall log:\n  - navigating to \"http://localhost:5173/partners\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/urgent-help",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/urgent-help\nCall log:\n  - navigating to \"http://localhost:5173/urgent-help\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/accessibility",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/accessibility\nCall log:\n  - navigating to \"http://localhost:5173/accessibility\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/access",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/access\nCall log:\n  - navigating to \"http://localhost:5173/access\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/negotiate",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/negotiate\nCall log:\n  - navigating to \"http://localhost:5173/negotiate\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/site-review",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/site-review\nCall log:\n  - navigating to \"http://localhost:5173/site-review\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/sla",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/sla\nCall log:\n  - navigating to \"http://localhost:5173/sla\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/find-attorney",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/find-attorney\nCall log:\n  - navigating to \"http://localhost:5173/find-attorney\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/ask",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ask\nCall log:\n  - navigating to \"http://localhost:5173/ask\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/issue-packs",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/issue-packs\nCall log:\n  - navigating to \"http://localhost:5173/issue-packs\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/case-predictor",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/case-predictor/start",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor/start\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor/start\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/chatbot",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot\nCall log:\n  - navigating to \"http://localhost:5173/chatbot\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/chatbot-standalone",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot-standalone\nCall log:\n  - navigating to \"http://localhost:5173/chatbot-standalone\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/chat",
+      "category": "accessibility",
+      "severity": "medium",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 3
+    },
+    {
+      "route": "/",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/\nCall log:\n  - navigating to \"http://localhost:5173/\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/login",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login\nCall log:\n  - navigating to \"http://localhost:5173/login\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/signup",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup\nCall log:\n  - navigating to \"http://localhost:5173/signup\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/forgot-password",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/forgot-password\nCall log:\n  - navigating to \"http://localhost:5173/forgot-password\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/pricing",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pricing\nCall log:\n  - navigating to \"http://localhost:5173/pricing\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/checkout",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/checkout\nCall log:\n  - navigating to \"http://localhost:5173/checkout\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/contact",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/contact\nCall log:\n  - navigating to \"http://localhost:5173/contact\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/features",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/features\nCall log:\n  - navigating to \"http://localhost:5173/features\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/about",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/about\nCall log:\n  - navigating to \"http://localhost:5173/about\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/ezreads",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ezreads\nCall log:\n  - navigating to \"http://localhost:5173/ezreads\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/pro-bono",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pro-bono\nCall log:\n  - navigating to \"http://localhost:5173/pro-bono\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/emergency-resources",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/emergency-resources\nCall log:\n  - navigating to \"http://localhost:5173/emergency-resources\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/for-organizations",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-organizations\nCall log:\n  - navigating to \"http://localhost:5173/for-organizations\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/for-business",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-business\nCall log:\n  - navigating to \"http://localhost:5173/for-business\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/for-individuals",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-individuals\nCall log:\n  - navigating to \"http://localhost:5173/for-individuals\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/for-partners",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-partners\nCall log:\n  - navigating to \"http://localhost:5173/for-partners\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/share-perspective",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/share-perspective\nCall log:\n  - navigating to \"http://localhost:5173/share-perspective\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/scope-disclaimers",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/scope-disclaimers\nCall log:\n  - navigating to \"http://localhost:5173/scope-disclaimers\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/schedule-demo",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/schedule-demo\nCall log:\n  - navigating to \"http://localhost:5173/schedule-demo\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/lso-dashboard",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/lso-dashboard\nCall log:\n  - navigating to \"http://localhost:5173/lso-dashboard\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/grant-reporting",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/grant-reporting\nCall log:\n  - navigating to \"http://localhost:5173/grant-reporting\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/ai-governance",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ai-governance\nCall log:\n  - navigating to \"http://localhost:5173/ai-governance\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/terms",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/terms\nCall log:\n  - navigating to \"http://localhost:5173/terms\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/privacy",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/privacy\nCall log:\n  - navigating to \"http://localhost:5173/privacy\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/trust-center",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/trust-center\nCall log:\n  - navigating to \"http://localhost:5173/trust-center\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/enterprise-security",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/enterprise-security\nCall log:\n  - navigating to \"http://localhost:5173/enterprise-security\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/how-it-works",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-it-works\nCall log:\n  - navigating to \"http://localhost:5173/how-it-works\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/partner-hub",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partner-hub\nCall log:\n  - navigating to \"http://localhost:5173/partner-hub\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/media-kit",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/media-kit\nCall log:\n  - navigating to \"http://localhost:5173/media-kit\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/how-reports-are-reviewed",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-reports-are-reviewed\nCall log:\n  - navigating to \"http://localhost:5173/how-reports-are-reviewed\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/espanol",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/espanol\nCall log:\n  - navigating to \"http://localhost:5173/espanol\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/es",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/es\nCall log:\n  - navigating to \"http://localhost:5173/es\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/business",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/business\nCall log:\n  - navigating to \"http://localhost:5173/business\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/partners",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partners\nCall log:\n  - navigating to \"http://localhost:5173/partners\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/urgent-help",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/urgent-help\nCall log:\n  - navigating to \"http://localhost:5173/urgent-help\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/accessibility",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/accessibility\nCall log:\n  - navigating to \"http://localhost:5173/accessibility\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/access",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/access\nCall log:\n  - navigating to \"http://localhost:5173/access\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/negotiate",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/negotiate\nCall log:\n  - navigating to \"http://localhost:5173/negotiate\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/site-review",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/site-review\nCall log:\n  - navigating to \"http://localhost:5173/site-review\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/sla",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/sla\nCall log:\n  - navigating to \"http://localhost:5173/sla\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/find-attorney",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/find-attorney\nCall log:\n  - navigating to \"http://localhost:5173/find-attorney\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/ask",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ask\nCall log:\n  - navigating to \"http://localhost:5173/ask\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/issue-packs",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/issue-packs\nCall log:\n  - navigating to \"http://localhost:5173/issue-packs\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/case-predictor",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/case-predictor/start",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor/start\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor/start\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chatbot",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot\nCall log:\n  - navigating to \"http://localhost:5173/chatbot\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chatbot-standalone",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot-standalone\nCall log:\n  - navigating to \"http://localhost:5173/chatbot-standalone\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chat",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chat",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chat",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chat",
+      "category": "content",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/\nCall log:\n  - navigating to \"http://localhost:5173/\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/login",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login\nCall log:\n  - navigating to \"http://localhost:5173/login\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/signup",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup\nCall log:\n  - navigating to \"http://localhost:5173/signup\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/forgot-password",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/forgot-password\nCall log:\n  - navigating to \"http://localhost:5173/forgot-password\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/pricing",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pricing\nCall log:\n  - navigating to \"http://localhost:5173/pricing\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/checkout",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/checkout\nCall log:\n  - navigating to \"http://localhost:5173/checkout\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/contact",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/contact\nCall log:\n  - navigating to \"http://localhost:5173/contact\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/features",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/features\nCall log:\n  - navigating to \"http://localhost:5173/features\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/about",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/about\nCall log:\n  - navigating to \"http://localhost:5173/about\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/ezreads",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ezreads\nCall log:\n  - navigating to \"http://localhost:5173/ezreads\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/pro-bono",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/pro-bono\nCall log:\n  - navigating to \"http://localhost:5173/pro-bono\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/emergency-resources",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/emergency-resources\nCall log:\n  - navigating to \"http://localhost:5173/emergency-resources\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/for-organizations",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-organizations\nCall log:\n  - navigating to \"http://localhost:5173/for-organizations\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/for-business",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-business\nCall log:\n  - navigating to \"http://localhost:5173/for-business\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/for-individuals",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-individuals\nCall log:\n  - navigating to \"http://localhost:5173/for-individuals\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/for-partners",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/for-partners\nCall log:\n  - navigating to \"http://localhost:5173/for-partners\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/share-perspective",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/share-perspective\nCall log:\n  - navigating to \"http://localhost:5173/share-perspective\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/scope-disclaimers",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/scope-disclaimers\nCall log:\n  - navigating to \"http://localhost:5173/scope-disclaimers\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/schedule-demo",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/schedule-demo\nCall log:\n  - navigating to \"http://localhost:5173/schedule-demo\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/lso-dashboard",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/lso-dashboard\nCall log:\n  - navigating to \"http://localhost:5173/lso-dashboard\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/grant-reporting",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/grant-reporting\nCall log:\n  - navigating to \"http://localhost:5173/grant-reporting\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/ai-governance",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ai-governance\nCall log:\n  - navigating to \"http://localhost:5173/ai-governance\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/terms",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/terms\nCall log:\n  - navigating to \"http://localhost:5173/terms\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/privacy",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/privacy\nCall log:\n  - navigating to \"http://localhost:5173/privacy\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/trust-center",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/trust-center\nCall log:\n  - navigating to \"http://localhost:5173/trust-center\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/enterprise-security",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/enterprise-security\nCall log:\n  - navigating to \"http://localhost:5173/enterprise-security\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/how-it-works",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-it-works\nCall log:\n  - navigating to \"http://localhost:5173/how-it-works\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/partner-hub",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partner-hub\nCall log:\n  - navigating to \"http://localhost:5173/partner-hub\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/media-kit",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/media-kit\nCall log:\n  - navigating to \"http://localhost:5173/media-kit\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/how-reports-are-reviewed",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/how-reports-are-reviewed\nCall log:\n  - navigating to \"http://localhost:5173/how-reports-are-reviewed\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/espanol",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/espanol\nCall log:\n  - navigating to \"http://localhost:5173/espanol\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/es",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/es\nCall log:\n  - navigating to \"http://localhost:5173/es\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/business",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/business\nCall log:\n  - navigating to \"http://localhost:5173/business\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/partners",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/partners\nCall log:\n  - navigating to \"http://localhost:5173/partners\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/urgent-help",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/urgent-help\nCall log:\n  - navigating to \"http://localhost:5173/urgent-help\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/accessibility",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/accessibility\nCall log:\n  - navigating to \"http://localhost:5173/accessibility\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/access",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/access\nCall log:\n  - navigating to \"http://localhost:5173/access\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/negotiate",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/negotiate\nCall log:\n  - navigating to \"http://localhost:5173/negotiate\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/site-review",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/site-review\nCall log:\n  - navigating to \"http://localhost:5173/site-review\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/sla",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/sla\nCall log:\n  - navigating to \"http://localhost:5173/sla\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/find-attorney",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/find-attorney\nCall log:\n  - navigating to \"http://localhost:5173/find-attorney\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/ask",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/ask\nCall log:\n  - navigating to \"http://localhost:5173/ask\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/issue-packs",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/issue-packs\nCall log:\n  - navigating to \"http://localhost:5173/issue-packs\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/case-predictor",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/case-predictor/start",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/case-predictor/start\nCall log:\n  - navigating to \"http://localhost:5173/case-predictor/start\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chatbot",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot\nCall log:\n  - navigating to \"http://localhost:5173/chatbot\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chatbot-standalone",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chatbot-standalone\nCall log:\n  - navigating to \"http://localhost:5173/chatbot-standalone\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chat",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chat",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chat",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 4
+    },
+    {
+      "route": "/chat",
+      "category": "conversion",
+      "severity": "low",
+      "issue": "audit-error",
+      "description": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/chat\nCall log:\n  - navigating to \"http://localhost:5173/chat\", waiting until \"networkidle\"\n",
+      "priority": 4
+    }
+  ]
+}
