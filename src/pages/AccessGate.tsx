@@ -420,9 +420,9 @@ function WrongEmailContent({
         <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <AlertCircle className="w-8 h-8 text-amber-600" />
         </div>
-        <h1 className="text-2xl font-bold text-navy-800 mb-2">
+        <h2 className="text-2xl font-bold text-navy-800 mb-2">
           Different Account Required
-        </h1>
+        </h2>
         <p className="text-navy-600">
           This link was shared with <span className="font-medium">{tokenInfo?.allowedEmail}</span>
         </p>
@@ -469,9 +469,9 @@ function ExpiredContent({
         <div className="w-16 h-16 bg-navy-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Clock className="w-8 h-8 text-navy-500" />
         </div>
-        <h1 className="text-2xl font-bold text-navy-800 mb-2">
+        <h2 className="text-2xl font-bold text-navy-800 mb-2">
           Link Expired
-        </h1>
+        </h2>
         <p className="text-navy-600">
           This access link is no longer valid
         </p>
@@ -512,9 +512,9 @@ function RevokedContent({ tokenInfo: _tokenInfo }: { tokenInfo: TokenInfo | null
         <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Ban className="w-8 h-8 text-red-500" />
         </div>
-        <h1 className="text-2xl font-bold text-navy-800 mb-2">
+        <h2 className="text-2xl font-bold text-navy-800 mb-2">
           Access Revoked
-        </h1>
+        </h2>
         <p className="text-navy-600">
           This access link has been deactivated
         </p>
@@ -551,9 +551,9 @@ function MaxUsesContent({
         <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Users className="w-8 h-8 text-amber-600" />
         </div>
-        <h1 className="text-2xl font-bold text-navy-800 mb-2">
+        <h2 className="text-2xl font-bold text-navy-800 mb-2">
           Link Limit Reached
-        </h1>
+        </h2>
         <p className="text-navy-600">
           This link has reached its maximum number of uses
         </p>
@@ -583,9 +583,9 @@ function NotFoundContent() {
         <div className="w-16 h-16 bg-navy-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <AlertCircle className="w-8 h-8 text-navy-500" />
         </div>
-        <h1 className="text-2xl font-bold text-navy-800 mb-2">
+        <h2 className="text-2xl font-bold text-navy-800 mb-2">
           Link Not Found
-        </h1>
+        </h2>
         <p className="text-navy-600">
           We couldn't find the resource you're looking for
         </p>
@@ -737,9 +737,9 @@ function RequestSuccessContent({ email }: { email: string }) {
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
-        <h1 className="text-2xl font-bold text-navy-800 mb-2">
+        <h2 className="text-2xl font-bold text-navy-800 mb-2">
           Request Submitted
-        </h1>
+        </h2>
         <p className="text-navy-600">
           We'll notify you at <span className="font-medium">{email}</span> when your request is reviewed
         </p>

@@ -560,7 +560,7 @@ This research is for informational purposes only and does not constitute legal a
                     <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
                       <BookOpen className="w-5 h-5 text-teal-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-navy-900">{t('research.summary')}</h3>
+                    <h2 className="text-lg font-semibold text-navy-900">{t('research.summary')}</h2>
                   </div>
                   <div className="text-navy-700 leading-relaxed whitespace-pre-wrap">{parsedResults.summary}</div>
                 </div>

@@ -95,9 +95,9 @@ export default function PartnerLanding() {
         <Navigation />
         <main className="pt-24 min-h-screen flex items-center justify-center bg-navy-50">
           <div className="text-center max-w-md mx-auto px-4">
-            <h1 className="text-2xl font-bold text-navy-900 mb-4">
+            <h2 className="text-2xl font-bold text-navy-900 mb-4">
               {es ? 'Página no encontrada' : 'Page Not Found'}
-            </h1>
+            </h2>
             <p className="text-navy-600 mb-6">
               {es
                 ? 'Esta página de alianza no existe o ya no esta activa.'
@@ -125,7 +125,7 @@ export default function PartnerLanding() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-4 mb-8">
               {page.partner_logo_url && (
-                <img src={page.partner_logo_url} alt={partner?.organization_name || ''} className="h-10 object-contain" />
+                <img src={page.partner_logo_url} alt={partner?.organization_name || ''} className="h-10 object-contain" loading="lazy" />
               )}
               <div className="flex items-center gap-2 text-navy-500">
                 <span className="text-sm">+</span>

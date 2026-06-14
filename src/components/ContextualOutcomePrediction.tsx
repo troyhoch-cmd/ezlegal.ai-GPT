@@ -350,7 +350,7 @@ export default function ContextualOutcomePrediction({
         <div className="p-4 overflow-y-auto flex-1">
           <div className="text-center mb-4">
             <div className="relative inline-block mb-3">
-              <svg className="w-28 h-28" viewBox="0 0 100 100">
+              <svg className="w-28 h-28" viewBox="0 0 100 100" aria-hidden="true">
                 <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" strokeWidth="8" />
                 <circle
                   cx="50" cy="50" r="45" fill="none"

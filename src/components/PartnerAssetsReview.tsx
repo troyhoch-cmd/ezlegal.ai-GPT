@@ -353,7 +353,7 @@ export default function PartnerAssetsReview() {
                 className="w-full flex items-center justify-between p-5 hover:bg-navy-50/50 transition-colors text-left"
               >
                 <div>
-                  <h4 className="font-bold text-navy-900">{flyer.title}</h4>
+                  <h3 className="font-bold text-navy-900">{flyer.title}</h3>
                   <p className="text-sm text-navy-500 mt-0.5">{flyer.description}</p>
                 </div>
                 {expandedTile === `flyer-${flyer.id}` ? (

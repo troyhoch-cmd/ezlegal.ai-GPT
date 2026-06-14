@@ -72,7 +72,7 @@ interface AIModel {
 
 function getSourceCoverage(text: string): { level: 'high' | 'medium' | 'low'; label: string; color: string; pct: number } {
   const citationPattern = /\b(A\.R\.S\.|§|U\.S\.C\.|USC|statute|code section|regulation|rule \d|amendment|article \d)/i;
-  const specificPattern = /\b(according to|under|pursuant to|as stated in|per section|section \d)/i;
+  const specificPattern = /\b(according to|under|as stated in|per section|section \d)/i;
   const hedgePattern = /\b(may|might|could|possibly|generally|typically|often|usually|it depends|varies)/i;
   const hasCitations = citationPattern.test(text);
   const hasSpecific = specificPattern.test(text);
@@ -1519,7 +1519,7 @@ Full transcript available via "Export Transcript" option.
                     <Sparkles className="w-6 h-6 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-bold text-navy-900 mb-2">{language === 'es' ? 'Bienvenido, Invitado' : 'Welcome, Guest!'}</h4>
+                    <h2 className="font-bold text-navy-900 mb-2">{language === 'es' ? 'Bienvenido, Invitado' : 'Welcome, Guest!'}</h2>
                     <p className="text-sm text-navy-700 mb-3">
                       {language === 'es'
                         ? 'Estás usando el Asistente Legal IA como invitado. El historial no se guardará. Crea una cuenta gratis para guardar tus conversaciones.'

@@ -371,7 +371,7 @@ export default function GrantReporting() {
                                 {grant.funder && (
                                   <span className={`w-2 h-2 rounded-full ${getFunderTypeColor(grant.funder.type)}`} />
                                 )}
-                                <h4 className="font-bold text-navy-900">{grant.grant_name}</h4>
+                                <h3 className="font-bold text-navy-900">{grant.grant_name}</h3>
                               </div>
                               <p className="text-sm text-navy-500">{grant.grant_number}</p>
                             </div>

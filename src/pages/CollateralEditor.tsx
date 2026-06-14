@@ -689,7 +689,7 @@ function EditorPanel({
               if (f && target) {
                 onUploadImage(f, (url) => {
                   const existing = draft.content_sections[target.s]?.content[target.b] ?? '';
-                  const next = `${existing} <img src="${url}" alt="" class="inline-block max-h-32 my-2 rounded" />`;
+                  const next = `${existing} <img src="${url}" alt="" class="inline-block max-h-32 my-2 rounded w-full h-auto" loading="lazy" />`;
                   onUpdateBullet(target.s, target.b, next);
                 });
               }
@@ -726,7 +726,7 @@ const PreviewPanel = forwardRef<HTMLDivElement, PreviewPanelProps>(function Prev
           style={{ background: `linear-gradient(135deg, ${accent}, #1e3a8a)` }}
         >
           <p className="text-xs font-semibold uppercase tracking-widest opacity-80">ezLegal.ai</p>
-          <h1 className="text-3xl font-bold mt-2 leading-tight">{draft.title}</h1>
+          <h2 className="text-3xl font-bold mt-2 leading-tight">{draft.title}</h2>
           {draft.subtitle && <p className="text-sm opacity-90 mt-2">{draft.subtitle}</p>}
         </div>
 
@@ -742,26 +742,12 @@ const PreviewPanel = forwardRef<HTMLDivElement, PreviewPanelProps>(function Prev
         <div className="px-10 py-8 space-y-6">
           {draft.content_sections.map((section, i) => (
             <section key={i}>
-              <h2
+            <h2
                 className="text-sm font-bold uppercase tracking-wider mb-2"
                 style={{ color: accent }}
               >
                 {section.heading}
               </h2>
-              <ul className="space-y-2">
-                {section.content.map((bullet, j) => (
-                  <li key={j} className="text-sm text-navy-800 leading-relaxed flex gap-2">
-                    <span
-                      className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0"
-                      style={{ backgroundColor: accent }}
-                    />
-                    <span
-                      className="flex-1"
-                      dangerouslySetInnerHTML={{ __html: bullet || '&nbsp;' }}
-                    />
-                  </li>
-                ))}
-              </ul>
             </section>
           ))}
         </div>
@@ -779,7 +765,7 @@ const PreviewPanel = forwardRef<HTMLDivElement, PreviewPanelProps>(function Prev
               </p>
             )}
           </div>
-          {qrDataUrl && <img src={qrDataUrl} alt="QR code" className="w-24 h-24" />}
+          {qrDataUrl && <img src={qrDataUrl} alt="QR code" className="w-24 h-24" loading="lazy" />}
         </div>
       </div>
     </div>
@@ -798,9 +784,9 @@ function VersionsDrawer({
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <aside className="relative ml-auto w-full max-w-sm bg-white h-full shadow-xl flex flex-col">
         <header className="px-5 py-4 border-b border-navy-100 flex items-center justify-between">
-          <h3 className="font-semibold text-navy-900 flex items-center gap-2">
+          <h2 className="font-semibold text-navy-900 flex items-center gap-2">
             <History className="w-4 h-4" /> Version history
-          </h3>
+          </h2>
           <button onClick={onClose} className="p-1 rounded hover:bg-navy-50">
             <X className="w-5 h-5" />
           </button>

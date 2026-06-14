@@ -386,7 +386,7 @@ export default function AICaseMatchingDashboard() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-semibold text-stone-900">{caseItem.clientName}</h4>
+                        <h3 className="font-semibold text-stone-900">{caseItem.clientName}</h3>
                         <span className={`px-2 py-0.5 rounded text-xs font-medium border ${getUrgencyColor(caseItem.urgencyLevel)}`}>
                           {caseItem.urgencyLevel}
                         </span>
@@ -778,7 +778,7 @@ export default function AICaseMatchingDashboard() {
                     }`}>
                       {index + 1}
                     </span>
-                    <img src={lawyer.image} alt={lawyer.name} className="w-8 h-8 rounded-full object-cover" />
+                    <img src={lawyer.image} alt={lawyer.name} className="w-8 h-8 rounded-full object-cover" loading="lazy" />
                     <div className="flex-1">
                       <div className="text-sm font-semibold text-stone-900">{lawyer.name}</div>
                       <div className="text-xs text-stone-500">{lawyer.experience} years - {lawyer.practiceAreas[0]}</div>

@@ -103,11 +103,11 @@ export default function AIModelCard() {
                 <Section title="Intended Purpose & Users">
                   <div className="space-y-6">
                     <div>
-                      <h4 className="font-semibold text-navy-800 mb-2">Primary Purpose</h4>
+                      <h2 className="font-semibold text-navy-800 mb-2">Primary Purpose</h2>
                       <p className="text-navy-600">Provide accessible legal information, document generation guidance, and attorney referrals to individuals and small businesses who cannot afford traditional legal services.</p>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-navy-800 mb-2">Intended Users</h4>
+                      <h3 className="font-semibold text-navy-800 mb-2">Intended Users</h3>
                       <ul className="space-y-2">
                         <li className="flex items-start gap-2 text-navy-600">
                           <CheckCircle className="h-4 w-4 text-teal-600 mt-0.5 flex-shrink-0" />

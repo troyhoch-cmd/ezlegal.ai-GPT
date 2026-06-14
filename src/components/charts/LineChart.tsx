@@ -36,7 +36,7 @@ export default function LineChart({
 
   return (
     <div style={{ height }} className="relative">
-      <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-full" preserveAspectRatio="none">
+      <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-full" preserveAspectRatio="none" aria-hidden="true">
         {showGrid && (
           <g className="stroke-stone-200" strokeWidth="0.5">
             {[0, 25, 50, 75, 100].map(y => (

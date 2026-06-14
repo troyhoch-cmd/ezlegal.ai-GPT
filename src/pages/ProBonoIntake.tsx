@@ -363,7 +363,7 @@ export default function ProBonoIntake() {
               <span className="text-sm font-semibold">{t.switchLanguage}</span>
             </button>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2">{t.title}</h1>
+            <h2 className="text-4xl font-bold text-navy-900 mb-2">{t.title}</h2>
           <p className="text-lg text-white/90 mb-4">{t.subtitle}</p>
 
           <div className="bg-white/10 rounded-xl p-4 mt-6">
@@ -718,27 +718,27 @@ export default function ProBonoIntake() {
 
                 <div className="space-y-4 text-sm">
                   <div className="bg-navy-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-navy-900 mb-2 flex items-center gap-2">
+                    <h3 className="font-semibold text-navy-900 mb-2 flex items-center gap-2">
                       <Mail className="w-4 h-4 text-teal-600" /> {t.contactInfo}
-                    </h4>
+                    </h3>
                     <p><strong>{t.fullName}:</strong> {formData.full_name}</p>
                     <p><strong>{t.email}:</strong> {formData.email}</p>
                     {formData.phone && <p><strong>{t.phone}:</strong> {formData.phone}</p>}
                   </div>
 
                   <div className="bg-navy-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-navy-900 mb-2 flex items-center gap-2">
+                    <h3 className="font-semibold text-navy-900 mb-2 flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-teal-600" /> {t.locationInfo}
-                    </h4>
+                    </h3>
                     <p><strong>{t.state}:</strong> {formData.state}</p>
                     <p><strong>{t.county}:</strong> {formData.county}</p>
                     {formData.zip_code && <p><strong>{t.zipCode}:</strong> {formData.zip_code}</p>}
                   </div>
 
                   <div className="bg-navy-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-navy-900 mb-2 flex items-center gap-2">
+                    <h3 className="font-semibold text-navy-900 mb-2 flex items-center gap-2">
                       <DollarSign className="w-4 h-4 text-teal-600" /> {t.financialInfo}
-                    </h4>
+                    </h3>
                     <p><strong>{t.householdIncome}:</strong> ${parseInt(formData.household_income).toLocaleString()}</p>
                     <p><strong>{t.householdSize}:</strong> {formData.household_size}</p>
                     {aiEligibility && (
@@ -749,9 +749,9 @@ export default function ProBonoIntake() {
                   </div>
 
                   <div className="bg-navy-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-navy-900 mb-2 flex items-center gap-2">
+                    <h3 className="font-semibold text-navy-900 mb-2 flex items-center gap-2">
                       <Scale className="w-4 h-4 text-teal-600" /> {t.legalIssueInfo}
-                    </h4>
+                    </h3>
                     <p><strong>{t.legalCategory}:</strong> {legalCategories.find(c => c.value === formData.legal_issue_category)?.label[language]}</p>
                     <p><strong>{t.urgency}:</strong> {formData.urgency_level}</p>
                     <p className="mt-2"><strong>{t.description}:</strong></p>

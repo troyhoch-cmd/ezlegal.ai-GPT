@@ -180,7 +180,7 @@ export default function Checkout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="flex items-center">
-              <img src="/red-and-grey-minamali-business-card-2-1-2.svg" alt="ezLegal.ai" className="h-8 w-auto" />
+              <img src="/red-and-grey-minamali-business-card-2-1-2.svg" alt="ezLegal.ai" className="h-8 w-auto" loading="lazy" />
             </Link>
             <div className="flex items-center gap-2 text-sm text-navy-600">
               <Lock className="w-4 h-4 text-green-600" />
@@ -191,7 +191,7 @@ export default function Checkout() {
       </header>
 
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <h1 className="sr-only">{language === 'en' ? 'Secure Checkout' : 'Pago Seguro'}</h1>
+        <h2 className="sr-only">{language === 'en' ? 'Secure Checkout' : 'Pago Seguro'}</h2>
         <button
           onClick={() => step === 'review' ? navigate(-1) : setStep('review')}
           className="flex items-center gap-2 text-navy-600 hover:text-navy-900 mb-6 font-medium text-sm"

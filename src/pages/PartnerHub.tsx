@@ -344,9 +344,9 @@ export default function PartnerHub() {
                   <Users className="w-5 h-5 text-teal-600" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-navy-900 text-sm mb-1">
+                  <h2 className="font-bold text-navy-900 text-sm mb-1">
                     {es ? 'Quieres ofrecer ezLegal a tu comunidad?' : 'Want to offer ezLegal to your community?'}
-                  </h3>
+                  </h2>
                   <p className="text-xs text-navy-600 mb-2">
                     {es
                       ? 'Estas en el lugar correcto. Explora nuestros modelos de alianza abajo.'

@@ -10,7 +10,7 @@ function QRCode({ url, size = 72 }: { url: string; size?: number }) {
   const [dataUrl, setDataUrl] = useState<string | null>(null);
   useEffect(() => { generateQRDataURL(url, size * 2).then(setDataUrl); }, [url, size]);
   if (!dataUrl) return <div className="w-full h-full bg-navy-100 animate-pulse rounded" />;
-  return <img src={dataUrl} alt={`QR code for ${url}`} width={size} height={size} className="rounded" />;
+  return <img src={dataUrl} alt={`QR code for ${url}`} width={size} height={size} className="rounded" loading="lazy" />;
 }
 
 interface FlyerShellProps {

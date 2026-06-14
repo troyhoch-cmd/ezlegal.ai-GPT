@@ -132,7 +132,7 @@ export default function SecurityFAQ() {
               className="p-4 bg-teal-50 border border-teal-200 rounded-xl hover:border-teal-400 transition-all group"
             >
               <Shield className="w-8 h-8 text-teal-600 mb-2" />
-              <h3 className="font-semibold text-navy-900 mb-1">Trust Center</h3>
+              <h2 className="font-semibold text-navy-900 mb-1">Trust Center</h2>
               <p className="text-sm text-navy-600">Overview of all policies</p>
             </Link>
 

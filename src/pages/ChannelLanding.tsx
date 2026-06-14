@@ -220,9 +220,9 @@ export default function ChannelLanding() {
                   />
                 ) : (
                   <div className="bg-white rounded-2xl border border-navy-200 shadow-xl p-8">
-                    <h3 className="text-lg font-bold text-navy-900 mb-4">
+                    <h2 className="text-lg font-bold text-navy-900 mb-4">
                       {es ? 'Areas Legales que Cubrimos' : 'Legal Areas We Cover'}
-                    </h3>
+                    </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                       {LEGAL_AREAS.map(area => (
                         <div key={area.en} className="flex items-center gap-3 p-3 bg-navy-50 rounded-xl">

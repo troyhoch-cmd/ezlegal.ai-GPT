@@ -733,8 +733,8 @@ Agent`
 This Settlement Agreement is made between [party1_name] ("Party A") and [party2_name] ("Party B").
 
 RECITALS
-WHEREAS, a dispute exists between the parties regarding: [dispute_description]
-WHEREAS, the parties wish to resolve this dispute without further litigation.
+Given that a dispute exists between the parties regarding: [dispute_description]
+Given that the parties wish to resolve this dispute without further litigation.
 
 ARTICLE I - SETTLEMENT PAYMENT
 Party B shall pay Party A: $[settlement_amount]
@@ -783,7 +783,7 @@ ARTICLE IV - TRANSFER RESTRICTIONS
 No shareholder may transfer shares without first offering them to other shareholders (Right of First Refusal).
 
 ARTICLE V - DRAG-ALONG
-If majority shareholders accept a bona fide offer, minority shareholders must sell on same terms.
+If majority shareholders accept a genuine offer, minority shareholders must sell on same terms.
 
 ARTICLE VI - TAG-ALONG
 If majority shareholders sell, minority shareholders may participate proportionately.
@@ -1067,9 +1067,9 @@ function DocumentFormFields({
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-navy-900">
+          <h2 className="text-lg font-semibold text-navy-900">
             {templates[selectedTemplate].name}
-          </h3>
+          </h2>
           <p className="text-sm text-navy-500 mt-1">
             Fill in the details below to generate your document
           </p>

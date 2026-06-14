@@ -329,7 +329,7 @@ export default function LawyerConnectionModal({ lawyer, initialTab = 'chat', onC
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
         <div className="bg-gradient-to-r from-[#0067FF] to-teal-600 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img src={lawyer.image} alt={lawyer.name} className="w-12 h-12 rounded-full border-2 border-white/30 object-cover" />
+            <img src={lawyer.image} alt={lawyer.name} className="w-12 h-12 rounded-full border-2 border-white/30 object-cover" loading="lazy" />
             <div className="text-white">
               <h2 className="text-lg font-bold">{lawyer.name}</h2>
               <div className="flex items-center gap-2 text-white/80 text-sm">

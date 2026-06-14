@@ -235,7 +235,7 @@ export default function TrustCenter() {
               <ShieldCheck className="w-4 h-4 text-gold-300" />
               <span className="text-sm font-semibold">Trust & Safety</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold mb-4">Trust Center</h1>
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4">Trust Center</h2>
             <p className="text-xl text-teal-100 max-w-3xl mx-auto">
               Transparency, security, and ethical AI practices are foundational to ezLegal.ai™.
               Learn how we protect your data and ensure responsible AI use.

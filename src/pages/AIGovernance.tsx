@@ -454,7 +454,7 @@ export default function AIGovernance() {
               <div className="space-y-4">
                 {securityControls.map((control, index) => (
                   <div key={index} className="bg-white rounded-xl p-4 border border-navy-200">
-                    <h4 className="font-semibold text-navy-900 mb-1">{control.title}</h4>
+                    <h3 className="font-semibold text-navy-900 mb-1">{control.title}</h3>
                     <p className="text-navy-600 text-sm">{control.description}</p>
                   </div>
                 ))}
@@ -474,7 +474,7 @@ export default function AIGovernance() {
               <div className="space-y-4">
                 {dataHandlingPractices.map((practice, index) => (
                   <div key={index} className="bg-white rounded-xl p-4 border border-navy-200">
-                    <h4 className="font-semibold text-navy-900 mb-1">{practice.title}</h4>
+                    <h3 className="font-semibold text-navy-900 mb-1">{practice.title}</h3>
                     <p className="text-navy-600 text-sm">{practice.description}</p>
                   </div>
                 ))}

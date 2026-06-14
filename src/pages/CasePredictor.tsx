@@ -72,7 +72,7 @@ export default function CasePredictor() {
                   {language === 'en' ? 'Example' : 'Ejemplo'}
                 </div>
                 <div className="mb-4 sm:mb-6 pr-20 sm:pr-0 sm:text-center">
-                  <h3 className="text-white font-bold text-base sm:text-lg mb-1">{language === 'en' ? 'Sample Report' : 'Informe de Ejemplo'}</h3>
+                  <h2 className="text-white font-bold text-base sm:text-lg mb-1">{language === 'en' ? 'Sample Report' : 'Informe de Ejemplo'}</h2>
                   <p className="text-teal-200 text-xs sm:text-sm">{language === 'en' ? 'Eviction Defense \u2014 Arizona' : 'Defensa de Desalojo \u2014 Arizona'}</p>
                 </div>
                 <div className="space-y-4">

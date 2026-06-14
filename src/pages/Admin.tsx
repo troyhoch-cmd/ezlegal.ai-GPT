@@ -1100,7 +1100,7 @@ function UsersSection() {
     <div className="p-8">
       <div className="bg-white rounded-xl shadow-sm border border-navy-200 p-6">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <h1 className="text-2xl font-bold text-navy-900">User management</h1>
+        <h2 className="text-2xl font-bold text-navy-900">User management</h2>
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setShowAddModal(true)}
@@ -1447,7 +1447,7 @@ function TrialUsersSection() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold text-navy-900 mb-6">Trial Users</h1>
+      <h2 className="text-3xl font-bold text-navy-900 mb-6">Trial Users</h2>
 
       <div className="bg-white rounded-xl shadow-sm border border-navy-200">
         {loading ? (
@@ -1666,7 +1666,7 @@ function UsersChatListingSection() {
               <div className="w-24 h-24 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4">
                 {selectedUser.full_name?.[0]?.toUpperCase() || selectedUser.email?.[0]?.toUpperCase()}
               </div>
-              <h3 className="text-lg font-semibold text-teal-600">{selectedUser.full_name || 'No name'}</h3>
+              <h2 className="text-lg font-semibold text-teal-600">{selectedUser.full_name || 'No name'}</h2>
               <p className="text-sm text-navy-600 mt-1">{selectedUser.email}</p>
               <div className="mt-4">
                 <p className="text-sm text-navy-600">Total Asked Questions</p>
@@ -1721,7 +1721,7 @@ function UsersChatListingSection() {
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-navy-900">Users Chat Listing</h1>
+        <h2 className="text-3xl font-bold text-navy-900">Users Chat Listing</h2>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-navy-200">
@@ -1861,7 +1861,7 @@ function ConversationsSection() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold text-navy-900 mb-6">Chat Conversations</h1>
+      <h2 className="text-3xl font-bold text-navy-900 mb-6">Chat Conversations</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl shadow-sm border border-navy-200">
@@ -2055,7 +2055,7 @@ function DocumentsSection() {
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-navy-900">Documents Management</h1>
+        <h2 className="text-3xl font-bold text-navy-900">Documents Management</h2>
         <div className="text-sm text-navy-500">{documents.length} documents</div>
       </div>
 
@@ -2369,7 +2369,7 @@ function CategoriesSection() {
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-navy-900">Categories Management</h1>
+        <h2 className="text-3xl font-bold text-navy-900">Categories Management</h2>
         <div className="text-sm text-navy-500">{categories.length} categories</div>
       </div>
 
@@ -2593,7 +2593,7 @@ function SubcategoriesSection() {
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-navy-900">Subcategories Management</h1>
+        <h2 className="text-3xl font-bold text-navy-900">Subcategories Management</h2>
         <div className="text-sm text-navy-500">{subcategories.length} subcategories</div>
       </div>
 
@@ -2893,7 +2893,7 @@ function PromptsSection() {
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-navy-900">Prompts Management</h1>
+        <h2 className="text-3xl font-bold text-navy-900">Prompts Management</h2>
         <div className="text-sm text-navy-500">{prompts.length} prompts</div>
       </div>
 
@@ -3199,7 +3199,7 @@ function AIModelsSection() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-navy-900">AI Model Configuration</h1>
+          <h2 className="text-3xl font-bold text-navy-900">AI Model Configuration</h2>
           <p className="text-navy-600 mt-1">Configure available ChatGPT models and versions</p>
         </div>
         <button
@@ -3771,7 +3771,7 @@ function EmbedWidgetsAdminSection() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-navy-900">Embed Widgets</h1>
+          <h2 className="text-2xl font-bold text-navy-900">Embed Widgets</h2>
           <p className="text-navy-600">Manage all widgets across all users</p>
         </div>
       </div>
@@ -4032,7 +4032,7 @@ function EmbedWidgetsAdminSection() {
                 <MessageSquare className="w-8 h-8" style={{ color: selectedWidget.config?.appearance?.primaryColor || '#0067FF' }} />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-navy-900">{selectedWidget.name}</h3>
+                <h2 className="text-xl font-bold text-navy-900">{selectedWidget.name}</h2>
                 <p className="text-navy-600">{getWidgetTypeLabel(selectedWidget.widget_type)}</p>
                 <div className="flex items-center gap-2 mt-2">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -4049,7 +4049,7 @@ function EmbedWidgetsAdminSection() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
-                <h4 className="font-semibold text-navy-900 mb-3">Owner Information</h4>
+                <h3 className="font-semibold text-navy-900 mb-3">Owner Information</h3>
                 <div className="bg-navy-50 rounded-lg p-4 space-y-2">
                   <div className="flex items-center gap-2">
                     <Users className="w-4 h-4 text-navy-500" />

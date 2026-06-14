@@ -1902,7 +1902,7 @@ I am writing in response to your [letter/call] dated [date]
 regarding the above-referenced account. This is NOT an
 acknowledgment of the debt.
 
-Pursuant to the Fair Debt Collection Practices Act (FDCPA),
+Under the Fair Debt Collection Practices Act (FDCPA),
 15 U.S.C. Section 1692g, I am exercising my right to request
 validation of this alleged debt.
 

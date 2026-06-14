@@ -21,7 +21,7 @@ export default function DonutChart({
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="relative" style={{ width: size, height: size }}>
-        <svg width={size} height={size} className="transform -rotate-90">
+        <svg width={size} height={size} className="transform -rotate-90" aria-hidden="true">
           {data.map((item, idx) => {
             const percentage = item.value / total;
             const strokeDasharray = `${percentage * circumference} ${circumference}`;

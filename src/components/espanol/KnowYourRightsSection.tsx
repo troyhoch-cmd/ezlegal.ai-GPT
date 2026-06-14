@@ -308,7 +308,7 @@ export default function KnowYourRightsSection() {
                       onClick={() => setExpandedRight(expandedRight === `${category.id}-${index}` ? null : `${category.id}-${index}`)}
                       className="w-full p-5 flex items-center justify-between text-left"
                     >
-                      <h4 className="font-semibold text-white text-lg">{right.title}</h4>
+                      <h3 className="font-semibold text-white text-lg">{right.title}</h3>
                       {expandedRight === `${category.id}-${index}` ? (
                         <ChevronUp className="w-5 h-5 text-slate-400" />
                       ) : (

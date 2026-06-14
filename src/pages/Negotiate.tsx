@@ -99,9 +99,9 @@ export default function Negotiate() {
                 >
                   &larr; {language === 'en' ? 'Back to overview' : 'Volver a resumen'}
                 </button>
-                <h1 className="text-2xl font-bold text-navy-900">
+                <h2 className="text-2xl font-bold text-navy-900">
                   {language === 'en' ? 'Negotiation Strategy Planner' : 'Planificador de Estrategia de Negociacion'}
-                </h1>
+                </h2>
                 <p className="text-navy-600">
                   {language === 'en'
                     ? 'AmLaw 100 tactics, simplified for everyone'
@@ -240,7 +240,7 @@ export default function Negotiate() {
                   <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center mb-4">
                     <Icon className="w-6 h-6 text-teal-600" />
                   </div>
-                  <h3 className="font-bold text-navy-900 mb-2">{feature.title}</h3>
+                  <h2 className="font-bold text-navy-900 mb-2">{feature.title}</h2>
                   <p className="text-sm text-navy-600">{feature.description}</p>
                 </div>
               );

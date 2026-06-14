@@ -130,9 +130,9 @@ export default function SharePerspective() {
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-10 h-10 text-green-600" />
             </div>
-            <h1 className="text-3xl font-bold text-navy-900 mb-4">
+            <h2 className="text-3xl font-bold text-navy-900 mb-4">
               Thank You for Sharing!
-            </h1>
+            </h2>
             <p className="text-lg text-navy-600 mb-8">
               Your insights on AI in legal services are invaluable to our community. We'll review your submission and may reach out if we'd like to feature your perspective.
             </p>
@@ -176,9 +176,9 @@ export default function SharePerspective() {
               <Quote className="w-8 h-8" />
             </div>
             <div>
-              <h1 className="text-3xl lg:text-4xl font-bold">
+              <h2 className="text-3xl lg:text-4xl font-bold">
                 Share Your AI Perspective
-              </h1>
+              </h2>
               <p className="text-teal-100 text-lg mt-1">
                 For Legal Professionals Using AI in Pro Bono & Legal Aid Work
               </p>

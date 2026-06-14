@@ -343,11 +343,11 @@ export default function Matters() {
             <div className="w-16 h-16 bg-navy-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <FolderOpen className="w-8 h-8 text-navy-400" />
             </div>
-            <h3 className="text-lg font-semibold text-navy-900 mb-2">
+            <h2 className="text-lg font-semibold text-navy-900 mb-2">
               {searchTerm || statusFilter !== 'all' || practiceAreaFilter !== 'all'
                 ? t('matters.noMatch')
                 : t('matters.noMatters')}
-            </h3>
+            </h2>
             <p className="text-navy-600 mb-6 max-w-md mx-auto">
               {searchTerm || statusFilter !== 'all' || practiceAreaFilter !== 'all'
                 ? t('matters.adjustFilters')

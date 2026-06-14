@@ -154,7 +154,7 @@ export default function Billing() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
         <div className="mb-8">
           <p className="text-xs uppercase tracking-wider text-teal-700 font-semibold mb-1">Account</p>
-          <h1 className="text-3xl font-bold text-navy-900">Billing & subscription</h1>
+          <h2 className="text-3xl font-bold text-navy-900">Billing & subscription</h2>
           <p className="text-navy-600 mt-1">Manage your plan, view receipts, and upgrade when you need more.</p>
         </div>
 

@@ -76,9 +76,9 @@ export default function PersonaIntake() {
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-teal-500/20 mb-3 group-hover:scale-110 transition-transform">
                 <User className="w-7 h-7 text-teal-400" />
               </div>
-              <h3 className="text-white font-bold text-lg mb-1">
+              <h2 className="text-white font-bold text-lg mb-1">
                 {language === 'en' ? 'Individual' : 'Individual'}
-              </h3>
+              </h2>
               <p className="text-navy-300 text-sm">
                 {language === 'en'
                   ? 'Personal legal matter'

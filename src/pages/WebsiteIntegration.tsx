@@ -925,7 +925,7 @@ function CreateIntegrationModal({
               </div>
 
               <div className="bg-navy-50 rounded-xl p-6">
-                <h4 className="font-semibold text-navy-900 mb-4">Preview</h4>
+                <h3 className="font-semibold text-navy-900 mb-4">Preview</h3>
                 <div className="flex items-center gap-4">
                   <div
                     className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg"

@@ -211,9 +211,9 @@ export default function Cases() {
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-navy-900 mb-1">
+                <h2 className="text-lg font-semibold text-navy-900 mb-1">
                   {caseItem.title}
-                </h3>
+                </h2>
                 {caseItem.case_number && (
                   <p className="text-sm text-navy-500">Case #{caseItem.case_number}</p>
                 )}

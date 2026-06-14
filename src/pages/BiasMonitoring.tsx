@@ -147,7 +147,7 @@ export default function BiasMonitoring() {
             </h2>
             <div className="bg-navy-50 rounded-xl p-6 space-y-4 text-sm text-navy-700">
               <div>
-                <h4 className="font-semibold text-navy-800 mb-1">Automated Bias Sweeps (Quarterly)</h4>
+                <h3 className="font-semibold text-navy-800 mb-1">Automated Bias Sweeps (Quarterly)</h3>
                 <p>500+ adversarial prompts per protected category, testing for quality degradation, stereotyping, differential treatment, and escalation disparity. Prompts designed by diverse team including native Spanish speakers, immigration attorneys, and DV advocates.</p>
               </div>
               <div>

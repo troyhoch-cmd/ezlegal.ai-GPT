@@ -106,9 +106,9 @@ export default function LegalSafetyNet() {
         <Navigation />
         <section className="pt-32 pb-20 px-4 max-w-3xl mx-auto text-center">
           <Shield className="w-16 h-16 text-teal-600 mx-auto mb-6" />
-          <h1 className="text-4xl font-bold text-navy-900 mb-4">
+          <h2 className="text-4xl font-bold text-navy-900 mb-4">
             {en ? 'Your Legal Safety Net' : 'Tu Red de Seguridad Legal'}
-          </h1>
+          </h2>
           <p className="text-lg text-navy-600 mb-8">
             {en
               ? 'Save legal matters, track deadlines, store documents, and know your next step. In plain English or Spanish.'
@@ -165,7 +165,7 @@ export default function LegalSafetyNet() {
                 </div>
                 <div className="flex items-center gap-6">
                   <div className="relative w-28 h-28">
-                    <svg className="w-28 h-28 -rotate-90" viewBox="0 0 100 100">
+                    <svg className="w-28 h-28 -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
                       <circle cx="50" cy="50" r="44" strokeWidth="8" className="stroke-navy-100" fill="none" />
                       <circle
                         cx="50" cy="50" r="44" strokeWidth="8" fill="none"

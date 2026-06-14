@@ -497,7 +497,7 @@ export default function Profile() {
                     </button>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-navy-900">{t('profile.photoTitle')}</h3>
+                    <h2 className="text-lg font-semibold text-navy-900">{t('profile.photoTitle')}</h2>
                     <p className="text-sm text-navy-600 mt-1">
                       {uploading ? t('profile.photoUploading') : t('profile.photoDesc')}
                     </p>

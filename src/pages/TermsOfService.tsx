@@ -36,7 +36,7 @@ export default function TermsOfService() {
                 <AlertTriangle className="w-5 h-5 text-teal-600" />
               </div>
               <div>
-                <h3 className="font-bold text-navy-900 mb-2">Important Notice</h3>
+                <h2 className="font-bold text-navy-900 mb-2">Important Notice</h2>
                 <p className="text-navy-700 text-sm">
                   ezLegal.ai provides AI-powered legal information and tools for educational and informational purposes only.
                   We are NOT a law firm and do NOT provide legal advice. The information provided through our services does not
@@ -473,7 +473,7 @@ export default function TermsOfService() {
 
                 <h3 className="text-lg font-semibold text-navy-900 mb-3">12.3 Effect of Termination</h3>
                 <p className="text-navy-700 mb-4">
-                  Upon termination, you will no longer have access to your account or any data stored therein.
+                  Upon termination, you will no longer have access to your account or any data stored in it.
                   We may delete your data in accordance with our Privacy Policy. Provisions that by their nature
                   should survive termination shall survive, including Sections 8-11, 13, and 14.
                 </p>
@@ -496,7 +496,7 @@ export default function TermsOfService() {
               <div className="pl-11">
                 <h3 className="text-lg font-semibold text-navy-900 mb-3">13.1 Governing Law</h3>
                 <p className="text-navy-700 mb-4">
-                  These Terms and any disputes arising hereunder shall be governed by and construed in accordance with the
+                  These Terms and any disputes arising under these terms shall be governed by and construed in accordance with the
                   laws of the State of Arizona, without regard to its conflict of law provisions.
                 </p>
 

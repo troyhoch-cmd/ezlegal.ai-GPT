@@ -69,7 +69,7 @@ export default function ResetPassword() {
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <AlertCircle className="w-8 h-8 text-red-600" />
               </div>
-              <h1 className="text-2xl font-bold text-navy-900 mb-2">Invalid or Expired Link</h1>
+              <h2 className="text-2xl font-bold text-navy-900 mb-2">Invalid or Expired Link</h2>
               <p className="text-navy-600 mb-6">
                 This password reset link is invalid or has expired. Please request a new one.
               </p>
@@ -103,7 +103,7 @@ export default function ResetPassword() {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
-              <h1 className="text-2xl font-bold text-navy-900 mb-2">Password Updated</h1>
+              <h2 className="text-2xl font-bold text-navy-900 mb-2">Password Updated</h2>
               <p className="text-navy-600 mb-6">
                 Your password has been successfully reset. You will be redirected to sign in shortly.
               </p>
@@ -120,7 +120,7 @@ export default function ResetPassword() {
                 <div className="w-16 h-16 bg-navy-50 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Lock className="w-8 h-8 text-teal-600" />
                 </div>
-                <h1 className="text-2xl font-bold text-navy-900 mb-2">Create New Password</h1>
+                <h2 className="text-2xl font-bold text-navy-900 mb-2">Create New Password</h2>
                 <p className="text-navy-600">
                   Enter your new password below. Make sure it's at least 8 characters.
                 </p>

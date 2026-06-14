@@ -399,9 +399,9 @@ export default function History() {
             <div className="w-20 h-20 bg-gradient-to-br from-brand-100 to-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Clock className="w-10 h-10 text-brand-600" />
             </div>
-            <h3 className="text-xl font-semibold text-navy-900 mb-2">
+            <h2 className="text-xl font-semibold text-navy-900 mb-2">
               {hasActiveFilters ? t('history.noMatch') : t('history.noActivity')}
-            </h3>
+            </h2>
             <p className="text-navy-600 mb-6 max-w-md mx-auto">
               {hasActiveFilters
                 ? t('history.adjustFilters')

@@ -245,7 +245,7 @@ function AlignmentCard({ principle, score, evidence }: { principle: string; scor
   return (
     <div className="border border-navy-200 rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="font-semibold text-navy-800 text-sm">{principle}</h4>
+        <h3 className="font-semibold text-navy-800 text-sm">{principle}</h3>
         <span className="inline-block px-2 py-0.5 rounded text-xs font-bold bg-teal-50 text-teal-700 border border-teal-200">{score}</span>
       </div>
       <p className="text-xs text-navy-500">{evidence}</p>

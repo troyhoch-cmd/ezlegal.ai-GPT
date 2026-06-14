@@ -269,7 +269,7 @@ function QrPanel({ onSaved }: { onSaved: () => void }) {
         <div className="flex flex-col items-center justify-center bg-slate-50 rounded-xl border border-dashed border-slate-300 p-6 min-h-[280px]">
           {dataUrl ? (
             <>
-              <img src={dataUrl} alt={label} className="rounded-lg shadow-sm bg-white" style={{ width: Math.min(size, 220), height: Math.min(size, 220) }} />
+              <img src={dataUrl} alt={label} className="rounded-lg shadow-sm bg-white" style={{ width: Math.min(size, 220), height: Math.min(size, 220) }} loading="lazy" />
               <button onClick={download} className="mt-4 inline-flex items-center gap-2 text-sm text-teal-700 hover:text-teal-800 font-medium">
                 <Download className="w-4 h-4" /> Download PNG
               </button>

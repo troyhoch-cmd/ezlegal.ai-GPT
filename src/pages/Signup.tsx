@@ -114,11 +114,11 @@ export default function Signup() {
         <div className="w-full max-w-5xl">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="hidden lg:block">
-              <h1 className="text-4xl lg:text-5xl font-bold text-navy-900 mb-4">
+              <h2 className="text-4xl lg:text-5xl font-bold text-navy-900 mb-4">
                 {t('signup.heroTitle')}{' '}
                 <span className="text-teal-600">{t('signup.heroHighlight')}</span>{' '}
                 {t('signup.heroSuffix')}
-              </h1>
+              </h2>
               <p className="text-xl text-navy-600 mb-8 leading-relaxed">
                 {t('signup.heroSubtitle')}
               </p>
@@ -175,9 +175,9 @@ export default function Signup() {
 
             <div>
               <div className="text-center mb-6 lg:hidden">
-                <h1 className="text-2xl font-bold text-navy-900 mb-2">
+                <h2 className="text-2xl font-bold text-navy-900 mb-2">
                   {t('signup.mobileTitle')}
-                </h1>
+                </h2>
                 <p className="text-navy-600">{t('signup.mobileSubtitle')}</p>
               </div>
 
@@ -187,9 +187,9 @@ export default function Signup() {
                     <CheckCircle className="w-4 h-4 text-green-600" />
                     <span className="text-sm font-semibold text-green-700">{t('signup.freeForever')}</span>
                   </div>
-                  <h2 className="text-2xl font-bold text-navy-900 mb-2">
+                  <h3 className="text-2xl font-bold text-navy-900 mb-2">
                     {t('signup.formTitle')}
-                  </h2>
+                  </h3>
                   <p className="text-sm text-navy-600">
                     {t('signup.formSubtitle')}
                   </p>

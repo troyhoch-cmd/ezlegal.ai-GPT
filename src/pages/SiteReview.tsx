@@ -377,10 +377,10 @@ export default function SiteReview() {
               </div>
 
               <div className="bg-teal-50 border border-teal-200 rounded-xl p-4">
-                <h3 className="text-sm font-semibold text-teal-800 mb-2 flex items-center gap-2">
+                <h2 className="text-sm font-semibold text-teal-800 mb-2 flex items-center gap-2">
                   <Hash className="w-4 h-4" />
                   Quick Use
-                </h3>
+                </h2>
                 <ol className="text-xs text-teal-700 space-y-2 list-decimal list-inside">
                   <li>Click <strong>"Copy All Text"</strong></li>
                   <li>Open GPT-5.2 (or any LLM)</li>

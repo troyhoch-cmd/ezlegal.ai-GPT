@@ -130,9 +130,9 @@ export default function Clients() {
                 <User className="w-6 h-6 text-teal-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-navy-900">
+                <h2 className="font-semibold text-navy-900">
                   {client.first_name} {client.last_name}
-                </h3>
+                </h2>
                 <p className="text-sm text-navy-500">
                   {t('clients.added')} {new Date(client.created_at).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')}
                 </p>

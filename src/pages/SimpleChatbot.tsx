@@ -472,9 +472,9 @@ export default function SimpleChatbot() {
               <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                 <Bot className="w-10 h-10 text-teal-600" />
               </div>
-              <h3 className="text-3xl font-bold text-navy-900 mb-2">
+              <h2 className="text-3xl font-bold text-navy-900 mb-2">
                 ezLegal.ai<sup className="text-lg">TM</sup> Legal Assistant
-              </h3>
+              </h2>
               <div className="flex items-center justify-center gap-2 mb-6">
                 <span className="text-[10px] font-medium text-navy-500 uppercase tracking-wide">Powered by</span>
                 <span className="text-sm font-bold text-navy-700">Legalbreeze®</span>
@@ -485,9 +485,9 @@ export default function SimpleChatbot() {
                   : "Haga cualquier pregunta legal y obtenga orientación al instante. Estoy entrenado en la ley de Arizona para ayudar a consumidores y pequenas empresas a entender su situación legal antes de consultar con un abogado."}
               </p>
 
-              <h4 className="text-lg font-semibold text-navy-900 mb-4">
+              <h3 className="text-lg font-semibold text-navy-900 mb-4">
                 {language === 'en' ? 'Popular Questions' : 'Preguntas Populares'}
-              </h4>
+              </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto">
                 {quickPrompts.map((prompt, index) => (
                   <button

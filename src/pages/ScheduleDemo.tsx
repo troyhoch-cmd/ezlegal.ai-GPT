@@ -99,7 +99,7 @@ export default function ScheduleDemo() {
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-10 h-10 text-green-600" />
             </div>
-            <h1 className="text-3xl font-bold text-navy-900 mb-4">Demo Scheduled!</h1>
+            <h2 className="text-3xl font-bold text-navy-900 mb-4">Demo Scheduled!</h2>
             <p className="text-lg text-navy-600 mb-8">
               Thank you for your interest in ezLegal.ai. We've sent a calendar invitation
               to <span className="font-semibold">{formData.email}</span> with the meeting details.

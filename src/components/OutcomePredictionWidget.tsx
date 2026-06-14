@@ -752,7 +752,7 @@ export default function OutcomePredictionWidget({
           <div className="space-y-6">
             <div className="text-center">
               <div className="relative inline-block">
-                <svg className="w-32 h-32" viewBox="0 0 100 100">
+                <svg className="w-32 h-32" viewBox="0 0 100 100" aria-hidden="true">
                   <circle
                     cx="50"
                     cy="50"

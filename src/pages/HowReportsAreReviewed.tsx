@@ -131,7 +131,7 @@ function ReviewStepCard({ step }: { step: typeof REVIEW_STEPS[number] }) {
           <span className="text-navy-700 font-bold">{step.number}</span>
         </div>
         <div>
-          <h3 className="font-semibold text-navy-900 mb-2">{step.title}</h3>
+          <h2 className="font-semibold text-navy-900 mb-2">{step.title}</h2>
           <p className="text-navy-600 text-sm mb-3">{step.description}</p>
           {'priorities' in step && step.priorities && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
