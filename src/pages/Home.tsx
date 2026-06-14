@@ -105,6 +105,13 @@ export default function Home() {
                 }
               </p>
 
+              <p className="text-xs text-navy-300 max-w-md leading-snug">
+                {language === 'en'
+                  ? 'Currently focused on Arizona law. Coverage expanding soon.'
+                  : 'Actualmente enfocados en la ley de Arizona. Cobertura expandiéndose pronto.'
+                }
+              </p>
+
               <p className="text-sm text-navy-200 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
                 <Shield className="w-4 h-4 text-teal-400 flex-shrink-0" aria-hidden="true" />
                 <Link
@@ -118,6 +125,44 @@ export default function Home() {
 
             <div className="mt-3 flex justify-center w-full min-w-0">
               <CrisisStrip variant="inline" />
+            </div>
+          </div>
+        </section>
+
+        {/* Social proof + conversion strip */}
+        <section className="py-5 bg-white border-b border-slate-200">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-center">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 text-teal-700">
+                  <Users className="w-4 h-4" aria-hidden="true" />
+                </span>
+                <span className="text-sm font-semibold text-navy-800">
+                  {language === 'en' ? '2,000+ Arizonans helped' : '2,000+ personas ayudadas en Arizona'}
+                </span>
+              </div>
+              <span className="hidden sm:block w-px h-6 bg-slate-200" aria-hidden="true" />
+              <span className="text-sm text-navy-600 font-medium">
+                {language === 'en' ? '$0 to start — no credit card needed' : '$0 para empezar — sin tarjeta de crédito'}
+              </span>
+              <span className="hidden sm:block w-px h-6 bg-slate-200" aria-hidden="true" />
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/find-a-lawyer"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal-700 hover:text-teal-800 transition-colors"
+                >
+                  {language === 'en' ? 'Find a Lawyer' : 'Buscar un Abogado'}
+                  <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                </Link>
+                <span className="w-px h-4 bg-slate-200 hidden sm:block" aria-hidden="true" />
+                <Link
+                  to="/pricing?audience=legal-aid"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-navy-600 hover:text-navy-800 transition-colors"
+                >
+                  {language === 'en' ? 'Free for Legal Aid Orgs' : 'Gratis para Organizaciones de Ayuda Legal'}
+                  <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                </Link>
+              </div>
             </div>
           </div>
         </section>

@@ -26,6 +26,7 @@ import ShareButton from '../components/ShareButton';
 import ChatSharePrompt from '../components/ChatSharePrompt';
 import ContextualOutcomePrediction from '../components/ContextualOutcomePrediction';
 import NextBestStep from '../components/NextBestStep';
+import AIResponseFeedback from '../components/AIResponseFeedback';
 import EmailCapturePanel from '../components/EmailCapturePanel';
 import JurisdictionSelector from '../components/shared/JurisdictionSelector';
 
@@ -271,7 +272,7 @@ export default function Chatbot() {
   const [selectedPromptIndex, setSelectedPromptIndex] = useState(0);
   const [useRAGMode, setUseRAGMode] = useState(false);
   const [advancedMode, setAdvancedMode] = useState(() => localStorage.getItem('ezlegal-advanced-mode') === 'true');
-  const [disclaimerCollapsed, setDisclaimerCollapsed] = useState(() => localStorage.getItem('ezlegal-safety-checkpoint') === 'true');
+  const [disclaimerCollapsed, setDisclaimerCollapsed] = useState(() => sessionStorage.getItem('ezlegal-safety-checkpoint') === 'true');
   const [showInlineJurisdiction, setShowInlineJurisdiction] = useState(false);
   const [activeThreadDate, setActiveThreadDate] = useState<string | null>(null);
   const [sharePromptDismissed, setSharePromptDismissed] = useState(false);
@@ -572,7 +573,7 @@ export default function Chatbot() {
     setUserJurisdiction(data.jurisdiction);
     setShowSafetyCheckpoint(false);
     localStorage.setItem('ezlegal-jurisdiction', data.jurisdiction);
-    localStorage.setItem('ezlegal-safety-checkpoint', 'true');
+    sessionStorage.setItem('ezlegal-safety-checkpoint', 'true');
     localStorage.setItem('ezlegal-triage-completed', 'true');
     if (user?.id) {
       supabase
@@ -1423,7 +1424,7 @@ Full transcript available via "Export Transcript" option.
         )}
 
         {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto px-6 py-6 bg-gradient-to-b from-navy-50 to-white">
+        <div className="flex-1 overflow-y-auto px-6 py-6 bg-gradient-to-b from-navy-50 to-white" aria-live="polite" aria-relevant="additions">
           <div className="max-w-4xl mx-auto space-y-6">
             {!disclaimerCollapsed ? (
               <div className="bg-navy-50 border border-navy-200 rounded-xl p-3 flex items-start gap-3">
@@ -1431,7 +1432,7 @@ Full transcript available via "Export Transcript" option.
                 <div className="flex-1">
                   <p className="text-xs text-navy-600">
                     {language === 'es'
-                      ? 'ezLegal.ai proporciona información legal, no asesoramiento legal. No se crea relacion abogado-cliente.'
+                      ? 'ezLegal.ai proporciona información legal, no asesoramiento legal. No se crea relación abogado-cliente.'
                       : 'ezLegal.ai provides legal information, not legal advice. No attorney-client relationship is created.'}
                     {' '}
                     <Link to="/scope-disclaimers" className="underline font-medium text-teal-600">
@@ -1442,7 +1443,7 @@ Full transcript available via "Export Transcript" option.
                 <button
                   onClick={() => {
                     setDisclaimerCollapsed(true);
-                    localStorage.setItem('ezlegal-safety-checkpoint', 'true');
+                    sessionStorage.setItem('ezlegal-safety-checkpoint', 'true');
                   }}
                   className="text-navy-400 hover:text-navy-600 transition-colors flex-shrink-0"
                   aria-label="Collapse safety notice"
@@ -1473,7 +1474,7 @@ Full transcript available via "Export Transcript" option.
                     </p>
                     <p className="text-xs text-amber-700 mb-2">
                       {language === 'es'
-                        ? 'Para darte orientación mas precisa, necesitamos saber tu estado.'
+                        ? 'Para darte orientación más precisa, necesitamos saber tu estado.'
                         : 'To give you more accurate guidance, we need your state. Legal rights vary significantly by jurisdiction.'}
                     </p>
                     <details className="mb-3">
@@ -1706,6 +1707,7 @@ Full transcript available via "Export Transcript" option.
                           </div>
                         )}
                       </div>
+                      <AIResponseFeedback messageId={msg.id} language={language === 'es' ? 'es' : 'en'} compact />
                       {messages.indexOf(msg) === messages.length - 1 && messages.length >= 1 && !sharePromptDismissed && !loading && (
                         <ChatSharePrompt
                           messageCount={messages.length}

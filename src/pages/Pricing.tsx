@@ -60,13 +60,13 @@ export default function Pricing() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
             <h1 className="text-2xl sm:text-3xl font-bold text-navy-900 mb-2 leading-tight">
               {l === 'es'
-                ? 'Comienza gratis. Mejora solo cuando necesites mas ayuda.'
+                ? 'Comienza gratis. Mejora solo cuando necesites más ayuda.'
                 : 'Start free. Upgrade only when you need more help.'
               }
             </h1>
             <p className="text-sm sm:text-base text-navy-600 max-w-xl mx-auto mb-2">
               {l === 'es'
-                ? 'Haz preguntas legales, entiende documentos y prepara proximos pasos en ingles o espanol.'
+                ? 'Haz preguntas legales, entiende documentos y prepara próximos pasos en inglés o español.'
                 : 'Ask legal questions, understand documents, and prepare next steps in English or Spanish.'
               }
             </p>
@@ -74,7 +74,7 @@ export default function Pricing() {
               <p className="inline-flex items-center gap-1.5 text-xs text-navy-500">
                 <Shield className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" aria-hidden="true" />
                 {l === 'es'
-                  ? 'Enlaces de ayuda urgente gratis. Respuestas claras. No es asesoria legal.'
+                  ? 'Enlaces de ayuda urgente gratis. Respuestas claras. No es asesoría legal.'
                   : 'Free urgent-help links. Plain-language answers. Not legal advice.'
                 }
               </p>
@@ -222,8 +222,14 @@ export default function Pricing() {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
             <p className="text-xs text-navy-500 leading-relaxed">
               {l === 'es'
-                ? 'ezLegal.ai proporciona informacion legal, no asesoramiento legal. Los recursos gratuitos y de ayuda urgente no se clasifican por quien nos paga.'
+                ? 'ezLegal.ai proporciona información legal, no asesoramiento legal. Los recursos gratuitos y de ayuda urgente no se clasifican por quien nos paga.'
                 : 'ezLegal.ai provides legal information, not legal advice. Free and urgent-help resources are not ranked by who pays us.'
+              }
+            </p>
+            <p className="text-xs text-navy-400 mt-1">
+              {l === 'es'
+                ? 'Actualmente enfocados en la ley de Arizona. Cobertura expandiéndose pronto.'
+                : 'Currently focused on Arizona law. Coverage expanding soon.'
               }
             </p>
           </div>

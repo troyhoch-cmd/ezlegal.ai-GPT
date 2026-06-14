@@ -197,7 +197,7 @@ export default function EspanolLanding() {
             </div>
             <div>
               <div className="text-3xl font-bold text-amber-400">IA + Abogados</div>
-              <div className="text-navy-400 text-sm">Asistencia bilingue</div>
+              <div className="text-navy-400 text-sm">Asistencia bilingüe</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-emerald-400">Arizona</div>
@@ -636,7 +636,7 @@ export default function EspanolLanding() {
                 Recibe Ayuda Legal por WhatsApp
               </h2>
               <p className="text-navy-300 mb-6">
-                Deja tu numero y nuestro equipo bilingue te contactara en menos de 24 horas. Confidencial y seguro.
+                Deja tu número y nuestro equipo bilingüe te contactará en menos de 24 horas. Confidencial y seguro.
               </p>
               <WhatsAppOptIn source="espanol_landing" variant="full" />
             </div>

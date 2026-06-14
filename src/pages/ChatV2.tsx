@@ -13,6 +13,7 @@ import {
 import AIModelSelector from '../components/AIModelSelector';
 import AnswerModeSelector, { type AnswerMode } from '../components/AnswerModeSelector';
 import GuidedIssueLauncher from '../components/GuidedIssueLauncher';
+import AIResponseFeedback from '../components/AIResponseFeedback';
 import UrgentSignalCard from '../components/UrgentSignalCard';
 import CrisisStrip from '../components/CrisisStrip';
 import EthicalConversionPanel from '../components/EthicalConversionPanel';
@@ -550,9 +551,9 @@ export default function ChatV2() {
                 <p className="text-xs text-slate-400 max-w-sm mx-auto mb-4">
                   {en
                     ? 'Legal information, not legal advice.'
-                    : 'Informacion legal, no asesoria legal.'}{' '}
+                    : 'Información legal, no asesoría legal.'}{' '}
                   <Link to="/scope-disclaimers" className="underline text-teal-600 hover:text-teal-800">
-                    {en ? 'Learn more' : 'Saber mas'}
+                    {en ? 'Learn more' : 'Saber más'}
                   </Link>
                 </p>
 
@@ -658,7 +659,7 @@ export default function ChatV2() {
                           className="flex items-center justify-center gap-1 w-full mt-3 py-2 text-xs text-slate-500 hover:text-slate-700 transition-colors"
                         >
                           <ChevronDown className="w-3.5 h-3.5" />
-                          {en ? 'More examples' : 'Mas ejemplos'}
+                          {en ? 'More examples' : 'Más ejemplos'}
                         </button>
                       )}
                     </div>
@@ -666,7 +667,7 @@ export default function ChatV2() {
                 })()}
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-6" aria-live="polite" aria-relevant="additions">
                 {hasCrisisSignal && (
                   <ContextualCrisisAlert
                     messages={messages.map((m) => ({ content: m.content, role: m.role }))}
@@ -719,6 +720,10 @@ export default function ChatV2() {
                             {message.modelUsed}
                           </p>
                         )}
+
+                        <div className="pl-4">
+                          <AIResponseFeedback messageId={message.id} language={en ? 'en' : 'es'} compact />
+                        </div>
 
                         {message.id === lastAssistantId && !isLoading && (
                           <EthicalConversionPanel onAction={handleConversionAction} />
