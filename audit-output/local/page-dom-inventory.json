@@ -1,0 +1,260 @@
+{
+  "auditedAt": "2026-06-14T04:31:49.956Z",
+  "pages": [
+    {
+      "route": "/",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/login",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/signup",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/forgot-password",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/pricing",
+      "icp": "smb",
+      "viewports": {}
+    },
+    {
+      "route": "/checkout",
+      "icp": "smb",
+      "viewports": {}
+    },
+    {
+      "route": "/contact",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/features",
+      "icp": "smb",
+      "viewports": {}
+    },
+    {
+      "route": "/about",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/ezreads",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/pro-bono",
+      "icp": "pro-bono-lso",
+      "viewports": {}
+    },
+    {
+      "route": "/emergency-resources",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/for-organizations",
+      "icp": "pro-bono-lso",
+      "viewports": {}
+    },
+    {
+      "route": "/for-business",
+      "icp": "smb",
+      "viewports": {}
+    },
+    {
+      "route": "/for-individuals",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/for-partners",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/share-perspective",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/scope-disclaimers",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/schedule-demo",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/lso-dashboard",
+      "icp": "pro-bono-lso",
+      "viewports": {}
+    },
+    {
+      "route": "/grant-reporting",
+      "icp": "pro-bono-lso",
+      "viewports": {}
+    },
+    {
+      "route": "/ai-governance",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/terms",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/privacy",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/trust-center",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/enterprise-security",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/how-it-works",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/partner-hub",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/media-kit",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/how-reports-are-reviewed",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/espanol",
+      "icp": "spanish-speaking",
+      "viewports": {}
+    },
+    {
+      "route": "/es",
+      "icp": "spanish-speaking",
+      "viewports": {}
+    },
+    {
+      "route": "/business",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/partners",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/urgent-help",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/accessibility",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/access",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/negotiate",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/site-review",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/sla",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/find-attorney",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/ask",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/issue-packs",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/case-predictor",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/case-predictor/start",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/chatbot",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/chatbot-standalone",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/chat",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/chat",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/chat",
+      "icp": "general",
+      "viewports": {}
+    },
+    {
+      "route": "/chat",
+      "icp": "general",
+      "viewports": {}
+    }
+  ]
+}
