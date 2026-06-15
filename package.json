@@ -36,6 +36,8 @@
     "audit:all:live": "node scripts/audit/discover-routes.mjs --live && node scripts/audit/run-visual-audit.mjs --live && node scripts/audit/run-accessibility-audit.mjs --live && node scripts/audit/run-content-audit.mjs --live && node scripts/audit/run-conversion-audit.mjs --live && node scripts/audit/generate-full-site-audit.mjs --live",
     "dev:audit": "vite --host 127.0.0.1 --port 5173 --strictPort",
     "launch:check": "npm run typecheck && npm run build && npm run audit:all && node scripts/audit/check-launch-ready.mjs",
+    "launch:readiness": "node scripts/audit/check-launch-readiness.mjs",
+    "launch:gate": "npm run typecheck && npm run build && npm run audit:all && node scripts/audit/check-launch-readiness.mjs",
     "export:gpt-review": "node scripts/export-for-gpt-review.cjs",
     "prerender": "node scripts/prerender.cjs",
     "build:static": "vite build && node scripts/prerender.cjs",
