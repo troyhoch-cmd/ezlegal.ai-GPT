@@ -1,0 +1,134 @@
+{
+  "generatedAt": "2026-06-15T01:21:08.159Z",
+  "launchReady": false,
+  "totalBlockers": 7,
+  "thresholds": {
+    "criticalFindings": {
+      "required": 0,
+      "actual": 0,
+      "pass": true
+    },
+    "highFindings": {
+      "required": 0,
+      "actual": 0,
+      "pass": true
+    },
+    "navigationErrors": {
+      "required": 0,
+      "actual": 306,
+      "pass": false
+    },
+    "publicRouteReachability": {
+      "required": "100%",
+      "actual": "0%",
+      "pass": false
+    },
+    "icpRouteCoverage": {
+      "required": "100%",
+      "actual": "100%",
+      "pass": true
+    },
+    "aiRouteTrust": {
+      "required": "all pass",
+      "actual": "9 failing",
+      "pass": false
+    },
+    "spanishRouteCompleteness": {
+      "required": "all pass",
+      "actual": "2 failing",
+      "pass": false
+    },
+    "conversionRouteReadiness": {
+      "required": "all pass",
+      "actual": "all pass",
+      "pass": true
+    },
+    "noDuplicateRoutes": {
+      "required": 0,
+      "actual": 1,
+      "pass": false
+    },
+    "screenshotCoverage": {
+      "required": "100%",
+      "actual": "1 missing",
+      "pass": false
+    },
+    "ciPasses": {
+      "required": "all pass",
+      "actual": "2 failing",
+      "pass": false
+    }
+  },
+  "blockers": [
+    {
+      "threshold": "0 navigation/audit errors",
+      "actual": 306,
+      "details": [
+        "[/] page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/\nCall log:\n  - n",
+        "[/] page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/\nCall log:\n  - n",
+        "[/] page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/\nCall log:\n  - n"
+      ]
+    },
+    {
+      "threshold": "100% public route reachability",
+      "actual": "0% (0/51)",
+      "details": [
+        "/",
+        "/login",
+        "/signup",
+        "/forgot-password",
+        "/pricing"
+      ]
+    },
+    {
+      "threshold": "All AI routes have AI disclosure, legal boundary, jurisdiction warning, privacy notice, and human escalation",
+      "actual": "9 AI route(s) with missing trust signals",
+      "details": [
+        "/ai-governance: no ICP evidence collected",
+        "/case-predictor: no ICP evidence collected",
+        "/case-predictor/start: no ICP evidence collected",
+        "/chatbot: no ICP evidence collected",
+        "/chatbot-standalone: no ICP evidence collected"
+      ]
+    },
+    {
+      "threshold": "All Spanish routes have Spanish/bilingual nav, forms, CTAs, and disclaimers",
+      "actual": "2 Spanish route(s) with gaps",
+      "details": [
+        "/espanol: no Spanish ICP evidence collected",
+        "/es: no Spanish ICP evidence collected"
+      ]
+    },
+    {
+      "threshold": "No duplicate route inventory entries",
+      "actual": "1 duplicate path(s)",
+      "details": [
+        "/chat (4x)"
+      ]
+    },
+    {
+      "threshold": "Screenshots exist for every route and viewport",
+      "actual": "1 missing screenshot(s)",
+      "details": [
+        "Screenshot directory does not exist"
+      ]
+    },
+    {
+      "threshold": "Build, typecheck, and Playwright smoke tests pass",
+      "actual": "2 CI check(s) failed",
+      "details": [
+        "Typecheck failed: src/App.tsx(47,7): error TS6133: 'Chatbot' is declared but its value is never read. src/App.tsx(48,7): error TS6133: 'SimpleChatbot' is declared but its value is never read. src/components/AICaseMatch",
+        "Playwright failed:  Running 128 tests using 1 worker"
+      ]
+    }
+  ],
+  "summary": {
+    "totalRoutes": 62,
+    "publicRoutes": 51,
+    "totalFindings": 306,
+    "icpDefinitions": 3,
+    "typecheckPass": false,
+    "buildPass": true,
+    "playwrightPass": false
+  }
+}
