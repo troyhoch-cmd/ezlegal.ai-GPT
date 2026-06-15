@@ -11,6 +11,7 @@ import DocumentOCRProcessor from '../components/DocumentOCRProcessor';
 import AIModelSelector from '../components/AIModelSelector';
 import DocumentIntelligencePanel from '../components/DocumentIntelligencePanel';
 import { getFieldConfig, validateField } from '../lib/document-validation';
+import { AIGovernanceNotice, ScopeBoundaryCard, DataUseAndPrivacyCard } from '../components/trust';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -2131,6 +2132,12 @@ Follow the drafting posture defined in your system instructions. Return the exec
           </div>
         </div>
       )}
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-8 mb-8 grid sm:grid-cols-3 gap-3">
+        <AIGovernanceNotice variant="compact" />
+        <ScopeBoundaryCard variant="banner" />
+        <DataUseAndPrivacyCard variant="compact" />
+      </div>
     </div>
   );
 }

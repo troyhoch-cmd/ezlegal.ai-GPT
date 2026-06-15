@@ -20,6 +20,7 @@ import InFlowTrustStrip from '../components/InFlowTrustStrip';
 import PersonaNextSteps from '../components/PersonaNextSteps';
 import UserMenu from '../components/UserMenu';
 import { useEngagementThrottle } from '../hooks/useEngagementThrottle';
+import { AIGovernanceNotice, ScopeBoundaryCard, HumanEscalationCard, DataUseAndPrivacyCard } from '../components/trust';
 
 interface Message {
   id: string;
@@ -507,6 +508,13 @@ export default function SimpleChatbot() {
                     <p className="text-sm font-medium text-navy-700 group-hover:text-teal-600">{prompt}</p>
                   </button>
                 ))}
+              </div>
+
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto text-left">
+                <AIGovernanceNotice variant="compact" />
+                <ScopeBoundaryCard variant="banner" />
+                <HumanEscalationCard variant="compact" />
+                <DataUseAndPrivacyCard variant="compact" />
               </div>
             </div>
           ) : (

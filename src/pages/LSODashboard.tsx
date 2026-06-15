@@ -23,6 +23,7 @@ import {
 } from '../components/dashboards';
 import AICaseMatchingDashboard from '../components/AICaseMatchingDashboard';
 import LSOGovernanceDisclosures from '../components/LSOGovernanceDisclosures';
+import { AIGovernanceNotice, ScopeBoundaryCard, HumanEscalationCard, DataUseAndPrivacyCard } from '../components/trust';
 
 interface Client {
   id: number;
@@ -1910,6 +1911,13 @@ export default function LSODashboard() {
               Contact Sales
             </a>
           </div>
+        </div>
+
+        <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <AIGovernanceNotice variant="compact" />
+          <ScopeBoundaryCard variant="banner" />
+          <HumanEscalationCard variant="compact" />
+          <DataUseAndPrivacyCard variant="compact" />
         </div>
       </div>
     </div>

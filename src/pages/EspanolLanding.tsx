@@ -28,6 +28,7 @@ import ShareButton from '../components/ShareButton';
 import Navigation from '../components/Navigation';
 import { AccessibleGallery } from '../components/inclusive';
 import SmartImage from '../components/SmartImage';
+import { SpanishLanguageAccessNotice, AIGovernanceNotice, ScopeBoundaryCard, HumanEscalationCard, DataUseAndPrivacyCard } from '../components/trust';
 
 const COMMUNITY_VALUES = [
   { name: 'Confidencial', description: 'Tu información está protegida y nunca se comparte' },
@@ -681,6 +682,16 @@ export default function EspanolLanding() {
             <Lock className="w-4 h-4 inline mr-2" />
             Tu privacidad está protegida. No compartimos información con agencias del gobierno.
           </p>
+        </div>
+      </section>
+
+      <section className="py-8 bg-white border-t border-slate-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 grid sm:grid-cols-2 gap-4">
+          <SpanishLanguageAccessNotice variant="card" />
+          <AIGovernanceNotice variant="compact" />
+          <ScopeBoundaryCard variant="banner" />
+          <HumanEscalationCard variant="compact" />
+          <DataUseAndPrivacyCard variant="compact" />
         </div>
       </section>
 

@@ -11,6 +11,7 @@ import ComparisonTable from '../components/pricing/ComparisonTable';
 import { pricingAudiences } from '../data/pricing';
 import { useLanguage } from '../contexts/LanguageContext';
 import { trackEngagement } from '../services/engagement-service';
+import { AIGovernanceNotice, ScopeBoundaryCard, HumanEscalationCard, DataUseAndPrivacyCard } from '../components/trust';
 
 type AudienceId = 'individuals' | 'business' | 'legal-aid';
 
@@ -232,6 +233,15 @@ export default function Pricing() {
                 : 'Currently focused on Arizona law. Coverage expanding soon.'
               }
             </p>
+          </div>
+        </section>
+
+        <section className="py-8 bg-white border-t border-slate-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 grid sm:grid-cols-2 gap-4">
+            <AIGovernanceNotice variant="compact" />
+            <ScopeBoundaryCard variant="banner" />
+            <HumanEscalationCard variant="compact" />
+            <DataUseAndPrivacyCard variant="compact" />
           </div>
         </section>
       </main>

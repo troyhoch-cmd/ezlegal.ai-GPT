@@ -8,6 +8,7 @@ import {
   Shield, Award, ArrowRight, CheckCircle2, Star, AlertCircle, ChevronDown, ChevronUp
 } from 'lucide-react';
 import RealLawyerDirectory from '../components/RealLawyerDirectory';
+import { AIGovernanceNotice, ScopeBoundaryCard, HumanEscalationCard, DataUseAndPrivacyCard } from '../components/trust';
 
 interface Message {
   id: string;
@@ -933,6 +934,13 @@ export default function AIAssistant() {
               </div>
             </div>
           )}
+        </div>
+
+        <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <AIGovernanceNotice variant="compact" />
+          <ScopeBoundaryCard variant="banner" />
+          <HumanEscalationCard variant="compact" />
+          <DataUseAndPrivacyCard variant="compact" />
         </div>
       </div>
     </div>

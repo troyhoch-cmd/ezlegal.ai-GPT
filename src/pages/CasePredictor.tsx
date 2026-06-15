@@ -14,6 +14,7 @@ import InlineEmailCapture from '../components/InlineEmailCapture';
 import CoverageConfidenceIndicator from '../components/CoverageConfidenceIndicator';
 import AttorneyReferralDisclosure from '../components/AttorneyReferralDisclosure';
 import { AttorneyServiceDisclosure } from '../components/shared';
+import { AIGovernanceNotice, ScopeBoundaryCard, HumanEscalationCard, DataUseAndPrivacyCard } from '../components/trust';
 
 export default function CasePredictor() {
   const { language } = useLanguage();
@@ -512,6 +513,15 @@ export default function CasePredictor() {
               {language === 'en' ? 'Ask My Question Free' : 'Hacer Mi Pregunta Gratis'}
               <ArrowRight className="w-5 h-5" />
             </Link>
+          </div>
+        </section>
+
+        <section className="py-12 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 grid sm:grid-cols-2 gap-4">
+            <AIGovernanceNotice variant="compact" />
+            <ScopeBoundaryCard variant="banner" />
+            <HumanEscalationCard variant="compact" />
+            <DataUseAndPrivacyCard variant="compact" />
           </div>
         </section>
       </main>

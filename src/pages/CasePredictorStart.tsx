@@ -8,6 +8,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import { US_STATES } from '../data/jurisdictions';
+import { AIGovernanceNotice, ScopeBoundaryCard, HumanEscalationCard } from '../components/trust';
 
 const CASE_TYPES = [
   { id: 'housing', en: 'Housing / Eviction', es: 'Vivienda / Desalojo', icon: '🏠' },
@@ -335,6 +336,14 @@ export default function CasePredictorStart() {
           </div>
         </div>
       </main>
+
+      <section className="py-8 bg-white border-t border-slate-100">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 grid sm:grid-cols-3 gap-3">
+          <AIGovernanceNotice variant="compact" />
+          <ScopeBoundaryCard variant="banner" />
+          <HumanEscalationCard variant="compact" />
+        </div>
+      </section>
 
       <Footer />
     </div>

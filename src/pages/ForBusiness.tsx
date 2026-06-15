@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 import { StandardDisclaimer } from '../components/templates/LegalDisclosureModule';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getAffordabilityMessage } from '../lib/microcopy';
+import { AIGovernanceNotice, ScopeBoundaryCard, HumanEscalationCard, DataUseAndPrivacyCard } from '../components/trust';
 import {
   Building2, FileText, Shield, Clock, DollarSign, Users, CheckCircle2,
   ArrowRight, Briefcase, Scale, AlertTriangle,
@@ -763,6 +764,15 @@ export default function ForBusiness() {
           </div>
         </section>
       </main>
+
+      <section className="py-8 bg-white border-t border-slate-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 grid sm:grid-cols-2 gap-4">
+          <AIGovernanceNotice variant="compact" />
+          <ScopeBoundaryCard variant="banner" />
+          <HumanEscalationCard variant="compact" />
+          <DataUseAndPrivacyCard variant="compact" />
+        </div>
+      </section>
 
       <RelatedLinks />
       <Footer />
