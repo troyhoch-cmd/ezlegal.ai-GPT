@@ -51,29 +51,33 @@ export function useAccessibilityPreferences() {
     mh.addEventListener('change', update);
 
     (async () => {
-      const { data: authData } = await supabase.auth.getUser();
-      const user = authData?.user;
-      if (!user) {
-        setLoaded(true);
-        return;
-      }
-      const { data } = await supabase
-        .from('accessibility_preferences')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      if (!mounted) return;
-      if (data) {
-        setPrefs({
-          reduceMotion: data.reduce_motion || mm.matches,
-          highContrast: data.high_contrast || mh.matches,
-          textSize: data.text_size,
-          keyboardFirst: data.keyboard_first,
-          screenReaderHints: data.screen_reader_hints,
-          simplifiedLayout: data.simplified_layout,
-          linkUnderlines: data.link_underlines,
-          captionsDefault: data.captions_default,
-        });
+      try {
+        const { data: authData } = await supabase.auth.getUser();
+        const user = authData?.user;
+        if (!user) {
+          setLoaded(true);
+          return;
+        }
+        const { data } = await supabase
+          .from('accessibility_preferences')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (!mounted) return;
+        if (data) {
+          setPrefs({
+            reduceMotion: data.reduce_motion || mm.matches,
+            highContrast: data.high_contrast || mh.matches,
+            textSize: data.text_size,
+            keyboardFirst: data.keyboard_first,
+            screenReaderHints: data.screen_reader_hints,
+            simplifiedLayout: data.simplified_layout,
+            linkUnderlines: data.link_underlines,
+            captionsDefault: data.captions_default,
+          });
+        }
+      } catch {
+        // Backend unreachable -- use OS defaults
       }
       setLoaded(true);
     })();

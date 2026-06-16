@@ -23,7 +23,6 @@ export default defineConfig({
           if (id.includes('pdfjs-dist')) return 'pdfjs';
           if (id.includes('jspdf')) return 'jspdf';
           if (id.includes('html2canvas')) return 'html2canvas';
-          if (id.includes('tesseract.js')) return 'ocr-tools';
           if (id.includes('qrcode')) return 'qr';
           return 'vendor';
         },

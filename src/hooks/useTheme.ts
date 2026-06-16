@@ -67,19 +67,23 @@ export function useTheme() {
   useEffect(() => {
     let active = true;
     (async () => {
-      const { data } = await supabase.auth.getUser();
-      const user = data?.user;
-      if (!user || !active) return;
-      const { data: pref } = await supabase
-        .from('accessibility_preferences')
-        .select('theme')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      if (!active) return;
-      const remote = pref?.theme as ThemeMode | undefined;
-      const local = window.localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
-      if (remote && remote !== local) {
-        setMode(remote);
+      try {
+        const { data } = await supabase.auth.getUser();
+        const user = data?.user;
+        if (!user || !active) return;
+        const { data: pref } = await supabase
+          .from('accessibility_preferences')
+          .select('theme')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (!active) return;
+        const remote = pref?.theme as ThemeMode | undefined;
+        const local = window.localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
+        if (remote && remote !== local) {
+          setMode(remote);
+        }
+      } catch {
+        // Backend unreachable -- use local/system theme
       }
     })();
     return () => {

@@ -1,5 +1,3 @@
-import Tesseract from 'tesseract.js';
-
 export type OcrLanguage = 'eng' | 'spa' | 'eng+spa';
 
 export interface OcrResult {
@@ -13,6 +11,7 @@ export async function runOcr(
   language: OcrLanguage = 'eng',
   onProgress?: (p: number) => void
 ): Promise<OcrResult> {
+  const Tesseract = await import('tesseract.js');
   const result = await Tesseract.recognize(file, language, {
     logger: (m) => {
       if (m.status === 'recognizing text' && onProgress) {

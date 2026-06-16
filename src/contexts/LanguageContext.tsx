@@ -77,24 +77,28 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
     (async () => {
-      const { data: auth } = await supabase.auth.getUser();
-      const user = auth?.user;
-      if (!user || !active) return;
-      const { data } = await supabase
-        .from('accessibility_preferences')
-        .select('locale, timezone')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      if (!active || !data) return;
-      if (data.locale) {
-        const code = data.locale.split('-')[0] as Language;
-        const match = SUPPORTED_LOCALES.find((l) => l.code === code);
-        if (match) {
-          setLanguageState(match.code);
-          setLocaleState(data.locale);
+      try {
+        const { data: auth } = await supabase.auth.getUser();
+        const user = auth?.user;
+        if (!user || !active) return;
+        const { data } = await supabase
+          .from('accessibility_preferences')
+          .select('locale, timezone')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (!active || !data) return;
+        if (data.locale) {
+          const code = data.locale.split('-')[0] as Language;
+          const match = SUPPORTED_LOCALES.find((l) => l.code === code);
+          if (match) {
+            setLanguageState(match.code);
+            setLocaleState(data.locale);
+          }
         }
+        if (data.timezone) setTimezone(data.timezone);
+      } catch {
+        // Backend unreachable -- use defaults
       }
-      if (data.timezone) setTimezone(data.timezone);
     })();
     return () => {
       active = false;
