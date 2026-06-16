@@ -8,12 +8,11 @@ import {
   ChevronDown,
   ChevronRight,
   Shield,
-  Activity,
   Users,
-  Smartphone,
   Calendar,
   Target,
   Loader2,
+  Smartphone,
 } from 'lucide-react';
 import {
   BETA_EXIT_CHECKLIST,

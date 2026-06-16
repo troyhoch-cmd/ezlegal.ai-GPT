@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import usePersonaRouting from '../hooks/usePersonaRouting';
 import { supabase } from '../lib/supabase';
-import { Plus, FileText, Download, Search, Sparkles, X, MapPin, CheckCircle, AlertTriangle, Wand2, Loader2, ScanLine, Building2, Users, Workflow, Award, Gavel, Scale, Upload } from 'lucide-react';
+import { Plus, FileText, Download, Search, Sparkles, X, MapPin, CheckCircle, AlertTriangle, Wand2, Loader2, Building2, Users, Workflow, Award, Gavel, Scale, Upload } from 'lucide-react';
 import { JURISDICTION_GROUPS, getJurisdictionName } from '../data/jurisdictions';
 import ValidatedFormField from '../components/ValidatedFormField';
 import DocumentOCRProcessor from '../components/DocumentOCRProcessor';

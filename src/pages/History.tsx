@@ -328,7 +328,7 @@ export default function History() {
                       <div className="px-4 py-2 border-b border-navy-100">
                         <span className="text-xs font-semibold text-navy-500 uppercase tracking-wider">{t('history.activityTypes')}</span>
                       </div>
-                      {activityTypeOptions.map(({ type, label, icon: Icon }) => {
+                      {activityTypeOptions.map(({ type, icon: Icon }) => {
                         const config = getActivityTypeConfig(type);
                         const isSelected = selectedTypes.includes(type);
                         return (

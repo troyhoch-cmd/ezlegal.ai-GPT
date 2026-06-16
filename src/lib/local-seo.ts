@@ -84,15 +84,16 @@ export async function fetchServiceAreas(locationId: string): Promise<ServiceArea
   return (data as ServiceArea[] | null) ?? [];
 }
 
-const DAY_TO_SCHEMA: Record<BusinessHours['day'], string> = {
-  Monday: 'Mo',
-  Tuesday: 'Tu',
-  Wednesday: 'We',
-  Thursday: 'Th',
-  Friday: 'Fr',
-  Saturday: 'Sa',
-  Sunday: 'Su',
-};
+// Unused schema mapping, kept for reference
+// const DAY_TO_SCHEMA: Record<BusinessHours['day'], string> = {
+//   Monday: 'Mo',
+//   Tuesday: 'Tu',
+//   Wednesday: 'We',
+//   Thursday: 'Th',
+//   Friday: 'Fr',
+//   Saturday: 'Sa',
+//   Sunday: 'Su',
+// };
 
 export function buildLocalBusinessSchema(
   loc: BusinessLocation,

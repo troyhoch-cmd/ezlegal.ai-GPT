@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   Clock, Users, DollarSign, Target, Download, Filter,
-  ChevronDown, Star, TrendingUp, Award
+  ChevronDown, TrendingUp, Award
 } from 'lucide-react';
 import { BarChart, ProgressRing, StatCard } from '../charts';
 

@@ -33,7 +33,7 @@ export type DisclosureKey =
   | 'attorneyFeesSeparate'
   | 'attorneyGeographicLimits';
 
-type DisclosureRecord = Record<Language, string>;
+type DisclosureRecord = { en: string; es: string; ar?: string; he?: string };
 
 const disclosures: Record<DisclosureKey, DisclosureRecord> = {
   notAdvice: {
@@ -163,15 +163,15 @@ const disclosures: Record<DisclosureKey, DisclosureRecord> = {
 };
 
 export function getDisclosure(key: DisclosureKey, language: Language): string {
-  return disclosures[key][language];
+  return disclosures[key][language] || '';
 }
 
 export function getDisclosures(keys: DisclosureKey[], language: Language): string[] {
-  return keys.map(key => disclosures[key][language]);
+  return keys.map(key => disclosures[key][language] || '');
 }
 
 export interface CrisisResource {
-  name: Record<Language, string>;
+  name: { en: string; es: string; ar?: string; he?: string };
   phone: string;
   url: string;
   type: 'dv' | 'crisis' | 'housing' | 'general';
@@ -207,7 +207,7 @@ export const CRISIS_RESOURCES: CrisisResource[] = [
 export function getCrisisResources(language: Language, type?: CrisisResource['type']): Array<{ name: string; phone: string; url: string }> {
   const filtered = type ? CRISIS_RESOURCES.filter(r => r.type === type) : CRISIS_RESOURCES;
   return filtered.map(r => ({
-    name: r.name[language],
+    name: r.name[language] || r.name.en,
     phone: r.phone,
     url: r.url,
   }));

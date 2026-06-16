@@ -100,9 +100,9 @@ export function formatPercent(value: number, locale: string, fractionDigits = 0)
   });
 }
 
-export function formatList(items: string[], locale: string, type: Intl.ListFormatType = 'conjunction'): string {
+export function formatList(items: string[], locale: string, type: 'conjunction' | 'disjunction' | 'unit' = 'conjunction'): string {
   try {
-    return new Intl.ListFormat(locale, { style: 'long', type }).format(items);
+    return new (Intl as any).ListFormat(locale, { style: 'long', type }).format(items);
   } catch {
     return items.join(', ');
   }

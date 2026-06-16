@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
-  Scale, Users, Zap, Building2, ArrowRight, Globe, Shield,
-  Award, Lock, CheckCircle, Phone, Mail, FileText,
-  Paintbrush, Type, Image, Heart, AlertTriangle,
+  Scale, Zap, Building2, ArrowRight, Globe, Shield,
+  CheckCircle, Phone, Mail, FileText,
+  Heart, AlertTriangle,
   Smartphone, ExternalLink, ShieldCheck
 } from 'lucide-react';
 import { generateQRDataURL } from '../../lib/qr-generator';

@@ -193,7 +193,6 @@ export async function evaluateBetaExit(testId: string): Promise<BetaExitEvaluati
 
   let hardGatesPassed = sampleRequirementsMet;
   let softGatesPassCount = 0;
-  let softGatesTotalCount = 0;
 
   for (const category of config.categories) {
     const itemResults: Record<string, GateStatus> = {};
@@ -262,7 +261,6 @@ export async function evaluateBetaExit(testId: string): Promise<BetaExitEvaluati
     }
 
     if (category.gateType === 'soft') {
-      softGatesTotalCount = category.items.length;
       softGatesPassCount = passedCount;
     }
   }

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import { Scale, CheckCircle, TrendingDown, Activity, Calendar, Shield, AlertTriangle, BarChart3, Globe } from 'lucide-react';
+import { CheckCircle, TrendingDown, Activity, Calendar, Shield, AlertTriangle, BarChart3, Globe } from 'lucide-react';
 
 export default function BiasMonitoring() {
   const { language } = useLanguage();

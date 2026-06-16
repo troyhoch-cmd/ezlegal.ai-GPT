@@ -39,7 +39,7 @@ export default function PartnerLanding() {
   useEffect(() => {
     if (slug) {
       fetchPage(slug);
-      trackView(slug);
+      trackView();
     }
   }, [slug]);
 
@@ -64,17 +64,13 @@ export default function PartnerLanding() {
     setLoading(false);
   };
 
-  const trackView = async (pageSlug: string) => {
+  const trackView = async () => {
     const refCode = searchParams.get('ref');
     if (refCode) {
       await supabase.from('partner_referrals').update({
         metadata: { last_visited: new Date().toISOString() },
       }).eq('referral_code', refCode);
     }
-
-    await supabase.from('partner_co_branded_pages')
-      .update({ view_count: (page?.view_count || 0) + 1 })
-      .eq('slug', pageSlug);
   };
 
   if (loading) {

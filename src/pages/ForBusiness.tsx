@@ -5,9 +5,6 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import RelatedLinks from '../components/RelatedLinks';
 import { AttorneyServiceDisclosure } from '../components/shared';
 import Footer from '../components/Footer';
-import { StandardDisclaimer } from '../components/templates/LegalDisclosureModule';
-import { useLanguage } from '../contexts/LanguageContext';
-import { getAffordabilityMessage } from '../lib/microcopy';
 import { AIGovernanceNotice, ScopeBoundaryCard, HumanEscalationCard, DataUseAndPrivacyCard } from '../components/trust';
 import {
   Building2, FileText, Shield, Clock, DollarSign, Users, CheckCircle2,

@@ -8,14 +8,11 @@ import usePersonaRouting from '../hooks/usePersonaRouting';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import NegotiationStrategyPlanner from '../components/NegotiationStrategyPlanner';
-import NegotiationStrategyQuiz from '../components/NegotiationStrategyQuiz';
 
 export default function Negotiate() {
   const { language } = useLanguage();
   const { isOrganization, isBusiness } = usePersonaRouting();
   const [showPlanner, setShowPlanner] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
-  const [quizResult, setQuizResult] = useState<any>(null);
 
   const features = [
     {

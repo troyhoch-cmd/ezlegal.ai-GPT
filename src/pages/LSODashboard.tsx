@@ -4,7 +4,7 @@ import {
   Users, FileText, BarChart3, Clock, CheckCircle, AlertCircle,
   Calendar, Briefcase, TrendingUp, Download, Filter, Search,
   ChevronRight, ArrowUpRight, ArrowDownRight, UserCheck, Scale,
-  Building2, Mail, Star, Eye, PlusCircle, Bell,
+  Building2, Mail, Eye, PlusCircle, Bell,
   MessageSquare, Zap, Brain, Target, RefreshCw, Send, Sparkles,
   Activity, Shield, ExternalLink, X, PieChart
 } from 'lucide-react';

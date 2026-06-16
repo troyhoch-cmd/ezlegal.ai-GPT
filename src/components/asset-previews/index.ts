@@ -9,7 +9,7 @@ import {
   EmploymentEN, EmploymentES,
 } from './CommunityFlyerPreviews';
 
-const previewMap: Record<string, () => JSX.Element> = {
+const previewMap: Record<string, React.ComponentType<any>> = {
   'one-pager': OnePagerPreview,
   'tech-guide': TechGuidePreview,
   'brand-guidelines': BrandGuidelinesPreview,
@@ -32,6 +32,6 @@ const previewMap: Record<string, () => JSX.Element> = {
   'employment-es': EmploymentES,
 };
 
-export function getAssetPreview(assetId: string): (() => JSX.Element) | null {
+export function getAssetPreview(assetId: string): React.ComponentType<any> | null {
   return previewMap[assetId] || null;
 }

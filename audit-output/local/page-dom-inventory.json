@@ -1,5 +1,5 @@
 {
-  "auditedAt": "2026-06-14T04:31:49.956Z",
+  "auditedAt": "2026-06-15T03:04:14.413Z",
   "pages": [
     {
       "route": "/",
@@ -233,21 +233,6 @@
     },
     {
       "route": "/chatbot-standalone",
-      "icp": "general",
-      "viewports": {}
-    },
-    {
-      "route": "/chat",
-      "icp": "general",
-      "viewports": {}
-    },
-    {
-      "route": "/chat",
-      "icp": "general",
-      "viewports": {}
-    },
-    {
-      "route": "/chat",
       "icp": "general",
       "viewports": {}
     },

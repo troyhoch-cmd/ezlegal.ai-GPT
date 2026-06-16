@@ -16,14 +16,6 @@ import PostPurchaseActivation from '../components/PostPurchaseActivation';
 import TrialOnboarding from '../components/TrialOnboarding';
 import { getUserEntitlements, getEntitlementStatusLabel, type Entitlement } from '../services/entitlement-service';
 
-interface UsageStats {
-  chatsToday: number;
-  chatsThisMonth: number;
-  documentsCreated: number;
-  researchQueries: number;
-  dailyLimit: number;
-  monthlyLimit: number;
-}
 
 interface RecentActivity {
   id: string;
@@ -40,14 +32,6 @@ export default function Dashboard() {
   const [showPredictionModal, setShowPredictionModal] = useState(false);
   const [predictionConsented, setPredictionConsented] = useState(false);
   const [_consentedJurisdiction, setConsentedJurisdiction] = useState('');
-  const [stats, setStats] = useState<UsageStats>({
-    chatsToday: 0,
-    chatsThisMonth: 0,
-    documentsCreated: 0,
-    researchQueries: 0,
-    dailyLimit: 5,
-    monthlyLimit: 150,
-  });
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [loading, setLoading] = useState(true);
   const [entitlements, setEntitlements] = useState<Entitlement[]>([]);
@@ -79,14 +63,14 @@ export default function Dashboard() {
 
       const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
 
-      const { count: todayCount } = await supabase
+      const { count: _todayCount } = await supabase
         .from('chat_messages')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', user.id)
         .eq('role', 'user')
         .gte('created_at', today.toISOString());
 
-      const { count: monthCount } = await supabase
+      const { count: _monthCount } = await supabase
         .from('chat_messages')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', user.id)
@@ -101,14 +85,8 @@ export default function Dashboard() {
         .order('created_at', { ascending: false })
         .limit(5);
 
-      setStats({
-        chatsToday: todayCount || 0,
-        chatsThisMonth: monthCount || 0,
-        documentsCreated: 0,
-        researchQueries: 0,
-        dailyLimit: 5,
-        monthlyLimit: 150,
-      });
+      // Metrics computed from query results above
+      // todayCount and monthCount available from prior queries
 
       if (recentChats) {
         setRecentActivity(

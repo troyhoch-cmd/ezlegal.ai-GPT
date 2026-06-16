@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Phone, AlertTriangle, Shield, Heart, Home,
-  Scale, Globe, ExternalLink, MessageCircle
+  Scale, Globe, MessageCircle
 } from 'lucide-react';
 import Navigation from '../../components/Navigation';
 import Footer from '../../components/Footer';

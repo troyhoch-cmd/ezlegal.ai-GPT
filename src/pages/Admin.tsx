@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Search, UserCheck, Crown, X, Save, Loader2, MessageSquare, FolderTree, FileText, Cpu, Settings, ChevronDown, ChevronRight, Plus, Trash2, CreditCard as Edit, Eye, ToggleLeft, ToggleRight, Clock, ArrowLeft, Layers, Sparkles, Home, Upload, CheckCircle, FileUp, MessagesSquare, Paperclip, UserPlus, Mail, FileDown, FileInput, Code2, Globe, MousePointer, BarChart3, Scale, Shield, HelpCircle, Brain, Handshake, AlertCircle, Activity } from 'lucide-react';
+import { Users, Search, UserCheck, Crown, X, Save, Loader2, MessageSquare, FolderTree, FileText, Cpu, Settings, ChevronDown, ChevronRight, Plus, Trash2, CreditCard as Edit, Eye, ToggleLeft, ToggleRight, Clock, ArrowLeft, Layers, Sparkles, Home, Upload, CheckCircle, FileUp, MessagesSquare, Paperclip, UserPlus, Mail, FileDown, FileInput, Code2, Globe, MousePointer, BarChart3, Scale, Shield, Brain, Handshake, AlertCircle, Activity } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import RBACAdminPanel from '../components/RBACAdminPanel';

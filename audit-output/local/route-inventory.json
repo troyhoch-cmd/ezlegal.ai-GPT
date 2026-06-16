@@ -1,8 +1,8 @@
 {
-  "discoveredAt": "2026-06-14T04:30:56.505Z",
+  "discoveredAt": "2026-06-15T03:03:51.614Z",
   "mode": "local",
   "baseUrl": "http://localhost:5173",
-  "totalRoutes": 62,
+  "totalRoutes": 59,
   "routes": [
     {
       "path": "/",
@@ -408,27 +408,6 @@
       "fullUrl": "http://localhost:5173/dashboard/website-integration",
       "icp": "general",
       "requiresAuth": true,
-      "isDynamic": false
-    },
-    {
-      "path": "/chat",
-      "fullUrl": "http://localhost:5173/chat",
-      "icp": "general",
-      "requiresAuth": false,
-      "isDynamic": false
-    },
-    {
-      "path": "/chat",
-      "fullUrl": "http://localhost:5173/chat",
-      "icp": "general",
-      "requiresAuth": false,
-      "isDynamic": false
-    },
-    {
-      "path": "/chat",
-      "fullUrl": "http://localhost:5173/chat",
-      "icp": "general",
-      "requiresAuth": false,
       "isDynamic": false
     },
     {

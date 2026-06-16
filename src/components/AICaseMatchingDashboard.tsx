@@ -3,7 +3,7 @@ import {
   Brain, Target, Users, Clock, CheckCircle, X,
   Filter, Search, TrendingUp,
   PlusCircle, Sparkles, Award, ArrowRight, Loader2,
-  ThumbsUp, ThumbsDown, MessageSquare, BarChart3, MapPin, Briefcase
+  ThumbsUp, ThumbsDown, MessageSquare, BarChart3, MapPin
 } from 'lucide-react';
 import CaseIntakeForm from './CaseIntakeForm';
 import LawyerProfileModal from './LawyerProfileModal';

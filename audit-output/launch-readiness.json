@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-15T01:21:08.159Z",
+  "generatedAt": "2026-06-16T01:53:35.889Z",
   "launchReady": false,
   "totalBlockers": 7,
   "thresholds": {
@@ -55,7 +55,7 @@
     },
     "ciPasses": {
       "required": "all pass",
-      "actual": "2 failing",
+      "actual": "1 failing",
       "pass": false
     }
   },
@@ -115,9 +115,8 @@
     },
     {
       "threshold": "Build, typecheck, and Playwright smoke tests pass",
-      "actual": "2 CI check(s) failed",
+      "actual": "1 CI check(s) failed",
       "details": [
-        "Typecheck failed: src/App.tsx(47,7): error TS6133: 'Chatbot' is declared but its value is never read. src/App.tsx(48,7): error TS6133: 'SimpleChatbot' is declared but its value is never read. src/components/AICaseMatch",
         "Playwright failed:  Running 128 tests using 1 worker"
       ]
     }
@@ -127,7 +126,7 @@
     "publicRoutes": 51,
     "totalFindings": 306,
     "icpDefinitions": 3,
-    "typecheckPass": false,
+    "typecheckPass": true,
     "buildPass": true,
     "playwrightPass": false
   }

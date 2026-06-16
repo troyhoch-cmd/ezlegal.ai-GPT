@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
-  Puzzle, Code, Building2, Shield, ArrowRight, CheckCircle,
-  Globe, Users, Zap, Lock, Heart, BarChart3, Headphones
+  Puzzle, Code, Building2, ArrowRight, CheckCircle,
+  Globe, Users, Heart
 } from 'lucide-react';
 import Navigation from '../../components/Navigation';
 import Footer from '../../components/Footer';
@@ -62,7 +62,6 @@ const INTEGRATION_OPTIONS = [
 export default function PartnersLanding() {
   const { language } = useLanguage();
   const { trackPageVisit } = usePersonalization();
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', email: '', org: '', type: '' });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);

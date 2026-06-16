@@ -35,7 +35,7 @@ interface LanguageContextType {
   formatNumber: (v: number, opts?: Intl.NumberFormatOptions) => string;
   formatCurrency: (v: number, currency?: string) => string;
   formatPercent: (v: number, fractionDigits?: number) => string;
-  formatList: (items: string[], type?: Intl.ListFormatType) => string;
+  formatList: (items: string[], type?: 'conjunction' | 'disjunction' | 'unit') => string;
   plural: (count: number, forms: { zero?: string; one: string; two?: string; few?: string; many?: string; other: string }) => string;
   supportedLocales: typeof SUPPORTED_LOCALES;
 }

@@ -1,7 +1,7 @@
 import {
-  Scale, Users, BarChart3, ArrowRight, Shield, Zap,
-  CheckCircle, Star, TrendingUp, Globe, Code,
-  FileText, Building2, MessageSquare, Award
+  Scale, Users, Shield,
+  Star, TrendingUp,
+  FileText, MessageSquare
 } from 'lucide-react';
 
 export function PitchDeckPreview() {

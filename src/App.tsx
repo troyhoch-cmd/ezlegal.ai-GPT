@@ -44,8 +44,6 @@ const Signup = lazy(() => import('./pages/Signup'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const AuthCallback = lazy(() => import('./pages/AuthCallback'));
-const Chatbot = lazy(() => import('./pages/Chatbot'));
-const SimpleChatbot = lazy(() => import('./pages/SimpleChatbot'));
 const History = lazy(() => import('./pages/History'));
 const Documents = lazy(() => import('./pages/Documents'));
 const ICPTemplateLibrary = lazy(() => import('./pages/ICPTemplateLibrary'));

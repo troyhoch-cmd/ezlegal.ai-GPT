@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Check, Target, Clock, DollarSign } from 'lucide-react';
+import { Target, Clock } from 'lucide-react';
 
 interface QuizResult {
   tactics: string[];

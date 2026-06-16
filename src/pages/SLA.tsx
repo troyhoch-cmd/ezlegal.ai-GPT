@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import {
   Shield, Clock, AlertTriangle, CheckCircle2, ArrowRight,
-  Server, Lock, Mail, FileText, Download
+  Server, Lock, Mail
 } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Building2, Search, ChevronDown, ChevronRight, Plus, Eye, CreditCard as Edit, Loader2, ArrowRight, Clock, CheckCircle, X, Save, Phone, Mail, Globe, Users, TrendingUp, AlertCircle, Star, Filter, MessageSquare } from 'lucide-react';
+import { Building2, Search, Plus, CreditCard as Edit, Loader2, ArrowRight, CheckCircle, X, Save, Phone, Mail, Globe, Users, TrendingUp, Star, MessageSquare } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 

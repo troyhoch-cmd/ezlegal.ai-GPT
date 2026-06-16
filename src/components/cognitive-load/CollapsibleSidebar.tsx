@@ -6,7 +6,6 @@ import {
   History,
   Wrench,
   BookOpen,
-  HelpCircle,
   Phone,
   User,
   Sparkles,
@@ -69,13 +68,13 @@ export default function CollapsibleSidebar({
   const en = language === 'en';
   const location = useLocation();
   const sidebarRef = useRef<HTMLElement>(null);
-  const [hovering, setHovering] = useState(false);
   const hoverTimeoutRef = useRef<NodeJS.Timeout>();
 
   const [expanded, setExpanded] = useState(() => {
     const stored = localStorage.getItem(SIDEBAR_EXPANDED_KEY);
     return stored === 'true';
   });
+  const [, setHovering] = useState(false);
 
   const classNameHasWidth = /(^|\s)w-/.test(className);
   const collapsedWidth = classNameHasWidth ? '' : 'w-16';

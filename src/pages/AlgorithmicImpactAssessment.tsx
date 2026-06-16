@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import { Shield, Users, AlertTriangle, CheckCircle, Scale, Heart, Globe, FileText, TrendingUp, Minus } from 'lucide-react';
+import { Users, AlertTriangle, CheckCircle, Heart, Globe, FileText, TrendingUp, Scale } from 'lucide-react';
 
 export default function AlgorithmicImpactAssessment() {
   const { language } = useLanguage();

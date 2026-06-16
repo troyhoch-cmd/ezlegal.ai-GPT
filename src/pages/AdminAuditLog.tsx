@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Shield, Search, Filter, Download, Calendar, User, FileText } from 'lucide-react';
+import { Shield, Search, Download, Calendar, User, FileText } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface AuditLog {

@@ -476,7 +476,6 @@ function GovernancePanel({ asset, blockedReasons, isAdmin, userId, onReadinessUp
 }
 
 function GovernanceDetailCard({
-  dimension,
   title,
   status,
   reviewerId,

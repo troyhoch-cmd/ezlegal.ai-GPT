@@ -7,7 +7,7 @@ interface AIResponseFeedbackProps {
   compact?: boolean;
 }
 
-export default function AIResponseFeedback({ messageId, language = 'en', compact = false }: AIResponseFeedbackProps) {
+export default function AIResponseFeedback({ language = 'en', compact = false }: AIResponseFeedbackProps) {
   const [feedback, setFeedback] = useState<'positive' | 'negative' | 'reported' | null>(null);
 
   const handleFeedback = (type: 'positive' | 'negative' | 'reported') => {

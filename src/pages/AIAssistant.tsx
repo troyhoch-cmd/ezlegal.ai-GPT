@@ -155,36 +155,6 @@ const promptsLibrary = {
   ],
 };
 
-const quickActions: QuickAction[] = [
-  {
-    id: 'contract',
-    title: 'Review Contract',
-    description: 'Get contract analysis',
-    icon: <FileText className="w-5 h-5" />,
-    prompt: 'I need help reviewing a contract. What should I look for?',
-  },
-  {
-    id: 'lawsuit',
-    title: 'Legal Dispute',
-    description: 'Understand your options',
-    icon: <Shield className="w-5 h-5" />,
-    prompt: 'I\'m considering legal action. What are my options?',
-  },
-  {
-    id: 'business',
-    title: 'Start Business',
-    description: 'Formation guidance',
-    icon: <TrendingUp className="w-5 h-5" />,
-    prompt: 'I want to start a business in Arizona. What do I need to know?',
-  },
-  {
-    id: 'employment',
-    title: 'Employment Issue',
-    description: 'Know your rights',
-    icon: <Users className="w-5 h-5" />,
-    prompt: 'I\'m having issues at work. What are my employment rights?',
-  },
-];
 
 export default function AIAssistant() {
   const [messages, setMessages] = useState<Message[]>([]);

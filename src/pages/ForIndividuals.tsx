@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
 import RelatedLinks from '../components/RelatedLinks';
 import {
-  MessageSquare, CheckCircle, Shield, ArrowRight,
+  MessageSquare, CheckCircle, ArrowRight,
   Users, FileText, Home, Briefcase, Car, Heart,
   Scale, Sparkles, Globe,
   ChevronDown, ChevronUp

@@ -6,7 +6,6 @@ import {
   Handshake,
   Settings,
   Shield,
-  BarChart3,
   Home,
   ChevronLeft,
   Menu,

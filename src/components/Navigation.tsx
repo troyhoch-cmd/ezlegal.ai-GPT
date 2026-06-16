@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu as MenuIcon, X, ChevronDown, ChevronRight, Globe, Shield, ShieldCheck, Handshake, MessageSquare, FileText, Users, Building2, Scale, CreditCard, Info, AlertTriangle, BookOpen, Sparkles, User, Search, Home, ShoppingBag, Video as LucideIcon } from 'lucide-react';
+import { Menu as MenuIcon, X, ChevronDown, ChevronRight, Globe, Shield, ShieldCheck, Handshake, MessageSquare, FileText, Users, Building2, Scale, CreditCard, Info, AlertTriangle, BookOpen, Sparkles, User, Search, Home, ShoppingBag } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useDemo } from '../contexts/DemoContext';
@@ -12,12 +12,12 @@ import MobileBottomNav from './MobileBottomNav';
 import { trackEngagement } from '../services/engagement-service';
 import { fetchNavigation, consolidateNavGroups, NavGroup, NavItem } from '../lib/navigation';
 
-const ICONS: Record<string, LucideIcon> = {
+const ICONS: Record<string, React.ComponentType<any>> = {
   Sparkles, Handshake, Scale, AlertTriangle, BookOpen, Users, ShieldCheck,
   FileText, User, Building2, CreditCard, Info, MessageSquare, Shield, Home, ChevronRight, ShoppingBag,
 };
 
-function iconFor(name: string): LucideIcon {
+function iconFor(name: string): React.ComponentType<any> {
   return ICONS[name] ?? ChevronRight;
 }
 

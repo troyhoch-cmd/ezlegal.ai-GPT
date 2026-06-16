@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Scale, Home, Users, Briefcase, Globe, ShieldCheck, Shield,
+  Home, Users, Briefcase, Globe, ShieldCheck, Shield,
   Phone, Mail, AlertTriangle, Smartphone, ExternalLink,
   FileText, Heart, DollarSign, Gavel
 } from 'lucide-react';

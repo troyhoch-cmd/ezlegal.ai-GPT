@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   Sparkles, ArrowRight, ArrowLeft, Shield, AlertTriangle,
-  Scale, FileText, Clock, CheckCircle
+  Scale, Clock, CheckCircle
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import Navigation from '../components/Navigation';

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Loader2, Mic, Paperclip, Sparkles, ArrowUp, ChevronDown, MessageSquare, FileText, Clock, Search } from 'lucide-react';
+import { Loader2, Mic, Paperclip, Sparkles, ArrowUp, ChevronDown, MessageSquare, FileText, Search, Clock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useLanguage, type Language } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   UnifiedTrustStrip,
   TabbedResponse,
@@ -28,7 +28,6 @@ import {
   trackMetric,
   trackTimeToFirstAction,
   trackFollowUpClick,
-  trackTabSwitch,
 } from '../lib/ab-test-config';
 
 interface Message {
@@ -60,8 +59,19 @@ interface Message {
 function parseResponseToTabs(content: string): Message['parsed'] {
   const lines = content.split('\n');
   const summary: string[] = [];
-  const actionSteps: Message['parsed']['actionSteps'] = [];
-  const sources: Message['parsed']['sources'] = [];
+  const actionSteps: Array<{
+    step: number;
+    title: string;
+    description: string;
+    priority?: 'high' | 'medium' | 'low';
+    deadline?: string;
+  }> = [];
+  const sources: Array<{
+    title: string;
+    url?: string;
+    citation?: string;
+    confidence?: number;
+  }> = [];
 
   let currentSection = 'summary';
   let stepCount = 0;

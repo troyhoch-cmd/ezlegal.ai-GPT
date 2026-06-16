@@ -1,4 +1,4 @@
-export type Language = 'en' | 'es';
+import { Language } from './i18n';
 
 export const LEGAL_DISCLOSURES = {
   NOT_LEGAL_ADVICE: {
@@ -102,23 +102,23 @@ export const ARCHETYPE_CONSTRAINTS: Record<PageArchetype, { maxPrimaryActions: n
 };
 
 export function getDisclosure(key: keyof typeof LEGAL_DISCLOSURES, language: Language): string {
-  return LEGAL_DISCLOSURES[key][language];
+  return LEGAL_DISCLOSURES[key][language as 'en' | 'es'];
 }
 
 export function getActionLabel(key: keyof typeof ACTION_LABELS, language: Language): string {
-  return ACTION_LABELS[key][language];
+  return ACTION_LABELS[key][language as 'en' | 'es'];
 }
 
 export function getAffordabilityMessage(key: keyof typeof AFFORDABILITY_MESSAGES, language: Language): string {
-  return AFFORDABILITY_MESSAGES[key][language];
+  return AFFORDABILITY_MESSAGES[key][language as 'en' | 'es'];
 }
 
 export function getTrustSignal(key: keyof typeof TRUST_SIGNALS, language: Language): string {
-  return TRUST_SIGNALS[key][language];
+  return TRUST_SIGNALS[key][language as 'en' | 'es'];
 }
 
 export function combineDisclosures(keys: (keyof typeof LEGAL_DISCLOSURES)[], language: Language): string {
-  return keys.map(key => LEGAL_DISCLOSURES[key][language]).join(' ');
+  return keys.map(key => LEGAL_DISCLOSURES[key][language as 'en' | 'es']).join(' ');
 }
 
 export const AUTH_ERROR_COPY: Record<string, { en: string; es: string }> = {
@@ -159,7 +159,7 @@ export const AUTH_ERROR_COPY: Record<string, { en: string; es: string }> = {
 export function translateAuthError(raw: string | undefined | null, language: Language = 'en'): string {
   const msg = (raw ?? '').toLowerCase();
   let key: keyof typeof AUTH_ERROR_COPY = 'auth.generic';
-  if (!msg) return AUTH_ERROR_COPY[key][language];
+  if (!msg) return AUTH_ERROR_COPY[key][language as 'en' | 'es'];
   if (msg.includes('invalid login') || msg.includes('invalid credentials') || msg.includes('invalid_credentials')) {
     key = 'auth.invalid_credentials';
   } else if (msg.includes('already registered') || msg.includes('user already') || msg.includes('already exists')) {
@@ -173,7 +173,7 @@ export function translateAuthError(raw: string | undefined | null, language: Lan
   } else if (msg.includes('network') || msg.includes('fetch') || msg.includes('failed to')) {
     key = 'auth.network_error';
   }
-  return AUTH_ERROR_COPY[key][language];
+  return AUTH_ERROR_COPY[key][language as 'en' | 'es'];
 }
 
 export const FIELD_HINTS = {
@@ -204,6 +204,6 @@ export const FIELD_HINTS = {
 } as const;
 
 export function getFieldHint(key: keyof typeof FIELD_HINTS, language: Language): string {
-  return FIELD_HINTS[key][language];
+  return FIELD_HINTS[key][language as 'en' | 'es'];
 }
 

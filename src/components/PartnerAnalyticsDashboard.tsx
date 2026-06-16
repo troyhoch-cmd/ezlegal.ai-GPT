@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
-  Building2, TrendingUp, Users, DollarSign, ArrowUpRight,
-  ArrowDownRight, BarChart3, Clock, CheckCircle, Globe,
-  Loader2, RefreshCw, Calendar, Target
+  Building2, DollarSign,
+  CheckCircle,
+  Loader2, RefreshCw, Target
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 

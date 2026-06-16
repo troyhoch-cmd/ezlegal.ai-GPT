@@ -1,6 +1,6 @@
 # Launch Readiness Report
 
-**Generated:** 2026-06-15T01:21:08.159Z
+**Generated:** 2026-06-16T01:53:35.889Z
 **Launch Ready:** NO
 **Total Blockers:** 7
 
@@ -20,7 +20,7 @@
 | 8 | Conversion Route Readiness | all pass | all pass | PASS |
 | 9 | No Duplicate Routes | 0 | 1 | FAIL |
 | 10 | Screenshot Coverage | 100% | 1 missing | FAIL |
-| 11 | Ci Passes | all pass | 2 failing | FAIL |
+| 11 | Ci Passes | all pass | 1 failing | FAIL |
 
 ---
 
@@ -74,9 +74,8 @@ Call log:
 - Screenshot directory does not exist
 
 ### 7. Build, typecheck, and Playwright smoke tests pass
-**Actual:** 2 CI check(s) failed
+**Actual:** 1 CI check(s) failed
 
-- Typecheck failed: src/App.tsx(47,7): error TS6133: 'Chatbot' is declared but its value is never read. src/App.tsx(48,7): error TS6133: 'SimpleChatbot' is declared but its value is never read. src/components/AICaseMatch
 - Playwright failed:  Running 128 tests using 1 worker
 
 ---
@@ -87,6 +86,6 @@ Call log:
 - Public routes: 51
 - Total findings: 306
 - ICP definitions: 3
-- Typecheck: FAIL
+- Typecheck: PASS
 - Build: PASS
 - Playwright: FAIL

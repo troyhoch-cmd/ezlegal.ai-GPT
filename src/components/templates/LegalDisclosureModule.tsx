@@ -1,4 +1,4 @@
-import { AlertTriangle, Info, Shield, Scale } from 'lucide-react';
+import { AlertTriangle, Info, Shield } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { LEGAL_DISCLOSURES, getDisclosure } from '../../lib/microcopy';
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Lock, Key, Database, Server, Eye, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { Shield, Lock, Database, Eye, ChevronDown, ChevronUp, ExternalLink, ArrowRight } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 

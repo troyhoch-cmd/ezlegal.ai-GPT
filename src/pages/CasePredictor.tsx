@@ -4,7 +4,7 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import RelatedLinks from '../components/RelatedLinks';
 import {
   Sparkles, CheckCircle, ArrowRight, Shield, AlertTriangle,
-  BarChart3, FileText, Scale, Brain, Clock, Lock, Users, Zap, ChevronDown, ChevronUp
+  BarChart3, FileText, Scale, Brain, Clock, Users, Zap, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import Navigation from '../components/Navigation';
@@ -12,7 +12,6 @@ import Footer from '../components/Footer';
 import VerifiableTrustStrip from '../components/VerifiableTrustStrip';
 import InlineEmailCapture from '../components/InlineEmailCapture';
 import CoverageConfidenceIndicator from '../components/CoverageConfidenceIndicator';
-import AttorneyReferralDisclosure from '../components/AttorneyReferralDisclosure';
 import { AttorneyServiceDisclosure } from '../components/shared';
 import { AIGovernanceNotice, ScopeBoundaryCard, HumanEscalationCard, DataUseAndPrivacyCard } from '../components/trust';
 

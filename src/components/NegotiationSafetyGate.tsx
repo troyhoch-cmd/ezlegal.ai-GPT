@@ -54,7 +54,7 @@ const t = {
 
 export default function NegotiationSafetyGate({ safetyData, onChange }: NegotiationSafetyGateProps) {
   const { language } = useLanguage();
-  const s = t[language] || t.en;
+  const s = t[language as keyof typeof t] || t.en;
   const [showCrisisResources, setShowCrisisResources] = useState(false);
 
   const hasSafetyFlags = safetyData.safetyRisk === true ||

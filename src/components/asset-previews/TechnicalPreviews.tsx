@@ -1,7 +1,7 @@
 import {
-  Scale, Code, Terminal, Globe, Shield, Lock, Award,
-  CheckCircle, Copy, Settings, Smartphone, Monitor,
-  ArrowRight, ExternalLink, Wifi, Database, Key,
+  Scale, Code, Globe, Shield, Lock, Award,
+  CheckCircle, Copy, Settings, Monitor,
+  Wifi, Database, Key,
   Eye, Fingerprint, Server, FileText, MousePointer
 } from 'lucide-react';
 

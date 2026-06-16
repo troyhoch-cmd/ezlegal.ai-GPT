@@ -2,12 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Send, Shield, Clock, MessageSquare, Scale, Sparkles, Check,
-  Globe, Home as HomeIcon, Users, Briefcase, FileWarning, Handshake, ArrowRight
+  Globe, Home as HomeIcon, Users, Briefcase, FileWarning, ArrowRight
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { StandardDisclaimer } from '../components/templates/LegalDisclosureModule';
-import { FormTrustSignals } from '../components/templates/TrustModule';
-import { getAffordabilityMessage } from '../lib/microcopy';
 
 const TOPIC_CONFIG: Record<string, { icon: typeof Scale; color: string; en: { title: string; subtitle: string; placeholder: string; questions: string[] }; es: { title: string; subtitle: string; placeholder: string; questions: string[] } }> = {
   immigration: {

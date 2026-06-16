@@ -643,7 +643,6 @@ export default function WidgetDemoModal({ onClose, initialWidget }: WidgetDemoMo
               {(() => {
                 const trustInfo = WIDGET_TRUST_INFO[activeWidget];
                 if (!trustInfo) return null;
-                const activeDemo = WIDGET_DEMOS.find(w => w.id === activeWidget);
                 return (
                   <div className="mt-6 bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
                     <div className="px-5 py-3 bg-slate-100 border-b border-slate-200 flex items-center justify-between">

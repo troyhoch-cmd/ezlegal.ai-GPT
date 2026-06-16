@@ -1,11 +1,11 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Sparkles, BookOpen, Menu as MenuIcon, User, Video as LucideIcon } from 'lucide-react';
+import { Sparkles, BookOpen, Menu as MenuIcon, User } from 'lucide-react';
 import { fetchBottomNavItems, NavItem } from '../lib/navigation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 
-const ICONS: Record<string, LucideIcon> = {
+const ICONS: Record<string, React.ComponentType<any>> = {
   Sparkles,
   BookOpen,
   User,

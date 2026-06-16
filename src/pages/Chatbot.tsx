@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { chatService } from '../services/chat-service';
@@ -17,10 +17,10 @@ import CrisisEscalationCard, { detectCrisis, CrisisType } from '../components/Cr
 import ChatHandoffToolbar from '../components/ChatHandoffToolbar';
 import { PrivacyMicroPanelInline } from '../components/PrivacyMicroPanel';
 import {
-  Send, Bot, User, Sparkles, Plus, Mic, MicOff, Upload, FileText,
-  Trash2, X, Menu, ChevronLeft, ChevronDown, ChevronUp, Clock, MessageSquare, Search, BookOpen,
+  Send, Bot, Sparkles, Plus, Mic, MicOff, Upload, FileText,
+  Trash2, X, Menu, ChevronLeft, ChevronDown, ChevronUp, Search, BookOpen,
   LogOut, Car, Building2, Copyright, Landmark, Briefcase,
-  AlertTriangle, Scale, Users as UsersIcon, Shield, Lightbulb, Zap, Settings2, Check, Loader2, HelpCircle, Info
+  AlertTriangle, Scale, Shield, Lightbulb, Zap, Settings2, Check, Loader2, HelpCircle, Info, Users, Clock
 } from 'lucide-react';
 import ShareButton from '../components/ShareButton';
 import ChatSharePrompt from '../components/ChatSharePrompt';
@@ -199,7 +199,7 @@ const legalTopics: LegalTopic[] = [
     id: 'employment',
     title: 'Employment Law',
     description: 'Rights & Contracts',
-    icon: <UsersIcon className="w-5 h-5" />,
+    icon: <Users className="w-5 h-5" />,
     questions: [
       "What are my rights if I was wrongfully terminated?",
       "Is my employer required to pay overtime?",
@@ -225,7 +225,6 @@ const legalTopics: LegalTopic[] = [
 
 export default function Chatbot() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -239,7 +238,7 @@ export default function Chatbot() {
     return window.innerWidth >= 1024;
   });
   const [showTopicsModal, setShowTopicsModal] = useState(false);
-  const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
+  // Unused state variable - could be used for chat history filtering
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [expandedTopicId, setExpandedTopicId] = useState<string | null>(null);
@@ -261,8 +260,9 @@ export default function Chatbot() {
     }
     return true;
   });
-  const [triageIssueType, setTriageIssueType] = useState<string>('');
+  const [_triageIssueType, setTriageIssueType] = useState<string>('');
   const [userJurisdiction, setUserJurisdiction] = useState<string>('');
+  const [_chatHistory, setChatHistory] = useState<any[]>([]);
   const [activeCrisis, setActiveCrisis] = useState<CrisisType | null>(null);
   const [showModelSelector, setShowModelSelector] = useState(false);
   const [availableModels, setAvailableModels] = useState<AIModel[]>([]);
@@ -547,28 +547,6 @@ export default function Chatbot() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const loadThreadMessages = async (date: string) => {
-    if (!user) return;
-
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
-
-    const { data, error } = await supabase
-      .from('chat_messages')
-      .select('*')
-      .eq('user_id', user.id)
-      .gte('created_at', startOfDay.toISOString())
-      .lte('created_at', endOfDay.toISOString())
-      .order('created_at', { ascending: true });
-
-    if (!error && data) {
-      setMessages(data);
-      setActiveThreadDate(date);
-    }
-  };
 
   const handleSafetyCheckpointComplete = (data: { jurisdiction: string; hasUrgentDeadline: boolean }) => {
     setUserJurisdiction(data.jurisdiction);
@@ -1271,7 +1249,7 @@ Full transcript available via "Export Transcript" option.
             to="/dashboard/lawyer-profiles"
             className="w-full flex items-center gap-3 px-3 py-2 text-navy-700 hover:bg-navy-100 rounded-lg transition-colors"
           >
-            <UsersIcon className="w-4 h-4 text-navy-400" />
+            <Users className="w-4 h-4 text-navy-400" />
             <span className="font-medium text-sm">{t('sidebar.lawyerProfiles')}</span>
           </Link>
         </div>
@@ -1409,7 +1387,7 @@ Full transcript available via "Export Transcript" option.
                   to="/find-attorney"
                   className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-medium rounded-lg transition-colors"
                 >
-                  <UsersIcon className="w-3.5 h-3.5" />
+                  <Users className="w-3.5 h-3.5" />
                   {language === 'es' ? 'Buscar abogado' : 'Find a lawyer'}
                 </Link>
                 <button
