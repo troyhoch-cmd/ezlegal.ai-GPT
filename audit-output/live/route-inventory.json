@@ -1,0 +1,32 @@
+{
+  "discoveredAt": "2026-06-16T02:05:51.752Z",
+  "mode": "live",
+  "baseUrl": "https://dev.ezlegal.ai",
+  "totalRoutes": 1,
+  "routes": [
+    {
+      "path": "/",
+      "fullUrl": "https://dev.ezlegal.ai/",
+      "icp": "general",
+      "requiresAuth": false,
+      "isDynamic": false
+    }
+  ],
+  "byIcp": [
+    {
+      "id": "spanish-speaking",
+      "label": "Spanish-speaking individuals",
+      "routes": []
+    },
+    {
+      "id": "smb",
+      "label": "Small and Medium Businesses",
+      "routes": []
+    },
+    {
+      "id": "pro-bono-lso",
+      "label": "Pro Bono / Legal Service Organizations",
+      "routes": []
+    }
+  ]
+}

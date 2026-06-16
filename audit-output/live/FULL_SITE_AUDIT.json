@@ -1,0 +1,157 @@
+{
+  "generatedAt": "2026-06-16T02:06:04.411Z",
+  "version": "2.2",
+  "auditValidity": "valid",
+  "invalidReason": null,
+  "launchReady": false,
+  "summary": {
+    "totalRoutes": 1,
+    "totalFindings": 6,
+    "navigationErrors": 0,
+    "icpBlockedFields": 0,
+    "bySeverity": {
+      "critical": 3,
+      "high": 2,
+      "medium": 1,
+      "low": 0
+    },
+    "byCategory": {
+      "visual": 3,
+      "accessibility": 1,
+      "content": 1,
+      "conversion": 1
+    }
+  },
+  "audits": {
+    "visual": {
+      "findings": 3,
+      "bySeverity": {
+        "critical": 3,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      }
+    },
+    "accessibility": {
+      "findings": 1,
+      "bySeverity": {
+        "critical": 0,
+        "high": 1,
+        "medium": 0,
+        "low": 0
+      }
+    },
+    "content": {
+      "findings": 1,
+      "summary": {
+        "averageReadingGrade": 10.7,
+        "routesAboveThreshold": 1,
+        "totalJargonInstances": 0,
+        "spanishContentRoutes": 0
+      }
+    },
+    "conversion": {
+      "findings": 1,
+      "summary": {
+        "avgTrustSignals": 0,
+        "routesWithoutCta": 1,
+        "avgEthicalAIScore": 0
+      }
+    },
+    "icpEvidence": null
+  },
+  "icpCoverage": [
+    {
+      "id": "spanish-speaking",
+      "label": "Spanish-speaking individuals",
+      "dedicatedRoutes": 0,
+      "findings": 0
+    },
+    {
+      "id": "smb",
+      "label": "Small and Medium Businesses",
+      "dedicatedRoutes": 0,
+      "findings": 0
+    },
+    {
+      "id": "pro-bono-lso",
+      "label": "Pro Bono / Legal Service Organizations",
+      "dedicatedRoutes": 0,
+      "findings": 0
+    }
+  ],
+  "remediationBacklog": [
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "critical",
+      "issue": "http-error",
+      "description": "Route returned HTTP 503",
+      "evidence": {
+        "statusCode": 503,
+        "url": "https://dev.ezlegal.ai/"
+      },
+      "priority": 1
+    },
+    {
+      "route": "/",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "critical",
+      "issue": "http-error",
+      "description": "Route returned HTTP 503",
+      "evidence": {
+        "statusCode": 503,
+        "url": "https://dev.ezlegal.ai/"
+      },
+      "priority": 1
+    },
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "critical",
+      "issue": "http-error",
+      "description": "Route returned HTTP 503",
+      "evidence": {
+        "statusCode": 503,
+        "url": "https://dev.ezlegal.ai/"
+      },
+      "priority": 1
+    },
+    {
+      "route": "/",
+      "category": "accessibility",
+      "severity": "high",
+      "issue": "html-has-lang",
+      "description": "Ensure every HTML document has a lang attribute",
+      "help": "<html> element must have a lang attribute",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/html-has-lang?application=playwright",
+      "selector": "html",
+      "html": "<html>",
+      "wcagTags": [
+        "wcag2a",
+        "wcag311"
+      ],
+      "priority": 2
+    },
+    {
+      "route": "/",
+      "category": "conversion",
+      "severity": "high",
+      "issue": "no-above-fold-cta",
+      "description": "No call-to-action visible above the fold",
+      "priority": 2
+    },
+    {
+      "route": "/",
+      "category": "content",
+      "severity": "medium",
+      "issue": "high-reading-level",
+      "description": "Reading level grade 10.7 exceeds threshold of 8",
+      "metric": 10.7,
+      "priority": 3
+    }
+  ]
+}

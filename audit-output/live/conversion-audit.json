@@ -1,0 +1,39 @@
+{
+  "auditedAt": "2026-06-16T02:06:04.351Z",
+  "category": "conversion",
+  "totalFindings": 1,
+  "summary": {
+    "avgTrustSignals": 0,
+    "routesWithoutCta": 1,
+    "avgEthicalAIScore": 0
+  },
+  "bySeverity": {
+    "critical": 0,
+    "high": 1,
+    "medium": 0,
+    "low": 0
+  },
+  "routeMetrics": [
+    {
+      "route": "/",
+      "icp": "general",
+      "totalCtas": 0,
+      "aboveFoldCtas": 0,
+      "formCount": 0,
+      "maxFormFields": 0,
+      "trustSignalCount": 0,
+      "trustSignals": [],
+      "ethicalAISignals": [],
+      "ethicalAIScore": 0
+    }
+  ],
+  "findings": [
+    {
+      "route": "/",
+      "category": "conversion",
+      "severity": "high",
+      "issue": "no-above-fold-cta",
+      "description": "No call-to-action visible above the fold"
+    }
+  ]
+}

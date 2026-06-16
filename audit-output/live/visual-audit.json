@@ -1,0 +1,49 @@
+{
+  "auditedAt": "2026-06-16T02:05:55.435Z",
+  "category": "visual",
+  "totalFindings": 3,
+  "bySeverity": {
+    "critical": 3,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "findings": [
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "category": "visual",
+      "severity": "critical",
+      "issue": "http-error",
+      "description": "Route returned HTTP 503",
+      "evidence": {
+        "statusCode": 503,
+        "url": "https://dev.ezlegal.ai/"
+      }
+    },
+    {
+      "route": "/",
+      "viewport": "tablet",
+      "category": "visual",
+      "severity": "critical",
+      "issue": "http-error",
+      "description": "Route returned HTTP 503",
+      "evidence": {
+        "statusCode": 503,
+        "url": "https://dev.ezlegal.ai/"
+      }
+    },
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "category": "visual",
+      "severity": "critical",
+      "issue": "http-error",
+      "description": "Route returned HTTP 503",
+      "evidence": {
+        "statusCode": 503,
+        "url": "https://dev.ezlegal.ai/"
+      }
+    }
+  ]
+}
