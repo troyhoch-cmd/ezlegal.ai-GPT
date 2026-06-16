@@ -21,7 +21,9 @@ These settings must be confirmed in the Supabase Dashboard (Authentication > Set
 - [x] All tables have RLS enabled
 - [x] Policies use `auth.uid()` for ownership checks
 - [x] No `USING (true)` policies on user data tables
+- [x] `lead_captures` INSERT policy validates email format and field presence
 - [x] Functions use `SECURITY INVOKER` (hardening phases applied)
+- [x] Anonymous SELECT policies limited to public reference/content tables only
 
 ## Edge Functions
 
