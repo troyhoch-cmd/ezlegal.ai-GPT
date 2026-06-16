@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileText, Users, Zap, BarChart3, CheckCircle, Circle, ArrowRight, X, Clock, CreditCard } from 'lucide-react';
+import { FileText, Users, Zap, BarChart3, CheckCircle, Circle, ArrowRight, X, CreditCard } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -47,7 +47,7 @@ interface TrialOnboardingProps {
   trialEndDate?: string;
 }
 
-export default function TrialOnboarding({ trialEndDate }: TrialOnboardingProps) {
+export default function TrialOnboarding({ }: TrialOnboardingProps) {
   const { language } = useLanguage();
   const { user, profile } = useAuth();
   const lang = language === 'en' ? 'en' : 'es';
@@ -84,10 +84,6 @@ export default function TrialOnboarding({ trialEndDate }: TrialOnboardingProps) 
   if (dismissed || !user || !isBusiness) return null;
   if (completedSteps.length === TRIAL_STEPS.length) return null;
 
-  const daysLeft = trialEndDate
-    ? Math.max(0, Math.ceil((new Date(trialEndDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
-    : null;
-
   const progress = Math.round((completedSteps.length / TRIAL_STEPS.length) * 100);
 
   return (
@@ -96,19 +92,13 @@ export default function TrialOnboarding({ trialEndDate }: TrialOnboardingProps) 
         <div>
           <div className="flex items-center gap-2 mb-1">
             <h3 className="font-bold text-navy-900">
-              {language === 'en' ? 'Your Trial Checklist' : 'Lista de Tu Prueba'}
+              {language === 'en' ? 'Getting Started Checklist' : 'Lista para Comenzar'}
             </h3>
-            {daysLeft !== null && (
-              <span className="flex items-center gap-1 text-xs font-medium bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-                <Clock className="w-3 h-3" />
-                {daysLeft} {language === 'en' ? 'days left' : 'dias restantes'}
-              </span>
-            )}
           </div>
           <p className="text-sm text-navy-500">
             {language === 'en'
-              ? 'Complete these steps to get the most from your trial'
-              : 'Completa estos pasos para aprovechar al maximo tu prueba'}
+              ? 'Complete these steps to get the most from your account'
+              : 'Completa estos pasos para aprovechar al maximo tu cuenta'}
           </p>
         </div>
         <button
@@ -167,8 +157,8 @@ export default function TrialOnboarding({ trialEndDate }: TrialOnboardingProps) 
           <div className="flex items-center gap-1">
             <CreditCard className="w-3 h-3" />
             {language === 'en'
-              ? 'No charge until trial ends. Cancel anytime.'
-              : 'Sin cargo hasta que termine la prueba. Cancela cuando quieras.'}
+              ? 'Cancel anytime. No long-term commitment.'
+              : 'Cancela cuando quieras. Sin compromiso a largo plazo.'}
           </div>
           <Link to="/dashboard/profile" className="text-blue-600 hover:text-blue-700 font-medium">
             {language === 'en' ? 'Manage billing' : 'Gestionar facturacion'}

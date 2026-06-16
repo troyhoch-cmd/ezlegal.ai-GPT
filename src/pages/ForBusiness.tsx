@@ -679,7 +679,7 @@ export default function ForBusiness() {
 
             <div className="mt-12 text-center">
               <p className="text-navy-600 mb-4">
-                All plans include a 14-day free trial. No credit card required.
+                Start free. No credit card required. Upgrade when you need more.
               </p>
               <Link
                 to="/pricing"
@@ -756,7 +756,7 @@ export default function ForBusiness() {
               </Link>
             </div>
             <p className="mt-6 text-teal-200 text-sm">
-              14-day free trial. No credit card required. Cancel anytime.
+              Free to start. No credit card required. Cancel anytime.
             </p>
           </div>
         </section>

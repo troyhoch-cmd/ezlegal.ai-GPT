@@ -46,7 +46,7 @@ export default function ForPartners() {
       primaryStyle: 'primary',
       secondaryLink: '/schedule-demo',
       secondaryText: 'View Live Demo',
-      trial: '14-day free trial included',
+      trial: 'Free to start, no credit card',
     },
     {
       tier: 'API',
@@ -57,7 +57,7 @@ export default function ForPartners() {
       price: '$0.02',
       pricePeriod: '/query',
       billingUnit: '1 query = 1 POST to /v1/chat/completions (includes all follow-up reasoning)',
-      included: 'Free sandbox: 100 queries/day for 14 days',
+      included: 'Free sandbox: 100 queries/day',
       overage: 'Pay-as-you-go after sandbox; volume discounts at 10K+ queries/mo',
       typicalCost: '$40 - $200/mo for 2K-10K queries',
       recommendedWhen: 'You have developers and want full control over the UX',

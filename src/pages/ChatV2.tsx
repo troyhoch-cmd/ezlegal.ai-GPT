@@ -13,7 +13,7 @@ import {
 import AIModelSelector from '../components/AIModelSelector';
 import AnswerModeSelector, { type AnswerMode } from '../components/AnswerModeSelector';
 import GuidedIssueLauncher from '../components/GuidedIssueLauncher';
-import AIResponseFeedback from '../components/AIResponseFeedback';
+import AIDisclosure from '../components/AIDisclosure';
 import UrgentSignalCard from '../components/UrgentSignalCard';
 import CrisisStrip from '../components/CrisisStrip';
 import EthicalConversionPanel from '../components/EthicalConversionPanel';
@@ -732,7 +732,7 @@ export default function ChatV2() {
                         )}
 
                         <div className="pl-4">
-                          <AIResponseFeedback messageId={message.id} language={en ? 'en' : 'es'} compact />
+                          <AIDisclosure messageId={message.id} compact />
                         </div>
 
                         {message.id === lastAssistantId && !isLoading && (
@@ -744,8 +744,8 @@ export default function ChatV2() {
                 ))}
 
                 {isLoading && (
-                  <div className="flex items-center gap-3 text-slate-500">
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                  <div className="flex items-center gap-3 text-slate-500" role="status" aria-live="polite">
+                    <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
                     <span className="text-sm">
                       {en ? 'Researching your question...' : 'Investigando su pregunta...'}
                     </span>

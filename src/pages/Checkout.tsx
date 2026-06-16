@@ -264,7 +264,7 @@ export default function Checkout() {
                 <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6">
                   <div className="flex items-center gap-2 text-sm text-green-700">
                     <Shield className="w-4 h-4" />
-                    <span className="font-medium">{language === 'en' ? '7-day satisfaction guarantee' : 'Garantia de 7 dias'}</span>
+                    <span className="font-medium">{language === 'en' ? '30-day satisfaction guarantee' : 'Garantia de 30 dias'}</span>
                   </div>
                   <p className="text-xs text-green-600 mt-1 ml-6">
                     {language === 'en' ? 'Full refund if not satisfied. No questions asked.' : 'Reembolso completo si no estas satisfecho.'}
@@ -382,7 +382,7 @@ export default function Checkout() {
                 <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 text-center">
                   <p className="text-xs text-green-700">
                     <span className="font-semibold">{language === 'en' ? 'Refund policy:' : 'Politica de reembolso:'}</span>{' '}
-                    {language === 'en' ? '7-day full refund if not satisfied. Contact support@ezlegal.ai' : '7 dias de reembolso completo. Contacta support@ezlegal.ai'}
+                    {language === 'en' ? '30-day full refund if not satisfied. Contact support@ezlegal.ai' : '30 dias de reembolso completo. Contacta support@ezlegal.ai'}
                   </p>
                 </div>
 
@@ -429,7 +429,7 @@ export default function Checkout() {
               </div>
               <div className="space-y-2 text-xs text-navy-500">
                 <div className="flex items-center gap-2"><Lock className="w-3 h-3 text-green-600" /> TLS 1.3 + AES-256</div>
-                <div className="flex items-center gap-2"><Shield className="w-3 h-3 text-green-600" /> {language === 'en' ? '7-day refund guarantee' : 'Garantia de 7 dias'}</div>
+                <div className="flex items-center gap-2"><Shield className="w-3 h-3 text-green-600" /> {language === 'en' ? '30-day refund guarantee' : 'Garantia de 30 dias'}</div>
                 <div className="flex items-center gap-2"><Zap className="w-3 h-3 text-green-600" /> {language === 'en' ? 'Instant access' : 'Acceso instantaneo'}</div>
               </div>
             </div>

@@ -539,7 +539,7 @@ export default function IssuePacks() {
                         </span>
                         <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full font-medium ${pack.id === 'negotiation' ? 'bg-white/10 text-navy-100' : 'bg-navy-50 text-navy-600 border border-navy-100'}`}>
                           <RefreshCw className="w-3 h-3" />
-                          {language === 'en' ? '7-day refund if unused' : 'Reembolso 7 dias si no se usa'}
+                          {language === 'en' ? '30-day refund if unused' : 'Reembolso 30 dias si no se usa'}
                         </span>
                         <button
                           type="button"
