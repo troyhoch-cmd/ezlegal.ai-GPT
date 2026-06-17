@@ -30,6 +30,7 @@ export default defineConfig({
     },
   },
   server: {
+    host: '0.0.0.0',
     open: false,
     fs: {
       strict: true,
@@ -37,5 +38,9 @@ export default defineConfig({
     watch: {
       ignored: ['**/.git/**', '**/node_modules/**', '**/dist/**'],
     },
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 4173,
   },
 });
