@@ -33,23 +33,23 @@ const SUGGESTIONS_EN: Suggestion[] = [
 
 const SUGGESTIONS_ES: Suggestion[] = [
   { text: 'Mi arrendador no devuelve mi depósito de seguridad', category: 'Housing Law' },
-  { text: 'Recibi un aviso de desalojo', category: 'Housing Law' },
+  { text: 'Recibí un aviso de desalojo', category: 'Housing Law' },
   { text: 'Mi apartamento tiene moho o necesita reparaciones', category: 'Housing Law' },
   { text: 'El aumento de renta parece ilegal', category: 'Housing Law' },
-  { text: 'Mi empleador no pago horas extra', category: 'Employment Law' },
-  { text: 'Me despidieron sin razon', category: 'Employment Law' },
-  { text: 'Acoso o discriminacion en el trabajo', category: 'Employment Law' },
-  { text: 'Mi ultimo cheque de pago esta atrasado', category: 'Employment Law' },
-  { text: 'Un cobrador de deudas sigue llamandome', category: 'Consumer Protection' },
+  { text: 'Mi empleador no pagó horas extra', category: 'Employment Law' },
+  { text: 'Me despidieron sin razón', category: 'Employment Law' },
+  { text: 'Acoso o discriminación en el trabajo', category: 'Employment Law' },
+  { text: 'Mi último cheque de pago está atrasado', category: 'Employment Law' },
+  { text: 'Un cobrador de deudas sigue llamándome', category: 'Consumer Protection' },
   { text: 'Fui estafado por un negocio', category: 'Consumer Protection' },
   { text: 'Cargos injustos en mi cuenta', category: 'Consumer Protection' },
-  { text: 'Quiero disputar una factura medica', category: 'Consumer Protection' },
+  { text: 'Quiero disputar una factura médica', category: 'Consumer Protection' },
   { text: 'Presentar divorcio', category: 'Family Law' },
   { text: 'Arreglo de custodia de hijos', category: 'Family Law' },
-  { text: 'Modificacion de pension alimenticia', category: 'Family Law' },
+  { text: 'Modificación de pensión alimenticia', category: 'Family Law' },
   { text: 'Necesito crear un testamento', category: 'Wills & Probate' },
-  { text: 'Conceptos basicos de planificacion patrimonial', category: 'Wills & Probate' },
-  { text: 'Proceso de sucesion despues de un fallecimiento', category: 'Wills & Probate' },
+  { text: 'Conceptos básicos de planificación patrimonial', category: 'Wills & Probate' },
+  { text: 'Proceso de sucesión después de un fallecimiento', category: 'Wills & Probate' },
   { text: 'Demandar a alguien en tribunal de reclamos menores', category: 'Civil Law' },
   { text: 'Alguien me debe dinero', category: 'Civil Law' },
   { text: 'Disputa con vecino o de propiedad', category: 'Civil Law' },
@@ -147,12 +147,12 @@ export default function GuidesSearch({ onSearch, onClear }: GuidesSearchProps) {
   const categoryDisplayName = (dbCategory: string) => {
     if (language !== 'es') return dbCategory;
     const map: Record<string, string> = {
-      'Housing Law': 'Derecho de Vivienda',
-      'Employment Law': 'Derecho Laboral',
-      'Consumer Protection': 'Proteccion al Consumidor',
-      'Family Law': 'Derecho Familiar',
-      'Wills & Probate': 'Testamentos y Sucesiones',
-      'Civil Law': 'Derecho Civil',
+      'Housing Law': 'Derecho de vivienda',
+      'Employment Law': 'Derecho laboral',
+      'Consumer Protection': 'Protección al consumidor',
+      'Family Law': 'Derecho familiar',
+      'Wills & Probate': 'Testamentos y sucesiones',
+      'Civil Law': 'Derecho civil',
     };
     return map[dbCategory] || dbCategory;
   };

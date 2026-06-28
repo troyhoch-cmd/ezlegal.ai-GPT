@@ -21,12 +21,12 @@ const CATEGORY_RESOURCES: Record<string, CategoryResource> = {
 };
 
 const CATEGORY_NAME_MAP: Record<string, string> = {
-  'Derecho de Vivienda': 'Housing Law',
-  'Derecho Laboral': 'Employment Law',
-  'Proteccion al Consumidor': 'Consumer Protection',
-  'Derecho Familiar': 'Family Law',
-  'Testamentos y Sucesiones': 'Wills & Probate',
-  'Derecho Civil': 'Civil Law',
+  'Derecho de vivienda': 'Housing Law',
+  'Derecho laboral': 'Employment Law',
+  'Protección al consumidor': 'Consumer Protection',
+  'Derecho familiar': 'Family Law',
+  'Testamentos y sucesiones': 'Wills & Probate',
+  'Derecho civil': 'Civil Law',
 };
 
 interface UrgentHelpBannerProps {
@@ -43,10 +43,14 @@ export default function UrgentHelpBanner({ category }: UrgentHelpBannerProps) {
   if (!resource) return null;
 
   return (
-    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+    <div
+      className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+      role="alert"
+      aria-label={t(resource.messageKey)}
+    >
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <AlertTriangle className="w-5 h-5 text-amber-600" />
+          <AlertTriangle className="w-5 h-5 text-amber-600" aria-hidden="true" />
         </div>
         <div className="min-w-0">
           <p className="font-semibold text-navy-900 text-sm">{t(resource.messageKey)}</p>
@@ -58,8 +62,9 @@ export default function UrgentHelpBanner({ category }: UrgentHelpBannerProps) {
           <a
             href={`tel:${resource.hotline.number.replace(/-/g, '')}`}
             className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition-colors"
+            aria-label={`${resource.hotline.label}: ${resource.hotline.number}`}
           >
-            <Phone className="w-4 h-4" />
+            <Phone className="w-4 h-4" aria-hidden="true" />
             {resource.hotline.number}
           </a>
         )}
@@ -67,7 +72,7 @@ export default function UrgentHelpBanner({ category }: UrgentHelpBannerProps) {
           href="/emergency-resources"
           className="inline-flex items-center gap-2 px-4 py-2 border border-navy-300 text-navy-700 rounded-lg text-sm font-semibold hover:bg-navy-100 transition-colors"
         >
-          <ExternalLink className="w-4 h-4" />
+          <ExternalLink className="w-4 h-4" aria-hidden="true" />
           {t('urgent.allResources')}
         </a>
       </div>
