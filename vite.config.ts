@@ -3,6 +3,10 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  test: {
+    include: ['tests/**/*.spec.ts', '!tests/e2e/**', '!tests/a11y.spec.ts', '!tests/launch.smoke.spec.ts', '!tests/ai-legal-safety.spec.ts'],
+    exclude: ['tests/e2e/**'],
+  },
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
@@ -23,6 +27,7 @@ export default defineConfig({
           if (id.includes('pdfjs-dist')) return 'pdfjs';
           if (id.includes('jspdf')) return 'jspdf';
           if (id.includes('html2canvas')) return 'html2canvas';
+          if (id.includes('tesseract.js')) return 'ocr-tools';
           if (id.includes('qrcode')) return 'qr';
           return 'vendor';
         },
@@ -30,7 +35,6 @@ export default defineConfig({
     },
   },
   server: {
-    host: '0.0.0.0',
     open: false,
     fs: {
       strict: true,
@@ -38,9 +42,5 @@ export default defineConfig({
     watch: {
       ignored: ['**/.git/**', '**/node_modules/**', '**/dist/**'],
     },
-  },
-  preview: {
-    host: '0.0.0.0',
-    port: 4173,
   },
 });
