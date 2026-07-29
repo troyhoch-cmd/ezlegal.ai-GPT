@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  Plus, Save, Trash2, Loader2, Edit, X,
-  MessageCircle, Facebook, MapPin, GripVertical,
-  Eye, EyeOff
-} from 'lucide-react';
+import { Plus, Save, Trash2, Loader2, CreditCard as Edit, X, MessageCircle, Facebook, MapPin, GripVertical, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface SocialTemplate {
