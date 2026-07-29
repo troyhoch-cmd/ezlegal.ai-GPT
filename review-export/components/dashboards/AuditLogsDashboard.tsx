@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  Shield, Clock, User, Filter, Search, Download,
-  ChevronLeft, ChevronRight, Eye, Activity, AlertTriangle,
-  CheckCircle, XCircle, Edit, Trash2, Plus, UserCheck
-} from 'lucide-react';
+import { Shield, Clock, User, Filter, Search, Download, ChevronLeft, ChevronRight, Eye, Activity, AlertTriangle, CheckCircle, XCircle, CreditCard as Edit, Trash2, Plus, UserCheck } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface AuditLog {
