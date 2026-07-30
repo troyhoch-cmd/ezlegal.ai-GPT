@@ -1,5 +1,9 @@
 import { useState, useMemo } from 'react';
-import { FileText, CheckSquare, Clock, MapPin, Download, Printer, Copy, ChevronDown, ChevronRight, Calendar, AlertTriangle, FileCheck, Scale, Building, Phone, ExternalLink, CheckCircle, AlertCircle, ShieldAlert, HelpCircle, CreditCard as Edit2, Check, X, RefreshCw, Info } from 'lucide-react';
+import {
+  FileText, CheckSquare, Clock, MapPin, Download, Printer, Copy, ChevronDown, ChevronRight,
+  Calendar, AlertTriangle, FileCheck, Scale, Building, Phone, ExternalLink, CheckCircle,
+  AlertCircle, ShieldAlert, HelpCircle, Edit2, Check, X, RefreshCw, Info
+} from 'lucide-react';
 
 export interface TimelineItem {
   id: string;
