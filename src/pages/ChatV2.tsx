@@ -29,6 +29,7 @@ import {
   trackTimeToFirstAction,
   trackFollowUpClick,
 } from '../lib/ab-test-config';
+import { parseChatResponse } from '../lib/chat-response-parser';
 
 interface Message {
   id: string;
@@ -53,76 +54,6 @@ interface Message {
       citation?: string;
       confidence?: number;
     }>;
-  };
-}
-
-function parseResponseToTabs(content: string): Message['parsed'] {
-  const lines = content.split('\n');
-  const summary: string[] = [];
-  const actionSteps: Array<{
-    step: number;
-    title: string;
-    description: string;
-    priority?: 'high' | 'medium' | 'low';
-    deadline?: string;
-  }> = [];
-  const sources: Array<{
-    title: string;
-    url?: string;
-    citation?: string;
-    confidence?: number;
-  }> = [];
-
-  let currentSection = 'summary';
-  let stepCount = 0;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-
-    if (/^#{1,3}\s/.test(trimmed) || /^(\*\*|__).*?(Step|Action|Guidance|What to Do)/i.test(trimmed)) {
-      currentSection = 'actions';
-      continue;
-    }
-
-    if (/^(\*\*|__).*?(Source|Citation|Reference)/i.test(trimmed) || /^---\s*$/.test(trimmed)) {
-      currentSection = 'sources';
-      continue;
-    }
-
-    if (currentSection === 'summary' && trimmed) {
-      if (summary.length < 5 || /^(\*\*|__)?(Direct Answer|Summary|Overview)/i.test(trimmed)) {
-        summary.push(trimmed.replace(/^\*\*|\*\*$/g, '').replace(/^__$|^__$/g, ''));
-      }
-    }
-
-    if (currentSection === 'actions' && /^\d+\.|^-|^\*/.test(trimmed)) {
-      stepCount++;
-      const stepText = trimmed.replace(/^\d+\.\s*/, '').replace(/^[-*]\s*/, '');
-      const [title, ...rest] = stepText.split(':');
-      actionSteps.push({
-        step: stepCount,
-        title: title.replace(/^\*\*|\*\*$/g, '').trim(),
-        description: rest.join(':').trim() || title,
-        priority: stepCount <= 2 ? 'high' : stepCount <= 4 ? 'medium' : 'low',
-      });
-    }
-
-    if (currentSection === 'sources' && /^\d+\.|^-|^\*/.test(trimmed)) {
-      const sourceText = trimmed.replace(/^\d+\.\s*/, '').replace(/^[-*]\s*/, '');
-      const urlMatch = sourceText.match(/\[([^\]]+)\]\(([^)]+)\)/);
-      sources.push({
-        title: urlMatch ? urlMatch[1] : sourceText.split(' - ')[0] || sourceText,
-        url: urlMatch ? urlMatch[2] : undefined,
-        citation: sourceText,
-        confidence: 0.85,
-      });
-    }
-  }
-
-  return {
-    summary: summary.slice(0, 3).join(' ').substring(0, 500) || content.substring(0, 300),
-    actionSteps: actionSteps.slice(0, 6),
-    sources,
   };
 }
 
@@ -210,6 +141,12 @@ export default function ChatV2() {
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // ChatV2 may be remounted without a full browser refresh. A new page visit must
+  // never inherit the singleton service's facts from an unrelated prior matter.
+  useEffect(() => {
+    chatService.resetSession();
+  }, []);
 
   useEffect(() => {
     trackMetric('chat_started', 1);
@@ -313,7 +250,7 @@ export default function ChatV2() {
     try {
       const response: ChatMessage = await chatService.sendMessage(content.trim());
 
-      const parsed = parseResponseToTabs(response.content);
+      const parsed = parseChatResponse(response.content);
 
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
@@ -712,16 +649,21 @@ export default function ChatV2() {
                         )}
 
                         {message.followUpQuestions && message.followUpQuestions.length > 0 && (
-                          <div className="flex flex-wrap gap-2 pl-4">
-                            {message.followUpQuestions.slice(0, 3).map((q, i) => (
-                              <button
-                                key={i}
-                                onClick={() => handleFollowUp(q, i)}
-                                className="text-xs px-3 py-1.5 bg-white border border-slate-200 hover:border-teal-300 hover:bg-teal-50 rounded-full text-slate-600 hover:text-teal-700 transition-colors"
-                              >
-                                {q}
-                              </button>
-                            ))}
+                          <div className="pl-4">
+                            <p className="mb-2 text-xs font-semibold text-slate-700">
+                              {en ? 'A few details will help me narrow this down:' : 'Algunos detalles me ayudarán a precisar la respuesta:'}
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {message.followUpQuestions.slice(0, 3).map((q, i) => (
+                                <button
+                                  key={i}
+                                  onClick={() => handleFollowUp(q, i)}
+                                  className="text-xs px-3 py-1.5 bg-white border border-slate-200 hover:border-teal-300 hover:bg-teal-50 rounded-full text-slate-600 hover:text-teal-700 transition-colors"
+                                >
+                                  {q}
+                                </button>
+                              ))}
+                            </div>
                           </div>
                         )}
 
