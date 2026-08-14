@@ -44,4 +44,22 @@ The deadline depends on the type of tenancy.
     expect(parsed.actionSteps).toHaveLength(1);
     expect(parsed.sources).toHaveLength(1);
   });
+
+  it.each([
+    '## Your Immediate Action Checklist',
+    '## Su lista de acciones inmediatas',
+  ])('recognizes the prompted checklist heading %s', (heading) => {
+    const parsed = parseChatResponse(`Your rights depend on the filing deadline.
+
+${heading}
+1. **Check the date:** Find the date on your notice.
+2. **Keep a copy:** Save the notice with your records.`);
+
+    expect(parsed.summary).toBe('Your rights depend on the filing deadline.');
+    expect(parsed.actionSteps).toHaveLength(2);
+    expect(parsed.actionSteps[0]).toMatchObject({
+      title: 'Check the date',
+      description: 'Find the date on your notice.',
+    });
+  });
 });

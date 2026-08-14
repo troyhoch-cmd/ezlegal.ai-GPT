@@ -19,7 +19,7 @@ export interface ParsedChatResponse {
   sources: ParsedSource[];
 }
 
-const ACTION_HEADING = /^(?:#{1,6}\s*)?(?:\*\*|__)?(?:immediate\s+)?(?:action\s+(?:steps|checklist)|next\s+steps|what\s+(?:you\s+)?can\s+do|what\s+to\s+do|step-by-step\s+guidance|verification\s+checklist|pasos\s+a\s+seguir|pr[oó]ximos\s+pasos|qu[eé]\s+puede\s+hacer)(?:\*\*|__)?\s*:?[\s]*$/i;
+const ACTION_HEADING = /^(?:#{1,6}\s*)?(?:\*\*|__)?(?:(?:your\s+)?immediate\s+)?(?:action\s+(?:steps|checklist)|next\s+steps|what\s+(?:you\s+)?can\s+do|what\s+to\s+do|step-by-step\s+guidance|verification\s+checklist|pasos\s+a\s+seguir|pr[oó]ximos\s+pasos|qu[eé]\s+puede\s+hacer|(?:su\s+)?lista\s+de\s+acciones\s+inmediatas)(?:\*\*|__)?\s*:?[\s]*$/i;
 const SOURCE_HEADING = /^(?:#{1,6}\s*)?(?:\*\*|__)?(?:sources?|citations?|references?|legal\s+authorities|fuentes?|referencias?)(?:\*\*|__)?\s*:?[\s]*$/i;
 const ANY_HEADING = /^(?:#{1,6}\s+.+|(?:\*\*|__).+(?:\*\*|__)\s*:?)$/;
 const LIST_ITEM = /^\s*(?:\d+[.)]|[-*•])\s+(.+)$/;
