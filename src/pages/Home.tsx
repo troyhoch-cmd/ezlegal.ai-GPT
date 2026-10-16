@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
+import './home-redesign.css';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-  Shield, MessageSquare, FileText, CheckCircle, Users,
+  Shield, MessageSquare, FileText, CheckCircle, Users, Home as House, Briefcase, Heart, Scale,
   ArrowRight, ChevronDown, ChevronUp
 } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import ResumeBanner from '../components/ResumeBanner';
-import HomeKPIStrip from '../components/HomeKPIStrip';
 import CrisisStrip from '../components/CrisisStrip';
 import HomeAudienceRouting from '../components/HomeAudienceRouting';
-import SafeguardsSection from '../components/SafeguardsSection';
 import { useLanguage } from '../contexts/LanguageContext';
 import { usePersonalization } from '../contexts/PersonalizationContext';
 import { usePersona } from '../contexts/PersonaContext';
@@ -18,7 +17,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { markHeroVariantSeen } from '../services/ui-preferences-service';
 import { getVariant, HERO_EN_TEST, HERO_EN_COPY, HERO_ES_TEST, HERO_ES_COPY } from '../lib/ab-testing';
 import { trackCTAClick } from '../lib/utm';
-import { renderClaimOrFallback } from '../content/trustEvidence';
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -62,70 +60,37 @@ export default function Home() {
 
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
+    <div className="home-redesign min-h-screen overflow-x-hidden">
       <Navigation />
 
       <main id="main-content" className="pb-[calc(5rem+env(safe-area-inset-bottom,0px))] lg:pb-0">
-        <section className="relative pt-24 pb-12 min-h-[68vh] flex items-center overflow-x-clip">
-          <div className="absolute inset-0 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 pointer-events-none" />
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
-
-          <div className="relative w-full max-w-4xl mx-auto px-5 sm:px-6 lg:px-8 text-center min-w-0">
-            <h1 className="text-[clamp(1.75rem,7vw,3.75rem)] font-bold mb-4 leading-[1.1] tracking-tight text-white text-balance break-words">
-              {heroCopy.title}
-            </h1>
-
-            <p className="text-base sm:text-lg md:text-xl text-navy-100 mb-6 max-w-2xl mx-auto leading-relaxed">
-              {heroCopy.subtitle}
-            </p>
-
-            <div className="flex flex-col items-center justify-center gap-3 mb-4 w-full min-w-0">
-              <button
-                type="button"
-                onClick={(e) => handleStartNow(e)}
-                data-testid="hero-primary-cta"
-                className="group bg-teal-700 hover:bg-teal-600 text-white px-6 sm:px-10 py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 flex items-center justify-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900 min-h-[56px] w-full sm:w-auto"
-                aria-label={heroCopy.cta}
-              >
-                {heroCopy.cta}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform flex-shrink-0" aria-hidden="true" />
-              </button>
-
-              <p className="text-sm text-white/80 mt-1 max-w-md leading-snug">
-                {language === 'en'
-                  ? 'Legal information, not legal advice. We are not a law firm.'
-                  : 'Información legal, no asesoría legal. No somos un bufete de abogados.'
-                }
-              </p>
-
-              <p className="text-sm font-semibold text-teal-200 max-w-md leading-snug">
-                {language === 'en'
-                  ? 'For Arizona legal questions. Other states are outside our current coverage.'
-                  : 'Para preguntas sobre la ley de Arizona. Otros estados están fuera de nuestra cobertura actual.'
-                }
-              </p>
-
-              <p className="text-sm text-navy-200 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-                <Shield className="w-4 h-4 text-teal-400 flex-shrink-0" aria-hidden="true" />
-                <Link
-                  to="/trust-center"
-                  className="underline underline-offset-2 hover:text-white transition-colors"
-                >
-                  {renderClaimOrFallback('attorney-informed', language === 'es' ? 'es' : 'en')}
-                </Link>
-              </p>
+        <section className="clarity-hero" aria-labelledby="clarity-title">
+          <div className="clarity-grid">
+            <div className="clarity-intro">
+              <span className="clarity-eyebrow"><span />{language === 'en' ? 'ARIZONA LEGAL INFORMATION' : 'INFORMACIÓN LEGAL DE ARIZONA'}</span>
+              <h1 id="clarity-title">{language === 'en' ? <>Life gets complicated.<br /><em>Your next step<br />doesn’t have to.</em></> : <>La vida se complica.<br /><em>Tu próximo paso<br />no tiene por qué.</em></>}</h1>
+              <p className="clarity-description">{language === 'en' ? 'Make sense of your legal questions, understand your documents, and find a way forward. In English or Spanish. In your own words.' : 'Aclara tus preguntas legales, entiende tus documentos y encuentra cómo seguir. En inglés o español. Con tus propias palabras.'}</p>
+              <button type="button" onClick={handleStartNow} data-testid="hero-primary-cta" className="clarity-primary" aria-label={heroCopy.cta}>{heroCopy.cta}<ArrowRight size={19} aria-hidden="true" /></button>
+              <a href="#how-it-works" className="clarity-secondary">{language === 'en' ? 'See how it works' : 'Mira cómo funciona'}<ChevronDown size={16} aria-hidden="true" /></a>
+              <p className="clarity-allowance">{language === 'en' ? 'Free plan: 10 questions and 3 documents per month. No credit card to start. You can ask without an account; sign in to save your work. Paid plans are optional.' : 'Plan gratis: 10 preguntas y 3 documentos al mes. Sin tarjeta para empezar. Puedes preguntar sin cuenta; inicia sesión para guardar tu trabajo. Los planes de pago son opcionales.'} <Link to="/pricing">{language === 'en' ? 'Compare plans' : 'Comparar planes'}</Link></p>
             </div>
-
-            <p className="mx-auto max-w-xl text-sm text-navy-100 leading-relaxed">
-              {language === 'en'
-                ? 'Free plan: 10 questions and 3 documents per month. No credit card to start. You can ask without an account; sign in to save your work. Paid plans are optional.'
-                : 'Plan gratis: 10 preguntas y 3 documentos al mes. Sin tarjeta para empezar. Puedes preguntar sin cuenta; inicia sesión para guardar tu trabajo. Los planes de pago son opcionales.'}
-              {' '}<Link to="/pricing" className="underline underline-offset-4 focus-visible:outline focus-visible:outline-2">{language === 'en' ? 'Compare plans and pilot prices' : 'Comparar planes y precios piloto'}</Link>
-            </p>
-            <div className="mt-3 flex justify-center w-full min-w-0">
-              <CrisisStrip variant="inline" />
+            <div className="clarity-paths">
+              <div className="clarity-paths-heading"><span className="clarity-eyebrow">{language === 'en' ? 'A LITTLE CLARITY STARTS HERE' : 'LA CLARIDAD EMPIEZA AQUÍ'}</span><span className="clarity-mark" aria-hidden="true"><Scale size={27} /></span></div>
+              <h2>{language === 'en' ? 'What’s on your mind?' : '¿Qué te preocupa?'}</h2>
+              <p>{language === 'en' ? 'Pick a starting point. We’ll take it from there.' : 'Elige un punto de partida. Seguimos desde ahí.'}</p>
+              <div className="clarity-task-list">
+                {[
+                  { icon: House, en: 'Housing & renting', es: 'Vivienda y alquiler', detailEn: 'Leases, repairs, eviction notices', detailEs: 'Contratos, reparaciones, desalojos', path: '/ask/housing' },
+                  { icon: Heart, en: 'Family & relationships', es: 'Familia y relaciones', detailEn: 'Divorce, custody, family questions', detailEs: 'Divorcio, custodia, dudas familiares', path: '/ask/family' },
+                  { icon: Briefcase, en: 'Work & pay', es: 'Trabajo y salario', detailEn: 'Wages, workplace rights, job concerns', detailEs: 'Salarios y derechos laborales', path: '/ask/employment' },
+                  { icon: FileText, en: 'Understand a document', es: 'Entender un documento', detailEn: 'Put confusing legal language in context', detailEs: 'Aclara el lenguaje legal confuso', path: '/chat' },
+                  { icon: MessageSquare, en: 'Something else', es: 'Algo más', detailEn: 'Start with a question in your own words', detailEs: 'Empieza con tus propias palabras', path: '/chat' },
+                ].map(({ icon: Icon, en, es, detailEn, detailEs, path }) => <Link className="clarity-task" to={path} key={en}><span className="clarity-task-icon"><Icon size={21} aria-hidden="true" /></span><span><strong>{language === 'en' ? en : es}</strong><small>{language === 'en' ? detailEn : detailEs}</small></span><ArrowRight size={18} aria-hidden="true" /></Link>)}
+              </div>
+              <div className="clarity-scope"><Shield size={17} aria-hidden="true" /><span>{language === 'en' ? 'For Arizona legal questions. Other states are outside our current coverage.' : 'Para preguntas sobre la ley de Arizona. Otros estados están fuera de nuestra cobertura actual.'}</span></div>
             </div>
           </div>
+          <div className="clarity-trust"><span>{language === 'en' ? 'Legal information, not legal advice. We are not a law firm.' : 'Información legal, no asesoría legal. No somos un bufete de abogados.'} <Link to="/privacy">{language === 'en' ? 'Your privacy' : 'Tu privacidad'}</Link></span><CrisisStrip variant="inline" /></div>
         </section>
 
         {/* Social proof + conversion strip */}
@@ -166,61 +131,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-6 bg-slate-50 border-y border-slate-200">
-          <div className="max-w-5xl mx-auto px-4">
-            <ResumeBanner />
-            <div className="mt-4">
-              <HomeKPIStrip />
-            </div>
-            <div className="mt-4 flex justify-center">
-              <SafeguardsSection />
-            </div>
-          </div>
-        </section>
-
-        <section className="py-10 sm:py-12 bg-white border-b border-slate-200">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="sr-only">
-              {language === 'en' ? 'What you can do with ezLegal.ai' : 'Lo que puedes hacer con ezLegal.ai'}
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-              {[
-                {
-                  Icon: MessageSquare,
-                  en: 'Ask legal questions',
-                  es: 'Haz preguntas legales',
-                },
-                {
-                  Icon: FileText,
-                  en: 'Understand documents',
-                  es: 'Entiende documentos',
-                },
-                {
-                  Icon: CheckCircle,
-                  en: 'Find safe next steps',
-                  es: 'Encuentra próximos pasos',
-                },
-                {
-                  Icon: Users,
-                  en: 'Prepare for an attorney',
-                  es: 'Prepárate para un abogado',
-                },
-              ].map(({ Icon, en, es }) => (
-                <div
-                  key={en}
-                  className="flex flex-col items-center text-center rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm min-w-0"
-                >
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-teal-50 text-teal-600 mb-3">
-                    <Icon className="w-5 h-5" aria-hidden="true" />
-                  </span>
-                  <span className="text-xs sm:text-sm font-semibold text-navy-900 leading-snug break-words">
-                    {language === 'en' ? en : es}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <div className="max-w-6xl mx-auto px-5"><ResumeBanner /></div>
 
         <HomeAudienceRouting />
 
@@ -228,7 +139,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold text-navy-900 mb-4">
-                {language === 'en' ? 'How It Works Now' : 'Cómo Funciona Ahora'}
+                {language === 'en' ? 'From uncertainty to a next step' : 'De la duda al próximo paso'}
               </h2>
               <p className="text-lg text-navy-500 max-w-2xl mx-auto">
                 {language === 'en'

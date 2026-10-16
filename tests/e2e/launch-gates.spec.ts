@@ -38,6 +38,19 @@ for (const lang of ['en', 'es'] as const) {
       await expect(page.locator('#retention')).toContainText('90');
     });
 
+    test('homepage task shortcuts reach the matching intake', async ({ page }) => {
+      await page.goto('/');
+      const shortcuts = page.locator('.clarity-task');
+      await expect(shortcuts).toHaveCount(5);
+      const destinations = ['/ask/housing', '/ask/family', '/ask/employment', '/chat', '/chat'];
+      for (let index = 0; index < destinations.length; index++) {
+        await expect(shortcuts.nth(index)).toHaveAttribute('href', destinations[index]);
+      }
+      await shortcuts.first().click();
+      await expect(page).toHaveURL(/\/ask\/housing/);
+      await expect(page.getByRole('textbox')).toBeVisible();
+    });
+
     test('five starting cards prefill editable questions and consent gates submission', async ({ page }) => {
       await page.goto('/chat');
       const startingPoints = page.getByRole('region', { name: lang === 'en' ? 'Starting points' : 'Puntos de partida' });

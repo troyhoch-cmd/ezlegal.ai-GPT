@@ -1,0 +1,33 @@
+.home-redesign { background: #faf8f2; }
+.clarity-hero { padding: 140px 32px 0; background: #f5f2e9; color: #213e38; }
+.clarity-grid { max-width: 1180px; margin: auto; display: grid; grid-template-columns: 1.12fr 1fr; align-items: center; gap: 76px; padding-bottom: 54px; }
+.clarity-eyebrow { display: inline-flex; align-items: center; gap: 9px; font-size: 10px; font-weight: 700; letter-spacing: .16em; line-height: 1.6; }
+.clarity-eyebrow > span { width: 7px; height: 7px; background: #7b8c50; border-radius: 50%; }
+.clarity-intro h1 { font-family: Georgia, serif; font-size: clamp(38px, 4.4vw, 65px); line-height: 1.08; font-weight: 400; letter-spacing: -.045em; margin: 25px 0; }
+.clarity-intro h1 em { color: #527363; font-weight: 400; }
+.clarity-description { color: #53645d; max-width: 440px; font-size: 17px; line-height: 1.8; margin-bottom: 29px; }
+.clarity-primary { display: inline-flex; align-items: center; justify-content: center; gap: 22px; min-height: 54px; background: #264e42; color: #fff; padding: 14px 22px; border-radius: 6px; font-size: 14px; font-weight: 600; transition: background .2s, transform .2s; }
+.clarity-primary:hover { background: #183b30; transform: translateY(-2px); }
+.clarity-secondary { display: inline-flex; gap: 5px; align-items: center; min-height: 44px; margin: 10px 0 0 20px; font-size: 12px; text-decoration: underline; text-underline-offset: 4px; }
+.clarity-allowance { max-width: 440px; font-size: 11px; line-height: 1.8; color: #5b685f; margin-top: 20px; }
+.clarity-allowance a, .clarity-trust a { text-decoration: underline; text-underline-offset: 3px; }
+.clarity-paths { background: #fffefb; border: 1px solid #dedfd3; border-radius: 14px; padding: 26px; box-shadow: 0 18px 48px #314b3d0b; position: relative; }
+.clarity-paths-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #637260; }
+.clarity-mark { color: #71816b; }
+.clarity-paths h2 { font: 400 30px/1.2 Georgia, serif; letter-spacing: -.035em; margin: 17px 0 8px; }
+.clarity-paths > p { color: #68756b; font-size: 12px; margin-bottom: 24px; }
+.clarity-task-list { display: grid; }
+.clarity-task { display: grid; grid-template-columns: 40px 1fr 18px; gap: 12px; align-items: center; padding: 15px 0; border-top: 1px solid #e8e8df; transition: color .2s, transform .2s; }
+.clarity-task:hover { color: #0f766e; transform: translateX(3px); }
+.clarity-task-icon { width: 38px; height: 40px; display: grid; place-items: center; background: #f0f2e9; border-radius: 7px; color: #5b725b; }
+.clarity-task strong { font-size: 13px; display: block; font-weight: 600; }
+.clarity-task small { font-size: 10px; color: #6d776c; display: block; margin-top: 5px; line-height: 1.5; }
+.clarity-scope { display: flex; gap: 9px; align-items: flex-start; background: #f0f2e9; padding: 13px; border-radius: 6px; margin-top: 12px; font-size: 10px; line-height: 1.6; color: #53634f; }
+.clarity-scope svg { flex-shrink: 0; }
+.clarity-trust { border-top: 1px solid #dcded2; max-width: 1180px; margin: auto; display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 16px 0; font-size: 11px; color: #5e6d60; }
+.clarity-trust > span { max-width: 470px; }
+.home-redesign #how-it-works { background: #f5f2e9; border-top: 1px solid #dedfd3; }
+.home-redesign #how-it-works h2 { font-family: Georgia, serif; font-weight: 400; }
+@media (max-width: 1023px) { .clarity-grid { gap: 30px; } .clarity-hero { padding: 112px 24px 0; } .clarity-secondary { display: flex; margin-left: 0; } .clarity-trust { flex-direction: column; align-items: flex-start; } }
+@media (max-width: 700px) { .clarity-grid { grid-template-columns: 1fr; gap: 30px; padding-bottom: 30px; } .clarity-hero { padding: 105px 20px 0; } .clarity-intro h1 { font-size: clamp(35px, 8.4vw, 52px); } .clarity-description { font-size: 15px; } .clarity-primary { width: 100%; } .clarity-secondary { justify-content: center; } .clarity-paths { padding: 20px; } .clarity-paths h2 { font-size: 27px; } .clarity-task { gap: 8px; } }
+@media (prefers-contrast: more) { .clarity-hero, .clarity-paths, .clarity-scope { background: white; color: #162c24; } .clarity-task small, .clarity-allowance, .clarity-description, .clarity-trust { color: #253a30; } }
