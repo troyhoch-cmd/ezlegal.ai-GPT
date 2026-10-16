@@ -23,7 +23,7 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [activeTab, setActiveTab] = useState<'profile' | 'settings' | 'security' | 'data'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'settings' | 'security' | 'data'>(() => new URLSearchParams(window.location.search).get('tab') === 'data' ? 'data' : 'profile');
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const [profileData, setProfileData] = useState<ProfileData>({
     full_name: '',

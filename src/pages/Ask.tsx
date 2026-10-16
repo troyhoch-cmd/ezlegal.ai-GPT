@@ -1,3 +1,4 @@
+import BeforeYouShare from '../components/BeforeYouShare';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -168,6 +169,7 @@ const TOPIC_CONFIG: Record<string, { icon: typeof Scale; color: string; en: { ti
 export default function Ask() {
   const { topic } = useParams<{ topic?: string }>();
   const [question, setQuestion] = useState('');
+  const [processingAccepted, setProcessingAccepted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
@@ -183,7 +185,7 @@ export default function Ask() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!question.trim()) return;
+    if (!question.trim() || !processingAccepted) return;
     setIsSubmitting(true);
     const topicPrefix = topicConfig ? `[${topic}] ` : '';
     try {
@@ -284,10 +286,12 @@ export default function Ask() {
           )}
         </div>
 
+        <BeforeYouShare accepted={processingAccepted} onChange={setProcessingAccepted} />
         <form onSubmit={handleSubmit} className="mb-8">
           <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
             <textarea
               ref={inputRef}
+              aria-label={language === 'en' ? 'Your legal question' : 'Tu pregunta legal'}
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -296,7 +300,7 @@ export default function Ask() {
               rows={4}
               autoFocus
             />
-            <div className="flex items-center justify-between px-6 py-4 bg-navy-50 border-t border-navy-100">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between px-4 sm:px-6 py-4 bg-navy-50 border-t border-navy-100">
               <div className="flex items-center gap-4 text-sm text-navy-500">
                 <span className="flex items-center gap-1.5">
                   <Shield className="w-4 h-4 text-green-600" />
@@ -309,7 +313,7 @@ export default function Ask() {
               </div>
               <button
                 type="submit"
-                disabled={!question.trim() || isSubmitting}
+                disabled={!question.trim() || isSubmitting || !processingAccepted}
                 className="flex items-center gap-2 bg-teal-600 hover:bg-gold-400 disabled:bg-navy-300 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl"
               >
                 {isSubmitting ? (
@@ -320,7 +324,7 @@ export default function Ask() {
                 ) : (
                   <>
                     <Send className="w-5 h-5" />
-                    {language === 'en' ? 'Get My Answer' : 'Obtener Mi Respuesta'}
+                    {language === 'en' ? 'Continue to chat' : 'Continuar al chat'}
                   </>
                 )}
               </button>
@@ -407,7 +411,7 @@ export default function Ask() {
 
         <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
           <h2 className="text-lg font-semibold text-white mb-4 text-center">
-            {language === 'en' ? 'What you get - free, always:' : 'Lo que obtienes - gratis, siempre:'}
+            {language === 'en' ? 'Included in the free plan:' : 'Incluido en el plan gratis:'}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[

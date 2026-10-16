@@ -1,9 +1,13 @@
+import { useLanguage } from '../contexts/LanguageContext';
+import { translateAuthError } from '../lib/microcopy';
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Lock, CheckCircle, AlertCircle } from 'lucide-react';
 
 export default function ResetPassword() {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,12 +31,12 @@ export default function ResetPassword() {
     setError('');
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError(en ? 'Passwords do not match' : 'Las contraseñas no coinciden');
       return;
     }
 
     if (password.length < 8) {
-      setError('Password must be at least 8 characters long');
+      setError(en ? 'Password must be at least 8 characters long' : 'La contraseña debe tener al menos 8 caracteres');
       return;
     }
 
@@ -41,7 +45,7 @@ export default function ResetPassword() {
     const { error } = await updatePassword(password);
 
     if (error) {
-      setError(error.message);
+      setError(translateAuthError(error.message, language));
       setLoading(false);
     } else {
       setSuccess(true);
@@ -69,15 +73,15 @@ export default function ResetPassword() {
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <AlertCircle className="w-8 h-8 text-red-600" />
               </div>
-              <h2 className="text-2xl font-bold text-navy-900 mb-2">Invalid or Expired Link</h2>
+              <h2 className="text-2xl font-bold text-navy-900 mb-2">{en ? "Invalid or Expired Link" : "Enlace no v\u00e1lido o caducado"}</h2>
               <p className="text-navy-600 mb-6">
-                This password reset link is invalid or has expired. Please request a new one.
+                {en ? "This password reset link is invalid or has expired. Please request a new one." : "Este enlace no es v\u00e1lido o ha caducado. Solicita uno nuevo."}
               </p>
               <Link
                 to="/forgot-password"
                 className="inline-block w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3 px-4 rounded-lg transition-all text-center"
               >
-                Request New Link
+                {en ? "Request New Link" : "Solicitar un enlace nuevo"}
               </Link>
             </div>
           </div>
@@ -103,15 +107,15 @@ export default function ResetPassword() {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
-              <h2 className="text-2xl font-bold text-navy-900 mb-2">Password Updated</h2>
+              <h2 className="text-2xl font-bold text-navy-900 mb-2">{en ? "Password Updated" : "Contrase\u00f1a actualizada"}</h2>
               <p className="text-navy-600 mb-6">
-                Your password has been successfully reset. You will be redirected to sign in shortly.
+                {en ? "Your password has been successfully reset. You will be redirected to sign in shortly." : "Tu contrase\u00f1a se ha restablecido. En breve ir\u00e1s al inicio de sesi\u00f3n."}
               </p>
               <Link
                 to="/login"
                 className="inline-block w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3 px-4 rounded-lg transition-all text-center"
               >
-                Sign In Now
+                {en ? "Sign In Now" : "Iniciar sesi\u00f3n"}
               </Link>
             </div>
           ) : (
@@ -120,7 +124,7 @@ export default function ResetPassword() {
                 <div className="w-16 h-16 bg-navy-50 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Lock className="w-8 h-8 text-teal-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-navy-900 mb-2">Create New Password</h2>
+                <h2 className="text-2xl font-bold text-navy-900 mb-2">{en ? "Create New Password" : "Crear contrase\u00f1a nueva"}</h2>
                 <p className="text-navy-600">
                   Enter your new password below. Make sure it's at least 8 characters.
                 </p>
@@ -135,7 +139,7 @@ export default function ResetPassword() {
 
                 <div>
                   <label htmlFor="password" className="block text-sm font-medium text-navy-600 mb-2">
-                    New Password
+                    {en ? "New Password" : "Contrase\u00f1a nueva"}
                   </label>
                   <input
                     id="password"
@@ -145,13 +149,13 @@ export default function ResetPassword() {
                     required
                     minLength={8}
                     className="w-full px-4 py-3 border border-navy-200 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-colors"
-                    placeholder="Enter new password"
+                    placeholder={en ? 'Enter new password' : 'Escribe la contraseña nueva'}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="confirmPassword" className="block text-sm font-medium text-navy-600 mb-2">
-                    Confirm New Password
+                    {en ? "Confirm New Password" : "Confirmar contrase\u00f1a nueva"}
                   </label>
                   <input
                     id="confirmPassword"
@@ -161,7 +165,7 @@ export default function ResetPassword() {
                     required
                     minLength={8}
                     className="w-full px-4 py-3 border border-navy-200 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-colors"
-                    placeholder="Confirm new password"
+                    placeholder={en ? 'Confirm new password' : 'Confirma la contraseña nueva'}
                   />
                 </div>
 
@@ -170,7 +174,7 @@ export default function ResetPassword() {
                   disabled={loading}
                   className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3.5 px-4 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Updating...' : 'Update Password'}
+                  {loading ? (en ? 'Updating...' : 'Actualizando…') : (en ? 'Update Password' : 'Actualizar contraseña')}
                 </button>
               </form>
             </>

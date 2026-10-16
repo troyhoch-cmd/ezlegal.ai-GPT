@@ -122,7 +122,7 @@ export default function MoreHelpDrawer({
             id: 'prediction',
             icon: Brain,
             label: en ? 'Case Outcome Estimate' : 'Estimacion de Resultado',
-            description: en ? 'AI scenario analysis' : 'Analisis de escenarios con IA',
+            description: en ? 'Not available in this workspace yet' : 'Aún no disponible aquí',
             color: 'text-amber-600',
             bgColor: 'hover:bg-slate-50',
             onClick: onPrediction,
@@ -157,7 +157,7 @@ export default function MoreHelpDrawer({
                 id: 'export',
                 icon: Download,
                 label: en ? 'Export Conversation' : 'Exportar Conversacion',
-                description: en ? 'Download as PDF' : 'Descargar como PDF',
+                description: en ? 'Download as text' : 'Descargar como texto',
                 color: 'text-slate-600',
                 bgColor: 'hover:bg-slate-50',
                 onClick: onExportChat,
@@ -170,7 +170,7 @@ export default function MoreHelpDrawer({
                 id: 'share',
                 icon: Share2,
                 label: en ? 'Share with Advocate' : 'Compartir con Defensor',
-                description: en ? 'Generate shareable link' : 'Generar enlace compartible',
+                description: en ? 'Links not available yet; see sharing options' : 'Enlaces aún no disponibles; ver opciones',
                 color: 'text-slate-600',
                 bgColor: 'hover:bg-slate-50',
                 onClick: onShareChat,
@@ -231,7 +231,7 @@ export default function MoreHelpDrawer({
         onClick={handleOpen}
         className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
         aria-expanded={open}
-        aria-haspopup="menu"
+        aria-controls="more-help-panel"
         aria-label={en ? 'More help options' : 'Mas opciones de ayuda'}
       >
         <MoreHorizontal className="w-5 h-5" aria-hidden="true" />
@@ -240,8 +240,10 @@ export default function MoreHelpDrawer({
 
       {open && (
         <div
-          role="menu"
-          className="absolute bottom-full right-0 mb-2 w-80 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-50 animate-in slide-in-from-bottom-2 duration-200"
+          id="more-help-panel"
+          role="region"
+          aria-label={en ? 'More help options' : 'Más opciones de ayuda'}
+          className="absolute bottom-full right-0 mb-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-50 animate-in slide-in-from-bottom-2 duration-200"
         >
           <div className="flex items-center justify-between px-4 py-3 bg-slate-50 border-b border-slate-200">
             <span className="text-sm font-semibold text-slate-800">

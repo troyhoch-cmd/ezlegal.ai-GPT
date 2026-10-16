@@ -11,7 +11,6 @@ import HomeKPIStrip from '../components/HomeKPIStrip';
 import CrisisStrip from '../components/CrisisStrip';
 import HomeAudienceRouting from '../components/HomeAudienceRouting';
 import SafeguardsSection from '../components/SafeguardsSection';
-import { recordConsent } from '../lib/consent';
 import { useLanguage } from '../contexts/LanguageContext';
 import { usePersonalization } from '../contexts/PersonalizationContext';
 import { usePersona } from '../contexts/PersonaContext';
@@ -58,12 +57,6 @@ export default function Home() {
     e?.preventDefault();
     e?.stopPropagation();
     trackCTAClick(`hero-primary-${heroVariant}`, '/start');
-    void recordConsent({
-      consentType: 'ai_processing',
-      source: 'home_primary_cta',
-      language,
-      userId: user?.id ?? null,
-    });
     navigate('/start');
   };
 
@@ -105,10 +98,10 @@ export default function Home() {
                 }
               </p>
 
-              <p className="text-xs text-navy-300 max-w-md leading-snug">
+              <p className="text-sm font-semibold text-teal-200 max-w-md leading-snug">
                 {language === 'en'
-                  ? 'Currently focused on Arizona law. Coverage expanding soon.'
-                  : 'Actualmente enfocados en la ley de Arizona. Cobertura expandiéndose pronto.'
+                  ? 'For Arizona legal questions. Other states are outside our current coverage.'
+                  : 'Para preguntas sobre la ley de Arizona. Otros estados están fuera de nuestra cobertura actual.'
                 }
               </p>
 
@@ -123,6 +116,12 @@ export default function Home() {
               </p>
             </div>
 
+            <p className="mx-auto max-w-xl text-sm text-navy-100 leading-relaxed">
+              {language === 'en'
+                ? 'Free plan: 10 questions and 3 documents per month. No credit card to start. You can ask without an account; sign in to save your work. Paid plans are optional.'
+                : 'Plan gratis: 10 preguntas y 3 documentos al mes. Sin tarjeta para empezar. Puedes preguntar sin cuenta; inicia sesión para guardar tu trabajo. Los planes de pago son opcionales.'}
+              {' '}<Link to="/pricing" className="underline underline-offset-4 focus-visible:outline focus-visible:outline-2">{language === 'en' ? 'Compare plans and pilot prices' : 'Comparar planes y precios piloto'}</Link>
+            </p>
             <div className="mt-3 flex justify-center w-full min-w-0">
               <CrisisStrip variant="inline" />
             </div>
@@ -138,7 +137,7 @@ export default function Home() {
                   <Users className="w-4 h-4" aria-hidden="true" />
                 </span>
                 <span className="text-sm font-semibold text-navy-800">
-                  {language === 'en' ? '2,000+ Arizonans helped' : '2,000+ personas ayudadas en Arizona'}
+                  {language === 'en' ? 'Legal information in English and Spanish' : 'Información legal en inglés y español'}
                 </span>
               </div>
               <span className="hidden sm:block w-px h-6 bg-slate-200" aria-hidden="true" />
@@ -317,8 +316,8 @@ export default function Home() {
                 {
                   q: language === 'en' ? "Is it really free?" : "Es realmente gratis?",
                   a: language === 'en'
-                    ? "Yes. Basic legal Q&A is completely free with no credit card required. You only pay if you choose optional premium features like detailed action plans or document templates."
-                    : "Si. Las preguntas legales basicas son completamente gratis. Solo pagas si eliges caracteristicas premium opcionales."
+                    ? "The free plan includes 10 questions and 3 documents per month, with no credit card to start. Paid upgrades are optional; see pricing for pilot prices."
+                    : "El plan gratis incluye 10 preguntas y 3 documentos al mes, sin tarjeta para empezar. Los planes de pago son opcionales; consulta los precios piloto."
                 },
                 {
                   q: language === 'en' ? "What makes ezLegal.ai ethical?" : "Que hace a ezLegal.ai etico?",
@@ -377,7 +376,7 @@ export default function Home() {
               onClick={handleStartNow}
               className="bg-teal-700 hover:bg-teal-600 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 inline-flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-teal-300 focus:ring-offset-2 focus:ring-offset-navy-900"
             >
-              {language === 'en' ? 'Start with a free question' : 'Empieza con una pregunta gratis'}
+              {language === 'en' ? 'Ask a free legal question' : 'Haz tu pregunta gratis'}
               <ArrowRight className="w-5 h-5" />
             </button>
             <p className="text-sm text-white/80 mt-4 max-w-md mx-auto leading-snug">

@@ -1,3 +1,5 @@
+import { useLanguage } from '../contexts/LanguageContext';
+import BeforeYouShare from './BeforeYouShare';
 import { useState, useCallback } from 'react';
 import { Upload, FileText, Loader2, CheckCircle, AlertCircle, Copy, Download, X, ScanLine, Eye } from 'lucide-react';
 import { convertPdfToImages, DocumentImage } from '../lib/document-extractor';
@@ -11,6 +13,9 @@ interface DocumentOCRProcessorProps {
 type ProcessingStatus = 'idle' | 'converting' | 'scanning' | 'complete' | 'error';
 
 export default function DocumentOCRProcessor({ onTextExtracted, onClose }: DocumentOCRProcessorProps) {
+  const { language } = useLanguage();
+  const en = language === 'en';
+  const [processingAccepted, setProcessingAccepted] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<ProcessingStatus>('idle');
   const [progress, setProgress] = useState({ page: 0, totalPages: 0, pageProgress: 0, statusText: '' });
@@ -22,12 +27,13 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
   const [showPreview, setShowPreview] = useState(false);
 
   const handleFileSelect = useCallback(async (selectedFile: File) => {
+    if (!processingAccepted) return;
     setFile(selectedFile);
     setError('');
     setExtractedText('');
     setStatus('idle');
     setPreviewImages([]);
-  }, []);
+  }, [processingAccepted]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -37,10 +43,10 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
       if (validTypes.includes(droppedFile.type) || droppedFile.name.toLowerCase().endsWith('.pdf')) {
         handleFileSelect(droppedFile);
       } else {
-        setError('Please upload a PDF or image file (PNG, JPG, WEBP, TIFF)');
+        setError(language === 'en' ? 'Please upload a PDF or image file (PNG, JPG, WEBP, TIFF)' : 'Selecciona un PDF o una imagen (PNG, JPG, WEBP, TIFF)');
       }
     }
-  }, [handleFileSelect]);
+  }, [handleFileSelect, language]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -50,7 +56,7 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
   };
 
   const processDocument = async () => {
-    if (!file) return;
+    if (!file || !processingAccepted) return;
 
     setStatus('converting');
     setError('');
@@ -111,15 +117,19 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
       }
     } catch (err) {
       console.error('OCR Error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to process document');
+      setError(en ? 'Unable to process this document. Check the file and try again.' : 'No se pudo procesar el documento. Revisa el archivo e intenta de nuevo.');
       setStatus('error');
     }
   };
 
   const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(extractedText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(extractedText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setError(en ? 'Clipboard access is unavailable. Select the text to copy it manually.' : 'No hay acceso al portapapeles. Selecciona el texto para copiarlo manualmente.');
+    }
   };
 
   const downloadText = () => {
@@ -149,15 +159,15 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
             <ScanLine className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Document Scanner (OCR)</h2>
-            <p className="text-sm text-blue-100">Extract text from scanned documents and images</p>
+            <h2 className="text-lg font-bold text-white">{en ? 'Document Scanner (OCR)' : 'Escáner de documentos (OCR)'}</h2>
+            <p className="text-sm text-blue-100">{en ? 'Extract text from scanned documents and images' : 'Extrae texto de documentos escaneados e imágenes'}</p>
           </div>
         </div>
         {onClose && (
           <button
             onClick={onClose}
             className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-            aria-label="Close scanner"
+            aria-label={en ? 'Close scanner' : 'Cerrar escáner'}
           >
             <X className="w-5 h-5 text-white" />
           </button>
@@ -165,6 +175,8 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
       </div>
 
       <div className="p-6">
+        <BeforeYouShare accepted={processingAccepted} onChange={setProcessingAccepted} />
+        <fieldset disabled={!processingAccepted}>
         {status === 'idle' && (
           <>
             <div
@@ -179,7 +191,8 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
                 id="ocr-file-input"
                 onChange={handleInputChange}
                 accept=".pdf,.png,.jpg,.jpeg,.webp,.tiff"
-                className="hidden"
+                aria-label={en ? 'Choose a document' : 'Elegir un documento'}
+                className="block w-full mb-4 text-sm"
               />
               <label htmlFor="ocr-file-input" className="cursor-pointer">
                 {file ? (
@@ -196,7 +209,7 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
                       onClick={(e) => { e.preventDefault(); resetProcessor(); }}
                       className="text-sm text-brand-600 hover:text-brand-700 font-medium"
                     >
-                      Choose different file
+                      {en ? 'Choose different file' : 'Elegir otro archivo'}
                     </button>
                   </div>
                 ) : (
@@ -205,10 +218,10 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
                       <Upload className="w-8 h-8 text-slate-400" />
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-900">Drop your scanned document here</p>
-                      <p className="text-sm text-slate-500">or click to browse</p>
+                      <p className="font-semibold text-slate-900">{en ? 'Drop your scanned document here' : 'Arrastra tu documento escaneado aquí'}</p>
+                      <p className="text-sm text-slate-500">{en ? 'or click to browse' : 'o selecciona un archivo'}</p>
                     </div>
-                    <p className="text-xs text-slate-400">Supports PDF, PNG, JPG, WEBP, TIFF</p>
+                    <p className="text-xs text-slate-400">{en ? 'Supports PDF, PNG, JPG, WEBP, TIFF' : 'Admite PDF, PNG, JPG, WEBP y TIFF'}</p>
                   </div>
                 )}
               </label>
@@ -220,7 +233,7 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
                 className="mt-4 w-full bg-brand-600 hover:bg-brand-700 text-white py-3 px-6 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
               >
                 <ScanLine className="w-5 h-5" />
-                Start OCR Processing
+                {en ? 'Start OCR Processing' : 'Iniciar reconocimiento de texto'}
               </button>
             )}
 
@@ -239,14 +252,14 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
               <Loader2 className="w-10 h-10 text-brand-600 animate-spin" />
             </div>
             <h3 className="text-lg font-bold text-slate-900 mb-2">
-              {status === 'converting' ? 'Preparing Document' : 'Scanning for Text'}
+              {status === 'converting' ? (en ? 'Preparing Document' : 'Preparando documento') : (en ? 'Scanning for Text' : 'Reconociendo texto')}
             </h3>
-            <p className="text-slate-600 mb-4">{progress.statusText}</p>
+            <p role="status" className="text-slate-600 mb-4">{en ? progress.statusText : 'Procesando documento…'}</p>
 
             {progress.totalPages > 0 && (
               <div className="max-w-xs mx-auto">
                 <div className="flex items-center justify-between text-sm text-slate-600 mb-2">
-                  <span>Page {progress.page} of {progress.totalPages}</span>
+                  <span>{en ? 'Page' : 'Página'} {progress.page} {en ? 'of' : 'de'} {progress.totalPages}</span>
                   <span>{progress.pageProgress}%</span>
                 </div>
                 <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
@@ -270,9 +283,9 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
                   <CheckCircle className="w-5 h-5 text-success-600" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900">Text Extracted Successfully</h3>
+                  <h3 className="font-bold text-slate-900">{en ? 'Text Extracted Successfully' : 'Texto extraído correctamente'}</h3>
                   <p className="text-sm text-slate-500">
-                    Confidence: {confidence}% | {previewImages.length} page(s) processed
+                    {en ? 'Confidence' : 'Confianza'}: {confidence}% | {previewImages.length} {en ? 'page(s) processed' : 'página(s) procesadas'}
                   </p>
                 </div>
               </div>
@@ -282,7 +295,7 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
                   className="flex items-center gap-2 px-3 py-2 text-sm text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
                 >
                   <Eye className="w-4 h-4" />
-                  {showPreview ? 'Hide' : 'Preview'}
+                  {showPreview ? (en ? 'Hide' : 'Ocultar') : (en ? 'Preview' : 'Vista previa')}
                 </button>
               )}
             </div>
@@ -293,7 +306,7 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
                   <div key={idx} className="aspect-[3/4] rounded-lg overflow-hidden border border-slate-200 bg-white">
                     <img
                       src={`data:${img.mimeType};base64,${img.data}`}
-                      alt={`Page ${img.pageNumber}`}
+                      alt={`${en ? 'Page' : 'Página'} ${img.pageNumber}`}
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -303,6 +316,7 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
 
             <div className="relative">
               <textarea
+                aria-label={en ? 'Extracted document text' : 'Texto extraído del documento'}
                 readOnly
                 value={extractedText}
                 className="w-full h-64 p-4 border border-slate-300 rounded-lg bg-slate-50 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -311,7 +325,7 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
                 <button
                   onClick={copyToClipboard}
                   className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
-                  title="Copy to clipboard"
+                  title={en ? 'Copy to clipboard' : 'Copiar al portapapeles'}
                 >
                   {copied ? (
                     <CheckCircle className="w-4 h-4 text-success-600" />
@@ -322,7 +336,7 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
                 <button
                   onClick={downloadText}
                   className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
-                  title="Download as text file"
+                  title={en ? 'Download as text file' : 'Descargar como texto'}
                 >
                   <Download className="w-4 h-4 text-slate-600" />
                 </button>
@@ -334,7 +348,7 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
                 onClick={resetProcessor}
                 className="flex-1 px-4 py-3 border border-slate-300 rounded-lg font-medium text-slate-700 hover:bg-slate-50 transition-colors"
               >
-                Scan Another Document
+                {en ? 'Scan Another Document' : 'Escanear otro documento'}
               </button>
               {onTextExtracted && (
                 <button
@@ -350,8 +364,8 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
               <div className="p-4 bg-warning-50 border border-warning-200 rounded-lg flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-warning-600 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-warning-700">
-                  <p className="font-semibold">Low Confidence Score</p>
-                  <p>The OCR confidence is below 70%. The document may have poor image quality, unusual fonts, or handwritten text. Please review the extracted text carefully.</p>
+                  <p className="font-semibold">{en ? "Low Confidence Score" : "Nivel de confianza bajo"}</p>
+                  <p>{en ? "The OCR confidence is below 70%. The document may have poor image quality, unusual fonts, or handwritten text. Please review the extracted text carefully." : "La confianza del reconocimiento es inferior al 70 %. Puede deberse a la calidad de la imagen, fuentes inusuales o texto manuscrito. Revisa el texto extraído con cuidado."}</p>
                 </div>
               </div>
             )}
@@ -363,22 +377,22 @@ export default function DocumentOCRProcessor({ onTextExtracted, onClose }: Docum
             <div className="w-16 h-16 bg-error-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <AlertCircle className="w-8 h-8 text-error-600" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">Processing Failed</h3>
+            <h3 className="text-lg font-bold text-slate-900 mb-2">{en ? 'Processing Failed' : 'No se pudo procesar'}</h3>
             <p className="text-slate-600 mb-4">{error}</p>
             <button
               onClick={resetProcessor}
               className="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-medium transition-colors"
             >
-              Try Again
+              {en ? "Try Again" : "Intentar de nuevo"}
             </button>
           </div>
         )}
+        </fieldset>
       </div>
 
       <div className="px-6 py-4 bg-slate-50 border-t border-slate-200">
         <p className="text-xs text-slate-500">
-          OCR (Optical Character Recognition) extracts text from scanned documents and images.
-          For best results, ensure documents are clear and well-lit. Processing happens locally in your browser - your documents are never uploaded to our servers.
+          {en ? 'OCR extracts text locally in your browser. In this workflow, starting processing can also send the extracted text to our service to save or analyze it. Remove sensitive details before selecting a file.' : 'El reconocimiento de texto se realiza en tu navegador. En este flujo, iniciar el procesamiento también puede enviar el texto extraído a nuestro servicio para guardarlo o analizarlo. Elimina los datos sensibles antes de seleccionar un archivo.'}
         </p>
       </div>
     </div>

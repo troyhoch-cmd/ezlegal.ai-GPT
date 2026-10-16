@@ -42,17 +42,17 @@ export const pricingAudiences: PricingAudience[] = [
         },
         features: {
           en: [
-            'Ask legal questions in English or Spanish',
+            '10 questions per month in English or Spanish',
             'Get plain-language explanations',
-            'Understand common legal documents',
+            '3 documents per month',
             'Find free or low-cost help',
             'Urgent-help links always free',
             'No credit card required',
           ],
           es: [
-            'Haz preguntas legales en inglés o español',
+            '10 preguntas al mes en inglés o español',
             'Recibe explicaciones en lenguaje simple',
-            'Entiende documentos legales comunes',
+            '3 documentos al mes',
             'Encuentra ayuda gratuita o de bajo costo',
             'Enlaces de ayuda urgente siempre gratis',
             'Sin tarjeta de crédito',
@@ -396,8 +396,8 @@ export const pricingFAQ = [
   {
     q: { en: 'What is free?', es: 'Que es gratis?' },
     a: {
-      en: 'Basic legal questions, plain-language explanations, understanding common documents, finding free or low-cost help, and all urgent-help resources are completely free. No credit card needed.',
-      es: 'Las preguntas legales básicas, explicaciones en lenguaje simple, entender documentos comunes, encontrar ayuda gratuita o de bajo costo, y todos los recursos de ayuda urgente son completamente gratis. Sin tarjeta de crédito.',
+      en: 'The free plan includes 10 questions and 3 documents per month. Urgent-help resources are always free. No credit card is needed to start. Sign in to save your work; paid upgrades are optional.',
+      es: 'El plan gratis incluye 10 preguntas y 3 documentos al mes. Los recursos de ayuda urgente siempre son gratis. Sin tarjeta para empezar. Inicia sesión para guardar tu trabajo; los planes de pago son opcionales.',
     },
   },
   {

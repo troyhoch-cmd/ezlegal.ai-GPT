@@ -81,8 +81,8 @@ export default function UrgentHelp() {
 
             <p className="text-lg text-rose-100 mb-6 max-w-2xl mx-auto">
               {en
-                ? 'Below are free, confidential resources for common legal emergencies. All services are available regardless of immigration status.'
-                : 'A continuación hay recursos gratuitos y confidenciales para emergencias legales comunes. Todos los servicios están disponibles sin importar tu estatus migratorio.'
+                ? 'These resources may help with urgent situations. Contact each provider to confirm hours, confidentiality, eligibility, and language availability.'
+                : 'Estos recursos pueden ayudar en situaciones urgentes. Confirma con cada proveedor sus horarios, confidencialidad, requisitos e idiomas disponibles.'
               }
             </p>
 
@@ -102,13 +102,14 @@ export default function UrgentHelp() {
             <Shield className="w-4 h-4 text-teal-400 flex-shrink-0" />
             <span>
               {en
-                ? 'Your privacy is protected. We do NOT share data with ICE, police, or any government agency.'
-                : 'Tu privacidad está protegida. NO compartimos datos con ICE, la policía ni ninguna agencia del gobierno.'
+                ? 'Do not include sensitive details here. We do not sell personal data; disclosure may be required by law. Review our privacy policy before sharing.'
+                : 'No incluyas datos sensibles aquí. No vendemos datos personales; la ley puede exigir su divulgación. Consulta nuestra política de privacidad antes de compartir.'
               }
             </span>
           </div>
         </section>
 
+        <div className="text-center py-3"><Link to="/privacy" className="text-teal-800 underline">{en ? 'Privacy policy' : 'Política de privacidad'}</Link></div>
         {/* Crisis Resources */}
         <section className="py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

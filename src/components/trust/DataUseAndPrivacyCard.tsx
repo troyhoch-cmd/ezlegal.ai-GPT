@@ -17,14 +17,14 @@ export default function DataUseAndPrivacyCard({
   const content = {
     title: en ? 'Your Data & Privacy' : 'Sus Datos y Privacidad',
     dataUse: en
-      ? 'We use your input only to generate your results. We do not sell or share your data.'
-      : 'Usamos su información solo para generar sus resultados. No vendemos ni compartimos sus datos.',
+      ? 'We use your input to provide the service. We do not sell personal data. We share it with service providers, with your consent, or when legally required.'
+      : 'Usamos su información para prestar el servicio. No vendemos datos personales. Los compartimos con proveedores, con su consentimiento o cuando lo exige la ley.',
     noTraining: en
-      ? 'We do not train AI on your case details unless you explicitly opt in.'
-      : 'No entrenamos la IA con los detalles de su caso a menos que usted lo autorice explícitamente.',
+      ? 'Your conversations and documents are not used to train our AI models.'
+      : 'Sus conversaciones y documentos no se usan para entrenar nuestros modelos de IA.',
     controls: en
-      ? 'You can delete or export your data at any time.'
-      : 'Puede eliminar o exportar sus datos en cualquier momento.',
+      ? 'Request deletion or export in account settings or contact privacy@ezlegal.ai. Legal retention requirements may apply.'
+      : 'Solicite eliminar o exportar sus datos en la configuración de su cuenta o escriba a privacy@ezlegal.ai. Pueden aplicarse obligaciones legales de conservación.',
     privacy: en ? 'Privacy Policy' : 'Política de Privacidad',
     delete: en ? 'Delete My Data' : 'Eliminar Mis Datos',
     export: en ? 'Export My Data' : 'Exportar Mis Datos',
@@ -86,14 +86,14 @@ export default function DataUseAndPrivacyCard({
               {content.privacy}
             </Link>
             <Link
-              to="/profile"
+              to="/dashboard/profile?tab=data"
               className="inline-flex items-center gap-1 text-xs font-medium text-red-600 hover:text-red-800 hover:underline"
             >
               <Trash2 className="w-3 h-3" aria-hidden="true" />
               {content.delete}
             </Link>
             <Link
-              to="/profile"
+              to="/dashboard/profile?tab=data"
               className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:underline"
             >
               <Download className="w-3 h-3" aria-hidden="true" />

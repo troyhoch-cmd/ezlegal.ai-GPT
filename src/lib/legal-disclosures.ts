@@ -141,8 +141,8 @@ const disclosures: Record<DisclosureKey, DisclosureRecord> = {
     es: 'Verificado por el colegio significa que la licencia activa de cada abogado ha sido confirmada a traves de registros oficiales del colegio de abogados estatal.',
   },
   freeDefinition: {
-    en: 'Free means unlimited AI legal questions at no cost, forever. Issue Packs and premium features are paid.',
-    es: 'Gratis significa preguntas legales de IA ilimitadas sin costo, para siempre. Los Paquetes de Ayuda y funciones premium son de pago.',
+    en: 'The free plan includes 10 questions and 3 documents per month. No credit card to start. Paid upgrades are optional.',
+    es: 'El plan gratis incluye 10 preguntas y 3 documentos al mes. Sin tarjeta para empezar. Los planes de pago son opcionales.',
   },
   attorneyServiceScope: {
     en: 'ezLegal.ai is a legal information platform, not a law firm. Attorney referrals are informational and do not constitute endorsement or guarantee of representation.',
