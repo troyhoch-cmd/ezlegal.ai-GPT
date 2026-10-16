@@ -491,3 +491,12 @@ textarea:focus-visible {
 [data-reading-underline-links="true"] a[class*="no-underline"] {
   text-decoration: none;
 }
+
+/* Keep keyboard focus visible on links and controls across the public journey. */
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

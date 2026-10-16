@@ -25,8 +25,8 @@ export default function PrivacyFAQ() {
         ? 'Who can see my conversations?'
         : 'Quién puede ver mis conversaciones?',
       answer: language === 'en'
-        ? 'Only you can see your conversations by default. Our AI processes your questions to provide answers, but your conversations are never used to train our models. Staff may review conversations only for quality assurance, safety screening, or if you report an issue.'
-        : 'Solo tú puedes ver tus conversaciones por defecto. Nuestra IA procesa tus preguntas para dar respuestas, pero tus conversaciones nunca se usan para entrenar modelos.'
+        ? 'Only you can see your conversations by default. Our AI and service providers process your questions. Conversations are not used to train our models. Staff may review them for quality assurance, safety, or a reported issue. See the policy for legal-disclosure exceptions.'
+        : 'Solo tú puedes ver tus conversaciones por defecto. Nuestra IA y proveedores procesan tus preguntas. No se usan para entrenar nuestros modelos. El personal puede revisarlas por control de calidad, seguridad o si notificas un problema. Consulta las excepciones legales en la política.'
     },
     {
       icon: Shield,
@@ -70,8 +70,8 @@ export default function PrivacyFAQ() {
         ? 'How long do you keep my data?'
         : 'Cuánto tiempo guardan mis datos?',
       answer: language === 'en'
-        ? 'Active accounts and conversations are retained as long as your account is active. If you delete your account, we delete your data within 30 days. We may retain anonymized usage statistics for product improvement.'
-        : 'Las cuentas activas y conversaciones se conservan mientras tu cuenta esté activa. Si eliminas tu cuenta, borramos tus datos en 30 días.'
+        ? 'Chat history is kept for 90 days by default. Documents are kept until you delete them or close your account. Account data is retained for 30 days after deletion. Legal retention requirements may apply.'
+        : 'El historial de chat se conserva 90 días por defecto. Los documentos se conservan hasta que los elimines o cierres tu cuenta. Los datos de cuenta se conservan 30 días después de eliminarla. Pueden aplicarse obligaciones legales de conservación.'
     },
     {
       icon: Shield,

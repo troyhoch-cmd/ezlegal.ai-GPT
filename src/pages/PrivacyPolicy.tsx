@@ -1,9 +1,13 @@
+import { useLanguage } from '../contexts/LanguageContext';
+import PrivacyPolicySpanish from './PrivacyPolicySpanish';
 import { Shield, Lock, Eye, Database, Trash2, Users, Globe, AlertTriangle, CheckCircle, Brain, FileText, Mail, Download, UserX, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 
 export default function PrivacyPolicy() {
+  const { language } = useLanguage();
+  if (language === 'es') return <PrivacyPolicySpanish />;
   return (
     <div className="min-h-screen bg-navy-50">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-teal-700 focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">
@@ -433,7 +437,7 @@ export default function PrivacyPolicy() {
                     </a>
                   </p>
                   <p className="text-navy-700 mb-4">
-                    Address: 123 Legal Avenue, Suite 100, San Francisco, CA 94102
+                    Contact us by email for privacy requests.
                   </p>
                   <p className="text-navy-700 text-sm">
                     We aim to respond to all privacy inquiries within 30 days.

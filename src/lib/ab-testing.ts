@@ -82,7 +82,7 @@ export const HERO_EN_COPY: Record<string, { title: string; subtitle: string; cta
   variant_a: {
     title: 'Start with legal information in English or Spanish',
     subtitle: 'AI-powered legal information — free to start and available 24/7. Understand your rights and find next steps.',
-    cta: 'Start with a free question',
+    cta: 'Ask a free legal question',
   },
 };
 
@@ -95,6 +95,6 @@ export const HERO_ES_COPY: Record<string, { title: string; subtitle: string; cta
   variant_a: {
     title: 'Información legal en español o inglés — gratis para comenzar',
     subtitle: 'Información legal con IA — gratuita para comenzar y disponible 24/7. Entiende tus derechos y encuentra próximos pasos.',
-    cta: 'Empieza con una pregunta gratis',
+    cta: 'Haz tu pregunta gratis',
   },
 };

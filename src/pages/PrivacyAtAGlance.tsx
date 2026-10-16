@@ -23,8 +23,8 @@ const ROWS: Row[] = [
     icon: Users,
     question: { en: 'Do my questions train public AI models?', es: '¿Mis preguntas entrenan modelos públicos de IA?' },
     answer: {
-      en: 'No. We use OpenAI via API with zero-retention/data-processing controls where available. Your chats are not used to train public foundation models.',
-      es: 'No. Usamos OpenAI por API con controles de retención cero / procesamiento de datos donde están disponibles. Tus chats no se usan para entrenar modelos públicos.',
+      en: 'Your conversations and documents are not used to train our AI models. Service providers process information to operate the service, as explained in our privacy policy.',
+      es: 'Tus conversaciones y documentos no se usan para entrenar nuestros modelos de IA. Los proveedores procesan información para operar el servicio, como explica nuestra política de privacidad.',
     },
   },
   {
@@ -47,8 +47,8 @@ const ROWS: Row[] = [
     icon: Globe,
     question: { en: 'Where is my data processed?', es: '¿Dónde se procesan mis datos?' },
     answer: {
-      en: 'Primary storage is US-based (Supabase). AI inference runs on OpenAI infrastructure. We do not sell personal data. For EU users we rely on SCCs for cross-border transfers.',
-      es: 'El almacenamiento principal está en EE. UU. (Supabase). La inferencia de IA se ejecuta en la infraestructura de OpenAI. No vendemos datos personales. Para usuarios de la UE usamos SCC para transferencias internacionales.',
+      en: 'Primary storage is US-based (Supabase). AI inference runs on OpenAI infrastructure. We do not sell personal data. Information may be disclosed when legally required; see our privacy policy.',
+      es: 'El almacenamiento principal está en EE. UU. (Supabase). La inferencia de IA se ejecuta en la infraestructura de OpenAI. No vendemos datos personales. La ley puede exigir divulgar información; consulta nuestra política de privacidad.',
     },
   },
   {
@@ -68,7 +68,7 @@ export default function PrivacyAtAGlance() {
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
-      <main className="pt-24 pb-16">
+      <main id="main-content" className="pt-24 pb-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-8">
             <p className="text-sm font-semibold text-teal-700 mb-2">

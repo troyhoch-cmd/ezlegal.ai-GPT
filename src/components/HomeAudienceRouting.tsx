@@ -60,17 +60,13 @@ export default function HomeAudienceRouting() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const handleSelect = async (card: Card) => {
-    try {
-      await supabase.from('persona_intake_sessions').insert({
-        user_id: user?.id ?? null,
-        persona_type: card.key,
-        intake_data: { source: 'home_audience_card', language: en ? 'en' : 'es' },
-      });
-    } catch {
-      // analytics-only; never block navigation
-    }
+  const handleSelect = (card: Card) => {
     navigate(card.href);
+    void supabase.from('persona_intake_sessions').insert({
+      user_id: user?.id ?? null,
+      persona_type: card.key,
+      intake_data: { source: 'home_audience_card', language: en ? 'en' : 'es' },
+    }).then(() => {}, () => {});
   };
 
   return (
