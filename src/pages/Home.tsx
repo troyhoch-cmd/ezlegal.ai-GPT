@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './home-redesign.css';
+import { isBackendConfigured } from '../lib/supabase';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   Shield, MessageSquare, FileText, CheckCircle, Users, Home as House, Briefcase, Heart, Scale,
@@ -65,6 +66,9 @@ export default function Home() {
 
       <main id="main-content" className="pb-[calc(5rem+env(safe-area-inset-bottom,0px))] lg:pb-0">
         <section className="clarity-hero" aria-labelledby="clarity-title">
+          {!isBackendConfigured && <p role="status" className="clarity-preview-notice">{language === 'en'
+            ? 'Preview: explore the new design. Connected services, including accounts and saved work, are currently unavailable.'
+            : 'Vista previa: explora el nuevo diseño. Los servicios conectados, incluidas las cuentas y el trabajo guardado, no están disponibles actualmente.'}</p>}
           <div className="clarity-grid">
             <div className="clarity-intro">
               <span className="clarity-eyebrow"><span />{language === 'en' ? 'ARIZONA LEGAL INFORMATION' : 'INFORMACIÓN LEGAL DE ARIZONA'}</span>

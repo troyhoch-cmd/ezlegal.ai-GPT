@@ -31,3 +31,5 @@
 @media (max-width: 1023px) { .clarity-grid { gap: 30px; } .clarity-hero { padding: 112px 24px 0; } .clarity-secondary { display: flex; margin-left: 0; } .clarity-trust { flex-direction: column; align-items: flex-start; } }
 @media (max-width: 700px) { .clarity-grid { grid-template-columns: 1fr; gap: 30px; padding-bottom: 30px; } .clarity-hero { padding: 105px 20px 0; } .clarity-intro h1 { font-size: clamp(35px, 8.4vw, 52px); } .clarity-description { font-size: 15px; } .clarity-primary { width: 100%; } .clarity-secondary { justify-content: center; } .clarity-paths { padding: 20px; } .clarity-paths h2 { font-size: 27px; } .clarity-task { gap: 8px; } }
 @media (prefers-contrast: more) { .clarity-hero, .clarity-paths, .clarity-scope { background: white; color: #162c24; } .clarity-task small, .clarity-allowance, .clarity-description, .clarity-trust { color: #253a30; } }
+
+.clarity-preview-notice { max-width: 1180px; margin: 0 auto 24px; padding: 12px 16px; border: 1px solid #d5d9c8; border-radius: 6px; background: #fffefb; color: #425442; font-size: 13px; line-height: 1.6; }
