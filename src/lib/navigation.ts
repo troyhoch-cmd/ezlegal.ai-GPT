@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase, isBackendConfigured } from './supabase';
 
 export interface NavGroup {
   id: string;
@@ -79,10 +79,16 @@ export async function fetchNavigation(): Promise<NavGroup[]> {
   const cached = getCachedNav();
   if (cached) return cached;
 
-  const [groupsRes, itemsRes] = await Promise.all([
-    supabase.from('navigation_groups').select('*').eq('is_active', true).order('sort_order'),
-    supabase.from('navigation_items').select('*').eq('is_active', true).order('sort_order'),
-  ]);
+  let groupsRes;
+  let itemsRes;
+  try {
+    [groupsRes, itemsRes] = await Promise.all([
+      supabase.from('navigation_groups').select('*').eq('is_active', true).order('sort_order'),
+      supabase.from('navigation_items').select('*').eq('is_active', true).order('sort_order'),
+    ]);
+  } catch {
+    return FALLBACK_GROUPS;
+  }
   const groups = (groupsRes.data ?? []) as Omit<NavGroup, 'items'>[];
   const items = (itemsRes.data ?? []) as NavItem[];
 
@@ -94,6 +100,7 @@ export async function fetchNavigation(): Promise<NavGroup[]> {
 }
 
 export async function fetchBottomNavItems(): Promise<NavItem[]> {
+  if (!isBackendConfigured) return FALLBACK_GROUPS.flatMap(group => group.items).filter(item => item.is_bottom_nav);
   const { data } = await supabase
     .from('navigation_items')
     .select('*')

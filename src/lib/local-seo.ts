@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase, isBackendConfigured } from './supabase';
 
 export interface BusinessHours {
   day: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
@@ -65,6 +65,7 @@ export const FALLBACK_LOCATION: BusinessLocation = {
 };
 
 export async function fetchPrimaryLocation(): Promise<BusinessLocation> {
+  if (!isBackendConfigured) return FALLBACK_LOCATION;
   const { data } = await supabase
     .from('business_locations')
     .select('*')
