@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase, isBackendConfigured } from './supabase';
 
 export type ErrorSeverity = 'info' | 'warning' | 'error' | 'fatal';
 export type ErrorCategory = 'network' | 'api' | 'validation' | 'render' | 'unknown';
@@ -146,7 +146,7 @@ export interface LogErrorOptions {
 }
 
 export async function logError(err: unknown, options: LogErrorOptions = {}): Promise<void> {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || !isBackendConfigured) return;
   const classified = classifyError(err);
   const stack = err instanceof Error ? err.stack ?? null : null;
 
@@ -183,7 +183,7 @@ export async function logError(err: unknown, options: LogErrorOptions = {}): Pro
 }
 
 export async function flushErrorQueue(): Promise<void> {
-  if (typeof window === 'undefined' || !navigator.onLine) return;
+  if (typeof window === 'undefined' || !navigator.onLine || !isBackendConfigured) return;
   const queue = loadQueue();
   if (!queue.length) return;
   try {

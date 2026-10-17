@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Users, Clock, Globe, Heart, AlertTriangle, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { supabase, isBackendConfigured } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getVerifiedClaims } from '../content/trustEvidence';
 
@@ -46,6 +46,7 @@ export default function HomeKPIStrip() {
   const [kpis, setKpis] = useState<KPI[]>(buildDefaultKPIs);
 
   useEffect(() => {
+    if (!isBackendConfigured) return;
     let cancelled = false;
     async function load() {
       const { count: partnerCount } = await supabase
